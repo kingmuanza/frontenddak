@@ -1,0 +1,60 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Tableau de bord
+        </div>
+        <div class="">
+
+            Listes des zones et des postes
+
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Noms
+                            </span>
+                        </div>
+                        <select type="date" name="date" class="form-control">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Matricule
+                            </span>
+                        </div>
+                        <select type="date" name="date" class="form-control">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn">Rechercher</button>
+                </div>
+            </div>
+            <div class="page-contenu-corps">
+                <div class="row">
+                    <div class="col-lg-2" *ngFor="let zone of zones">
+                        <div class="dash">
+                            <div class="dash-titre">
+                                ZONE : {{zone.libelle}}
+                            </div>
+                            <div class="dash-postes">
+                                <span class="dash-postes-libelle" *ngFor="let poste of postes">
+                                <span class="dash-postes-libelle" *ngIf="poste.zone === zone.idzone">
+                                    {{poste.libelle}}
+                                </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

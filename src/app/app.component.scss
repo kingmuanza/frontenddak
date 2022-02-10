@@ -1,0 +1,52 @@
+.application {
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.menu-gauche {
+    background-color: #303030;
+    height: 100vh;
+    padding: 20px;
+    padding-left: 40px;
+    width: 1000px;
+    &-titre {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: white;
+    }
+    &-sous-titre {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: white;
+        margin-top: 20px;
+    }
+    &-item {
+        a {
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            &.active {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.deconnexion {
+    background-color: #303030;
+    color: white;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 30px;
+}
+
+.row-no-padding {
+    [class*="col-"] {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

@@ -1,0 +1,315 @@
+<div class="page">
+    <div class="page-entete">
+        <div *ngIf="vigile.idvigile==0" class="page-entete-titre">
+            Ajouter une nouveau vigile
+        </div>
+        <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
+            Modifier le vigile
+        </div>
+        <div class="">
+            <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des vigiles
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+
+            <div class="page-contenu-corps">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Matricule
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="vigile.matricule" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Numéro
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="vigile.numero" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Noms
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="vigile.noms" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Date de naissance
+                                </span>
+                            </div>
+                            <input [(ngModel)]="vigile.dteNce" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Numéro CNI
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="vigile.numCni" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Ville
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="vigile.ville" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Nationalité
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="vigile.nationalite" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Téléphone
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="vigile.tel" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Fonction
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="vigile.fonction" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Date entrée
+                                </span>
+                            </div>
+                            <input [(ngModel)]="vigile.dateEntree" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Date sortie
+                                </span>
+                            </div>
+                            <input [(ngModel)]="vigile.dateSortie" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Date début congés
+                                </span>
+                            </div>
+                            <input [(ngModel)]="vigile.debutConge" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Date fin congés
+                                </span>
+                            </div>
+                            <input [(ngModel)]="vigile.finConge" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Statut
+                                </span>
+                            </div>
+                            <input [(ngModel)]="vigile.statut" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Jour de repos
+                                </span>
+                            </div>
+                            <input [(ngModel)]="vigile.statut" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Parrain
+                                </span>
+                            </div>
+                            <input [(ngModel)]="vigile.statut" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="equipements">
+                    <div class="equipements-titre">
+                        Equipements
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Casquette
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Porte matraque
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Pull over
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Chemisette
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Matraque/toufa
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Manteau
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Sifflet
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Combinaison MC
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Epaulettes
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Pantalon 
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Veste 
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Fourragère 
+                                    </span>
+                                </div>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <button [disabled]="processing" (click)="save()" class="btn btn-primary">Enregistrer</button> &nbsp;
+                    <button *ngIf="vigile.idvigile != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>

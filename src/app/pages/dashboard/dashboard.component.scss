@@ -1,0 +1,11 @@
+.dash {
+    background-color: rgba(#303030, 0.1);
+    height: 120px;
+    // color: white;
+    padding: 20px;
+    margin-bottom: 10px;
+    &-titre {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+}

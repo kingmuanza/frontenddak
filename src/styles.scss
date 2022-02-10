@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+
+.page {
+    padding-top: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    &-entete {
+        &-titre {
+            font-size: 1.5em;
+        }
+    }
+    &-contenu {
+        margin-top: 20px;
+        &-corps {
+            margin-top: 20px;
+        }
+    }
+}
