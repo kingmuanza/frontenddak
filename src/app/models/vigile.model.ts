@@ -4,9 +4,11 @@ export class Vigile {
     numero = "";
     noms = "";
     dteNce = new Date();
-    numCni = "";
-    ville = "";
-    nationalite = "";
+    mumCni = "";
+    ville: any;
+    nationalite :any;
+    quartier :any;
+    zone :any;
     tel = "";
     fonction = "";
     dateEntree = new Date();

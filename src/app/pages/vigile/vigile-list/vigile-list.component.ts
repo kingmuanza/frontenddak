@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
@@ -14,7 +15,8 @@ export class VigileListComponent implements OnInit {
   vigiles = new Array<any>();
 
   constructor(
-    private jarvisService: JarvisService<any> 
+    private router: Router,
+    private jarvisService: JarvisService<any>
   ) { }
 
   ngOnInit(): void {
@@ -29,4 +31,41 @@ export class VigileListComponent implements OnInit {
     };
   }
 
+  edit(id: string) {
+    this.router.navigate(['vigile', 'edit', id]);
+  }
+
+  libelleFonction(fonction: string) {
+    if (fonction == "AGENT")
+    return "Agent de sécurité";
+    if (fonction == "ESCORTEUR")
+    return "Escorteur";
+    if (fonction == "CONTROLEUR")
+    return "Contrôleur";
+    if (fonction == "CHAUFFEUR")
+    return "Chauffeur";
+    if (fonction == "MAITRECHIEN")
+    return "Maitre Chien";
+
+    return "";
+  }
+
+  libelleStatut(jour: number) {
+    if (jour == 1)
+    return "Absent[e]";
+    if (jour == 2)
+    return "Actif[ve]";
+    if (jour == 3)
+    return "Licencié(e)";
+    if (jour == 4)
+    return "Standby";
+    if (jour == 5)
+    return "Suspendu[e]";
+    if (jour == 6)
+    return "Démissionné[e]";
+    if (jour == 7)
+    return "Décédé[e]";
+
+    return "" + jour ? jour: "";
+  }
 }

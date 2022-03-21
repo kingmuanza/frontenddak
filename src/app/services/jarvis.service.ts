@@ -22,7 +22,7 @@ export class JarvisService<T> {
       });
     });
   }
-
+ 
   get(table: string, id: number): Promise<T> {
     return new Promise((resolve, reject)  => {
       this.http.get(this.URL + table + '/' + id).subscribe((data) => {

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DataTablesModule } from "angular-datatables";
 import { HttpClientModule } from '@angular/common/http';
 import { NotifierModule } from 'angular-notifier';
+import { NgChartsModule } from 'ng2-charts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,6 +35,14 @@ import { StatutEditComponent } from './pages/statut/statut-edit/statut-edit.comp
 import { MotifEditComponent } from './pages/motif/motif-edit/motif-edit.component';
 import { MotifListComponent } from './pages/motif/motif-list/motif-list.component';
 import { FormsModule } from '@angular/forms';
+import { ReposListComponent } from './pages/repos/repos-list/repos-list.component';
+import { ReposGrapheComponent } from './pages/repos/repos-graphe/repos-graphe.component';
+import { SanctionListComponent } from './pages/sanction/sanction-list/sanction-list.component';
+import { SanctionEditComponent } from './pages/sanction/sanction-edit/sanction-edit.component';
+import { VacantListComponent } from './pages/vacant/vacant-list/vacant-list.component';
+import { VacantVigileListComponent } from './pages/vacant/vacant-vigile-list/vacant-vigile-list.component';
+import { QuartierListComponent } from './pages/quartier/quartier-list/quartier-list.component';
+import { QuartierEditComponent } from './pages/quartier/quartier-edit/quartier-edit.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +73,15 @@ import { FormsModule } from '@angular/forms';
     StatutListComponent,
     StatutEditComponent,
     MotifEditComponent,
-    MotifListComponent
+    MotifListComponent,
+    ReposListComponent,
+    ReposGrapheComponent,
+    SanctionListComponent,
+    SanctionEditComponent,
+    VacantListComponent,
+    VacantVigileListComponent,
+    QuartierListComponent,
+    QuartierEditComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +102,7 @@ import { FormsModule } from '@angular/forms';
     DataTablesModule,
     HttpClientModule,
     FormsModule,
+    NgChartsModule,
     AppRoutingModule,
   ],
   providers: [],

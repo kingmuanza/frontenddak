@@ -1,1 +1,249 @@
-<p>poste-edit works!</p>
+<div class="page">
+    <div class="page-entete">
+        <div *ngIf="poste.idposte==0" class="page-entete-titre">
+            Ajouter un nouveau poste
+        </div>
+        <div *ngIf="poste.idposte!=0" class="page-entete-titre">
+            Modifier le poste
+        </div>
+        <div class="">
+            <a routerLink="/poste" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des postes
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+            <ul class="nav nav-pills nav-fill" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#infos-poste" type="button" role="tab" aria-controls="home" aria-selected="true">
+                        Informations
+                    </a>
+                </li>
+                <li *ngIf="poste.idposte != 0" class="nav-item" role="presentation">
+                    <a class="nav-link " id="photo-tab" data-bs-toggle="tab" data-bs-target="#affectation-poste" type="button" role="tab" aria-controls="photo" aria-selected="false">
+                        Dernières affectations
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-contenu-titre">
+            <div class="tab-content" id="myTabContent2">
+                <div class="tab-pane fade show active" id="infos-poste" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="page-contenu-corps">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Code
+                                        </span>
+                                    </div>
+                                    <input type="text" [(ngModel)]="poste.code" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Libellé
+                                        </span>
+                                    </div>
+                                    <input type="text" [(ngModel)]="poste.libelle" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Abrégé
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="poste.abrege" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Zone
+                                        </span>
+                                    </div>
+                                    <select type="text" [(ngModel)]="poste.zone" class="form-control">
+                                        <option [ngValue]="zone" *ngFor="let zone of zones">
+                                            {{zone.libelle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Quartier
+                                        </span>
+                                    </div>
+                                    <select type="text" [(ngModel)]="poste.idquartier" class="form-control">
+                                        <ng-container *ngFor="let quartier of quartiers">
+                                            <option *ngIf="poste.zone && quartier.idzone && poste.zone.idzone === quartier.idzone.idzone" [ngValue]="quartier">
+                                                {{quartier.nom}}
+                                            </option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Prime
+                                        </span>
+                                    </div>
+                                    <select [(ngModel)]="poste.prime" class="form-control">
+                                        <option value="true">Oui</option>
+                                        <option value="false">Non</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Contrat
+                                        </span>
+                                    </div>
+                                    <select [(ngModel)]="poste.contrat" class="form-control">
+                                        <option value="ENCOURS">En cours</option>
+                                        <option value="SUSPENDU">Suspendu</option>
+                                        <option value="ROMPU">Rompu</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Début du contrat
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="poste.debutContrat" type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Fin du contrat
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="poste.finContrat" type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Nombre Vigile Jour
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="poste.nombreVigileJour" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Nombre Vigile Nuit
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="poste.nombreVigileNuit" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Nombre MC
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="poste.nombreMC" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Nombre ESC
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="poste.nombreESC" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Nombre Radio
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="poste.nombreRadio" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Contact
+                                        </span>
+                                    </div>
+                                    <input type="text" [(ngModel)]="poste.contact" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Téléphone
+                                        </span>
+                                    </div>
+                                    <input type="text" [(ngModel)]="poste.tel" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <button [disabled]="processing" (click)="save()" class="btn btn-primary">Enregistrer</button> &nbsp;
+                            <button *ngIf="poste.idposte != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="poste.idposte != 0" class="tab-pane fade" id="affectation-poste" role="tabpanel" aria-labelledby="photo-tab">
+                    <div class="page-contenu-corps">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Poste</th>
+                                    <th>Vigile</th>
+                                    <th>Repos</th>
+                                    <th>Remplacant</th>
+                                    <th>Arrêt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
+                                    <td>{{affectation.idaffectation}}</td>
+                                    <td>{{affectation.dateAffectation.split('T')[0]}}</td>
+                                    <td>{{affectation.idposte.libelle}}</td>
+                                    <td>{{affectation.idvigile.noms}}</td>
+                                    <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
+                                    <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
+                                    <td>{{affectation.arret?.split('T')[0]}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

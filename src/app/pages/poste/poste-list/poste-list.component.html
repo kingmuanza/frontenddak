@@ -44,6 +44,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Zone</th>
+                            <th>Quartier</th>
                             <th>Libellé</th>
                             <th>Code</th>
                             <th>Contrat</th>
@@ -53,15 +54,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let poste of postes">
+                        <tr *ngFor="let poste of postes" (click)="edit(poste.idposte)">
                             <td>{{poste.idposte}}</td>
-                            <td>{{poste.zone}}</td>
+                            <td>{{poste.zone.libelle}}</td>
+                            <td>{{poste.idquartier?.nom}}</td>
                             <td>{{poste.libelle}}</td>
                             <td>{{poste.code}}</td>
                             <td>{{poste.contrat}}</td>
-                            <td>{{poste.nombreVigileJour}}</td>
-                            <td>{{poste.nombreVigilenuit}}</td>
-                            <td>{{poste.prime}}</td>
+                            <td>{{poste.nombreVigileJour ?poste.nombreVigileJour:0}}</td>
+                            <td>{{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}</td>
+                            <td>
+                                {{libellePrime(poste.prime)}}
+                            </td>
                         </tr>
                     </tbody>
                 </table>

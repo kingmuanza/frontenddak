@@ -45,6 +45,7 @@
                             <th>ID</th>
                             <th>Matricule</th>
                             <th>N°</th>
+                            <th>Fonction</th>
                             <th>Noms</th>
                             <th>Date Naiss</th>
                             <th>N° CNI</th>
@@ -53,15 +54,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let vigile of vigiles">
+                        <tr *ngFor="let vigile of vigiles" (click)="edit(vigile.idvigile)">
                             <td>{{vigile.idvigile}}</td>
                             <td>{{vigile.matricule}}</td>
                             <td>{{vigile.numero}}</td>
+                            <td>{{libelleFonction(vigile.fonction)}}</td>
                             <td>{{vigile.noms}}</td>
-                            <td>{{vigile.datenaiss}}</td>
-                            <td>{{vigile.cni}}</td>
-                            <td>{{vigile.ville}}</td>
-                            <td>{{vigile.nationalite}}</td>
+                            <td>{{vigile.dteNce | date:'yyyy-MM-dd'}}</td>
+                            <td>{{vigile.mumCni}}</td>
+                            <td>{{vigile.ville?.libelle}}</td>
+                            <td>{{vigile.nationalite?.libelle}}</td>
                         </tr>
                     </tbody>
                 </table>

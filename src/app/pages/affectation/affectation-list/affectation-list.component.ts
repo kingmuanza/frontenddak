@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
@@ -14,6 +15,7 @@ export class AffectationListComponent implements OnInit {
   affectations = new Array<any>();
 
   constructor(
+    private router: Router,
     private jarvisService: JarvisService<any> 
   ) { }
 
@@ -25,8 +27,31 @@ export class AffectationListComponent implements OnInit {
       this.dtTrigger.next('');
     });
     this.dtOptions = {
-      pagingType: 'full_numbers'
+      pagingType: 'full_numbers',
+      order:[[0, 'desc']] 
     };
   }
 
+  edit(id: string) {
+    this.router.navigate(['affectation', 'edit', id]);
+  }
+
+  jourSemaine(jour: number) {
+    if (jour == 1)
+    return "Lundi";
+    if (jour == 2)
+    return "Mardi";
+    if (jour == 3)
+    return "Mercredi";
+    if (jour == 4)
+    return "Jeudi";
+    if (jour == 5)
+    return "Vendredi";
+    if (jour == 6)
+    return "Samedi";
+    if (jour == 7)
+    return "Dimanche";
+
+    return "" + jour ? jour: "";
+  }
 }

@@ -1,0 +1,16 @@
+.text-right {
+    text-align: right;
+}
+
+.nombre {
+    background-color: #eee;
+    display: inline-block;
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 2px;
+    &.red {
+        background-color: #aa1010;
+        color: white;
+    }
+}

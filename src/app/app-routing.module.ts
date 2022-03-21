@@ -16,8 +16,15 @@ import { PointageEditComponent } from './pages/pointage/pointage-edit/pointage-e
 import { PointageListComponent } from './pages/pointage/pointage-list/pointage-list.component';
 import { PosteEditComponent } from './pages/poste/poste-edit/poste-edit.component';
 import { PosteListComponent } from './pages/poste/poste-list/poste-list.component';
+import { QuartierEditComponent } from './pages/quartier/quartier-edit/quartier-edit.component';
+import { QuartierListComponent } from './pages/quartier/quartier-list/quartier-list.component';
+import { ReposGrapheComponent } from './pages/repos/repos-graphe/repos-graphe.component';
+import { SanctionEditComponent } from './pages/sanction/sanction-edit/sanction-edit.component';
+import { SanctionListComponent } from './pages/sanction/sanction-list/sanction-list.component';
 import { StatutEditComponent } from './pages/statut/statut-edit/statut-edit.component';
 import { StatutListComponent } from './pages/statut/statut-list/statut-list.component';
+import { VacantListComponent } from './pages/vacant/vacant-list/vacant-list.component';
+import { VacantVigileListComponent } from './pages/vacant/vacant-vigile-list/vacant-vigile-list.component';
 import { VigileEditComponent } from './pages/vigile/vigile-edit/vigile-edit.component';
 import { VigileListComponent } from './pages/vigile/vigile-list/vigile-list.component';
 import { VilleEditComponent } from './pages/ville/ville-edit/ville-edit.component';
@@ -29,9 +36,18 @@ const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
   { path: 'dashboard', component: DashboardComponent },
 
+  { path: 'repos', component: ReposGrapheComponent },
+
+  { path: 'vacant/poste', component: VacantListComponent },
+  { path: 'vacant/vigile', component: VacantVigileListComponent },
+
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationEditComponent },
   { path: 'affectation/edit/:id', component: AffectationEditComponent },
+
+  { path: 'sanction', component: SanctionListComponent },
+  { path: 'sanction/edit', component: SanctionEditComponent },
+  { path: 'sanction/edit/:id', component: SanctionEditComponent },
 
   { path: 'incident', component: IncidentListComponent },
   { path: 'incident/edit', component: IncidentEditComponent },
@@ -69,6 +85,10 @@ const routes: Routes = [
   { path: 'zone', component: ZoneListComponent },
   { path: 'zone/edit', component: ZoneEditComponent },
   { path: 'zone/edit/:id', component: ZoneEditComponent },
+
+  { path: 'quartier', component: QuartierListComponent },
+  { path: 'quartier/edit', component: QuartierEditComponent },
+  { path: 'quartier/edit/:id', component: QuartierEditComponent },
 
   { path: 'fiche/planning-incomplet', component: PlanningIncompletFicheComponent },
   { path: 'fiche/planning-operationnel', component: PlanningOperationnelFicheComponent },

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
@@ -14,6 +15,7 @@ export class PosteListComponent implements OnInit {
   postes = new Array<any>();
 
   constructor(
+    private router: Router,
     private jarvisService: JarvisService<any> 
   ) { }
 
@@ -27,6 +29,17 @@ export class PosteListComponent implements OnInit {
     this.dtOptions = {
       pagingType: 'full_numbers'
     };
+  }
+
+  edit(id: string) {
+    this.router.navigate(['poste', 'edit', id]);
+  }
+
+  libellePrime(libelle: string) {
+    if (libelle)
+    return "OUI";
+
+    return "NON";
   }
 
 }
