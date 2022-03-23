@@ -269,6 +269,7 @@
                         </div>
                         <div class="input-group">
                             <button [disabled]="processing" (click)="save()" class="btn btn-primary">Enregistrer</button> &nbsp;
+                            <button *ngIf="vigile.idvigile != 0" [disabled]="processing" (click)="remplacant()" class="btn btn-primary">Définir comme remplacant</button> &nbsp;
                             <button *ngIf="vigile.idvigile != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
                         </div>
                     </div>

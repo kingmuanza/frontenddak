@@ -6,6 +6,7 @@
         <div *ngIf="poste.idposte!=0" class="page-entete-titre">
             Modifier le poste
         </div>
+
         <div class="">
             <a routerLink="/poste" class="btn btn-link" style="padding: 0; margin: 0;">
                 Revenir à la liste des postes
@@ -18,6 +19,12 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#infos-poste" type="button" role="tab" aria-controls="home" aria-selected="true">
                         Informations
+                    </a>
+                </li>
+                <li *ngIf="poste.idposte != 0" class="nav-item" role="presentation">
+                    <a class="nav-link " id="photo-tab" data-bs-toggle="tab" data-bs-target="#vigiles-poste" type="button" role="tab" aria-controls="photo" aria-selected="false">
+                        Vigiles en poste 
+                        [ Jour: {{this.affVigilesJour}}/{{poste.nombreVigileJour}} ; {{this.affVigilesNuit}}/{{poste.nombreVigileNuit}} ]
                     </a>
                 </li>
                 <li *ngIf="poste.idposte != 0" class="nav-item" role="presentation">
@@ -69,6 +76,7 @@
                                             Zone
                                         </span>
                                     </div>
+
                                     <select type="text" [(ngModel)]="poste.zone" class="form-control">
                                         <option [ngValue]="zone" *ngFor="let zone of zones">
                                             {{zone.libelle}}
@@ -233,13 +241,43 @@
                             <tbody>
                                 <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
                                     <td>{{affectation.idaffectation}}</td>
-                                    <td>{{affectation.dateAffectation.split('T')[0]}}</td>
+                                    <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
                                     <td>{{affectation.idposte.libelle}}</td>
                                     <td>{{affectation.idvigile.noms}}</td>
                                     <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
                                     <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
                                     <td>{{affectation.arret?.split('T')[0]}}</td>
                                 </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div *ngIf="poste.idposte != 0" class="tab-pane fade" id="vigiles-poste" role="tabpanel" aria-labelledby="vigiles-tab">
+                    <div class="page-contenu-corps">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Poste</th>
+                                    <th>Vigile</th>
+                                    <th>Repos</th>
+                                    <th>Remplacant</th>
+                                    <th>Arrêt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let affectation of affectations">
+                                    <tr *ngIf="!affectation.arret" (click)="edit(affectation.idaffectation)">
+                                        <td>{{affectation.idaffectation}}</td>
+                                        <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
+                                        <td>{{affectation.idposte.libelle}}</td>
+                                        <td>{{affectation.idvigile.noms}}</td>
+                                        <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
+                                        <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
+                                        <td>{{affectation.arret?.split('T')[0]}}</td>
+                                    </tr>
+                                </ng-container>
                             </tbody>
                         </table>
                     </div>

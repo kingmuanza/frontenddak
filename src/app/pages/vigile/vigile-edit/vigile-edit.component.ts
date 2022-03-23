@@ -180,6 +180,20 @@ export class VigileEditComponent implements OnInit {
     }
   }
 
+  remplacant() {
+    this.processing = true;
+    this.vigile.estRemplacant = true;
+    this.jarvisService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
+      console.log('data');
+      console.log(data);
+      this.processing = false;
+      this.notifierService.notify('success', "Modification effectuée avec succès");
+      this.router.navigate(['vigile']);
+    }).catch((e) => {
+      this.processing = false;
+    });
+  }
+
   supprimer() {
     const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
     if (reponse) {

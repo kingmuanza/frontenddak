@@ -19,6 +19,8 @@ export class PosteEditComponent implements OnInit {
   zones = new Array<any>();
   quartiers = new Array<any>();
   affectations = new Array<any>();
+  affVigilesJour = 0;
+  affVigilesNuit = 0;
 
   constructor(
     private router: Router,
@@ -30,7 +32,7 @@ export class PosteEditComponent implements OnInit {
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers',
-      order:[[0, 'desc']] 
+      order: [[0, 'desc']]
     };
     this.getVilles().then((zones) => {
       this.zones = zones;
@@ -46,13 +48,27 @@ export class PosteEditComponent implements OnInit {
 
               this.poste.debutContrat = poste.debutContrat?.split('T')[0];
               this.poste.finContrat = poste.finContrat?.split('T')[0];
-              
+
               this.jarvisService.getAll('affectation').then((data) => {
                 console.log('data');
                 console.log(data);
                 data.forEach((affectation) => {
                   if (affectation.idposte.idposte === poste.idposte) {
                     this.affectations.push(affectation);
+                  }
+                });
+                this.affVigilesJour = 0;
+                this.affVigilesNuit = 0;
+                this.affectations.forEach((aff) => {
+                  if (!aff.arret) {
+                    let horaire: string;
+                    horaire = aff.horaire;
+                    if (horaire.toLocaleLowerCase() == 'jour') {
+                      this.affVigilesJour += 1;
+                    }
+                    if (horaire.toLocaleLowerCase() == 'nuit') {
+                      this.affVigilesNuit += 1;
+                    }
                   }
                 });
                 this.dtTrigger.next('');

@@ -61,7 +61,7 @@
                         <tr *ngFor="let suiviPoste of suiviPostes">
                             <td>{{suiviPoste.idsuiviPoste}}</td>
                             <td>{{suiviPoste.numero ? getVigile(suiviPoste.numero).noms : ""}}</td>
-                            <td>{{suiviPoste.poste}}</td>
+                            <td>{{suiviPoste.poste?.libelle}}</td>
                             <td>{{suiviPoste.zone.libelle}}</td>
                             <td>{{suiviPoste.horaire}}</td>
                             <td>{{suiviPoste.statut}}</td>

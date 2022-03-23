@@ -6,9 +6,9 @@ export class Vigile {
     dteNce = new Date();
     mumCni = "";
     ville: any;
-    nationalite :any;
-    quartier :any;
-    zone :any;
+    nationalite: any;
+    quartier: any;
+    zone: any;
     tel = "";
     fonction = "";
     dateEntree = new Date();
@@ -18,4 +18,5 @@ export class Vigile {
     statut = "";
     jourRepos = "";
     parrain = "";
+    estRemplacant = false;
 }

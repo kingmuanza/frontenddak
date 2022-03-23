@@ -45,35 +45,6 @@
                 </div>
             </div>
             <div class="page-contenu-corps">
-                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Matricule</th>
-                            <th>N°</th>
-                            <th>Fonction</th>
-                            <th>Noms</th>
-                            <th>Date Naiss</th>
-                            <th>N° CNI</th>
-                            <th>Repos</th>
-                            <th>Nationalité</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let vigile of vigiles" (click)="edit(vigile.idvigile)">
-                            <td>{{vigile.idvigile}}</td>
-                            <td>{{vigile.matricule}}</td>
-                            <td>{{vigile.numero}}</td>
-                            <td>{{libelleFonction(vigile.fonction)}}</td>
-                            <td>{{vigile.noms}}</td>
-                            <td>{{vigile.dteNce | date:'yyyy-MM-dd'}}</td>
-                            <td>{{vigile.mumCni}}</td>
-                            <td>{{jourSemaine(vigile.jourRepos)}}</td>
-                            <td>{{vigile.nationalite?.libelle}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
             </div>
         </div>
     </div>

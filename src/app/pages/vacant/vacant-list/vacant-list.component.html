@@ -70,7 +70,7 @@
                                 {{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}
                             </td>
                             <td class="text-right">
-                                <div class="nombre" [ngClass]="{'red': poste.nombreVigileJour > getNombreAffectationJour(poste)}">
+                                <div class="nombre" [ngClass]="{'red': poste.nombreVigileNuit > getNombreAffectationNuit(poste)}">
                                     {{getNombreAffectationNuit(poste)}}
                                 </div>
                             </td>

@@ -105,33 +105,37 @@ export class AffectationEditComponent implements OnInit {
   terminerEtape1() {
     let valide = true;
     if (this.affectation.idposte && this.affectation.idvigile && this.affectation.dateAffectation) {
-      console.log('affectation à enregistrer');
-      console.log(this.affectation);
-      console.log(this.affectation);
-      this.affectationsAffectees = new Array<any>();
-      this.jarvisService.getAll('affectation').then((affectations) => {
-        console.log('affectations');
-        console.log(affectations);
-        affectations.forEach((aff) => {
-          if (aff.idvigile.idvigile === this.affectation.idvigile.idvigile && !aff.arret) {
-            this.affectationsAffectees.push(aff);
-            if (aff.idposte.idposte == this.affectation.idposte.idposte) {
-              if (this.affectation.idaffectation == 0) {
-                valide = false;
+      if (this.affectation.idaffectation == 0) {
+        console.log('affectation à enregistrer');
+        console.log(this.affectation);
+        console.log(this.affectation);
+        this.affectationsAffectees = new Array<any>();
+        this.jarvisService.getAll('affectation').then((affectations) => {
+          console.log('affectations');
+          console.log(affectations);
+          affectations.forEach((aff) => {
+            if (aff.idvigile.idvigile === this.affectation.idvigile.idvigile && !aff.arret) {
+              this.affectationsAffectees.push(aff);
+              if (aff.idposte.idposte == this.affectation.idposte.idposte) {
+                if (this.affectation.idaffectation == 0) {
+                  valide = false;
+                }
               }
+            }
+          });
+          console.log('affectationsAffectees');
+          console.log(this.affectationsAffectees);
+          if (valide) {
+            this.etape = 2;
+          } else {
+            if (this.affectation.idaffectation == 0) {
+              alert('Le vigile a déjà été affecté à ce poste');
             }
           }
         });
-        console.log('affectationsAffectees');
-        console.log(this.affectationsAffectees);
-        if (valide) {
-          this.etape = 2;
-        } else {
-          if (this.affectation.idaffectation == 0) {
-            alert('Le vigile a déjà été affecté à ce poste');
-          }
-        }
-      });
+      } else {
+        this.save();
+      }
     } else {
       this.notifierService.notify('error', "Veuillez renseigner une date, un vigile et un poste");
     }
@@ -160,13 +164,13 @@ export class AffectationEditComponent implements OnInit {
       }
       this.processing = false;
     }
+    if (this.affectation.dateAffectation)
+      this.affectation.dateAffectation = new Date(this.affectation.dateAffectation);
+
+    if (this.affectation.arret)
+      this.affectation.arret = new Date(this.affectation.arret);
 
     if (this.affectation.idaffectation == 0) {
-      if (this.affectation.dateAffectation)
-        this.affectation.dateAffectation = new Date(this.affectation.dateAffectation);
-
-      if (this.affectation.arret)
-        this.affectation.arret = new Date(this.affectation.arret);
 
       if (this.affectation.idposte && this.affectation.idvigile && this.affectation.dateAffectation) {
         this.processing = true;
