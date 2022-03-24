@@ -43,27 +43,29 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Matricule</th>
-                            <th>N°</th>
-                            <th>Fonction</th>
                             <th>Noms</th>
-                            <th>Date Naiss</th>
-                            <th>N° CNI</th>
+                            <th>Horaire</th>
+                            <th>Fonction</th>
+                            <th>Repos</th>
+                            <th>Zone</th>
+                            <th>Quartier</th>
                             <th>Ville</th>
-                            <th>Nationalité</th>
+                            <th style="text-align: center;">Remplacant</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let vigile of vigiles" (click)="edit(vigile.idvigile)">
+                        <tr *ngFor="let vigile of vigiles" (click)="edit(vigile.idvigile)" style="cursor: pointer;">
                             <td>{{vigile.idvigile}}</td>
-                            <td>{{vigile.matricule}}</td>
-                            <td>{{vigile.numero}}</td>
-                            <td>{{libelleFonction(vigile.fonction)}}</td>
                             <td>{{vigile.noms}}</td>
-                            <td>{{vigile.dteNce | date:'yyyy-MM-dd'}}</td>
-                            <td>{{vigile.mumCni}}</td>
+                            <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
+                            <td>{{libelleFonction(vigile.fonction)}}</td>
+                            <td>{{jourSemaine(vigile.jourRepos)}}</td>
+                            <td>{{vigile.zone?.libelle}}</td>
+                            <td>{{vigile.quartier?.nom}}</td>
                             <td>{{vigile.ville?.libelle}}</td>
-                            <td>{{vigile.nationalite?.libelle}}</td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

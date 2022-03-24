@@ -24,6 +24,7 @@ import { SanctionListComponent } from './pages/sanction/sanction-list/sanction-l
 import { StatutEditComponent } from './pages/statut/statut-edit/statut-edit.component';
 import { StatutListComponent } from './pages/statut/statut-list/statut-list.component';
 import { VacantListComponent } from './pages/vacant/vacant-list/vacant-list.component';
+import { VacantRemplacantListComponent } from './pages/vacant/vacant-remplacant-list/vacant-remplacant-list.component';
 import { VacantVigileListComponent } from './pages/vacant/vacant-vigile-list/vacant-vigile-list.component';
 import { VigileEditComponent } from './pages/vigile/vigile-edit/vigile-edit.component';
 import { VigileListComponent } from './pages/vigile/vigile-list/vigile-list.component';
@@ -39,7 +40,10 @@ const routes: Routes = [
   { path: 'repos', component: ReposGrapheComponent },
 
   { path: 'vacant/poste', component: VacantListComponent },
+  { path: 'vacant/poste/:idzone', component: VacantListComponent },
+
   { path: 'vacant/vigile', component: VacantVigileListComponent },
+  { path: 'vacant/remplacant', component: VacantRemplacantListComponent },
 
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationEditComponent },
@@ -91,6 +95,7 @@ const routes: Routes = [
   { path: 'quartier/edit/:id', component: QuartierEditComponent },
 
   { path: 'fiche/planning-incomplet', component: PlanningIncompletFicheComponent },
+  { path: 'fiche/planning-incomplet/:idzone', component: PlanningIncompletFicheComponent },
   { path: 'fiche/planning-operationnel', component: PlanningOperationnelFicheComponent },
   { path: 'fiche/pointage', component: PlanningOperationnelFicheComponent },
   { path: 'fiche/poste-vacant', component: PlanningOperationnelFicheComponent },

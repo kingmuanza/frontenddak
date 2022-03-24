@@ -4,6 +4,7 @@
     // color: white;
     padding: 20px;
     margin-bottom: 10px;
+    cursor: pointer;
     &-titre {
         font-size: 1.2em;
         font-weight: bold;
@@ -13,4 +14,24 @@
 .petit-titre {
     margin-bottom: 10px;
     color: #303030;
+}
+
+.vigiles-nuit {
+    background-color: #303030;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    padding-top: 10px;
+    line-height: 1.05;
+    cursor: pointer;
+    .titre {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+    .valeur {
+        font-size: 36px;
+    }
+    &:hover {
+        opacity: 0.9;
+    }
 }

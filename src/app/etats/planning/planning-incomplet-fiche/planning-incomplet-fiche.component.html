@@ -12,10 +12,11 @@
                         </div>
 
                         <select type="text" [(ngModel)]="zone" class="form-control">
-                        <option [ngValue]="zone" *ngFor="let zone of zones">
-                            {{zone.libelle}}
-                        </option>
-                    </select>
+                            <option [ngValue]="''"></option>
+                            <option [ngValue]="zone" *ngFor="let zone of zones">
+                                {{zone.libelle}}
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -45,16 +46,17 @@
                     <button class="btn" (click)="rechercher()">Rechercher</button>
                 </div>
             </div>
+
+            <div *ngIf="zone && date && recherche" style="float: right;">
+                <button class="btn" (click)="exportAsPDF()">Imprimer</button>
+            </div>
             <div #fiche id="fiche">
-                <div class="page-contenu-corps" *ngIf="zone && horaire && date && recherche">
+                <div class="page-contenu-corps" *ngIf="zone && date && recherche">
                     <div class="page-entete-titre">
                         Fiche de pointage du {{date | date: 'yyyy-MM-dd'}}
                     </div>
                     <div style="margin-bottom: 20px;">
                         Zone : <b>{{zone.libelle}}</b>, Horaire : <b>{{horaire}}</b>
-                    </div>
-                    <div>
-                        <button class="btn" (click)="exportAsPDF()">Imprimer</button>
                     </div>
 
                     <table class="table table-bordered row-border hover">

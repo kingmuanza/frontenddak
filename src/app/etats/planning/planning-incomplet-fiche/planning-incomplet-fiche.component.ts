@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Affectation } from 'src/app/models/affectation.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
@@ -17,12 +17,13 @@ export class PlanningIncompletFicheComponent implements OnInit {
   affectations = new Array<any>();
   date = new Date();
   jourDeLaSemaine = -1;
-  horaire = "jour";
+  horaire = "";
   zones = new Array<any>();
   zone: any;
   recherche = false;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private jarvisService: JarvisService<Affectation>,
     private zoneService: JarvisService<Zone>,
@@ -31,6 +32,17 @@ export class PlanningIncompletFicheComponent implements OnInit {
   ngOnInit(): void {
     this.getZones().then((zones) => {
       this.zones = zones;
+      this.route.paramMap.subscribe((paramMap)=>{
+        const idzone = paramMap.get('idzone');
+        if (idzone) {
+          this.zones.forEach((zone) => {
+            if (zone.idzone == idzone) {
+              this.zone = zone;
+              this.rechercher();
+            }
+          });
+        }
+      });
     });
   }
 
@@ -45,7 +57,7 @@ export class PlanningIncompletFicheComponent implements OnInit {
   }
 
   rechercher() {
-    if (this.zone && this.date && this.horaire) {
+    if (this.zone && this.date) {
       this.recherche = true;
       this.jourDeLaSemaine = new Date(this.date).getDay();
       this.jarvisService.getAll('affectation').then((data) => {
@@ -54,7 +66,7 @@ export class PlanningIncompletFicheComponent implements OnInit {
         this.affectations = [];
         data.forEach((aff) => {
           if (aff.idposte.zone?.idzone === this.zone.idzone) {
-            if (aff.horaire === this.horaire) {
+            if (!this.horaire || (this.horaire && aff.horaire === this.horaire)) {
               if (!aff.arret) {
                 this.affectations.push(aff);
               }

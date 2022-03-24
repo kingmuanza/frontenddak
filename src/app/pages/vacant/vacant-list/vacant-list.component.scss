@@ -14,3 +14,25 @@
         color: white;
     }
 }
+
+.idea {
+    margin-right: 10px;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+td,
+th {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.match {
+    margin-left: 10px;
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+    background-color: greenyellow;
+}

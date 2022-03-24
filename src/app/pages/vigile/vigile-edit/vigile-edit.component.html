@@ -40,13 +40,13 @@
         <div class="page-contenu-titre">
             <div class="tab-content" id="myTabContent">
                 <div *ngIf="vigile.idvigile != 0" class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
-                    <img [src]="url" height="200"> <br/>
+                    <img [src]="url" height="200"> <br />
                     <input type='file' (change)="onSelectFile($event)">
                 </div>
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="page-contenu-corps">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -56,7 +56,7 @@
                                     <input type="text" [(ngModel)]="vigile.matricule" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -64,6 +64,19 @@
                                         </span>
                                     </div>
                                     <input type="text" [(ngModel)]="vigile.numero" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Horaire
+                                        </span>
+                                    </div>
+                                    <select [(ngModel)]="vigile.horaire" class="form-control">
+                                        <option value="jour">Jour</option>
+                                        <option value="nuit">Nuit</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -133,7 +146,9 @@
                                     </div>
                                     <select type="text" [(ngModel)]="vigile.quartier" class="form-control">
                                         <ng-container *ngFor="let quartier of quartiers">
-                                            <option *ngIf="vigile.zone && quartier.idzone && vigile.zone.idzone === quartier.idzone.idzone" [ngValue]="quartier">
+                                            <option
+                                                *ngIf="vigile.zone && quartier.idzone && vigile.zone.idzone === quartier.idzone.idzone"
+                                                [ngValue]="quartier">
                                                 {{quartier.nom}}
                                             </option>
                                         </ng-container>

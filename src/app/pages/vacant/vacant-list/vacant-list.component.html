@@ -3,11 +3,6 @@
         <div class="page-entete-titre">
             Liste des postes vacants
         </div>
-        <div class="">
-            <a routerLink="/poste/edit" class="btn btn-link" style="padding: 0; margin: 0;">
-                Ajouter un poste
-            </a>
-        </div>
     </div>
     <div class="page-contenu">
         <div class="page-contenu-titre">
@@ -53,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let poste of postes" (click)="edit(poste.idposte)">
+                        <tr *ngFor="let poste of postes">
                             <td>{{poste.idposte}}</td>
                             <td>{{poste.zone.libelle}}</td>
                             <td>{{poste.libelle}}</td>
@@ -62,6 +57,8 @@
                                 {{poste.nombreVigileJour ?poste.nombreVigileJour:0}}
                             </td>
                             <td class="text-right">
+                                <div (click)="openModal(poste, 'jour')" *ngIf="poste.nombreVigileJour > getNombreAffectationJour(poste)" class="idea">
+                                </div>
                                 <div class="nombre" [ngClass]="{'red': poste.nombreVigileJour > getNombreAffectationJour(poste)}">
                                     {{getNombreAffectationJour(poste)}}
                                 </div>
@@ -70,6 +67,8 @@
                                 {{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}
                             </td>
                             <td class="text-right">
+                                <div (click)="openModal(poste, 'nuit')" *ngIf="poste.nombreVigileNuit > getNombreAffectationNuit(poste)" class="idea">
+                                </div>
                                 <div class="nombre" [ngClass]="{'red': poste.nombreVigileNuit > getNombreAffectationNuit(poste)}">
                                     {{getNombreAffectationNuit(poste)}}
                                 </div>
@@ -81,3 +80,90 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #exampleModal id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Suggestion : {{posteConcernee.libelle}}, {{posteConcernee.zone?.libelle}}, {{posteConcernee.idquartier?.nom}},
+                    <span style="text-transform: capitalize;">
+                        {{horaire}}
+                    </span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="vigiles.length == 0">
+                    Vous devez procéder à un recrutemeent
+                </div>
+                <div *ngIf="vigiles.length == 1">
+                    Vous pouvez affecter le vigile
+                    <b>
+                        {{vigiles[0].noms}}
+                    </b> au poste
+                    <b>
+                        {{posteConcernee.libelle}}
+                    </b>
+                </div>
+                <div *ngIf="vigiles.length > 1">
+                    <div style="margin-bottom: 15px;">
+                        Vous pouvez effectuer une des affectations suivantes :
+                    </div>
+                    <table class="table table-bordered table-dark">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">#</th>
+                                <th>Vigile</th>
+                                <th>Rempl.</th>
+                                <th style="text-align: center;">Zone</th>
+                                <th style="text-align: center;">Quartier</th>
+                                <th style="text-align: center;">Score</th>
+                                <th style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of propositions; let i=index">
+                                <td style="text-align: center;"> {{i+1}} </td>
+                                <td>
+                                    {{p.vigile.noms}}
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <select type="text" class="form-control" [(ngModel)]="p.remplacant">
+                                            <ng-container *ngFor="let vigile of remplacants">
+                                            <option [ngValue]="vigile" *ngIf="vigile.jourRepos !== p.vigile.jourRepos && vigile.horaire === p.vigile.horaire">
+                                                {{vigile.noms}}
+                                            </option>
+                                            </ng-container>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{p.vigile.zone?.libelle}}
+                                    <div *ngIf="posteConcernee.zone?.idzone === p.vigile.zone?.idzone" class="match"></div>
+                                </td>
+                                <td>
+                                    {{p.vigile.quartier?.nom}}
+                                    <div *ngIf="posteConcernee.idquartier?.idquartier === p.vigile.quartier?.idquartier" class="match"></div>
+                                </td>
+                                <td>
+                                    {{score(p.vigile, posteConcernee)}}
+                                </td>
+                                <td style="text-align: center;">
+                                    <button type="button" class="btn btn-primary btn-sm">Appliquer</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
+            </div>
+        </div>
+    </div>
+</div>

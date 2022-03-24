@@ -83,7 +83,7 @@
                                 <option *ngIf="!affectation.idvigile">Veuillez choisir premièrement un vigile</option>
                                 <ng-container *ngFor="let vigile of vigiles">
                                     <option [ngValue]="vigile"
-                                        *ngIf="affectation.idvigile && affectation.idvigile.idvigile != vigile.idvigile">
+                                        *ngIf="affectation.idvigile && affectation.idvigile.idvigile != vigile.idvigile && vigile.estRemplacant">
                                         {{vigile.noms}}
                                     </option>
                                 </ng-container>

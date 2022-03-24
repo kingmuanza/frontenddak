@@ -75,6 +75,13 @@ export class VigileEditComponent implements OnInit {
                       this.vigile.ville = ville;
                     }
                   });
+
+                  zones.forEach((zone) => {
+                    if (this.vigile.zone && zone.idzone == this.vigile.zone.idzone) {
+                      this.vigile.zone = zone;
+                    }
+                  });
+                  
                   nationalites.forEach((nationalite) => {
                     if (this.vigile.nationalite && nationalite.idnationalite == this.vigile.nationalite.idnationalite) {
                       this.vigile.nationalite = nationalite;

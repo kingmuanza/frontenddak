@@ -10,6 +10,7 @@ export class Vigile {
     quartier: any;
     zone: any;
     tel = "";
+    horaire = "";
     fonction = "";
     dateEntree = new Date();
     dateSortie = new Date();

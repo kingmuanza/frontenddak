@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { Affectation } from 'src/app/models/affectation.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
-  selector: 'app-vacant-vigile-list',
-  templateUrl: './vacant-vigile-list.component.html',
-  styleUrls: ['./vacant-vigile-list.component.scss']
+  selector: 'app-vacant-remplacant-list',
+  templateUrl: './vacant-remplacant-list.component.html',
+  styleUrls: ['./vacant-remplacant-list.component.scss']
 })
-export class VacantVigileListComponent implements OnInit {
+export class VacantRemplacantListComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
@@ -27,7 +28,7 @@ export class VacantVigileListComponent implements OnInit {
       console.log(data);
       this.vigiles = [];
       data.forEach((vigile) => {
-        if (!vigile.estRemplacant) {
+        if (vigile.estRemplacant) {
           this.vigiles.push(vigile);
         }
       });
@@ -40,42 +41,22 @@ export class VacantVigileListComponent implements OnInit {
     };
   }
 
-  getNombreAffectation(vigile: Vigile) {
+  getAffectationJour(vigile: Vigile, jour: number): Affectation {
     const dernieresAffectations = new Array<any>();
     this.affectations.forEach((affectation) => {
-      if (affectation.idvigile.idvigile === vigile.idvigile && !affectation.arret) {
-        if (true) {
+      if (affectation.remplacant.idvigile === vigile.idvigile && !affectation.arret) {
+        if (affectation.idvigile.jourRepos === jour) {
           dernieresAffectations.push(affectation);
         }
       }
     });
-    return dernieresAffectations;
+    if (dernieresAffectations.length > 0) {
+      return dernieresAffectations[0];
+    } else {
+      return new Affectation();
+    }
   }
-  
-  getNombreAffectationJour(vigile: Vigile) {
-    const dernieresAffectations = new Array<any>();
-    this.affectations.forEach((affectation) => {
-      if (affectation.idvigile.idvigile === vigile.idvigile && !affectation.arret) {
-        if (affectation.horaire.toLowerCase() === 'jour') {
-          dernieresAffectations.push(affectation);
-        }
-      }
-    });
-    return dernieresAffectations;
-  }
-
-  getNombreAffectationNuit(vigile: Vigile) {
-    const dernieresAffectations = new Array<any>();
-    this.affectations.forEach((affectation) => {
-      if (affectation.idvigile.idvigile === vigile.idvigile && !affectation.arret) {
-        if (affectation.horaire.toLowerCase() === 'nuit') {
-          dernieresAffectations.push(affectation);
-        }
-      }
-    });
-    return dernieresAffectations;
-  }
-
+ 
   getAffectations(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.jarvisService.getAll('affectation').then((data) => {

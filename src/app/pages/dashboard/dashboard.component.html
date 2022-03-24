@@ -38,6 +38,57 @@
                     <button class="btn">Rechercher</button>
                 </div>
             </div>
+            <div *ngIf="terminee" class="page-contenu-corps">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="petit-titre">
+                            Etats des lieux
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="vigiles-nuit" (click)="goToPostesVacants()">
+                            <div class="titre">
+                                Besoins en vigiles JOUR
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6" style="border-right: 1px solid #fff;">
+
+                                    <div class="valeur">
+                                        {{nbVigilesJour}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="valeur">
+                                        {{nbBesoinVigilesJour }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="vigiles-nuit" (click)="goToPostesVacants()">
+                            <div class="titre">
+                                Besoins en vigiles NUIT
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6" style="border-right: 1px solid #fff;">
+
+                                    <div class="valeur">
+                                        {{nbVigilesNuit}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="valeur">
+                                        {{nbBesoinVigilesNuit}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="page-contenu-corps">
                 <div class="row">
                     <div class="col-lg-12">
@@ -48,7 +99,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-2" *ngFor="let zone of zones">
-                        <div class="dash">
+                        <div (click)="goToZone(zone)" class="dash">
                             <div class="dash-titre">
                                 {{zone.libelle}}
                             </div>
