@@ -58,10 +58,10 @@
                         <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
                             <td>{{affectation.idaffectation}}</td>
                             <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
-                            <td>{{affectation.idposte.libelle}}</td>
+                            <td>{{affectation.idposte?.libelle}}</td>
                             <td>{{affectation.horaire}}</td>
-                            <td>{{affectation.idvigile.noms}}</td>
-                            <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
+                            <td>{{affectation.idvigile?.noms}}</td>
+                            <td>{{jourSemaine(affectation.idvigile?.jourRepos)}}</td>
                             <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
                             <td>{{affectation.arret?.split('T')[0]}}</td>
                         </tr>

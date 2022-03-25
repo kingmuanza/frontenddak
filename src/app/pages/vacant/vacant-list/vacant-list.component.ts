@@ -6,6 +6,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 import * as bootstrap from 'bootstrap';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Vigile } from 'src/app/models/vigile.model';
+import { NotifierService } from 'angular-notifier';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class VacantListComponent implements OnInit {
   display = "block";
   horaire = "jour";
   posteConcernee = new Poste();
+  processing = false;
 
   propositions = new Array<{
     vigile: Vigile,
@@ -36,6 +38,7 @@ export class VacantListComponent implements OnInit {
     private affectationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
     private vigileService: JarvisService<Vigile>,
+    private notifierService: NotifierService,
   ) { }
 
   ngOnInit(): void {
@@ -132,6 +135,42 @@ export class VacantListComponent implements OnInit {
       const myModal = new bootstrap.Modal(modale);
       myModal.show();
     }
+  }
+
+  affecter(p:{
+    vigile: Vigile,
+    poste?: Poste,
+    remplacant?: Vigile,
+  }) {
+    console.log('close modal');
+    console.log(p.vigile.noms);
+    console.log(p.remplacant?.noms);
+    console.log(p.poste?.libelle);
+    const modale = document.getElementById('exampleModal');
+    
+    console.log(modale);
+    if (modale != null) {
+      const myModal = bootstrap.Modal.getInstance(modale);
+      myModal?.hide();
+    }
+
+    const affectation = new Affectation();
+    affectation.dateAffectation = new Date();
+    affectation.horaire = p.vigile.horaire;
+    affectation.remplacant = p.remplacant;
+    affectation.idposte = p.poste;
+    affectation.idvigile = p.vigile;
+    
+    this.processing = true;
+    this.affectationService.ajouter('affectation', affectation).then((data) => {
+      console.log('data');
+      console.log(data);
+      this.processing = false;
+      this.notifierService.notify('success', "Ajout effectué avec succès");
+      this.router.navigate(['affectation']);
+    }).catch((e) => {
+      this.processing = false;
+    });
   }
 
   getVigiles(): Promise<Array<Vigile>> {

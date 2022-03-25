@@ -154,7 +154,7 @@
                                             Nombre Vigile Jour
                                         </span>
                                     </div>
-                                    <input [(ngModel)]="poste.nombreVigileJour" class="form-control">
+                                    <input type="number" [(ngModel)]="poste.nombreVigileJour" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -164,7 +164,7 @@
                                             Nombre Vigile Nuit
                                         </span>
                                     </div>
-                                    <input [(ngModel)]="poste.nombreVigileNuit" class="form-control">
+                                    <input type="number" [(ngModel)]="poste.nombreVigileNuit" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -215,6 +215,26 @@
                                         </span>
                                     </div>
                                     <input type="text" [(ngModel)]="poste.tel" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Longitude
+                                        </span>
+                                    </div>
+                                    <input type="number" [(ngModel)]="poste.longitude" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Latitude
+                                        </span>
+                                    </div>
+                                    <input type="number" [(ngModel)]="poste.latitude" class="form-control">
                                 </div>
                             </div>
                         </div>

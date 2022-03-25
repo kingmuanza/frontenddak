@@ -19,4 +19,6 @@ export class Poste {
     zoneJour: any;
     zoneNuit: any;
     idquartier: any;
+    longitude = 0;
+    latitude = 0;
 }

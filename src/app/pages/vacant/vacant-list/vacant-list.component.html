@@ -33,7 +33,7 @@
                     <button class="btn">Rechercher</button>
                 </div>
             </div>
-            <div class="page-contenu-corps">
+            <div *ngIf="!processing" class="page-contenu-corps">
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
                         <tr>
@@ -153,7 +153,7 @@
                                     {{score(p.vigile, posteConcernee)}}
                                 </td>
                                 <td style="text-align: center;">
-                                    <button type="button" class="btn btn-primary btn-sm">Appliquer</button>
+                                    <button (click)="affecter(p)" type="button" class="btn btn-primary btn-sm">Appliquer</button>
                                 </td>
                             </tr>
                         </tbody>

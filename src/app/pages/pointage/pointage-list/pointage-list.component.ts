@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ADTSettings } from 'angular-datatables/src/models/settings';
-import { Subject } from 'rxjs';
+import { ActivatedRoute, Router, } from '@angular/router';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { Affectation } from 'src/app/models/affectation.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
-import { PointageService } from 'src/app/services/pointage.service';
 
 @Component({
   selector: 'app-pointage-list',
@@ -12,65 +12,129 @@ import { PointageService } from 'src/app/services/pointage.service';
 })
 export class PointageListComponent implements OnInit, OnDestroy {
 
-  dtOptions: DataTables.Settings = {};
-  dtTrigger = new Subject<any>();
-  suiviPostes = new Array<any>();
+  affectations = new Array<any>();
+  date = new Date();
+  jourDeLaSemaine = -1;
+  horaire = "";
   zones = new Array<any>();
-  vigiles = new Array<any>();
+  zone: any;
+  recherche = false;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
-    private jarvisService: JarvisService<any>
+    private jarvisService: JarvisService<Affectation>,
+    private zoneService: JarvisService<Zone>,
   ) { }
+  ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
+  }
+
   ngOnInit(): void {
-    this.jarvisService.getAll('vigile').then((data2) => {
-      console.log('data');
-      console.log(data2);
-      this.vigiles = data2;
-      this.jarvisService.getAll('zone').then((data1) => {
-        console.log('data');
-        console.log(data1);
-        this.zones = data1;
-  
-        this.jarvisService.getAll('suiviposte').then((data) => {
-          console.log('data');
-          console.log(data);
-          this.suiviPostes = data;
-          this.dtTrigger.next('');
-        });
+    this.getZones().then((zones) => {
+      this.zones = zones;
+      this.route.paramMap.subscribe((paramMap) => {
+        const idzone = paramMap.get('idzone');
+        if (idzone) {
+          this.zones.forEach((zone) => {
+            if (zone.idzone == idzone) {
+              this.zone = zone;
+              this.rechercher();
+            }
+          });
+        } else {
+          this.rechercher();
+        }
       });
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
   }
 
-  getZone(id: number) {
-    let zone: any;
-    this.zones.forEach((z)=>{
-      if (z.idzone == id) {
-        zone = z;
-      }
+  getZones(): Promise<Array<any>> {
+    return new Promise((resolve, reject) => {
+      this.zoneService.getAll('zone').then((zones) => {
+        console.log('zones');
+        console.log(zones);
+        resolve(zones);
+      });
     });
-    return zone;
   }
 
-  getVigile(numero: string) {
-    let vigile: any;
-    this.vigiles.forEach((v)=>{
-      if (v.numero == numero) {
-        vigile = v;
-      }
-    });
-    return vigile;
+  rechercher() {
+    if (this.date) {
+      this.recherche = true;
+      this.jourDeLaSemaine = new Date(this.date).getDay();
+      this.jarvisService.getAll('affectation').then((data) => {
+        console.log('data');
+        console.log(data);
+        this.affectations = [];
+        data.forEach((aff) => {
+          if (this.zone) {
+            if (aff.idposte.zone?.idzone === this.zone.idzone) {
+              if (!this.horaire || (this.horaire && aff.horaire === this.horaire)) {
+                if (!aff.arret) {
+                  this.affectations.push(aff);
+                }
+                if (aff.arret) {
+                  if (new Date(aff.arret).getTime() > new Date(this.date).getTime()) {
+                    this.affectations.push(aff);
+                  }
+                }
+              }
+            }
+          } else {
+            if (!this.horaire || (this.horaire && aff.horaire === this.horaire)) {
+              if (!aff.arret) {
+                this.affectations.push(aff);
+              }
+              if (aff.arret) {
+                if (new Date(aff.arret).getTime() > new Date(this.date).getTime()) {
+                  this.affectations.push(aff);
+                }
+              }
+            }
+          }
+        });
+      });
+    } else {
+      alert('Veuillez remplir le formulaire');
+    }
   }
 
   edit(id: string) {
-    this.router.navigate(['zone', 'edit', id]);
+    this.router.navigate(['affectation', 'edit', id]);
   }
 
-  ngOnDestroy(): void {
+  jourSemaine(jour: number) {
+    if (jour == 1)
+      return "Lundi";
+    if (jour == 2)
+      return "Mardi";
+    if (jour == 3)
+      return "Mercredi";
+    if (jour == 4)
+      return "Jeudi";
+    if (jour == 5)
+      return "Vendredi";
+    if (jour == 6)
+      return "Samedi";
+    if (jour == 7)
+      return "Dimanche";
 
+    return "" + jour ? jour : "";
   }
 
+  exportAsPDF() {
+    console.log('exportAsPDF');
+    let data = document.getElementById('fiche');
+    console.log(data);
+    if (data) {
+      html2canvas(data).then(canvas => {
+        const contentDataURL = canvas.toDataURL('image/png')  // 'image/jpeg' for lower quality output.
+        let pdf = new jsPDF('p', 'cm', 'a4'); //Generates PDF in landscape mode
+        // let pdf = new jspdf('p', 'cm', 'a4'); Generates PDF in portrait mode
+        pdf.addImage(contentDataURL, 'PNG', 0, 0, 21, 29.7);
+        pdf.save('Filename.pdf');
+      });
+    }
+  }
 }
