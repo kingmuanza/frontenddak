@@ -3,15 +3,15 @@
         <div class="page-entete-titre">
             Liste des vigiles
         </div>
-        <div class="">
-            <a routerLink="/vigile/edit" class="btn btn-link" style="padding: 0; margin: 0;">
-                Ajouter un vigile
-            </a>
-        </div>
-    </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
+        <div class="boutons">
             <div class="row">
+                <div class="col-lg-2">
+                    <div class="nouveau">
+                        <a routerLink="/vigile/edit" class="btn nouveau">
+                            Ajouter un vigile
+                        </a>
+                    </div>
+                </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -35,9 +35,13 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn">Rechercher</button>
+                    <button class="btn primaire">Rechercher</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="card shadow-1">
             <div class="page-contenu-corps">
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>

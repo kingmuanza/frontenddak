@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { Ville } from 'src/app/models/ville.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -7,14 +10,15 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   templateUrl: './ville-list.component.html',
   styleUrls: ['./ville-list.component.scss']
 })
-export class VilleListComponent implements OnInit {
+export class VilleListComponent implements OnInit, OnDestroy {
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
-  villes = new Array<any>();
+  villes = new Array<Ville>();
 
   constructor(
-    private jarvisService: JarvisService<any> 
+    private router: Router,
+    private jarvisService: JarvisService<Ville> 
   ) { }
 
   ngOnInit(): void {
@@ -24,9 +28,14 @@ export class VilleListComponent implements OnInit {
       this.villes = data;
       this.dtTrigger.next('');
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
+  }
+
+  edit(ville: Ville) {
+    this.router.navigate(['ville', 'edit', ville.idville]);
+  }
+  
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
   }
 
 }

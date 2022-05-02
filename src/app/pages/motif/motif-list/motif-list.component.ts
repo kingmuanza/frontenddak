@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -7,10 +9,14 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   templateUrl: './motif-list.component.html',
   styleUrls: ['./motif-list.component.scss']
 })
-export class MotifListComponent implements OnInit {
+export class MotifListComponent implements OnInit, OnDestroy {
 
-  dtOptions: DataTables.Settings = {};
+  // Datatables
+  dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtInstance!: Promise<DataTables.Api>;
+
   motifs = new Array<any>();
 
   constructor(
@@ -24,9 +30,10 @@ export class MotifListComponent implements OnInit {
       this.motifs = data;
       this.dtTrigger.next('');
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
   }
 
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+  
 }

@@ -3,22 +3,21 @@
         <div class="page-entete-titre">
             Suivi de postes
         </div>
-        <div class="">
-            <a routerLink="/sanction/edit" class="btn btn-link" style="padding: 0; margin: 0;">
-                Ajouter une appréciation
-            </a>
-        </div>
-    </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
-
+        <div class="boutons">
             <div class="row">
+                <div class="col-lg-3">
+                    <div class="nouveau">
+                        <a routerLink="/sanction/edit" class="btn nouveau">
+                        Ajouter une appréciation
+                    </a>
+                    </div>
+                </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Date
-                            </span>
+                            Date
+                        </span>
                         </div>
                         <input type="date" name="date" class="form-control">
                     </div>
@@ -27,20 +26,24 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Horaire
-                            </span>
+                            Horaire
+                        </span>
                         </div>
                         <select type="date" name="date" class="form-control">
-                            <option value="jour">Jour</option>
-                            <option value="nuit">Nuit</option>
-                        </select>
+                        <option value="jour">Jour</option>
+                        <option value="nuit">Nuit</option>
+                    </select>
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn">Rechercher</button>
+                    <button class="btn primaire">Rechercher</button>
                 </div>
             </div>
-            <div class="page-contenu-corps">
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-corps">
+            <div class="card shadow-1">
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
                         <tr>
@@ -63,7 +66,6 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>

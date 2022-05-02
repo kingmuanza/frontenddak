@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -8,10 +10,14 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   templateUrl: './poste-list.component.html',
   styleUrls: ['./poste-list.component.scss']
 })
-export class PosteListComponent implements OnInit {
+export class PosteListComponent implements OnInit, OnDestroy {
 
-  dtOptions: DataTables.Settings = {};
+  // Datatables
+  dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtInstance!: Promise<DataTables.Api>;
+
   postes = new Array<any>();
 
   constructor(
@@ -26,9 +32,6 @@ export class PosteListComponent implements OnInit {
       this.postes = data;
       this.dtTrigger.next('');
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
   }
 
   edit(id: string) {
@@ -42,4 +45,8 @@ export class PosteListComponent implements OnInit {
     return "NON";
   }
 
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+  
 }

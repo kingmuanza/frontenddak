@@ -10,7 +10,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   templateUrl: './pointage-list.component.html',
   styleUrls: ['./pointage-list.component.scss']
 })
-export class PointageListComponent implements OnInit, OnDestroy {
+export class PointageListComponent implements OnInit {
 
   affectations = new Array<any>();
   date = new Date();
@@ -26,9 +26,6 @@ export class PointageListComponent implements OnInit, OnDestroy {
     private jarvisService: JarvisService<Affectation>,
     private zoneService: JarvisService<Zone>,
   ) { }
-  ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
-  }
 
   ngOnInit(): void {
     this.getZones().then((zones) => {

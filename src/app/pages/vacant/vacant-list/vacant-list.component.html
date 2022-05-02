@@ -30,53 +30,54 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn">Rechercher</button>
+                    <button class="btn primaire">Rechercher</button>
                 </div>
             </div>
             <div *ngIf="!processing" class="page-contenu-corps">
-                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Zone</th>
-                            <th>Libellé</th>
-                            <th>Contrat</th>
-                            <th class="text-right">Nbr Vigil Jr.</th>
-                            <th class="text-right">Nbr Vigil Aff Jr.</th>
-                            <th class="text-right">Nbr Vigil Nt.</th>
-                            <th class="text-right">Nbr Vigil Aff Nt.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let poste of postes">
-                            <td>{{poste.idposte}}</td>
-                            <td>{{poste.zone.libelle}}</td>
-                            <td>{{poste.libelle}}</td>
-                            <td>{{poste.contrat}}</td>
-                            <td class="text-right">
-                                {{poste.nombreVigileJour ?poste.nombreVigileJour:0}}
-                            </td>
-                            <td class="text-right">
-                                <div (click)="openModal(poste, 'jour')" *ngIf="poste.nombreVigileJour > getNombreAffectationJour(poste)" class="idea">
-                                </div>
-                                <div class="nombre" [ngClass]="{'red': poste.nombreVigileJour > getNombreAffectationJour(poste)}">
-                                    {{getNombreAffectationJour(poste)}}
-                                </div>
-                            </td>
-                            <td class="text-right">
-                                {{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}
-                            </td>
-                            <td class="text-right">
-                                <div (click)="openModal(poste, 'nuit')" *ngIf="poste.nombreVigileNuit > getNombreAffectationNuit(poste)" class="idea">
-                                </div>
-                                <div class="nombre" [ngClass]="{'red': poste.nombreVigileNuit > getNombreAffectationNuit(poste)}">
-                                    {{getNombreAffectationNuit(poste)}}
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                <div class="card shadow-1">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Zone</th>
+                                <th>Libellé</th>
+                                <th>Contrat</th>
+                                <th class="text-right">Nbr Vigil Jr.</th>
+                                <th class="text-right">Nbr Vigil Aff Jr.</th>
+                                <th class="text-right">Nbr Vigil Nt.</th>
+                                <th class="text-right">Nbr Vigil Aff Nt.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let poste of postes">
+                                <td>{{poste.idposte}}</td>
+                                <td>{{poste.zone.libelle}}</td>
+                                <td>{{poste.libelle}}</td>
+                                <td>{{poste.contrat}}</td>
+                                <td class="text-right">
+                                    {{poste.nombreVigileJour ?poste.nombreVigileJour:0}}
+                                </td>
+                                <td class="text-right">
+                                    <div (click)="openModal(poste, 'jour')" *ngIf="poste.nombreVigileJour > getNombreAffectationJour(poste)" class="idea">
+                                    </div>
+                                    <div class="nombre" [ngClass]="{'red': poste.nombreVigileJour > getNombreAffectationJour(poste)}">
+                                        {{getNombreAffectationJour(poste)}}
+                                    </div>
+                                </td>
+                                <td class="text-right">
+                                    {{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}
+                                </td>
+                                <td class="text-right">
+                                    <div (click)="openModal(poste, 'nuit')" *ngIf="poste.nombreVigileNuit > getNombreAffectationNuit(poste)" class="idea">
+                                    </div>
+                                    <div class="nombre" [ngClass]="{'red': poste.nombreVigileNuit > getNombreAffectationNuit(poste)}">
+                                        {{getNombreAffectationNuit(poste)}}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

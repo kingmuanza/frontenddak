@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn" (click)="rechercher()">Rechercher</button>
+                    <button class="btn primaire" (click)="rechercher()">Rechercher</button>
                 </div>
             </div>
 
@@ -65,50 +65,52 @@
                         </span>
                     </div>
 
-                    <table class="table table-bordered row-border hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Zone</th>
-                                <th>Quartier</th>
-                                <th>Poste</th>
-                                <th>Horaire</th>
-                                <th>Vigile</th>
-                                <th style="text-align: center;">Pointage 1</th>
-                                <th style="text-align: center;">Pointage 2</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
-                                <td>{{date | date: 'yyyy-MM-dd'}}</td>
-                                <td>{{affectation.idposte.zone?.libelle}}</td>
-                                <td>{{affectation.idposte.idquartier?.nom}}</td>
-                                <td>{{affectation.idposte.libelle}}</td>
-                                <td>{{affectation.horaire}}</td>
-                                <td>
-                                    <ng-container *ngIf="affectation.idvigile.jourRepos !== jourDeLaSemaine">
-                                        {{affectation.idvigile.noms}}
-                                    </ng-container>
-                                    <ng-container *ngIf="affectation.idvigile.jourRepos === jourDeLaSemaine">
-                                        <b>
+                    <div class="card shadow-1" style="padding: 0;">
+                        <table class="table table-bordered row-border hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Zone</th>
+                                    <th>Quartier</th>
+                                    <th>Poste</th>
+                                    <th>Horaire</th>
+                                    <th>Vigile</th>
+                                    <th style="text-align: center;">Pointage 1</th>
+                                    <th style="text-align: center;">Pointage 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
+                                    <td>{{date | date: 'yyyy-MM-dd'}}</td>
+                                    <td>{{affectation.idposte.zone?.libelle}}</td>
+                                    <td>{{affectation.idposte.idquartier?.nom}}</td>
+                                    <td>{{affectation.idposte.libelle}}</td>
+                                    <td>{{affectation.horaire}}</td>
+                                    <td>
+                                        <ng-container *ngIf="affectation.idvigile.jourRepos !== jourDeLaSemaine">
+                                            {{affectation.idvigile.noms}}
+                                        </ng-container>
+                                        <ng-container *ngIf="affectation.idvigile.jourRepos === jourDeLaSemaine">
+                                            <b>
                                             {{affectation.remplacant? affectation.remplacant.noms : ""}}
                                         </b>
-                                    </ng-container>
-                                </td>
-                                <td style="text-align: center;">
-                                    <span style="margin-right: 10px; color: green;">
+                                        </ng-container>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span style="margin-right: 10px; color: green;">
                                         <i class="bi-geo-alt"></i>
                                     </span>
-                                    <span style="margin-right: 10px; color: green;">
+                                        <span style="margin-right: 10px; color: green;">
                                         <i class="bi-fingerprint"></i>
                                     </span> {{date | date: 'HH:mm:ss'}}
-                                </td>
-                                <td>
+                                    </td>
+                                    <td>
 
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </div>

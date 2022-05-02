@@ -3,57 +3,37 @@
         <div class="page-entete-titre">
             Liste des statuts
         </div>
-        <div class="">
-            <a routerLink="/statut/edit" class="btn btn-link" style="padding: 0; margin: 0;">
-                Ajouter un statut
-            </a>
-        </div>
-    </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
+        <div class="boutons">
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Noms
-                            </span>
-                        </div>
-                        <select type="date" name="date" class="form-control">
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Matricule
-                            </span>
-                        </div>
-                        <select type="date" name="date" class="form-control">
-                        </select>
-                    </div>
-                </div>
                 <div class="col-lg-2">
-                    <button class="btn">Rechercher</button>
+                    <div class="nouveau">
+                        <a routerLink="/statut/edit" class="btn nouveau">
+                            Ajouter un statut
+                        </a>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="">
+        <div class="page-contenu-titre">
             <div class="page-contenu-corps">
-                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Libellé</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let statut of statuts">
-                            <td>{{statut.idstatut}}</td>
-                            <td>{{statut.libelle}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                <div class="card shadow-1">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Libellé</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let statut of statuts">
+                                <td>{{statut.idstatut}}</td>
+                                <td>{{statut.libelle}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

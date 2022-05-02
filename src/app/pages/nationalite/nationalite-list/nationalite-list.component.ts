@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -9,8 +11,12 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 })
 export class NationaliteListComponent implements OnInit {
 
-  dtOptions: DataTables.Settings = {};
+  // Datatables
+  dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtInstance!: Promise<DataTables.Api>;
+
   nationalites = new Array<any>();
 
   constructor(
@@ -24,9 +30,6 @@ export class NationaliteListComponent implements OnInit {
       this.nationalites = data;
       this.dtTrigger.next('');
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
   }
 
 }

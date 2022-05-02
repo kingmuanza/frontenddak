@@ -3,61 +3,57 @@
         <div class="page-entete-titre">
             Liste des zones
         </div>
-        <div class="">
-            <a routerLink="/zone/edit" class="btn btn-link" style="padding: 0; margin: 0;">
-                Ajouter une zone
-            </a>
-        </div>
-    </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
+        <div class="boutons">
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Noms
-                            </span>
-                        </div>
-                        <select type="date" name="date" class="form-control">
-                        </select>
+                <div class="col-lg-2">
+                    <div class="nouveau">
+                        <a routerLink="/zone/edit" class="btn nouveau">
+                            Ajouter une zone
+                        </a>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Matricule
-                            </span>
+                            <span class="input-group-text">Ville</span>
                         </div>
-                        <select type="date" name="date" class="form-control">
+                        <select [(ngModel)]="ville" class="form-control">
+                            <option [ngValue]="null">Toutes les villes</option>
+                            <option [ngValue]="ville" *ngFor="let ville of villes">
+                                {{ville.libelle}}
+                            </option>
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn">Rechercher</button>
+                    <button (click)="filtrer(ville)" class="btn primaire">Filtrer</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
             <div class="page-contenu-corps">
-                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Code</th>
-                            <th>Libellé</th>
-                            <th>Horaire</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let zone of zones" (click)="edit(zone.idzone)">
-                            <td>{{zone.idzone}}</td>
-                            <td>{{zone.code}}</td>
-                            <td>{{zone.libelle}}</td>
-                            <td>{{zone.horaire}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                <div class="card shadow-1">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table-border row-border hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Code</th>
+                                <th>Libellé</th>
+                                <th>Ville</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let zone of resultats" (click)="edit(zone.idzone)">
+                                <td>{{zone.idzone}}</td>
+                                <td>{{zone.code}}</td>
+                                <td>{{zone.libelle}}</td>
+                                <td>{{zone.idville?.libelle}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

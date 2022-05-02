@@ -34,16 +34,17 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                    Horaire
+                                    Ville
                                 </span>
                             </div>
-                            <select [(ngModel)]="zone.horaire" class="form-control">
-                                <option value="jour">Jour</option>
-                                <option value="nuit">Nuit</option>
+                            <select [(ngModel)]="zone.idville" class="form-control">
+                                <option [ngValue]="ville" *ngFor="let ville of villes">
+                                    {{ville.libelle}}
+                                </option>
                             </select>
                         </div>
                         <div class="input-group">
-                            <button [disabled]="processing" (click)="save()" class="btn btn-primary">Enregistrer</button> &nbsp;
+                            <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
                             <button *ngIf="zone.idzone != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Poste } from 'src/app/models/poste.model';
@@ -7,6 +7,8 @@ import * as bootstrap from 'bootstrap';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { NotifierService } from 'angular-notifier';
+import { DataTableDirective } from 'angular-datatables';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 
 
 @Component({
@@ -14,10 +16,14 @@ import { NotifierService } from 'angular-notifier';
   templateUrl: './vacant-list.component.html',
   styleUrls: ['./vacant-list.component.scss']
 })
-export class VacantListComponent implements OnInit {
+export class VacantListComponent implements OnInit, OnDestroy {
 
-  dtOptions: DataTables.Settings = {};
+  // Datatables
+  dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtInstance!: Promise<DataTables.Api>;
+
   postes = new Array<any>();
   vigiles = new Array<Vigile>();
   remplacants = new Array<Vigile>();
@@ -62,10 +68,6 @@ export class VacantListComponent implements OnInit {
         });
       });
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      order:[[0, 'desc']] 
-    };
   }
 
   getNombreAffectationJour(poste: Poste): number {
@@ -217,5 +219,8 @@ export class VacantListComponent implements OnInit {
     return score;
   }
 
-
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+  
 }

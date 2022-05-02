@@ -3,16 +3,16 @@
         <div class="page-entete-titre">
             Liste des affectations
         </div>
-        <div class="">
-            <a routerLink="/affectation/edit" class="btn btn-link" style="padding: 0; margin: 0;">
-                Ajouter une affectation
-            </a>
-        </div>
-    </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
+        <div class="boutons">
 
             <div class="row">
+                <div class="col-lg-3">
+                    <div class="nouveau">
+                        <a routerLink="/affectation/edit" class="btn nouveau">
+                            Ajouter une affectation
+                        </a>
+                    </div>
+                </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -37,10 +37,14 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn">Rechercher</button>
+                    <button class="btn primaire">Rechercher</button>
                 </div>
             </div>
-            <div class="page-contenu-corps">
+        </div>
+    </div>
+    <div class="">
+        <div class="page-contenu-corps">
+            <div class="card shadow-1">
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
                         <tr>
@@ -67,7 +71,7 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
+</div>

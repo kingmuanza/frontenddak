@@ -4,6 +4,7 @@ export class ZoneDak {
     code = "";
     libelle = "";
     horaire = "";
+    idville: any;
 
     constructor() {
 

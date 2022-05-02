@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
@@ -9,10 +11,14 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   templateUrl: './vacant-vigile-list.component.html',
   styleUrls: ['./vacant-vigile-list.component.scss']
 })
-export class VacantVigileListComponent implements OnInit {
+export class VacantVigileListComponent implements OnInit, OnDestroy {
 
-  dtOptions: DataTables.Settings = {};
+  // Datatables
+  dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtInstance!: Promise<DataTables.Api>;
+
   vigiles = new Array<any>();
   affectations = new Array<any>();
 
@@ -35,9 +41,6 @@ export class VacantVigileListComponent implements OnInit {
         this.dtTrigger.next('');
       });
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
   }
 
   getNombreAffectation(vigile: Vigile) {
@@ -98,4 +101,8 @@ export class VacantVigileListComponent implements OnInit {
     return "NON";
   }
 
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+  
 }

@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn">Rechercher</button>
+                    <button class="btn primaire">Rechercher</button>
                 </div>
             </div>
             <div *ngIf="terminee" class="page-contenu-corps">
@@ -56,12 +56,12 @@
                                 <div class="col-lg-6" style="border-right: 1px solid #fff;">
 
                                     <div class="valeur">
-                                        {{nbVigilesJour}}
+                                        {{besoinVigile.nbVigilesJour}}
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="valeur">
-                                        {{nbBesoinVigilesJour }}
+                                        {{besoinVigile.nbBesoinVigilesJour }}
                                     </div>
                                 </div>
                             </div>
@@ -76,12 +76,12 @@
                                 <div class="col-lg-6" style="border-right: 1px solid #fff;">
 
                                     <div class="valeur">
-                                        {{nbVigilesNuit}}
+                                        {{besoinVigile.nbVigilesNuit}}
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="valeur">
-                                        {{nbBesoinVigilesNuit}}
+                                        {{besoinVigile.nbBesoinVigilesNuit}}
                                     </div>
                                 </div>
                             </div>
@@ -102,6 +102,9 @@
                         <div (click)="goToZone(zone)" class="dash">
                             <div class="dash-titre">
                                 {{zone.libelle}}
+                            </div>
+                            <div class="">
+                                {{zone.idville?.nom}}
                             </div>
                             <div class="dash-postes">
                                 <span class="dash-postes-libelle" *ngFor="let poste of postes">

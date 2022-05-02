@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
@@ -10,10 +12,14 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   templateUrl: './vacant-remplacant-list.component.html',
   styleUrls: ['./vacant-remplacant-list.component.scss']
 })
-export class VacantRemplacantListComponent implements OnInit {
+export class VacantRemplacantListComponent implements OnInit, OnDestroy {
 
-  dtOptions: DataTables.Settings = {};
+  // Datatables
+  dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtInstance!: Promise<DataTables.Api>;
+
   vigiles = new Array<any>();
   affectations = new Array<any>();
 
@@ -36,9 +42,6 @@ export class VacantRemplacantListComponent implements OnInit {
         this.dtTrigger.next('');
       });
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
   }
 
   getAffectationJour(vigile: Vigile, jour: number): Affectation {
@@ -79,4 +82,8 @@ export class VacantRemplacantListComponent implements OnInit {
     return "NON";
   }
 
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+  
 }

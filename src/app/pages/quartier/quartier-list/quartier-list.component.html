@@ -3,61 +3,61 @@
         <div class="page-entete-titre">
             Liste des quartiers
         </div>
-        <div class="">
-            <a routerLink="/quartier/edit" class="btn btn-link" style="padding: 0; margin: 0;">
-                Ajouter un quartier
-            </a>
-        </div>
-    </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
+        <div class="boutons">
+
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Noms
-                            </span>
-                        </div>
-                        <select type="date" name="date" class="form-control">
-                        </select>
+                <div class="col-lg-2">
+                    <div class="nouveau">
+                        <a routerLink="/quartier/edit" class="btn nouveau">
+                            Ajouter un quartier
+                        </a>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Matricule
+                                Zone
                             </span>
                         </div>
-                        <select type="date" name="date" class="form-control">
+
+                        <select [(ngModel)]="zone" class="form-control">
+                            <option [ngValue]="null">Toutes les zones</option>
+                            <option [ngValue]="z" *ngFor="let z of zones">
+                                {{z.libelle}}
+                            </option>
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn">Rechercher</button>
+                    <button class="btn primaire" (click)="filtrer(zone)">Filtrer</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
             <div class="page-contenu-corps">
-                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Code</th>
-                            <th>Libellé</th>
-                            <th>Zone</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let quartier of quartiers" (click)="edit(quartier.idquartier)">
-                            <td>{{quartier.idquartier}}</td>
-                            <td>{{quartier.code}}</td>
-                            <td>{{quartier.nom}}</td>
-                            <td>{{quartier.idzone?.libelle}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                <div class="card shadow-1">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Code</th>
+                                <th>Libellé</th>
+                                <th>Zone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let quartier of resultats" (click)="edit(quartier.idquartier)">
+                                <td>{{quartier.idquartier}}</td>
+                                <td>{{quartier.code}}</td>
+                                <td>{{quartier.nom}}</td>
+                                <td>{{quartier.idzone?.libelle}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
