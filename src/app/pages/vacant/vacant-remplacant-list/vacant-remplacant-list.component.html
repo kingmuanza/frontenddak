@@ -5,6 +5,13 @@
         </div>
         <div class="boutons">
             <div class="row">
+                <div class="col-lg-4">
+                    <div class="nouveau">
+                        <a (click)="reorganiser()" class="btn nouveau">
+                            Proposer une réorganisation
+                        </a>
+                    </div>
+                </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -33,7 +40,11 @@
             </div>
         </div>
     </div>
+    <div>
+
+    </div>
     <div class="page-contenu">
+
         <div class="page-contenu-titre">
             <div class="card shadow-1">
                 <table datatable [dtOptions]="dtOptions " [dtTrigger]="dtTrigger " class="row-border hover ">
@@ -72,29 +83,31 @@
                                 </div>
                                 <div *ngIf="vigile.jourRepos !==2 ">
                                     <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 2).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 2).idposte?.libelle}} 
+                                        {{getAffectationJour(vigile, 2).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==3 && !getAffectationJour(vigile, 3).idposte " class="idea "></div>
+                                <div *ngIf="vigile.jourRepos !==3 && !getAffectationJour(vigile, 3).idposte " class="idea ">
+                                </div>
                                 <div *ngIf="vigile.jourRepos===3 " class="repos ">
                                     REPOS
                                 </div>
                                 <div *ngIf="vigile.jourRepos !==3 ">
                                     <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 3).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 3).idposte?.libelle}} 
+                                        {{getAffectationJour(vigile, 3).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==4 && !getAffectationJour(vigile, 4).idposte " class="idea "></div>
+                                <div *ngIf="vigile.jourRepos !==4 && !getAffectationJour(vigile, 4).idposte " class="idea ">
+                                </div>
                                 <div *ngIf="vigile.jourRepos===4 " class="repos ">
                                     REPOS
                                 </div>
                                 <div *ngIf="vigile.jourRepos !==4 ">
                                     <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 4).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 4).idposte?.libelle}} 
+                                        {{getAffectationJour(vigile, 4).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
@@ -135,6 +148,50 @@
                     </tbody>
                 </table>
 
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" #suggestion id="suggestion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Suggestions
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div *ngIf="vigiles.length == 0">
+                        Vous devez procéder à un recrutemeent
+                    </div>
+                    <div *ngIf="vigiles.length > 1">
+                        <div style="margin-bottom: 15px;">
+                            Vous pouvez effectuer une des affectations suivantes :
+                        </div>
+                        <table class="table table-bordered table-dark">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">#</th>
+                                    <th>Vigile</th>
+                                    <th>Rempl.</th>
+                                    <th style="text-align: center;">Zone</th>
+                                    <th style="text-align: center;">Quartier</th>
+                                    <th style="text-align: center;">Score</th>
+                                    <th style="text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
+                </div>
             </div>
         </div>
     </div>

@@ -50,15 +50,14 @@ export class VigileEditComponent implements OnInit {
               if (id) {
                 this.jarvisService.get('vigile', Number(id)).then((vigile) => {
                   console.log('le vigile recupéré');
-                  console.log(vigile);
-                  this.vigile = vigile;
+                  this.vigile = new Vigile();
+                  this.vigile.copy(vigile);
+                  console.log(this.vigile);
 
                   this.vigile.dateEntree = vigile.dateEntree?.split('T')[0];
                   this.vigile.dateSortie = vigile.dateSortie?.split('T')[0];
                   this.vigile.dteNce = vigile.dteNce?.split('T')[0];
-                  this.vigile.debutConge = vigile.debutConge?.split('T')[0];
-                  this.vigile.finConge = vigile.finConge?.split('T')[0];
-
+                  
                   this.jarvisService.getAll('affectation').then((data) => {
                     console.log('data');
                     console.log(data);
@@ -148,20 +147,27 @@ export class VigileEditComponent implements OnInit {
     }
   }
 
+  setConges() {
+    const annee = new Date().getFullYear();
+    if (this.vigile.dateEntree) {
+      const dateDebutConges = new Date(this.vigile.dateEntree);
+      dateDebutConges.setFullYear(annee);
+      this.vigile.debutConge = dateDebutConges;
+    }
+  }
+
   save() {
     console.log('vigile à enregistrer');
     console.log(this.vigile);
-    if (this.vigile.dteNce)
+    if (this.vigile.dteNce) {
       this.vigile.dteNce = new Date(this.vigile.dteNce);
-    if (this.vigile.dateEntree)
+    }
+    if (this.vigile.dateEntree) {
       this.vigile.dateEntree = new Date(this.vigile.dateEntree);
-    if (this.vigile.dateSortie)
+    }
+    if (this.vigile.dateSortie) {
       this.vigile.dateSortie = new Date(this.vigile.dateSortie);
-    if (this.vigile.debutConge)
-      this.vigile.debutConge = new Date(this.vigile.debutConge);
-    if (this.vigile.finConge)
-      this.vigile.finConge = new Date(this.vigile.finConge);
-
+    }
     if (this.vigile.idvigile == 0) {
       this.processing = true;
       this.jarvisService.ajouter('vigile', this.vigile).then((data) => {
@@ -190,6 +196,20 @@ export class VigileEditComponent implements OnInit {
   remplacant() {
     this.processing = true;
     this.vigile.estRemplacant = true;
+    this.jarvisService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
+      console.log('data');
+      console.log(data);
+      this.processing = false;
+      this.notifierService.notify('success', "Modification effectuée avec succès");
+      this.router.navigate(['vigile']);
+    }).catch((e) => {
+      this.processing = false;
+    });
+  }
+
+  unRemplacant() {
+    this.processing = true;
+    this.vigile.estRemplacant = false;
     this.jarvisService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
       console.log('data');
       console.log(data);

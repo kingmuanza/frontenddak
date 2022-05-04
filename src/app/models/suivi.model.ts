@@ -8,6 +8,7 @@ export class Suivi {
     poste: any;
     idvigile: any;
     remplacant: any;
+    nombreAbsence = 0;
 
     constructor() {
         this.dateSuivi = new Date().toISOString().split('T')[0];

@@ -48,8 +48,9 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Date</th>
-                            <th>Poste</th>
+                            <th>Date Sanction</th>
+                            <th>Date Effet</th>
+                            <th>Jours</th>
                             <th>Vigile</th>
                             <th>Horaire</th>
                             <th>Commentaire</th>
@@ -59,9 +60,10 @@
                         <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idsuiviPoste)">
                             <td>{{affectation.idsuiviPoste}}</td>
                             <td>{{affectation.dateSuivi.split('T')[0]}}</td>
-                            <td>{{affectation.poste?.libelle}}</td>
+                            <td>{{affectation.dateSuivi.split('T')[0]}}</td>
+                            <td>{{affectation.nombreAbsence}}</td>
                             <td>{{affectation.idvigile?.noms}}</td>
-                            <td>{{affectation.horaire}}</td>
+                            <td style="text-transform: capitalize;">{{affectation.horaire}}</td>
                             <td>{{affectation.commentaire}}</td>
                         </tr>
                     </tbody>

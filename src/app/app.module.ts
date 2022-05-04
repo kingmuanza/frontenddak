@@ -45,6 +45,8 @@ import { QuartierListComponent } from './pages/quartier/quartier-list/quartier-l
 import { QuartierEditComponent } from './pages/quartier/quartier-edit/quartier-edit.component';
 import { VacantRemplacantListComponent } from './pages/vacant/vacant-remplacant-list/vacant-remplacant-list.component';
 import { MenuGaucheComponent } from './composants/menu-gauche/menu-gauche.component';
+import { CongeListComponent } from './pages/conge/conge-list/conge-list.component';
+import { CongeEditComponent } from './pages/conge/conge-edit/conge-edit.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +87,9 @@ import { MenuGaucheComponent } from './composants/menu-gauche/menu-gauche.compon
     QuartierListComponent,
     QuartierEditComponent,
     VacantRemplacantListComponent,
-    MenuGaucheComponent
+    MenuGaucheComponent,
+    CongeListComponent,
+    CongeEditComponent
   ],
   imports: [
     BrowserModule,

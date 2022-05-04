@@ -4,6 +4,8 @@ import { PlanningIncompletFicheComponent } from './etats/planning/planning-incom
 import { PlanningOperationnelFicheComponent } from './etats/planning/planning-operationnel-fiche/planning-operationnel-fiche.component';
 import { AffectationEditComponent } from './pages/affectation/affectation-edit/affectation-edit.component';
 import { AffectationListComponent } from './pages/affectation/affectation-list/affectation-list.component';
+import { CongeEditComponent } from './pages/conge/conge-edit/conge-edit.component';
+import { CongeListComponent } from './pages/conge/conge-list/conge-list.component';
 import { ConnexionComponent } from './pages/connexion/connexion.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { IncidentEditComponent } from './pages/incident/incident-edit/incident-edit.component';
@@ -48,6 +50,10 @@ const routes: Routes = [
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationEditComponent },
   { path: 'affectation/edit/:id', component: AffectationEditComponent },
+
+  { path: 'conge', component: CongeListComponent },
+  { path: 'conge/edit', component: CongeEditComponent },
+  { path: 'conge/edit/:id', component: CongeEditComponent },
 
   { path: 'sanction', component: SanctionListComponent },
   { path: 'sanction/edit', component: SanctionEditComponent },

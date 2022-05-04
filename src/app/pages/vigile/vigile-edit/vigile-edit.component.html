@@ -4,7 +4,7 @@
             Ajouter un nouveau vigile
         </div>
         <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
-            Modifier le vigile
+            Modifier le vigile : {{vigile.noms}}
         </div>
         <div class="">
             <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
@@ -222,7 +222,7 @@
                                             Date début congés
                                         </span>
                                     </div>
-                                    <input [(ngModel)]="vigile.debutConge" type="date" class="form-control">
+                                    <input [ngModel]="vigile.debutConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.debutConge = $event" type="date" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -232,7 +232,7 @@
                                             Date fin congés
                                         </span>
                                     </div>
-                                    <input [(ngModel)]="vigile.finConge" type="date" class="form-control">
+                                    <input [ngModel]="vigile.finConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.debutConge = $event" type="date" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -281,10 +281,23 @@
                                     <input [(ngModel)]="vigile.statut" type="text" class="form-control">
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div style="margin-top:15px; margin-bottom: 15px;">
+                                    <input type="checkbox" [(ngModel)]="vigile.estRemplacant"> &nbsp; Est remplacant
+
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div style="margin-top:15px; margin-bottom: 15px;">
+                                    <input type="checkbox" [(ngModel)]="vigile.estRemplacantConges"> &nbsp; Est remplacant congés
+
+                                </div>
+                            </div>
                         </div>
                         <div class="input-group">
-                            <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
-                            <button *ngIf="vigile.idvigile != 0" [disabled]="processing" (click)="remplacant()" class="btn nouveau">Définir comme remplacant</button> &nbsp;
+                            <button [disabled]="processing" (click)="save()" class="btn nouveau">
+                                Enregistrer
+                            </button>&nbsp;
                             <button *ngIf="vigile.idvigile != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
                         </div>
                     </div>

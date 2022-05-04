@@ -1,9 +1,9 @@
-<div class="application" style="background-color: #eee;">
+<div class="application" style="background-color: #eee; height: 100vh; overflow-y: hidden;">
     <div class="row row-no-padding">
         <div class="col-lg-2" style="overflow-x: hidden;">
             <app-menu-gauche></app-menu-gauche>
         </div>
-        <div class="col-lg-10">
+        <div class="col-lg-10" style="height: 100vh; overflow-y: scroll;">
             <router-outlet></router-outlet>
         </div>
     </div>

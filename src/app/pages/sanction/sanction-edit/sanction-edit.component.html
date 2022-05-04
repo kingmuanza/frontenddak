@@ -1,14 +1,14 @@
 <div class="page">
     <div class="page-entete">
         <div *ngIf="suivi.idsuiviPoste==0" class="page-entete-titre">
-            Ajouter un nouveau suivi
+            Ajouter une nouvelle sanction
         </div>
         <div *ngIf="suivi.idsuiviPoste!=0" class="page-entete-titre">
-            Modifier le suivi
+            Modifier la sanction
         </div>
         <div class="">
             <a routerLink="/sanction" class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la liste des suivis
+                Revenir à la liste des sanctions
             </a>
         </div>
     </div>
@@ -17,47 +17,7 @@
 
             <div class="page-contenu-corps">
                 <div class="row">
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Date suivi
-                                </span>
-                            </div>
-                            <input [(ngModel)]="suivi.dateSuivi" (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
-                        </div>
-                        <small *ngIf="jour">
-                            {{jour}}
-                        </small>
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Poste
-                                </span>
-                            </div>
-                            <select type="text" [(ngModel)]="suivi.poste" class="form-control">
-                                <option [ngValue]="poste" *ngFor="let poste of postes">
-                                    {{poste.libelle}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Horaire
-                                </span>
-                            </div>
-                            <select [(ngModel)]="suivi.horaire" class="form-control">
-                                <option value="jour">Jour</option>
-                                <option value="nuit">Nuit</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-9">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -70,23 +30,28 @@
                                 </option>
                             </select>
                         </div>
-                        <small *ngIf="suivi.idvigile">
-                            Jour de repos : {{suivi.idvigile ? jourSemaine(suivi.idvigile?.jourRepos) :
-                            "Aucun jour défini"}}
-                        </small>
                     </div>
-                    <div class="col-lg-3">
-                        <div class="">
-                            <input type="checkbox" [(ngModel)]="estRemplacant">
-                            <span class="">
-                                Remplacant
-                            </span>
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Date effet
+                                </span>
+                            </div>
+                            <input [(ngModel)]="suivi.dateSuivi" (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
                         </div>
-                        <small *ngIf="estRemplacant">
-                            L'affectation sera suspendue
-                        </small>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-5">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Nombre de jour de repos pris
+                                </span>
+                            </div>
+                            <input [(ngModel)]="suivi.nombreAbsence" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
                         <div style="margin-top: 20px;">
                             <span class="">
                                 Commentaires

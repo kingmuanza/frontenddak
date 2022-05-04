@@ -55,6 +55,7 @@
                             <th>Quartier</th>
                             <th>Ville</th>
                             <th style="text-align: center;">Remplacant</th>
+                            <th style="text-align: center;">Rempl. Congés</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,6 +70,9 @@
                             <td>{{vigile.ville?.libelle}}</td>
                             <td style="text-align: center;">
                                 <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConges" readonly>
                             </td>
                         </tr>
                     </tbody>

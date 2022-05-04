@@ -20,6 +20,7 @@ export class SanctionEditComponent implements OnInit {
   vigiles = new Array<any>();
   jour = '';
   estRemplacant = false;
+  nombre = 1;
 
   constructor(
     private router: Router,
