@@ -17,10 +17,10 @@ export class Vigile {
     debutConge = new Date();
     finConge = new Date();
     statut = "";
-    jourRepos = "";
+    jourRepos = 0;
     parrain = "";
     estRemplacant = false;
-    estRemplacantConges = false;
+    estRemplacantConge = false;
 
     copy(vigile: Vigile) {
         this.idvigile = vigile.idvigile;
@@ -44,24 +44,8 @@ export class Vigile {
         this.jourRepos = vigile.jourRepos;
         this.parrain = vigile.parrain;
         this.estRemplacant = vigile.estRemplacant;
-        this.estRemplacantConges = vigile.estRemplacantConges ? vigile.estRemplacantConges : false ;
-        this.calculerConges();
+        this.estRemplacantConge = vigile.estRemplacantConge ? vigile.estRemplacantConge : false ;
     }
 
-    calculerConges() {
-        const annee = new Date().getFullYear();
-        if (this.dateEntree) {
-            const dateDebutConges = new Date(this.dateEntree);
-            if (new Date(this.dateEntree).getFullYear() === new Date().getFullYear()) {
-                dateDebutConges.setFullYear(annee + 1);
-            } else {
-                dateDebutConges.setFullYear(annee);
-            }
-            this.debutConge = dateDebutConges;
-            let dateFinConges = new Date(dateDebutConges);
-            dateFinConges.setDate(dateFinConges.getDate() + 21);
-            this.finConge = dateFinConges;
-        }
-    }
 
 }

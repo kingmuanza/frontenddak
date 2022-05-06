@@ -44,14 +44,13 @@
 
     </div>
     <div class="page-contenu">
-
         <div class="page-contenu-titre">
             <div class="card shadow-1">
                 <table datatable [dtOptions]="dtOptions " [dtTrigger]="dtTrigger " class="row-border hover ">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Noms</th>
+                            <th>Score</th>
+                            <th style="text-align: left;">Noms</th>
                             <th>Lundi</th>
                             <th>Mardi</th>
                             <th>Mercredi</th>
@@ -59,90 +58,94 @@
                             <th>Vendredi</th>
                             <th>Samedi</th>
                             <th>Dimanche</th>
+                            <th>Rep</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let vigile of vigiles ">
-                            <td>{{vigile.idvigile}}</td>
-                            <td>{{vigile.noms}}</td>
+                        <tr *ngFor="let v of vigilesPropositions">
+                            <td>{{v.score}}</td>
+                            <td style="text-align: left;">{{v.vigile.noms}}</td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==1 && !getAffectationJour(vigile, 1).idposte " class="idea "></div>
-                                <div *ngIf="vigile.jourRepos===1 " class="repos ">
+                                <div *ngIf="v.vigile.jourRepos !==1 && !getAffectationJour(v.vigile, 1).idposte " class="idea "></div>
+                                <div *ngIf="v.vigile.jourRepos===1 " class="repos ">
                                     REPOS
                                 </div>
-                                <div *ngIf="vigile.jourRepos !==1 ">
-                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 1).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 1).idposte?.libelle}}
+                                <div *ngIf="v.vigile.jourRepos !==1 ">
+                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(v.vigile, 1).idposte?.idposte ">
+                                        {{getAffectationJour(v.vigile, 1).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==2 && !getAffectationJour(vigile, 2).idposte " class="idea "></div>
-                                <div *ngIf="vigile.jourRepos===2 " class="repos ">
+                                <div *ngIf="v.vigile.jourRepos !==2 && !getAffectationJour(v.vigile, 2).idposte " class="idea "></div>
+                                <div *ngIf="v.vigile.jourRepos===2 " class="repos ">
                                     REPOS
                                 </div>
-                                <div *ngIf="vigile.jourRepos !==2 ">
-                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 2).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 2).idposte?.libelle}}
+                                <div *ngIf="v.vigile.jourRepos !==2 ">
+                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(v.vigile, 2).idposte?.idposte ">
+                                        {{getAffectationJour(v.vigile, 2).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==3 && !getAffectationJour(vigile, 3).idposte " class="idea ">
+                                <div *ngIf="v.vigile.jourRepos !==3 && !getAffectationJour(v.vigile, 3).idposte " class="idea ">
                                 </div>
-                                <div *ngIf="vigile.jourRepos===3 " class="repos ">
+                                <div *ngIf="v.vigile.jourRepos===3 " class="repos ">
                                     REPOS
                                 </div>
-                                <div *ngIf="vigile.jourRepos !==3 ">
-                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 3).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 3).idposte?.libelle}}
+                                <div *ngIf="v.vigile.jourRepos !==3 ">
+                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(v.vigile, 3).idposte?.idposte ">
+                                        {{getAffectationJour(v.vigile, 3).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==4 && !getAffectationJour(vigile, 4).idposte " class="idea ">
+                                <div *ngIf="v.vigile.jourRepos !==4 && !getAffectationJour(v.vigile, 4).idposte " class="idea ">
                                 </div>
-                                <div *ngIf="vigile.jourRepos===4 " class="repos ">
+                                <div *ngIf="v.vigile.jourRepos===4 " class="repos ">
                                     REPOS
                                 </div>
-                                <div *ngIf="vigile.jourRepos !==4 ">
-                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 4).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 4).idposte?.libelle}}
+                                <div *ngIf="v.vigile.jourRepos !==4 ">
+                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(v.vigile, 4).idposte?.idposte ">
+                                        {{getAffectationJour(v.vigile, 4).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==5 && !getAffectationJour(vigile, 5).idposte " class="idea "></div>
-                                <div *ngIf="vigile.jourRepos===5 " class="repos ">
+                                <div *ngIf="v.vigile.jourRepos !==5 && !getAffectationJour(v.vigile, 5).idposte " class="idea "></div>
+                                <div *ngIf="v.vigile.jourRepos===5 " class="repos ">
                                     REPOS
                                 </div>
-                                <div *ngIf="vigile.jourRepos !==5 ">
-                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 5).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 5).idposte?.libelle}}
+                                <div *ngIf="v.vigile.jourRepos !==5 ">
+                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(v.vigile, 5).idposte?.idposte ">
+                                        {{getAffectationJour(v.vigile, 5).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==6 && !getAffectationJour(vigile, 6).idposte " class="idea "></div>
-                                <div *ngIf="vigile.jourRepos===6 " class="repos ">
+                                <div *ngIf="v.vigile.jourRepos !==6 && !getAffectationJour(v.vigile, 6).idposte " class="idea "></div>
+                                <div *ngIf="v.vigile.jourRepos===6 " class="repos ">
                                     REPOS
                                 </div>
-                                <div *ngIf="vigile.jourRepos !==6 ">
-                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 6).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 6).idposte?.libelle}}
+                                <div *ngIf="v.vigile.jourRepos !==6 ">
+                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(v.vigile, 6).idposte?.idposte ">
+                                        {{getAffectationJour(v.vigile, 6).idposte?.libelle}}
                                     </a>
                                 </div>
                             </td>
                             <td>
-                                <div *ngIf="vigile.jourRepos !==7 && !getAffectationJour(vigile, 7).idposte " class="idea "></div>
-                                <div *ngIf="vigile.jourRepos===7 " class="repos ">
+                                <div *ngIf="v.vigile.jourRepos !==7 && !getAffectationJour(v.vigile, 7).idposte " class="idea "></div>
+                                <div *ngIf="v.vigile.jourRepos===7 " class="repos ">
                                     REPOS
                                 </div>
-                                <div *ngIf="vigile.jourRepos !==7 ">
-                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(vigile, 7).idposte?.idposte ">
-                                        {{getAffectationJour(vigile, 7).idposte?.libelle}}
+                                <div *ngIf="v.vigile.jourRepos !==7 ">
+                                    <a [routerLink]=" '/poste/edit/' + getAffectationJour(v.vigile, 7).idposte?.idposte ">
+                                        {{getAffectationJour(v.vigile, 7).idposte?.libelle}}
                                     </a>
                                 </div>
+                            </td>
+                            <td>
+                                {{v.affectations.length}}
                             </td>
                         </tr>
                     </tbody>
@@ -174,23 +177,89 @@
                         <table class="table table-bordered table-dark">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center;">#</th>
-                                    <th>Vigile</th>
-                                    <th>Rempl.</th>
-                                    <th style="text-align: center;">Zone</th>
-                                    <th style="text-align: center;">Quartier</th>
-                                    <th style="text-align: center;">Score</th>
-                                    <th style="text-align: center;">Action</th>
+                                    <th>Score</th>
+                                    <th style="text-align: left;">Noms</th>
+                                    <th>Lundi</th>
+                                    <th>Mardi</th>
+                                    <th>Mercredi</th>
+                                    <th>Jeudi</th>
+                                    <th>Vendredi</th>
+                                    <th>Samedi</th>
+                                    <th>Dimanche</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr *ngFor="let v of vigilesPropositions">
+                                    <td>{{v.score}}</td>
+                                    <td style="text-align: left;">
+                                        {{v.vigile.noms}}
+                                    </td>
+                                    <td>
+                                        <a style="color: #E3B505;" [routerLink]=" '/poste/edit/' + v.getAffectation(1)?.idposte?.idposte ">
+                                            {{v.getAffectation(1)?.idposte?.libelle}}
+                                        </a>
+                                        <div *ngIf="isRepos(v.vigile, 1)" class="repos ">
+                                            REPOS
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a style="color: #E3B505;" [routerLink]=" '/poste/edit/' + v.getAffectation(2)?.idposte?.idposte ">
+                                            {{v.getAffectation(2)?.idposte?.libelle}}
+                                        </a>
+                                        <div *ngIf="isRepos(v.vigile, 2)" class="repos ">
+                                            REPOS
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a style="color: #E3B505;" [routerLink]=" '/poste/edit/' + v.getAffectation(3)?.idposte?.idposte ">
+                                            {{v.getAffectation(3)?.idposte?.libelle}}
+                                        </a>
+                                        <div *ngIf="isRepos(v.vigile, 3)" class="repos ">
+                                            REPOS
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a style="color: #E3B505;" [routerLink]=" '/poste/edit/' + v.getAffectation(4)?.idposte?.idposte ">
+                                            {{v.getAffectation(4)?.idposte?.libelle}}
+                                        </a>
+                                        <div *ngIf="isRepos(v.vigile, 4)" class="repos ">
+                                            REPOS
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a style="color: #E3B505;" [routerLink]=" '/poste/edit/' + v.getAffectation(5)?.idposte?.idposte ">
+                                            {{v.getAffectation(5)?.idposte?.libelle}}
+                                        </a>
+                                        <div *ngIf="isRepos(v.vigile, 5)" class="repos ">
+                                            REPOS
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a style="color: #E3B505;" [routerLink]=" '/poste/edit/' + v.getAffectation(6)?.idposte?.idposte ">
+                                            {{v.getAffectation(6)?.idposte?.libelle}}
+                                        </a>
+                                        <div *ngIf="isRepos(v.vigile, 6)" class="repos ">
+                                            REPOS
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a style="color: #E3B505;" [routerLink]=" '/poste/edit/' + v.getAffectation(7)?.idposte?.idposte ">
+                                            {{v.getAffectation(7)?.idposte?.libelle}}
+                                        </a>
+                                        <div *ngIf="isRepos(v.vigile, 7)" class="repos ">
+                                            REPOS
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button> &nbsp;
+                    <button class="btn nouveau">
+                        Appliquer tout
+                    </button>
                 </div>
             </div>
         </div>

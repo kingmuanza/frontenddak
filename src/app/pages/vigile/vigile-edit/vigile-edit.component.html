@@ -21,6 +21,11 @@
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="conges-tab" data-bs-toggle="tab" data-bs-target="#conges" type="button" role="tab" aria-controls="conges" aria-selected="false">
+                        Congés
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
                     <a class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
                         Equipements
                     </a>
@@ -42,6 +47,42 @@
                 <div *ngIf="vigile.idvigile != 0" class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
                     <img [src]="url" height="200"> <br />
                     <input type='file' (change)="onSelectFile($event)">
+                </div>
+                <div class="tab-pane fade" id="conges" role="tabpanel" aria-labelledby="conges-tab">
+                    <div class="page-contenu-corps">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Date début congés
+                                        </span>
+                                    </div>
+                                    <input [ngModel]="vigile.debutConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.debutConge = $event" type="date" class="form-control">
+
+                                    <button (click)="calculerConges()" class="btn btn-outline-secondary" type="button">Calculer</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Date fin congés
+                                        </span>
+                                    </div>
+                                    <input [ngModel]="vigile.finConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.finConge = $event" type="date" class="form-control">
+
+                                    <button (click)="calculerConges()" class="btn btn-outline-secondary" type="button">Calculer</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <button [disabled]="processing" (click)="save()" class="btn nouveau">
+                                Enregistrer
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="page-contenu-corps">
@@ -199,46 +240,6 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            Date entrée
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="vigile.dateEntree" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Date sortie
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="vigile.dateSortie" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Date début congés
-                                        </span>
-                                    </div>
-                                    <input [ngModel]="vigile.debutConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.debutConge = $event" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Date fin congés
-                                        </span>
-                                    </div>
-                                    <input [ngModel]="vigile.finConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.debutConge = $event" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
                                             Statut
                                         </span>
                                     </div>
@@ -275,6 +276,26 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
+                                            Date entrée
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="vigile.dateEntree" type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Date sortie
+                                        </span>
+                                    </div>
+                                    <input [(ngModel)]="vigile.dateSortie" type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
                                             Parrain
                                         </span>
                                     </div>
@@ -289,7 +310,7 @@
                             </div>
                             <div class="col-lg-4">
                                 <div style="margin-top:15px; margin-bottom: 15px;">
-                                    <input type="checkbox" [(ngModel)]="vigile.estRemplacantConges"> &nbsp; Est remplacant congés
+                                    <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge"> &nbsp; Est remplacant congés
 
                                 </div>
                             </div>

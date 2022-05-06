@@ -9,7 +9,7 @@
         <div>
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="dash">
+                    <div (click)="enConges()" class="dash actu">
                         <div class="dash-valeur">
                             {{vigilesEnConges.length}}
                         </div>
@@ -56,6 +56,7 @@
                             <th style="width: 200px;">Matricule</th>
                             <th>Noms</th>
                             <th style="width: 100px; text-align: center;">Remplacant</th>
+                            <th style="width: 150px; text-align: center;">Rempl. Congés</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,6 +67,9 @@
                             <td>{{vigile.noms}}</td>
                             <td style="text-align: center;">
                                 <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
                             </td>
                         </tr>
                     </tbody>
@@ -86,6 +90,7 @@
                             <th style="width: 200px;">Matricule</th>
                             <th>Noms</th>
                             <th style="width: 100px; text-align: center;">Remplacant</th>
+                            <th style="width: 150px; text-align: center;">Rempl. Congés</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -96,6 +101,9 @@
                             <td>{{vigile.noms}}</td>
                             <td style="text-align: center;">
                                 <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
                             </td>
                         </tr>
                     </tbody>

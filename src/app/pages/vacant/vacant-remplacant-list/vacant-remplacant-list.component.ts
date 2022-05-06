@@ -7,6 +7,7 @@ import { Affectation } from 'src/app/models/affectation.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import * as bootstrap from 'bootstrap';
+import { VigiProp } from 'src/app/models/vigile.prop';
 
 @Component({
   selector: 'app-vacant-remplacant-list',
@@ -21,14 +22,20 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   dtInstance!: Promise<DataTables.Api>;
 
-  vigiles = new Array<any>();
-  vigilesPropositions = new Array<any>();
-  affectations = new Array<any>();
-  affectationsPropositions = new Array<any>();
+  listeJoursRepos: number[] = [];
+
+  vigiles = new Array<Vigile>();
+  vigilesPropositions = new Array<VigiProp>();
+  affectations = new Array<Affectation>();
+  affectationsSansRemplacants = new Array<Affectation>();
+  affectationsPropositions = new Array<{ affectation: Affectation, affectee: boolean }>();
+
+
 
   constructor(
     private router: Router,
-    private jarvisService: JarvisService<any>
+    private jarvisService: JarvisService<Vigile>,
+    private affectationService: JarvisService<Affectation>
   ) { }
 
   ngOnInit(): void {
@@ -44,31 +51,74 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
         }
       });
       this.getAffectations().then(() => {
+        this.affectations.sort((a, b) => {
+          return a.idvigile.jourRepos - b.idvigile.jourRepos > 0 ? 1 : -1;
+        });
+        this.affectations.forEach((a) => {
+          this.affectationsPropositions.push({
+            affectation: a,
+            affectee: false
+          })
+        });
+
+        this.vigiles.forEach((v) => {
+          const vigiProp = new VigiProp(this.getScore(v.jourRepos), v);
+          this.vigilesPropositions.push(vigiProp);
+        });
         this.dtTrigger.next('');
+        this.repartir();
       });
     });
+  }
+
+  repartir() {
+    this.vigilesPropositions.sort((a,b) => {
+      return a.score - b.score > 0 ? 1: -1
+    });
+    this.vigilesPropositions.forEach((vigiProp) => {
+      this.affectationsPropositions.forEach((aff) => {
+        if (!aff.affectee) {
+          if (!this.estDejaLa(aff.affectation, vigiProp) && aff.affectation.idvigile.jourRepos !== vigiProp.vigile.jourRepos) {
+            vigiProp.affectations.push(aff.affectation);
+            aff.affectee = true;
+          }
+        }
+      });
+    });
+  }
+
+  isRepos(vigile: Vigile, jour: number):boolean {
+    if (vigile.jourRepos === jour) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  estDejaLa(
+    affectation: Affectation,
+    vigiProp: { score: number, vigile: Vigile, affectations: Array<Affectation> }
+  ): boolean {
+    let estDejaLa = false;
+    vigiProp.affectations.forEach((aff) => {
+      if (aff.idvigile.jourRepos === affectation.idvigile.jourRepos) {
+        estDejaLa = true;
+      }
+    });
+    return estDejaLa;
   }
 
   reorganiser() {
     this.openModal();
     console.log('reorganiser');
-    const vigiles = this.vigiles.concat([]);
-    this.vigilesPropositions = new Array<any>();
-    vigiles.forEach((vigile) => {
-      if (vigile.estRemplacant) {
-        const v = new Vigile();
-        v.copy(vigile);
-        this.vigilesPropositions.push(v);
-      }
-    });
-    const postes = this.affectations.concat([]);
+    
   }
 
   openModal() {
-    
+
     console.log('open modal suggestion');
     const modale = document.getElementById('suggestion');
-    
+
     console.log(modale);
     if (modale != null) {
       const myModal = new bootstrap.Modal(modale);
@@ -91,16 +141,35 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
       return new Affectation();
     }
   }
- 
+
   getAffectations(): Promise<void> {
+    this.affectations = [];
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('affectation').then((data) => {
+      this.affectationService.getAll('affectation').then((data) => {
         console.log('data');
         console.log(data);
-        this.affectations = data;
+        data.forEach((aff) => {
+          if (!aff.arret) {
+            this.affectations.push(aff);
+            this.listeJoursRepos.push(aff.idvigile.jourRepos)
+            if (!aff.remplacant) {
+              this.affectationsSansRemplacants.push(aff)
+            }
+          }
+        });
         resolve();
       });
     });
+  }
+
+  getScore(repos: number): number {
+    let count = 0;
+    this.listeJoursRepos.forEach((jour) => {
+      if (jour === repos) {
+        count++;
+      }
+    });
+    return count;
   }
 
   edit(id: string) {
@@ -117,5 +186,5 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-  
+
 }

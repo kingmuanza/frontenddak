@@ -57,7 +57,7 @@ export class VigileEditComponent implements OnInit {
                   this.vigile.dateEntree = vigile.dateEntree?.split('T')[0];
                   this.vigile.dateSortie = vigile.dateSortie?.split('T')[0];
                   this.vigile.dteNce = vigile.dteNce?.split('T')[0];
-                  
+
                   this.jarvisService.getAll('affectation').then((data) => {
                     console.log('data');
                     console.log(data);
@@ -80,7 +80,7 @@ export class VigileEditComponent implements OnInit {
                       this.vigile.zone = zone;
                     }
                   });
-                  
+
                   nationalites.forEach((nationalite) => {
                     if (this.vigile.nationalite && nationalite.idnationalite == this.vigile.nationalite.idnationalite) {
                       this.vigile.nationalite = nationalite;
@@ -156,6 +156,36 @@ export class VigileEditComponent implements OnInit {
     }
   }
 
+
+  calculerConges() {
+    const annee = new Date().getFullYear();
+    if (this.vigile.dateEntree && !this.vigile.debutConge) {
+      const dateDebutConges = new Date(this.vigile.dateEntree);
+      if (new Date(this.vigile.dateEntree).getFullYear() === new Date().getFullYear()) {
+        dateDebutConges.setFullYear(annee + 1);
+      } else {
+        dateDebutConges.setFullYear(annee);
+      }
+      this.vigile.debutConge = dateDebutConges;
+      let dateFinConges = new Date(dateDebutConges);
+      dateFinConges.setDate(dateFinConges.getDate() + 21);
+      this.vigile.finConge = dateFinConges;
+    }
+    if (this.vigile.debutConge) {
+      let dateFinConges = new Date(this.vigile.debutConge);
+
+      let joursConges = 0;
+      while (joursConges < 14) {
+        dateFinConges.setDate(dateFinConges.getDate() + 1);
+        const jourDeLaSemaine = dateFinConges.getDay();
+        if (jourDeLaSemaine !== 0 && jourDeLaSemaine !== 6) {
+          joursConges++;
+        }
+      }
+      this.vigile.finConge = dateFinConges;
+    }
+  }
+
   save() {
     console.log('vigile à enregistrer');
     console.log(this.vigile);
@@ -167,6 +197,13 @@ export class VigileEditComponent implements OnInit {
     }
     if (this.vigile.dateSortie) {
       this.vigile.dateSortie = new Date(this.vigile.dateSortie);
+    }
+
+    if (this.vigile.debutConge) {
+      this.vigile.debutConge = new Date(this.vigile.debutConge);
+    }
+    if (this.vigile.finConge) {
+      this.vigile.finConge = new Date(this.vigile.finConge);
     }
     if (this.vigile.idvigile == 0) {
       this.processing = true;

@@ -193,4 +193,7 @@ export class CongeListComponent implements OnInit {
     return "" + jour ? jour : "";
   }
 
+  enConges() {
+    this.router.navigate(['conge', 'edit']);
+  }
 }
