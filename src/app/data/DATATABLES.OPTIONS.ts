@@ -4,6 +4,7 @@ export const DatatablesOptions = {
     pagingType: 'full_numbers',
     language: FrLanguage,
     dom: 'Bfrtip',
+    order: [[ 0, 'desc' ]],
     buttons: [
       {
         extend: 'copyHtml5',

@@ -26,7 +26,7 @@ export class ReposGrapheComponent implements OnInit {
   afficher = false;
 
   public barChartData = [
-    { data: this.semaines, label: 'Jours de repos' },
+    { data: this.semaines, label: 'Jours de repos', backgroundColor: '#E3B505'  },
   ];
 
   constructor(
@@ -38,8 +38,8 @@ export class ReposGrapheComponent implements OnInit {
     this.jarvisService.getAll('vigile').then((data) => {
       console.log('data');
       console.log(data);
-      this.vigiles = data;
-      this.vigiles.forEach((vigile) => {
+      
+      data.forEach((vigile) => {
         if (vigile.jourRepos) {
           if (vigile.jourRepos > 1) {
             this.semaines[vigile.jourRepos - 1] += 1;
@@ -49,11 +49,7 @@ export class ReposGrapheComponent implements OnInit {
       console.log('this.semaines');
       console.log(this.semaines);
       this.afficher = true;
-      this.dtTrigger.next('');
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers'
-    };
   }
 
   edit(id: string) {

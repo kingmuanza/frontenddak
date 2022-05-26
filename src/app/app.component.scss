@@ -4,14 +4,20 @@
 }
 
 .deconnexion {
-    background-color: #231709;
+    background-color: white;
     color: white;
     position: fixed;
     top: 20px;
     right: 20px;
-    padding: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
-    border-radius: 30px;
-    display: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 0px solid #231709;
+    padding: 7px;
+    text-align: center;
+    img {
+        width: 30px;
+        height: 30px;
+    }
 }

@@ -7,6 +7,13 @@
     <div class="page-contenu">
         <div class="page-contenu-titre">
             <div class="row">
+                <div class="col-lg-4">
+                    <div class="nouveau">
+                        <a (click)="reorganiser()" class="btn nouveau">
+                            Proposer une réorganisation
+                        </a>
+                    </div>
+                </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -49,32 +56,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let poste of postes">
-                                <td>{{poste.idposte}}</td>
-                                <td>{{poste.zone.libelle}}</td>
-                                <td>{{poste.libelle}}</td>
-                                <td>{{poste.contrat}}</td>
-                                <td class="text-right">
-                                    {{poste.nombreVigileJour ?poste.nombreVigileJour:0}}
-                                </td>
-                                <td class="text-right">
-                                    <div (click)="openModal(poste, 'jour')" *ngIf="poste.nombreVigileJour > getNombreAffectationJour(poste)" class="idea">
-                                    </div>
-                                    <div class="nombre" [ngClass]="{'red': poste.nombreVigileJour > getNombreAffectationJour(poste)}">
-                                        {{getNombreAffectationJour(poste)}}
-                                    </div>
-                                </td>
-                                <td class="text-right">
-                                    {{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}
-                                </td>
-                                <td class="text-right">
-                                    <div (click)="openModal(poste, 'nuit')" *ngIf="poste.nombreVigileNuit > getNombreAffectationNuit(poste)" class="idea">
-                                    </div>
-                                    <div class="nombre" [ngClass]="{'red': poste.nombreVigileNuit > getNombreAffectationNuit(poste)}">
-                                        {{getNombreAffectationNuit(poste)}}
-                                    </div>
-                                </td>
-                            </tr>
+                            <ng-container *ngFor="let poste of postes">
+                                <tr *ngIf="poste.nombreVigileJour > getNombreAffectationJour(poste) || poste.nombreVigileNuit > getNombreAffectationNuit(poste)">
+                                    <td>{{poste.idposte}}</td>
+                                    <td>{{poste.zone.libelle}}</td>
+                                    <td>{{poste.libelle}}</td>
+                                    <td>{{poste.contrat}}</td>
+                                    <td class="text-right">
+                                        {{poste.nombreVigileJour ?poste.nombreVigileJour:0}}
+                                    </td>
+                                    <td class="text-right">
+                                        <div (click)="openModal(poste, 'jour')" *ngIf="poste.nombreVigileJour > getNombreAffectationJour(poste)" class="idea">
+                                        </div>
+                                        <div class="nombre" [ngClass]="{'red': poste.nombreVigileJour > getNombreAffectationJour(poste)}">
+                                            {{getNombreAffectationJour(poste)}}
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        {{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}
+                                    </td>
+                                    <td class="text-right">
+                                        <div (click)="openModal(poste, 'nuit')" *ngIf="poste.nombreVigileNuit > getNombreAffectationNuit(poste)" class="idea">
+                                        </div>
+                                        <div class="nombre" [ngClass]="{'red': poste.nombreVigileNuit > getNombreAffectationNuit(poste)}">
+                                            {{getNombreAffectationNuit(poste)}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
                         </tbody>
                     </table>
                 </div>

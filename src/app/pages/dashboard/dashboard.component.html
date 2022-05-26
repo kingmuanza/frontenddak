@@ -12,7 +12,7 @@
     <div class="page-contenu">
         <div class="page-contenu-titre">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
@@ -34,6 +34,17 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Horaire
+                            </span>
+                        </div>
+                        <select type="date" name="date" class="form-control">
+                        </select>
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <button class="btn primaire">Rechercher</button>
                 </div>
@@ -48,7 +59,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-3">
-                        <div class="vigiles-nuit" (click)="goToPostesVacants()">
+                        <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
                             <div class="titre">
                                 Besoins en vigiles JOUR
                             </div>
@@ -68,7 +79,47 @@
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <div class="vigiles-nuit" (click)="goToPostesVacants()">
+                        <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
+                            <div class="titre">
+                                Besoins en vigiles NUIT
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6" style="border-right: 1px solid #fff;">
+
+                                    <div class="valeur">
+                                        {{besoinVigile.nbVigilesNuit}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="valeur">
+                                        {{besoinVigile.nbBesoinVigilesNuit}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
+                            <div class="titre">
+                                Besoins en vigiles JOUR
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6" style="border-right: 1px solid #fff;">
+
+                                    <div class="valeur">
+                                        {{besoinVigile.nbVigilesJour}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="valeur">
+                                        {{besoinVigile.nbBesoinVigilesJour }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
                             <div class="titre">
                                 Besoins en vigiles NUIT
                             </div>
@@ -91,27 +142,82 @@
             </div>
             <div class="page-contenu-corps">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="petit-titre">
-                            Liste des zones
+                    <div class="col-lg-6">
+                        <div class="card shadow-1">
+                            <div class="petit-titre">
+                                Liste des zones
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4" *ngFor="let zone of zones">
+                                    <div (click)="goToZone(zone)" class="dash">
+                                        <div class="dash-titre">
+                                            {{zone.libelle}}
+                                        </div>
+                                        <div class="">
+                                            {{zone.idville?.nom}}
+                                        </div>
+                                        <div class="dash-postes">
+                                            <span class="dash-postes-libelle" *ngFor="let poste of postes">
+                                                <span class="dash-postes-libelle" *ngIf="poste.zone === zone.idzone">
+                                                    {{poste.libelle}}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-2" *ngFor="let zone of zones">
-                        <div (click)="goToZone(zone)" class="dash">
-                            <div class="dash-titre">
-                                {{zone.libelle}}
+                    <div class="col-lg-6">
+                        <div *ngIf="afficher" class="card shadow-1">
+                            <div style="display: block;">
+                                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend">
+                                </canvas>
                             </div>
-                            <div class="">
-                                {{zone.idville?.nom}}
-                            </div>
-                            <div class="dash-postes">
-                                <span class="dash-postes-libelle" *ngFor="let poste of postes">
-                                    <span class="dash-postes-libelle" *ngIf="poste.zone === zone.idzone">
-                                        {{poste.libelle}}
-                                    </span>
-                                </span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="page-contenu-corps" style="margin-top: 25px;">
+                            <div class="card shadow-1">
+                                <div class="petit-titre" style="margin-bottom: 20px;">
+                                    Liste des vigiles en stand by
+                                </div>
+                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Noms</th>
+                                            <th>Horaire</th>
+                                            <th>Fonction</th>
+                                            <th>Repos</th>
+                                            <th>Zone</th>
+                                            <th>Quartier</th>
+                                            <th>Ville</th>
+                                            <th style="text-align: center;">Remplacant</th>
+                                            <th style="text-align: center;">Rempl. Congés</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let vigile of vigiles" style="cursor: pointer;">
+                                            <td>{{vigile.idvigile}}</td>
+                                            <td>{{vigile.noms}}</td>
+                                            <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
+                                            <td>{{libelleFonction(vigile.fonction)}}</td>
+                                            <td>{{jourSemaine(vigile.jourRepos)}}</td>
+                                            <td>{{vigile.zone?.libelle}}</td>
+                                            <td>{{vigile.quartier?.nom}}</td>
+                                            <td>{{vigile.ville?.libelle}}</td>
+                                            <td style="text-align: center;">
+                                                <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
                             </div>
                         </div>
                     </div>
@@ -119,3 +225,4 @@
             </div>
         </div>
     </div>
+    <div style="height: 25vh;"></div>

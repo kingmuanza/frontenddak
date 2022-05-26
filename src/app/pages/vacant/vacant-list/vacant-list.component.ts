@@ -219,6 +219,9 @@ export class VacantListComponent implements OnInit, OnDestroy {
     return score;
   }
 
+  reorganiser() {
+    
+  }
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }

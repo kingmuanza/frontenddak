@@ -48,7 +48,6 @@
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Date</th>
                             <th>Poste</th>
                             <th>Horaire</th>
@@ -60,7 +59,6 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
-                            <td>{{affectation.idaffectation}}</td>
                             <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
                             <td>{{affectation.idposte?.libelle}}</td>
                             <td>{{affectation.horaire}}</td>

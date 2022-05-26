@@ -81,7 +81,6 @@ export class VigileListComponent implements OnInit, OnDestroy {
     return "" + jour ? jour : "";
   }
 
-
   jourSemaine(jour: number) {
     if (jour == 1)
       return "Lundi";

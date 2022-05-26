@@ -1,6 +1,7 @@
 export class Suivi {
     idsuiviPoste = 0;
     dateSuivi: any;
+    dateEffet= new Date();
     horaire = '';
     commentaire = '';
     numero = '';
@@ -9,6 +10,7 @@ export class Suivi {
     idvigile: any;
     remplacant: any;
     nombreAbsence = 0;
+    motifSanction = '';
 
     constructor() {
         this.dateSuivi = new Date().toISOString().split('T')[0];

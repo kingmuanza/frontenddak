@@ -14,7 +14,6 @@
     </div>
     <div class="page-contenu">
         <div class="page-contenu-titre">
-
             <div class="page-contenu-corps">
                 <div class="row">
                     <div class="col-lg-9">
@@ -25,9 +24,27 @@
                                 </span>
                             </div>
                             <select type="text" [(ngModel)]="suivi.idvigile" class="form-control">
-                                <option [ngValue]="vigile" *ngFor="let vigile of vigiles">
-                                    {{vigile.noms}}
+                                <option [ngValue]="v" *ngFor="let v of vigiles">
+                                    {{v.noms}}
                                 </option>
+                            </select>
+                        </div>
+                        <div>
+                            <small *ngIf="suivi.idvigile">
+                                Jour de repos : {{jourSemaine(suivi.idvigile?.jourRepos)}}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Motif de la sanction
+                                </span>
+                            </div>
+                            <select type="text" [(ngModel)]="suivi.motifSanction" class="form-control">
+                                <option value="Absence">Absence</option>
+                                <option value="Sommeil">Sommeil</option>
                             </select>
                         </div>
                     </div>
@@ -38,7 +55,7 @@
                                     Date effet
                                 </span>
                             </div>
-                            <input [(ngModel)]="suivi.dateSuivi" (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
+                            <input [(ngModel)]="suivi.dateEffet" (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-5">
@@ -49,6 +66,16 @@
                                 </span>
                             </div>
                             <input [(ngModel)]="suivi.nombreAbsence" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="joursPris" style="">
+                            Les dates de repos prises seront les suivantes :
+                            <ul>
+                                <li *ngFor="let d of datesPrises">
+                                    {{d | date: 'EEEE dd-MM-yyyy'}}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -64,6 +91,7 @@
                 </div>
                 <div class="input-group">
                     <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
+                    <button [disabled]="processing" (click)="calculerDatesFutures(suivi)" class="btn nouveau">Calculer</button> &nbsp;
                     <button *ngIf="suivi.idsuiviPoste != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
                 </div>
             </div>

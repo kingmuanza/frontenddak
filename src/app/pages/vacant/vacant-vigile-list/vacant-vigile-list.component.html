@@ -47,13 +47,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let vigile of vigiles">
-                            <td>{{vigile.idvigile}}</td>
-                            <td>{{vigile.noms}}</td>
-                            <td>{{getNombreAffectation(vigile)[0]?.idposte.libelle }}</td>
-                            <td>{{getNombreAffectation(vigile)[0]?.horaire }}</td>
-                            <td>{{getNombreAffectation(vigile)[0]?.dateAffectation?.split('T')[0]}}</td>
-                        </tr>
+                        <ng-container *ngFor="let vigile of vigiles">
+                            <tr *ngIf="!getNombreAffectation(vigile)[0]">
+                                <td>{{vigile.idvigile}}</td>
+                                <td>{{vigile.noms}}</td>
+                                <td>{{getNombreAffectation(vigile)[0]?.idposte.libelle }}</td>
+                                <td>{{getNombreAffectation(vigile)[0]?.horaire }}</td>
+                                <td>{{getNombreAffectation(vigile)[0]?.dateAffectation?.split('T')[0]}}</td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
 

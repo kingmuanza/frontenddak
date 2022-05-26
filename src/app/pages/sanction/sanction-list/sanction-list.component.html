@@ -60,7 +60,7 @@
                         <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idsuiviPoste)">
                             <td>{{affectation.idsuiviPoste}}</td>
                             <td>{{affectation.dateSuivi.split('T')[0]}}</td>
-                            <td>{{affectation.dateSuivi.split('T')[0]}}</td>
+                            <td>{{affectation.dateEffet | date: 'yyyy-MM-dd'}}</td>
                             <td>{{affectation.nombreAbsence}}</td>
                             <td>{{affectation.idvigile?.noms}}</td>
                             <td style="text-transform: capitalize;">{{affectation.horaire}}</td>
@@ -71,3 +71,4 @@
             </div>
         </div>
     </div>
+</div>

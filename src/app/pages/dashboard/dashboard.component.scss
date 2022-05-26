@@ -1,6 +1,6 @@
 .dash {
     background-color: rgba(#231709, 0.1);
-    height: 120px;
+    height: 60px;
     // color: white;
     padding: 20px;
     margin-bottom: 10px;
@@ -34,4 +34,9 @@
     &:hover {
         opacity: 0.9;
     }
+}
+
+.card {
+    min-height: 360px;
+    overflow-y: auto;
 }

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
 import { Suivi } from 'src/app/models/suivi.model';
+import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -21,6 +22,8 @@ export class SanctionEditComponent implements OnInit {
   jour = '';
   estRemplacant = false;
   nombre = 1;
+  ojrdhui = new Date();
+  datesPrises = new Array<Date>();
 
   constructor(
     private router: Router,
@@ -30,6 +33,7 @@ export class SanctionEditComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.ojrdhui.setDate(this.ojrdhui.getDate() - 1)
     this.getPostes().then((postes) => {
       this.postes = postes;
       this.getVigiles().then((vigiles) => {
@@ -41,6 +45,7 @@ export class SanctionEditComponent implements OnInit {
               console.log('le suivi recupéré');
               console.log(suivi);
               this.suivi = suivi;
+              this.calculerDatesFutures(suivi)
 
               this.suivi.dateSuivi = suivi.dateSuivi?.split('T')[0];
               // this.suivi.arret = suivi.finContrat?.split('T')[0];
@@ -165,6 +170,25 @@ export class SanctionEditComponent implements OnInit {
     } else {
       this.jour = this.jourSemaine(new Date().getDay());
     }
+  }
+
+  calculerDatesFutures(suivi: Suivi) {
+    let date = suivi.dateEffet;
+    let nombreDeJours = suivi.nombreAbsence;
+    let vigile = suivi.idvigile;
+    this.datesPrises = new Array<Date>();
+    let jourSemaine = Number(vigile.jourRepos) % 7;
+    if (date && nombreDeJours && vigile) {
+      date = new Date(date);
+      for (let i = 0; i < nombreDeJours * 7; i++) {
+        date.setDate(date.getDate() + 1);
+        console.log(date.toISOString().split('T')[0]);
+        if (date.getDay() === jourSemaine) {
+          this.datesPrises.push(new Date(date));
+        }
+      }
+    }
+
   }
 
 }

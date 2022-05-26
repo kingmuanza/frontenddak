@@ -30,7 +30,8 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
   affectationsSansRemplacants = new Array<Affectation>();
   affectationsPropositions = new Array<{ affectation: Affectation, affectee: boolean }>();
 
-
+  processing = false;
+  myModal?: bootstrap.Modal;
 
   constructor(
     private router: Router,
@@ -39,6 +40,10 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.init();
+  }
+
+  init() {
     this.jarvisService.getAll('vigile').then((data) => {
       console.log('data');
       console.log(data);
@@ -72,8 +77,8 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
   }
 
   repartir() {
-    this.vigilesPropositions.sort((a,b) => {
-      return a.score - b.score > 0 ? 1: -1
+    this.vigilesPropositions.sort((a, b) => {
+      return a.score - b.score > 0 ? 1 : -1
     });
     this.vigilesPropositions.forEach((vigiProp) => {
       this.affectationsPropositions.forEach((aff) => {
@@ -87,7 +92,7 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
     });
   }
 
-  isRepos(vigile: Vigile, jour: number):boolean {
+  isRepos(vigile: Vigile, jour: number): boolean {
     if (vigile.jourRepos === jour) {
       return true;
     } else {
@@ -111,7 +116,7 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
   reorganiser() {
     this.openModal();
     console.log('reorganiser');
-    
+
   }
 
   openModal() {
@@ -121,8 +126,8 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
 
     console.log(modale);
     if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
+      this.myModal = new bootstrap.Modal(modale);
+      this.myModal.show();
     }
   }
 
@@ -181,6 +186,52 @@ export class VacantRemplacantListComponent implements OnInit, OnDestroy {
       return "OUI";
 
     return "NON";
+  }
+
+  async appliquerTout() {
+    this.processing = true;
+    let aEffectueer = 0;
+    let effectuees = 0;
+    for (let index1 = 0; index1 < this.vigilesPropositions.length; index1++) {
+      const vigiProp = this.vigilesPropositions[index1];
+      if (vigiProp.affectations.length > 0) {
+        console.log('A effectuer');
+        for (let i = 0; i < vigiProp.affectations.length; i++) {
+          aEffectueer++;
+        }
+      }
+    }
+
+    console.log('A effetcuer');
+    console.log(aEffectueer);
+
+    for (let index1 = 0; index1 < this.vigilesPropositions.length; index1++) {
+      const vigiProp = this.vigilesPropositions[index1];
+      if (vigiProp.affectations.length > 0) {
+        console.log('Modification des affectations');
+        for (let i = 0; i < vigiProp.affectations.length; i++) {
+          const affectation = vigiProp.affectations[i];
+          affectation.arret = new Date();
+          const nouvelleAffectation = new Affectation();
+          nouvelleAffectation.dateAffectation = new Date();
+          nouvelleAffectation.horaire = affectation.horaire;
+          nouvelleAffectation.idposte = affectation.idposte;
+          nouvelleAffectation.idvigile = affectation.idvigile;
+          nouvelleAffectation.remplacant = vigiProp.vigile;
+          console.log('affectation');
+          console.log(affectation);
+          console.log('nouvelleAffectation');
+          console.log(nouvelleAffectation);
+          await this.affectationService.modifier('affectation', affectation.idaffectation, affectation);
+          await this.affectationService.ajouter('affectation', nouvelleAffectation);
+          effectuees++;
+          if (aEffectueer === effectuees) {
+            this.processing = false;
+            window.location.reload();
+          }
+        }
+      }
+    }
   }
 
   ngOnDestroy(): void {
