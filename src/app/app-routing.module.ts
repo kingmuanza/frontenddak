@@ -14,6 +14,8 @@ import { MotifEditComponent } from './pages/motif/motif-edit/motif-edit.componen
 import { MotifListComponent } from './pages/motif/motif-list/motif-list.component';
 import { NationaliteEditComponent } from './pages/nationalite/nationalite-edit/nationalite-edit.component';
 import { NationaliteListComponent } from './pages/nationalite/nationalite-list/nationalite-list.component';
+import { PermissionEditComponent } from './pages/permission/permission-edit/permission-edit.component';
+import { PermissionListComponent } from './pages/permission/permission-list/permission-list.component';
 import { PointageEditComponent } from './pages/pointage/pointage-edit/pointage-edit.component';
 import { PointageListComponent } from './pages/pointage/pointage-list/pointage-list.component';
 import { PosteEditComponent } from './pages/poste/poste-edit/poste-edit.component';
@@ -26,6 +28,7 @@ import { SanctionListComponent } from './pages/sanction/sanction-list/sanction-l
 import { StatutEditComponent } from './pages/statut/statut-edit/statut-edit.component';
 import { StatutListComponent } from './pages/statut/statut-list/statut-list.component';
 import { VacantListComponent } from './pages/vacant/vacant-list/vacant-list.component';
+import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-remplacant-conge-list/vacant-remplacant-conge-list.component';
 import { VacantRemplacantListComponent } from './pages/vacant/vacant-remplacant-list/vacant-remplacant-list.component';
 import { VacantVigileListComponent } from './pages/vacant/vacant-vigile-list/vacant-vigile-list.component';
 import { VigileEditComponent } from './pages/vigile/vigile-edit/vigile-edit.component';
@@ -46,6 +49,7 @@ const routes: Routes = [
 
   { path: 'vacant/vigile', component: VacantVigileListComponent },
   { path: 'vacant/remplacant', component: VacantRemplacantListComponent },
+  { path: 'vacant/remplacant-conges', component: VacantRemplacantCongeListComponent },
 
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationEditComponent },
@@ -58,6 +62,10 @@ const routes: Routes = [
   { path: 'sanction', component: SanctionListComponent },
   { path: 'sanction/edit', component: SanctionEditComponent },
   { path: 'sanction/edit/:id', component: SanctionEditComponent },
+
+  { path: 'permission', component: PermissionListComponent },
+  { path: 'permission/edit', component: PermissionEditComponent },
+  { path: 'permission/edit/:id', component: PermissionEditComponent },
 
   { path: 'incident', component: IncidentListComponent },
   { path: 'incident/edit', component: IncidentEditComponent },

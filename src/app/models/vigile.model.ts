@@ -3,6 +3,8 @@ export class Vigile {
     matricule = "";
     numero = "";
     noms = "";
+    nom = "";
+    prenom = "";
     dteNce = new Date();
     mumCni = "";
     ville: any;
@@ -21,11 +23,14 @@ export class Vigile {
     parrain = "";
     estRemplacant = false;
     estRemplacantConge = false;
+    idremplacantConge: any;
 
     copy(vigile: Vigile) {
         this.idvigile = vigile.idvigile;
         this.matricule = vigile.matricule;
         this.numero = vigile.numero;
+        this.nom = vigile.nom;
+        this.prenom = vigile.prenom;
         this.noms = vigile.noms;
         this.dteNce = vigile.dteNce;
         this.mumCni = vigile.mumCni;

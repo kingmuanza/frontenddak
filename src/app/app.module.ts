@@ -47,6 +47,9 @@ import { VacantRemplacantListComponent } from './pages/vacant/vacant-remplacant-
 import { MenuGaucheComponent } from './composants/menu-gauche/menu-gauche.component';
 import { CongeListComponent } from './pages/conge/conge-list/conge-list.component';
 import { CongeEditComponent } from './pages/conge/conge-edit/conge-edit.component';
+import { PermissionListComponent } from './pages/permission/permission-list/permission-list.component';
+import { PermissionEditComponent } from './pages/permission/permission-edit/permission-edit.component';
+import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-remplacant-conge-list/vacant-remplacant-conge-list.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +92,10 @@ import { CongeEditComponent } from './pages/conge/conge-edit/conge-edit.componen
     VacantRemplacantListComponent,
     MenuGaucheComponent,
     CongeListComponent,
-    CongeEditComponent
+    CongeEditComponent,
+    PermissionListComponent,
+    PermissionEditComponent,
+    VacantRemplacantCongeListComponent
   ],
   imports: [
     BrowserModule,

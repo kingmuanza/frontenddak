@@ -20,6 +20,7 @@ export class VigileEditComponent implements OnInit {
   vigile = new Vigile();
   processing = false;
   villes = new Array<any>();
+  vigiles = new Array<any>();
   zones = new Array<any>();
   nationalites = new Array<any>();
 
@@ -52,6 +53,9 @@ export class VigileEditComponent implements OnInit {
                   console.log('le vigile recupéré');
                   this.vigile = new Vigile();
                   this.vigile.copy(vigile);
+                  if (!this.vigile.nom) {
+                    this.vigile.nom = this.vigile.noms;
+                  }
                   console.log(this.vigile);
 
                   this.vigile.dateEntree = vigile.dateEntree?.split('T')[0];
@@ -91,6 +95,20 @@ export class VigileEditComponent implements OnInit {
             });
           });
         });
+      });
+    });
+
+    this.getVigiles().then((vigiles) => {
+      this.vigiles = vigiles;
+    });
+  }
+
+  getVigiles(): Promise<Array<any>> {
+    return new Promise((resolve, reject) => {
+      this.jarvisService.getAll('vigile').then((vigiles) => {
+        console.log('vigiles');
+        console.log(vigiles);
+        resolve(vigiles);
       });
     });
   }
@@ -205,6 +223,9 @@ export class VigileEditComponent implements OnInit {
     if (this.vigile.finConge) {
       this.vigile.finConge = new Date(this.vigile.finConge);
     }
+
+    this.vigile.noms = this.vigile.nom ? this.vigile.nom : '' ;
+    this.vigile.noms = this.vigile.noms + ' ' + (this.vigile.prenom ? this.vigile.prenom: '');
     if (this.vigile.idvigile == 0) {
       this.processing = true;
       this.jarvisService.ajouter('vigile', this.vigile).then((data) => {

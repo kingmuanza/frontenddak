@@ -58,6 +58,10 @@ export class VigileListComponent implements OnInit, OnDestroy {
       return "Chauffeur";
     if (fonction == "MAITRECHIEN")
       return "Maitre Chien";
+    if (fonction == "ENTRETIEN")
+      return "Agent d'entretien";
+    if (fonction == "SUPERVISEUR")
+      return "Superviseur";
 
     return "";
   }
@@ -122,7 +126,7 @@ export class VigileListComponent implements OnInit, OnDestroy {
         return !vigile.estRemplacant && !vigile.estRemplacantConge;
       });
       this.resultats = this.resultats.concat(titulaires);
-      
+
     }
     if (this.sontRemplacants) {
       const remplacants = this.vigiles.filter((vigile) => {

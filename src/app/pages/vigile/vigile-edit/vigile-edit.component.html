@@ -75,6 +75,22 @@
                                     <button (click)="calculerConges()" class="btn btn-outline-secondary" type="button">Calculer</button>
                                 </div>
                             </div>
+                            <div class="col-lg-8">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Remplaçant congés
+                                        </span>
+                                    </div>
+                                    <select [(ngModel)]="vigile.idremplacantConge" class="form-control">
+                                        <ng-container *ngFor="let v of vigiles" >
+                                            <option *ngIf="v.estRemplacantConge && v.idvigile !== vigile.idvigile" [ngValue]="v">
+                                                {{v.noms}}
+                                            </option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="input-group">
@@ -120,14 +136,24 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
                                             Noms
                                         </span>
                                     </div>
-                                    <input type="text" [(ngModel)]="vigile.noms" class="form-control">
+                                    <input type="text" [(ngModel)]="vigile.nom" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Prénoms
+                                        </span>
+                                    </div>
+                                    <input type="text" [(ngModel)]="vigile.prenom" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -233,6 +259,8 @@
                                         <option value="CONTROLEUR">Contrôleur</option>
                                         <option value="CHAUFFEUR">Chauffeur</option>
                                         <option value="MAITRECHIEN">Maitre Chien</option>
+                                        <option value="ENTRETIEN">Agent d'entretien</option>
+                                        <option value="SUPERVISEUR">Superviseur</option>
                                     </select>
                                 </div>
                             </div>

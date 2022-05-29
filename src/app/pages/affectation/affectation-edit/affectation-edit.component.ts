@@ -105,7 +105,7 @@ export class AffectationEditComponent implements OnInit {
   terminerEtape1() {
     let valide = true;
     if (this.affectation.idposte && this.affectation.idvigile && this.affectation.dateAffectation) {
-      if (this.affectation.idaffectation == 0) {
+      if (this.affectation.idaffectation === 0) {
         console.log('affectation à enregistrer');
         console.log(this.affectation);
         console.log(this.affectation);

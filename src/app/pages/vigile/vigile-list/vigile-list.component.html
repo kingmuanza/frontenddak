@@ -85,8 +85,11 @@
                             <td style="text-align: center;">
                                 <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
                             </td>
-                            <td style="text-align: center;">
+                            <td style="">
                                 <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
+                                <small style="margin-left: 20px;">
+                                    {{vigile.idremplacantConge ? vigile.idremplacantConge.noms : ''}}
+                                </small>
                             </td>
                         </tr>
                     </tbody>
