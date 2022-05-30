@@ -20,7 +20,7 @@ export class Vigile {
     finConge = new Date();
     statut = "";
     jourRepos = 0;
-    parrain = "";
+    parrain: any;
     estRemplacant = false;
     estRemplacantConge = false;
     idremplacantConge: any;

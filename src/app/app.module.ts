@@ -50,6 +50,7 @@ import { CongeEditComponent } from './pages/conge/conge-edit/conge-edit.componen
 import { PermissionListComponent } from './pages/permission/permission-list/permission-list.component';
 import { PermissionEditComponent } from './pages/permission/permission-edit/permission-edit.component';
 import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-remplacant-conge-list/vacant-remplacant-conge-list.component';
+import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-remplacant-conge-edit/vacant-remplacant-conge-edit.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-rempla
     CongeEditComponent,
     PermissionListComponent,
     PermissionEditComponent,
-    VacantRemplacantCongeListComponent
+    VacantRemplacantCongeListComponent,
+    VacantRemplacantCongeEditComponent
   ],
   imports: [
     BrowserModule,

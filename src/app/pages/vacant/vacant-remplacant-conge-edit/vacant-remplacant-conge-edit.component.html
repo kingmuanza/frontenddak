@@ -1,0 +1,96 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="">
+            Planning du remplaçant congé
+        </div>
+        <div class="page-entete-titre">
+            {{vigile.noms}}
+        </div>
+
+        <div class="page-contenu-titre" style="margin-top: 10px; margin-bottom: 10px;">
+            <ul class="nav nav-pills nav-fill" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                        Calendrier
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="conges-tab" data-bs-toggle="tab" data-bs-target="#conges" type="button" role="tab" aria-controls="conges" aria-selected="false">
+                        Vigiles remplacés
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="page-contenu">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="row">
+                    <div *ngFor="let date of dates" class="col-lg-3">
+                        <div class="mois shadow-1">
+                            <div class="mois-titre">
+                                {{date | date: 'MMMM'}}
+                            </div>
+                            <div>
+                                <div class="row gy-2 gx-0">
+                                    <div class="col-lg-2" *ngFor="let jour of getTousLesJoursdUnMois(date)">
+                                        <div class="jour" [ngClass]="{'occupee': estUnJourOccupee(jour)}">
+                                            {{jour | date: 'dd'}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2" *ngFor="let item of [].constructor(7-getTousLesJoursdUnMois(date).length % 7)">
+                                        <div class="jour" style="color: white;">
+                                            AA
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="conges" role="tabpanel" aria-labelledby="conges-tab">
+                <div class="">
+                    <div class="card shadow-1">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover ">
+                            <thead>
+                                <tr>
+                                    <th>Date début</th>
+                                    <th>Date fin</th>
+                                    <th>Remplacé</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let r of remplaces;">
+                                    <tr>
+                                        <td>
+                                            {{r.debutConge | date: 'MM-dd'}}-{{annee}}
+                                        </td>
+                                        <td>
+                                            {{r.finConge | date: 'MM-dd'}}-{{annee}}
+                                        </td>
+                                        <td>
+                                            {{r.noms}}
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm">
+                                                Supprimer
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

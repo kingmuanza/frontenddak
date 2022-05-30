@@ -28,6 +28,7 @@ import { SanctionListComponent } from './pages/sanction/sanction-list/sanction-l
 import { StatutEditComponent } from './pages/statut/statut-edit/statut-edit.component';
 import { StatutListComponent } from './pages/statut/statut-list/statut-list.component';
 import { VacantListComponent } from './pages/vacant/vacant-list/vacant-list.component';
+import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-remplacant-conge-edit/vacant-remplacant-conge-edit.component';
 import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-remplacant-conge-list/vacant-remplacant-conge-list.component';
 import { VacantRemplacantListComponent } from './pages/vacant/vacant-remplacant-list/vacant-remplacant-list.component';
 import { VacantVigileListComponent } from './pages/vacant/vacant-vigile-list/vacant-vigile-list.component';
@@ -50,6 +51,7 @@ const routes: Routes = [
   { path: 'vacant/vigile', component: VacantVigileListComponent },
   { path: 'vacant/remplacant', component: VacantRemplacantListComponent },
   { path: 'vacant/remplacant-conges', component: VacantRemplacantCongeListComponent },
+  { path: 'vacant/remplacant-conges/edit/:id', component: VacantRemplacantCongeEditComponent },
 
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationEditComponent },
