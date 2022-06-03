@@ -14,6 +14,8 @@ import { MotifEditComponent } from './pages/motif/motif-edit/motif-edit.componen
 import { MotifListComponent } from './pages/motif/motif-list/motif-list.component';
 import { NationaliteEditComponent } from './pages/nationalite/nationalite-edit/nationalite-edit.component';
 import { NationaliteListComponent } from './pages/nationalite/nationalite-list/nationalite-list.component';
+import { PermissionEditComponent } from './pages/permission/permission-edit/permission-edit.component';
+import { PermissionListComponent } from './pages/permission/permission-list/permission-list.component';
 import { PointageEditComponent } from './pages/pointage/pointage-edit/pointage-edit.component';
 import { PointageListComponent } from './pages/pointage/pointage-list/pointage-list.component';
 import { PosteEditComponent } from './pages/poste/poste-edit/poste-edit.component';
@@ -25,7 +27,11 @@ import { SanctionEditComponent } from './pages/sanction/sanction-edit/sanction-e
 import { SanctionListComponent } from './pages/sanction/sanction-list/sanction-list.component';
 import { StatutEditComponent } from './pages/statut/statut-edit/statut-edit.component';
 import { StatutListComponent } from './pages/statut/statut-list/statut-list.component';
+import { SwitchEditComponent } from './pages/switch/switch-edit/switch-edit.component';
+import { SwitchListComponent } from './pages/switch/switch-list/switch-list.component';
 import { VacantListComponent } from './pages/vacant/vacant-list/vacant-list.component';
+import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-remplacant-conge-edit/vacant-remplacant-conge-edit.component';
+import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-remplacant-conge-list/vacant-remplacant-conge-list.component';
 import { VacantRemplacantListComponent } from './pages/vacant/vacant-remplacant-list/vacant-remplacant-list.component';
 import { VacantVigileListComponent } from './pages/vacant/vacant-vigile-list/vacant-vigile-list.component';
 import { VigileEditComponent } from './pages/vigile/vigile-edit/vigile-edit.component';
@@ -46,6 +52,8 @@ const routes: Routes = [
 
   { path: 'vacant/vigile', component: VacantVigileListComponent },
   { path: 'vacant/remplacant', component: VacantRemplacantListComponent },
+  { path: 'vacant/remplacant-conges', component: VacantRemplacantCongeListComponent },
+  { path: 'vacant/remplacant-conges/edit/:id', component: VacantRemplacantCongeEditComponent },
 
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationEditComponent },
@@ -58,6 +66,10 @@ const routes: Routes = [
   { path: 'sanction', component: SanctionListComponent },
   { path: 'sanction/edit', component: SanctionEditComponent },
   { path: 'sanction/edit/:id', component: SanctionEditComponent },
+
+  { path: 'permission', component: PermissionListComponent },
+  { path: 'permission/edit', component: PermissionEditComponent },
+  { path: 'permission/edit/:id', component: PermissionEditComponent },
 
   { path: 'incident', component: IncidentListComponent },
   { path: 'incident/edit', component: IncidentEditComponent },
@@ -82,6 +94,10 @@ const routes: Routes = [
   { path: 'statut', component: StatutListComponent },
   { path: 'statut/edit', component: StatutEditComponent },
   { path: 'statut/edit/:id', component: StatutEditComponent },
+
+  { path: 'switch', component: SwitchListComponent },
+  { path: 'switch/edit', component: SwitchEditComponent },
+  { path: 'switch/edit/:id', component: SwitchEditComponent },
 
   { path: 'vigile', component: VigileListComponent },
   { path: 'vigile/edit', component: VigileEditComponent },

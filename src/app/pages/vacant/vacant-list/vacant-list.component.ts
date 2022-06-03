@@ -9,6 +9,7 @@ import { Vigile } from 'src/app/models/vigile.model';
 import { NotifierService } from 'angular-notifier';
 import { DataTableDirective } from 'angular-datatables';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { Suivi } from 'src/app/models/suivi.model';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class VacantListComponent implements OnInit, OnDestroy {
 
   postes = new Array<any>();
   vigiles = new Array<Vigile>();
+  sanctions = new Array<Suivi>();
   remplacants = new Array<Vigile>();
   affectations = new Array<Affectation>();
   display = "block";
@@ -44,10 +46,16 @@ export class VacantListComponent implements OnInit, OnDestroy {
     private affectationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
     private vigileService: JarvisService<Vigile>,
+    private sanctionService: JarvisService<Suivi>,
     private notifierService: NotifierService,
   ) { }
 
   ngOnInit(): void {
+    this.sanctionService.getAll('suiviposte').then((data) => {
+      console.log('data');
+      console.log(data);
+      this.sanctions = data;
+    });
     this.posteService.getAll('poste').then((data) => {
       console.log('data');
       console.log(data);
@@ -68,6 +76,16 @@ export class VacantListComponent implements OnInit, OnDestroy {
         });
       });
     });
+  }
+
+  getSanctions(vigile: Vigile): number {
+    let nombre = 0;
+    this.sanctions.forEach((s) => {
+      if (s.idvigile.idvigile === vigile.idvigile) {
+        nombre++;
+      }
+    });
+    return nombre;
   }
 
   getNombreAffectationJour(poste: Poste): number {

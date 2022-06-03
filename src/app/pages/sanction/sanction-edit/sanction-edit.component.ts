@@ -100,8 +100,11 @@ export class SanctionEditComponent implements OnInit {
     console.log(this.suivi);
     if (this.suivi.dateSuivi)
       this.suivi.dateSuivi = new Date(this.suivi.dateSuivi);
+    if (this.suivi.dateEffet)
+      this.suivi.dateEffet = new Date(this.suivi.dateEffet);
+
     if (this.suivi.idsuiviPoste == 0) {
-      if (this.suivi.poste && this.suivi.idvigile) {
+      if (this.suivi.motifSanction && this.suivi.idvigile) {
         this.processing = true;
         this.jarvisService.ajouter('suiviposte', this.suivi).then((data) => {
           console.log('data');
@@ -163,6 +166,7 @@ export class SanctionEditComponent implements OnInit {
   }
 
   getJourSemaine(ev?: any) {
+    this.suivi.dateEffet = new Date(ev);
     if (ev) {
       console.log(ev);
       console.log(new Date(ev).getDay());

@@ -1,0 +1,66 @@
+<div class="page">
+    <div class="page-entete">
+        <div *ngIf="permission.idpermission==0" class="page-entete-titre">
+            Ajouter une nouvelle permission
+        </div>
+        <div *ngIf="permission.idpermission!=0" class="page-entete-titre">
+            Modifier la permission
+        </div>
+        <div class="">
+            <a routerLink="/permission" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des permissions
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+
+            <div class="page-contenu-corps">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Vigile
+                                </span>
+                            </div>
+                            <select type="text" [(ngModel)]="permission.idvigile" class="form-control">
+                                <option [ngValue]="vigile" *ngFor="let vigile of vigiles">
+                                    {{vigile.noms}}
+                                </option>
+                            </select>
+                        </div>
+                        <small *ngIf="permission.idvigile">
+                            Jour de repos : {{permission.idvigile ? jourSemaine(permission.idvigile?.jourRepos) :
+                            "Aucun jour défini"}}
+                        </small>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Début permission
+                                </span>
+                            </div>
+                            <input [ngModel]="permission.dateDebut | date:'yyyy-MM-dd'" (ngModelChange)="permission.dateDebut = $event" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Fin permission
+                                </span>
+                            </div>
+                            <input [ngModel]="permission.dateFin | date:'yyyy-MM-dd'" (ngModelChange)="permission.dateFin = $event" type="date" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
+                    <button *ngIf="permission.idpermission != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                </div>
+            </div>
+
+        </div>
+    </div>

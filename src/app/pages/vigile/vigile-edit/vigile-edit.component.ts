@@ -4,6 +4,7 @@ import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-vigile-edit',
@@ -20,10 +21,14 @@ export class VigileEditComponent implements OnInit {
   vigile = new Vigile();
   processing = false;
   villes = new Array<any>();
+  vigiles = new Array<any>();
   zones = new Array<any>();
   nationalites = new Array<any>();
 
   url: any;
+  parrainSelectionnee = false;
+
+  parrains = new Array<Vigile>();;
 
   constructor(
     private router: Router,
@@ -52,6 +57,9 @@ export class VigileEditComponent implements OnInit {
                   console.log('le vigile recupéré');
                   this.vigile = new Vigile();
                   this.vigile.copy(vigile);
+                  if (!this.vigile.nom) {
+                    this.vigile.nom = this.vigile.noms;
+                  }
                   console.log(this.vigile);
 
                   this.vigile.dateEntree = vigile.dateEntree?.split('T')[0];
@@ -86,11 +94,32 @@ export class VigileEditComponent implements OnInit {
                       this.vigile.nationalite = nationalite;
                     }
                   });
+                  this.getVigiles().then((vigiles) => {
+                    this.vigiles = vigiles;
+                    vigiles.forEach((v) => {
+                      if (this.vigile.parrain && v.idvigile === this.vigile.parrain.idvigile) {
+                        this.vigile.parrain = v;
+                        this.parrainSelectionnee = true;
+                      }
+                    });
+                    this.parrainSelectionnee = true;
+                    this.parrains = this.arborscenceDesParrains(vigile);
+                  });
                 });
               }
             });
           });
         });
+      });
+    });
+  }
+
+  getVigiles(): Promise<Array<any>> {
+    return new Promise((resolve, reject) => {
+      this.jarvisService.getAll('vigile').then((vigiles) => {
+        console.log('vigiles');
+        console.log(vigiles);
+        resolve(vigiles);
       });
     });
   }
@@ -205,6 +234,9 @@ export class VigileEditComponent implements OnInit {
     if (this.vigile.finConge) {
       this.vigile.finConge = new Date(this.vigile.finConge);
     }
+
+    this.vigile.noms = this.vigile.nom ? this.vigile.nom : '';
+    this.vigile.noms = this.vigile.noms + ' ' + (this.vigile.prenom ? this.vigile.prenom : '');
     if (this.vigile.idvigile == 0) {
       this.processing = true;
       this.jarvisService.ajouter('vigile', this.vigile).then((data) => {
@@ -293,5 +325,51 @@ export class VigileEditComponent implements OnInit {
       return "Dimanche";
 
     return "" + jour ? jour : "";
+  }
+
+  voirParrain() {
+    console.log('open modal');
+    const modale = document.getElementById('parrainModal');
+    
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  getVigileLocalByID(id: number) {
+    let vigile = new Vigile();
+    this.vigiles.forEach((v) => {
+      if (v.idvigile === id) {
+        vigile = v;
+      }
+    });
+    return vigile;
+  }
+
+  arborscenceDesParrains(vigile: Vigile): Array<Vigile> {
+    let parrains = new Array<Vigile>();
+    
+    console.log('parrains vigile');
+    console.log(vigile.noms);
+    if (vigile.parrain) {
+      parrains = parrains.concat(this.arborscenceDesParrains(this.getVigileLocalByID(vigile.parrain)));
+    } else {
+    }
+    parrains.push(vigile);
+    console.log('parrains');
+    console.log(parrains);
+    return parrains
+  }
+
+  fermerParrain() {
+    const modale = document.getElementById('exampleModal');
+    
+    console.log(modale);
+    if (modale != null) {
+      const myModal = bootstrap.Modal.getInstance(modale);
+      myModal?.hide();
+    }
   }
 }

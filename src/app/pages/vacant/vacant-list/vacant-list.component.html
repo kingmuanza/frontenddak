@@ -131,6 +131,7 @@
                                 <th style="text-align: center;">Zone</th>
                                 <th style="text-align: center;">Quartier</th>
                                 <th style="text-align: center;">Score</th>
+                                <th style="text-align: center;">Sanctions</th>
                                 <th style="text-align: center;">Action</th>
                             </tr>
                         </thead>
@@ -159,8 +160,11 @@
                                     {{p.vigile.quartier?.nom}}
                                     <div *ngIf="posteConcernee.idquartier?.idquartier === p.vigile.quartier?.idquartier" class="match"></div>
                                 </td>
-                                <td>
+                                <td style="text-align: right;">
                                     {{score(p.vigile, posteConcernee)}}
+                                </td>
+                                <td style="text-align: right;">
+                                    {{getSanctions(p.vigile)}}
                                 </td>
                                 <td style="text-align: center;">
                                     <button (click)="affecter(p)" type="button" class="btn btn-primary btn-sm">Appliquer</button>

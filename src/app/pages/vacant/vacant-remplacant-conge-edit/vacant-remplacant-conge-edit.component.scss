@@ -1,0 +1,22 @@
+.mois {
+    height: 260px;
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 20px;
+    padding-top: 10px;
+    text-align: center;
+    &-titre {
+        margin-bottom: 10px;
+    }
+    .jour {
+        padding: 2px;
+        &.occupee {
+            background-color: #E3B505;
+        }
+    }
+}
+
+.nav-link.active {
+    background-color: #E3B505;
+    color: #000;
+}

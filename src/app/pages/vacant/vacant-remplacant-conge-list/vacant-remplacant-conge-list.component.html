@@ -1,0 +1,86 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Planning des remplaçants congés
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="nouveau">
+                        <a (click)="reorganiser()" class="btn nouveau">
+                            Proposer une réorganisation
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Noms
+                            </span>
+                        </div>
+                        <select type="date" name="date" class="form-control">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Matricule
+                            </span>
+                        </div>
+                        <select type="date" name="date" class="form-control">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn primaire">Rechercher</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+            <div class="card shadow-1">
+                <table class="table table-bordered row-border hover ">
+                    <thead>
+                        <tr>
+
+                            <th style="text-align: left;">Rempl. Congés</th>
+                            <th>Vigile remplacé</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let v of remplacantsConges">
+                            <tr (click)="voir(v)">
+                                <td [attr.rowspan]="getRemplacements(v).length">{{v.noms}}</td>
+                                <td>{{getRemplacements(v)[0].noms}}</td>
+                                <td>{{getRemplacements(v)[0].debutConge | date: 'MM-dd'}}</td>
+                                <td>{{getRemplacements(v)[0].finConge | date: 'MM-dd'}}</td>
+                            </tr>
+                            <ng-container *ngFor="let r of getRemplacements(v); let i = index">
+                                <tr *ngIf="i > 0" (click)="voir(v)">
+                                    <td>
+                                        {{r.noms}}
+                                    </td>
+                                    <td>
+                                        {{r.debutConge | date: 'MM-dd'}}
+                                    </td>
+                                    <td>
+                                        {{r.finConge | date: 'MM-dd'}}
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
