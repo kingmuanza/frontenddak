@@ -51,6 +51,8 @@ import { PermissionListComponent } from './pages/permission/permission-list/perm
 import { PermissionEditComponent } from './pages/permission/permission-edit/permission-edit.component';
 import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-remplacant-conge-list/vacant-remplacant-conge-list.component';
 import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-remplacant-conge-edit/vacant-remplacant-conge-edit.component';
+import { SwitchListComponent } from './pages/switch/switch-list/switch-list.component';
+import { SwitchEditComponent } from './pages/switch/switch-edit/switch-edit.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +99,9 @@ import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-rempla
     PermissionListComponent,
     PermissionEditComponent,
     VacantRemplacantCongeListComponent,
-    VacantRemplacantCongeEditComponent
+    VacantRemplacantCongeEditComponent,
+    SwitchListComponent,
+    SwitchEditComponent
   ],
   imports: [
     BrowserModule,

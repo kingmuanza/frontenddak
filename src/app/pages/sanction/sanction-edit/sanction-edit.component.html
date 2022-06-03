@@ -55,7 +55,7 @@
                                     Date effet
                                 </span>
                             </div>
-                            <input [(ngModel)]="suivi.dateEffet" (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
+                            <input [ngModel]="suivi.dateEffet | date:'yyyy-MM-dd'" (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-5">

@@ -27,6 +27,8 @@ import { SanctionEditComponent } from './pages/sanction/sanction-edit/sanction-e
 import { SanctionListComponent } from './pages/sanction/sanction-list/sanction-list.component';
 import { StatutEditComponent } from './pages/statut/statut-edit/statut-edit.component';
 import { StatutListComponent } from './pages/statut/statut-list/statut-list.component';
+import { SwitchEditComponent } from './pages/switch/switch-edit/switch-edit.component';
+import { SwitchListComponent } from './pages/switch/switch-list/switch-list.component';
 import { VacantListComponent } from './pages/vacant/vacant-list/vacant-list.component';
 import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-remplacant-conge-edit/vacant-remplacant-conge-edit.component';
 import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-remplacant-conge-list/vacant-remplacant-conge-list.component';
@@ -92,6 +94,10 @@ const routes: Routes = [
   { path: 'statut', component: StatutListComponent },
   { path: 'statut/edit', component: StatutEditComponent },
   { path: 'statut/edit/:id', component: StatutEditComponent },
+
+  { path: 'switch', component: SwitchListComponent },
+  { path: 'switch/edit', component: SwitchEditComponent },
+  { path: 'switch/edit/:id', component: SwitchEditComponent },
 
   { path: 'vigile', component: VigileListComponent },
   { path: 'vigile/edit', component: VigileEditComponent },

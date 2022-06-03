@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { Permission } from 'src/app/models/permission.model';
 import { Poste } from 'src/app/models/poste.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { ZoneDak } from 'src/app/models/zone.model';
@@ -23,6 +24,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   dtInstance!: Promise<DataTables.Api>;
 
+  sanctions = new Array<any>();
+  permissions = new Array<Permission>();
   zones = new Array<ZoneDak>();
   postes = new Array<Poste>();
   vigiles = new Array<Vigile>();
@@ -54,6 +57,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private zoneService: JarvisService<ZoneDak>,
     private posteService: JarvisService<Poste>,
     private vigileService: JarvisService<Vigile>,
+    private sanctionService: JarvisService<any>,
+    private permissionService: JarvisService<Permission> ,
   ) { }
 
   ngOnInit(): void {
@@ -82,6 +87,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       console.log('data');
       console.log(zones);
       this.zones = zones;
+    });
+
+    this.sanctionService.getAll('suiviposte').then((suiviposte) => {
+      console.log('suiviposte');
+      console.log(suiviposte);
+      this.sanctions = suiviposte;
+    });
+    this.permissionService.getAll('permission').then((permissions) => {
+      console.log('permission');
+      console.log(permissions);
+      this.permissions = permissions;
     });
   }
 

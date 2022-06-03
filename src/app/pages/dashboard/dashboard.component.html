@@ -177,6 +177,66 @@
                         </div>
                     </div>
 
+                    <div class="col-lg-6">
+                        <div class="page-contenu-corps" style="margin-top: 25px;">
+                            <div class="card shadow-1">
+                                <div class="petit-titre" style="margin-bottom: 20px;">
+                                    Liste des vigiles sanctionnés
+                                </div>
+                                <table class="table table-bordered row-border hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Vigile</th>
+                                            <th>Horaire</th>
+                                            <th>Date</th>
+                                            <th>Date effet</th>
+                                            <th>Sanctions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let s of sanctions" style="cursor: pointer;">
+                                            <td>{{s.idvigile.noms}}</td>
+                                            <td>{{s.horaire}}</td>
+                                            <td>{{s.dateSuivi | date: 'yyyy-MM-dd'}}</td>
+                                            <td>{{s.dateEffet | date: 'yyyy-MM-dd'}}</td>
+                                            <td>{{s.commentaire}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="page-contenu-corps" style="margin-top: 25px;">
+                            <div class="card shadow-1">
+                                <div class="petit-titre" style="margin-bottom: 20px;">
+                                    Liste des permissions
+                                </div>
+                                <table class="table table-bordered row-border hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Vigile</th>
+                                            <th>Horaire</th>
+                                            <th>Date</th>
+                                            <th>Date effet</th>
+                                            <th>Sanctions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let s of permissions" style="cursor: pointer;">
+                                            <td>{{s.idvigile?.noms}}</td>
+                                            <td>{{s.idvigile?.horaire}}</td>
+                                            <td>{{s.dateDebut | date: 'yyyy-MM-dd'}}</td>
+                                            <td>{{s.dateFin | date: 'yyyy-MM-dd'}}</td>
+                                            <td>{{s.commentaire}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-12">
                         <div class="page-contenu-corps" style="margin-top: 25px;">
                             <div class="card shadow-1">

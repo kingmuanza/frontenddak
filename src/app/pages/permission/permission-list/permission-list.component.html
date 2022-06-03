@@ -54,6 +54,7 @@
                             <th>Repos</th>
                             <th>Début</th>
                             <th>Fin</th>
+                            <th>Commentaire</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,6 +65,7 @@
                             <td>{{jourSemaine(permission.idvigile?.jourRepos)}}</td>
                             <td>{{permission.dateDebut | date: 'yyyy-MM-dd'}}</td>
                             <td>{{permission.dateFin | date: 'yyyy-MM-dd'}}</td>
+                            <td>{{permission.commentaire}}</td>
                         </tr>
                     </tbody>
                 </table>
