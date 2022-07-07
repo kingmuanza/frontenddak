@@ -1,0 +1,33 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Synchroniser
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="nouveau">
+                        <a (click)="synchroniserTout()" class="btn nouveau">
+                            Synchroniser tout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="fonctionnalites">
+            <div class="row">
+                <div class="col-lg-3">
+                    Zones
+                </div>
+                <div class="col-lg-6">
+                    dernière synchro : 2022-02-01
+                </div>
+                <div class="col-lg-3">
+                    <button (click)="synchroniser('zone')" class="btn primaire">Synchroniser</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

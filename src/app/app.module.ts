@@ -53,6 +53,7 @@ import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-rempla
 import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-remplacant-conge-edit/vacant-remplacant-conge-edit.component';
 import { SwitchListComponent } from './pages/switch/switch-list/switch-list.component';
 import { SwitchEditComponent } from './pages/switch/switch-edit/switch-edit.component';
+import { SynchroniserComponent } from './pages/synchroniser/synchroniser.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { SwitchEditComponent } from './pages/switch/switch-edit/switch-edit.comp
     VacantRemplacantCongeListComponent,
     VacantRemplacantCongeEditComponent,
     SwitchListComponent,
-    SwitchEditComponent
+    SwitchEditComponent,
+    SynchroniserComponent
   ],
   imports: [
     BrowserModule,
