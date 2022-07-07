@@ -30,7 +30,8 @@
                                 Date
                             </span>
                         </div>
-                        <input type="date" class="form-control" [ngModel]="date |date:'yyyy-MM-dd'" (ngModelChange)="date = $event">
+                        <input type="date" class="form-control" [ngModel]="date |date:'yyyy-MM-dd'"
+                            (ngModelChange)="date = $event">
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -47,7 +48,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn primaire" (click)="rechercher()">Rechercher</button>
+                    <button class="btn primaire" (click)="getPointages()">Rechercher</button>
                 </div>
             </div>
 
@@ -70,42 +71,22 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Zone</th>
-                                    <th>Quartier</th>
-                                    <th>Poste</th>
-                                    <th>Horaire</th>
                                     <th>Vigile</th>
-                                    <th style="text-align: center;">Pointage 1</th>
-                                    <th style="text-align: center;">Pointage 2</th>
+                                    <th style="text-align: center;">Pointage</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
-                                    <td>{{date | date: 'yyyy-MM-dd'}}</td>
-                                    <td>{{affectation.idposte.zone?.libelle}}</td>
-                                    <td>{{affectation.idposte.idquartier?.nom}}</td>
-                                    <td>{{affectation.idposte.libelle}}</td>
-                                    <td>{{affectation.horaire}}</td>
-                                    <td>
-                                        <ng-container *ngIf="affectation.idvigile.jourRepos !== jourDeLaSemaine">
-                                            {{affectation.idvigile.noms}}
-                                        </ng-container>
-                                        <ng-container *ngIf="affectation.idvigile.jourRepos === jourDeLaSemaine">
-                                            <b>
-                                            {{affectation.remplacant? affectation.remplacant.noms : ""}}
-                                        </b>
-                                        </ng-container>
-                                    </td>
-                                    <td style="text-align: center;">
-                                        <span style="margin-right: 10px; color: green;">
-                                        <i class="bi-geo-alt"></i>
-                                    </span>
-                                        <span style="margin-right: 10px; color: green;">
-                                        <i class="bi-fingerprint"></i>
-                                    </span> {{date | date: 'HH:mm:ss'}}
-                                    </td>
-                                    <td>
+                                <tr *ngFor="let affectation of pointages">
+                                    <td>{{toDate(affectation.date) | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                                    <td>{{affectation.nomsVigile}}</td>
 
+                                    <td style="text-align: center;">
+                                        <span *ngIf="affectation.latitude" style="margin-right: 10px; color: green;">
+                                            <i class="bi-geo-alt"></i>
+                                        </span>
+                                        <span style="margin-right: 10px; color: green;">
+                                            <i class="bi-fingerprint"></i>
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>

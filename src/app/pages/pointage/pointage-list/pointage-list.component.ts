@@ -5,6 +5,12 @@ import jsPDF from 'jspdf';
 import { Affectation } from 'src/app/models/affectation.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
+import { collection, getDocs } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+
+
 @Component({
   selector: 'app-pointage-list',
   templateUrl: './pointage-list.component.html',
@@ -12,7 +18,9 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 })
 export class PointageListComponent implements OnInit {
 
+  app: any;
   affectations = new Array<any>();
+  pointages = new Array<any>();
   date = new Date();
   jourDeLaSemaine = -1;
   horaire = "";
@@ -25,7 +33,33 @@ export class PointageListComponent implements OnInit {
     private router: Router,
     private jarvisService: JarvisService<Affectation>,
     private zoneService: JarvisService<Zone>,
-  ) { }
+  ) {
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
+      authDomain: "dak-security.firebaseapp.com",
+      projectId: "dak-security",
+      storageBucket: "dak-security.appspot.com",
+      messagingSenderId: "448692904510",
+      appId: "1:448692904510:web:216883edce596209e6276f",
+      measurementId: "G-L0FKMS4EQH"
+    };
+    this.app = initializeApp(firebaseConfig);
+    this.getPointages().then(() => {
+
+    });
+  }
+
+  async getPointages() {
+    this.pointages = new Array<any>();
+    const db = getFirestore(this.app);
+    const querySnapshot = await getDocs(collection(db, "pointage"));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      this.pointages.push(doc.data());
+    });
+  }
 
   ngOnInit(): void {
     this.getZones().then((zones) => {
@@ -132,6 +166,15 @@ export class PointageListComponent implements OnInit {
         pdf.addImage(contentDataURL, 'PNG', 0, 0, 21, 29.7);
         pdf.save('Filename.pdf');
       });
+    }
+  }
+
+  toDate(timestp: any): Date {
+    if (timestp.seconds) {
+      return new Date(timestp.seconds * 1000);
+
+    } else {
+      return new Date();
     }
   }
 }
