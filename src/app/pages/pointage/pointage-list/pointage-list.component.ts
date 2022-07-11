@@ -9,6 +9,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
+import { Poste } from 'src/app/models/poste.model';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { initializeApp } from 'firebase/app';
 export class PointageListComponent implements OnInit {
 
   app: any;
-  affectations = new Array<any>();
+  affectations = new Array<Affectation>();
+  postes = new Array<any>();
   pointages = new Array<any>();
   date = new Date();
   jourDeLaSemaine = -1;
@@ -33,6 +35,8 @@ export class PointageListComponent implements OnInit {
     private router: Router,
     private jarvisService: JarvisService<Affectation>,
     private zoneService: JarvisService<Zone>,
+    private affectationService: JarvisService<Affectation>,
+    private posteService: JarvisService<Poste>,
   ) {
 
     const firebaseConfig = {
@@ -45,8 +49,17 @@ export class PointageListComponent implements OnInit {
       measurementId: "G-L0FKMS4EQH"
     };
     this.app = initializeApp(firebaseConfig);
-    this.getPointages().then(() => {
+    this.actualiser();
+  }
 
+  actualiser() {
+    this.getPostes().then(() => {
+      this.getAffectations().then((affectations) => {
+        this.affectations = affectations;
+        this.getPointages().then(() => {
+
+        });
+      });
     });
   }
 
@@ -88,6 +101,50 @@ export class PointageListComponent implements OnInit {
         resolve(zones);
       });
     });
+  }
+
+  getAffectations(): Promise<Array<Affectation>> {
+    return new Promise((resolve, reject) => {
+      this.affectationService.getAll('affectation').then((affectations) => {
+        console.log('affectations');
+        console.log(affectations);
+        affectations = affectations.filter((aff) => {
+          return !aff.arret;
+        });
+        resolve(affectations);
+      });
+    });
+  }
+
+  async getPostes() {
+    this.postes = new Array<any>();
+    const db = getFirestore(this.app);
+    const querySnapshot = await getDocs(collection(db, "poste"));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      this.postes.push(doc.data());
+    });
+  }
+
+  getPoste(idposte: number): any {
+    let poste: any;
+    this.postes.forEach((p) => {
+      if (p.idposte === idposte) {
+        poste = p;
+      }
+    });
+    return poste;
+  }
+
+  getAffectation(idvigile: string): any {
+    let affectation: any;
+    this.affectations.forEach((aff) => {
+      if (aff.idvigile.idvigile === idvigile) {
+        affectation = aff;
+      }
+    });
+    return affectation;
   }
 
   rechercher() {

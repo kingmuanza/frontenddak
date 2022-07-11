@@ -7,6 +7,13 @@
     <div class="page-contenu">
         <div class="page-contenu-titre">
             <div class="row">
+                <div class="col-lg-2">
+                    <div class="nouveau">
+                        <a (click)="actualiser()" class="btn nouveau">
+                            Actualiser
+                        </a>
+                    </div>
+                </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -30,11 +37,10 @@
                                 Date
                             </span>
                         </div>
-                        <input type="date" class="form-control" [ngModel]="date |date:'yyyy-MM-dd'"
-                            (ngModelChange)="date = $event">
+                        <input type="date" class="form-control" [ngModel]="date |date:'yyyy-MM-dd'" (ngModelChange)="date = $event">
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
@@ -54,9 +60,7 @@
 
             <div #fiche id="fiche">
                 <div class="page-contenu-corps">
-                    <div class="page-entete-titre">
-                        Fiche de pointage du {{date | date: 'yyyy-MM-dd'}}
-                    </div>
+
                     <div style="margin-bottom: 20px;">
                         <span *ngIf="zone">
                             Zone : <b>{{zone?.libelle}}</b>
@@ -72,14 +76,34 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Vigile</th>
+                                    <th>Longitude</th>
+                                    <th>Latitude</th>
+                                    <th>Affectation</th>
+                                    <th>Longitude</th>
                                     <th style="text-align: center;">Pointage</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let affectation of pointages">
+                                <tr *ngFor="let affectation of pointages.reverse()">
                                     <td>{{toDate(affectation.date) | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
                                     <td>{{affectation.nomsVigile}}</td>
-
+                                    <td>{{affectation.longitude}}</td>
+                                    <td>{{affectation.latitude}}</td>
+                                    <td>
+                                        <ng-container *ngIf="getAffectation(affectation.idvigile)">
+                                            {{getPoste(getAffectation(affectation.idvigile).idposte.idposte).libelle }}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        <ng-container *ngIf="getAffectation(affectation.idvigile)">
+                                            {{getPoste(getAffectation(affectation.idvigile).idposte.idposte).longitude }}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        <ng-container *ngIf="getAffectation(affectation.idvigile)">
+                                            {{getPoste(getAffectation(affectation.idvigile).idposte.idposte).latitude }}
+                                        </ng-container>
+                                    </td>
                                     <td style="text-align: center;">
                                         <span *ngIf="affectation.latitude" style="margin-right: 10px; color: green;">
                                             <i class="bi-geo-alt"></i>
