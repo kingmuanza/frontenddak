@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import { Affectation } from 'src/app/models/affectation.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
+import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
 import { collection, getDocs } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
@@ -20,13 +21,15 @@ import { Poste } from 'src/app/models/poste.model';
 export class PointageListComponent implements OnInit {
 
   app: any;
+
   affectations = new Array<Affectation>();
   postes = new Array<any>();
   pointages = new Array<any>();
+  zones = new Array<any>();
+
   date = new Date();
   jourDeLaSemaine = -1;
   horaire = "";
-  zones = new Array<any>();
   zone: any;
   recherche = false;
 
@@ -38,17 +41,7 @@ export class PointageListComponent implements OnInit {
     private affectationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
   ) {
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
-      authDomain: "dak-security.firebaseapp.com",
-      projectId: "dak-security",
-      storageBucket: "dak-security.appspot.com",
-      messagingSenderId: "448692904510",
-      appId: "1:448692904510:web:216883edce596209e6276f",
-      measurementId: "G-L0FKMS4EQH"
-    };
-    this.app = initializeApp(firebaseConfig);
+    this.app = initializeApp(FIREBASECONFIG);
     this.actualiser();
   }
 
