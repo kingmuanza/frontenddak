@@ -106,7 +106,14 @@
                                             {{getPoste(getAffectation(affectation.idvigile).idposte.idposte).latitude }}
                                         </ng-container>
                                     </td>
-                                    <td>{{affectation.commentaire}}</td>
+                                    <td>
+                                        <div *ngIf="affectation.raison">
+                                            <b>{{affectation.raison}}</b>
+                                        </div>
+                                        <div>
+                                            {{affectation.commentaire}}
+                                        </div>
+                                    </td>
                                     <td style="text-align: center;">
                                         <span *ngIf="affectation.latitude && affectation.latitude > 0" style="margin-right: 10px; color: green;">
                                             <i class="bi-geo-alt"></i>

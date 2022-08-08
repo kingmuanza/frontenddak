@@ -60,7 +60,7 @@
                     <tbody>
                         <tr *ngFor="let poste of postes " (click)="edit(poste.idposte) ">
                             <td>{{poste.idposte}}</td>
-                            <td>{{poste.zone.libelle}}</td>
+                            <td>{{poste.zone?.libelle}}</td>
                             <td>{{poste.idquartier?.nom}}</td>
                             <td>{{poste.libelle}}</td>
                             <td>{{poste.code}}</td>

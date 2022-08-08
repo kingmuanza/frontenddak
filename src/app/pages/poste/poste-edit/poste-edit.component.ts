@@ -114,6 +114,7 @@ export class PosteEditComponent implements OnInit {
   save() {
     console.log('poste à enregistrer');
     console.log(this.poste);
+    this.poste.libelle = this.poste.code;
     if (this.poste.debutContrat)
       this.poste.debutContrat = new Date(this.poste.debutContrat);
 

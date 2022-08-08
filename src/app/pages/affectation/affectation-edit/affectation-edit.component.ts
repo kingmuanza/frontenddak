@@ -83,7 +83,7 @@ export class AffectationEditComponent implements OnInit {
         console.log('postes');
         console.log(postes);
         data.forEach((poste) => {
-          if (poste.contrat == 'ENCOURS') {
+          if ( true/* poste.contrat == 'ENCOURS' */) {
             postes.push(poste);
           }
         });
