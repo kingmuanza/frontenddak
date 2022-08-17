@@ -1,11 +1,18 @@
 .connexion {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
     text-align: center;
-    padding-top: 15%;
+    padding-top: 100px;
     &-titre {
         margin-bottom: 10px;
         font-size: 2.0rem;
     }
     &-champ {
         margin-bottom: 10px;
+    }
+    &-contenu {
+        width: 600px;
+        margin: auto;
     }
 }

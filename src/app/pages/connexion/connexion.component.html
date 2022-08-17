@@ -1,16 +1,36 @@
 <div class="connexion">
+    <div>
+        <img src="../assets/img/logo.jpg" alt="">
+    </div>
     <div class="connexion-titre">
         Veuillez vous connecter
     </div>
     <div class="connexion-contenu">
         <div class="connexion-champ">
-            <input type="text" placeholder="login">
+            <app-test-connexion #serveur></app-test-connexion>
         </div>
         <div class="connexion-champ">
-            <input type="text" placeholder="Mot de passe">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Login
+                    </span>
+                </div>
+                <input [(ngModel)]="login" type="text" class="form-control">
+            </div>
         </div>
         <div class="connexion-champ">
-            <button class="btn" (click)="connexion()">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Mot de passe
+                    </span>
+                </div>
+                <input [(ngModel)]="passe" type="password" class="form-control">
+            </div>
+        </div>
+        <div class="connexion-champ">
+            <button class="btn nouveau" (click)="connexion()" style="width: 100%">
                 Connexion
             </button>
         </div>

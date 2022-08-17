@@ -1,0 +1,27 @@
+.deconnexion {
+    // background-color: #E3B505;
+    color: #333;
+    // border-radius: 22px;
+    overflow: hidden;
+    border: 0px solid #231709;
+    padding: 10px;
+    line-height: 1.05;
+    vertical-align: top;
+    border: 0px solid #E3B505;
+    text-align: right;
+    // font-size: 14px;
+    img {
+        width: 30px;
+        height: 30px;
+        vertical-align: top;
+    }
+    button {
+        vertical-align: top;
+        margin-right: 30px;
+    }
+    &-login-serveur {
+        display: inline-block;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

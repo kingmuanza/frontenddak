@@ -1,0 +1,17 @@
+<div *ngIf="user" class="deconnexion">
+    <img src="../assets/img/logo.jpg" alt="">
+    <div class="deconnexion-login-serveur">
+        <div>
+            {{user?.login}},
+            <b>
+                Administrateur
+            </b>
+        </div>
+        <div>
+            Serveur : {{serveur}}
+        </div>
+    </div>
+    <button (click)="deconnexion()" class="btn nouveau">
+        Déconnexion
+    </button>
+</div>

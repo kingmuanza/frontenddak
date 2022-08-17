@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-menu-gauche',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu-gauche.component.scss']
 })
 export class MenuGaucheComponent implements OnInit {
+
+  @Input() user: any;
 
   constructor() { }
 

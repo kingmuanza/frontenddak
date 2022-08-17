@@ -1,0 +1,15 @@
+<div class="input-group">
+    <div class="input-group-prepend">
+        <span class="input-group-text">
+            Adresse du serveur
+        </span>
+    </div>
+    <select [disabled]="loaderVisible" type="date" name="date" class="form-control" [(ngModel)]="urlServeur">
+        <option *ngFor="let url of urls" [value]="url">{{url}}</option>
+    </select>
+    <button *ngIf="loaderVisible" class="btn" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Veuillez patienter....
+    </button>
+    <button *ngIf="!loaderVisible" (click)="testerConnexion()" class="btn">Tester la connexion</button>
+</div>

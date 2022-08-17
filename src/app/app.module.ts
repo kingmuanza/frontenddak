@@ -54,6 +54,9 @@ import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-rempla
 import { SwitchListComponent } from './pages/switch/switch-list/switch-list.component';
 import { SwitchEditComponent } from './pages/switch/switch-edit/switch-edit.component';
 import { SynchroniserComponent } from './pages/synchroniser/synchroniser.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { TestConnexionComponent } from './composants/test-connexion/test-connexion.component';
+import { MenuHautComponent } from './composants/menu-haut/menu-haut.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +106,9 @@ import { SynchroniserComponent } from './pages/synchroniser/synchroniser.compone
     VacantRemplacantCongeEditComponent,
     SwitchListComponent,
     SwitchEditComponent,
-    SynchroniserComponent
+    SynchroniserComponent,
+    TestConnexionComponent,
+    MenuHautComponent
   ],
   imports: [
     BrowserModule,
@@ -127,7 +132,9 @@ import { SynchroniserComponent } from './pages/synchroniser/synchroniser.compone
     NgChartsModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
