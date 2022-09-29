@@ -1,0 +1,38 @@
+.input-group {
+    margin-top: 10px;
+}
+
+.categorie {
+    opacity: 0.5;
+    margin-top: 20px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.indication {
+    color: red;
+    font-size: 0.8em;
+}
+
+.remplacant-detail {
+    padding-left: 5px;
+    padding-top: 3px;
+}
+
+.voir-programme {
+    margin-left: 20px;
+    color: #231709;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.modal-backdrop {
+    background-color: red;
+    z-index: 500000;
+}
+
+.back-red {
+    background-color: rgba(#000, 0.3);
+}

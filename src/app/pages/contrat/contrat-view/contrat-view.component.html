@@ -1,0 +1,77 @@
+<div class="page">
+    <div class="page-entete">
+        <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
+            Contrat : {{contrat.libelle}}
+        </div>
+        <div class="">
+            <a routerLink="/contrat" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des contrats
+            </a>
+        </div>
+    </div>
+    <div class="boutons">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="nouveau">
+                    <a [routerLink]="'/contrat/edit/' + contrat.idcontrat " class="btn nouveau">
+                        Modifier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="shadow-1" style="padding: 20px;">
+                    <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}</div>
+                    <div>Date de début : {{contrat.dateDebut | date: 'yyyy-MM-dd'}}</div>
+                    <div style="margin-top: 20px;">
+                        {{contrat.description}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+
+                <div>
+                    <div style="margin-top: 20px">
+                        Historique du contrat
+                    </div>
+                    <div class="">
+
+                        <div class="page-contenu-corps ">
+                            <table class="table row-border hover ">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Postes</th>
+                                        <th>Vig. Jr</th>
+                                        <th>Vig. Nt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{contrat.date | date: 'yyyy-MM-dd'}}</td>
+                                        <td>{{contrat.description}}</td>
+                                        <td>{{contrat.nbPostes}}</td>
+                                        <td>{{contrat.nbVigileJour}}</td>
+                                        <td>{{contrat.nbVigileNuit}}</td>
+                                    </tr>
+                                    <tr *ngFor="let c of contrats ">
+                                        <td>{{c.date | date: 'yyyy-MM-dd'}}</td>
+                                        <td>{{c.description}}</td>
+                                        <td>{{c.nbPostes}}</td>
+                                        <td>{{c.nbVigileJour}}</td>
+                                        <td>{{c.nbVigileNuit}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

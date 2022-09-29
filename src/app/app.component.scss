@@ -5,3 +5,15 @@
     height: 100vh;
     overflow-y: hidden;
 }
+
+.dak-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(#fff, 0.5);
+    width: 100vw;
+    overflow-x: hidden;
+    height: 100vh;
+    overflow-y: hidden;
+    z-index: 100;
+}

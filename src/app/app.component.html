@@ -1,10 +1,10 @@
 <div class="application" style="">
     <div class="row row-no-padding">
         <div *ngIf="user" class="col-2" style="overflow-x: hidden;">
-            <app-menu-gauche></app-menu-gauche>
+            <app-menu-gauche [user]="user"></app-menu-gauche>
         </div>
         <div [ngClass]="{'col-10': user, 'col-12': !user}">
-            <app-menu-haut></app-menu-haut>
+            <app-menu-haut [user]="user"></app-menu-haut>
             <div style="height: 100vh; overflow-y: scroll;">
                 <router-outlet></router-outlet>
             </div>
@@ -13,3 +13,6 @@
 </div>
 
 <notifier-container></notifier-container>
+<div *ngIf="loading" class="dak-loading">
+
+</div>

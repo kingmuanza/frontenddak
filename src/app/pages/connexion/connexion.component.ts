@@ -5,6 +5,7 @@ import { NotifierService } from 'angular-notifier';
 import { TestConnexionComponent } from 'src/app/composants/test-connexion/test-connexion.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-connexion',

@@ -1,6 +1,9 @@
 <div class="menu-gauche shadow-1" style="width: 100%;">
     <div class="menu-gauche-titre">
         Menu
+        <div style="font-size: 14px; opacity: 0.5; font-weight: 100; margin-top: -5px;">
+            {{user?.role }}
+        </div>
     </div>
     <div class="menu-gauche-sous-titre">
         Suivi
@@ -10,55 +13,70 @@
             Tableau de bord
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" style="display: none;">
         <a routerLinkActive="active" routerLink="synchroniser">
             Synchroniser
+        </a>
+    </div>
+    <div class="menu-gauche-item" style="display: none;">
+        <a routerLinkActive="active" routerLink="controle">
+            Contrôle des vigiles
         </a>
     </div>
     <div class="menu-gauche-sous-titre">
         Edition
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="pointage">
         <a routerLinkActive="active" routerLink="pointage">
             Pointages
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="affectation">
         <a routerLinkActive="active" routerLink="affectation">
             Affectation
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="switch">
         <a routerLinkActive="active" routerLink="switch">
             Switchs
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="sanction">
         <a routerLinkActive="active" routerLink="sanction">
             Sanctions
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="permission">
         <a routerLinkActive="active" routerLink="permission">
             Permissions
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="vigile">
         <a routerLinkActive="active" routerLink="vigile">
             Vigiles
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="vigileBadge">
+        <a routerLinkActive="active" routerLink="vigile-badge">
+            Vigiles Badges
+        </a>
+    </div>
+    <div class="menu-gauche-item" *ngIf="conge">
         <a routerLinkActive="active" routerLink="conge">
             Congés
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="contrat">
+        <a routerLinkActive="active" routerLink="contrat">
+            Contrats
+        </a>
+    </div>
+    <div class="menu-gauche-item" *ngIf="poste">
         <a routerLinkActive="active" routerLink="poste">
             Postes
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="repos">
         <a routerLinkActive="active" routerLink="repos">
             Jours de repos
         </a>
@@ -67,32 +85,37 @@
     <div class="menu-gauche-sous-titre">
         Paramètres
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="zone">
         <a routerLinkActive="active" routerLink="zone">
             Zones
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="ville">
         <a routerLinkActive="active" routerLink="ville">
             Villes
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="quartier">
         <a routerLinkActive="active" routerLink="quartier">
             Quartiers
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="nationalite">
         <a routerLinkActive="active" routerLink="nationalite">
             Nationalités
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="equipement">
+        <a routerLinkActive="active" routerLink="equipement">
+            Equipements
+        </a>
+    </div>
+    <div class="menu-gauche-item" *ngIf="statut">
         <a routerLinkActive="active" routerLink="statut">
             Statuts
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="motif">
         <a routerLinkActive="active" routerLink="motif">
             Motifs
         </a>
@@ -101,27 +124,27 @@
         Etats
     </div>
 
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="fichepointage">
         <a routerLinkActive="active" routerLink="fiche/planning-incomplet">
             Fiche de pointage
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="postevacant">
         <a routerLinkActive="active" routerLink="vacant/poste">
             Postes vacants
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="titulairevacant">
         <a routerLinkActive="active" routerLink="vacant/vigile">
             Liste des titulaires vacants
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="planningremplacant">
         <a routerLinkActive="active" routerLink="vacant/remplacant">
             Planning des remplacants
         </a>
     </div>
-    <div class="menu-gauche-item">
+    <div class="menu-gauche-item" *ngIf="planningremplacantconge">
         <a routerLinkActive="active" routerLink="vacant/remplacant-conges">
             Planning des rempl. congés
         </a>

@@ -1,3 +1,5 @@
+import { Contrat } from "./contrat.model";
+
 export class Poste {
     code = '';
     abrege = '';
@@ -21,4 +23,6 @@ export class Poste {
     idquartier: any;
     longitude = 0;
     latitude = 0;
+    organisme = false;
+    idcontrat: Contrat | undefined;
 }

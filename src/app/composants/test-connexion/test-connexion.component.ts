@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-test-connexion',
@@ -21,6 +22,7 @@ export class TestConnexionComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private notifierService: NotifierService,
+    private loadingService: LoadingService,
   ) { }
 
   ngOnInit(): void {
@@ -40,10 +42,12 @@ export class TestConnexionComponent implements OnInit {
 
   showLoader() {
     this.loaderVisible = true;
+    this.loadingService.afficher();
   }
 
   hideLoader() {
     this.loaderVisible = false;
+    this.loadingService.cacher();
   }
 
   testerConnexion() {

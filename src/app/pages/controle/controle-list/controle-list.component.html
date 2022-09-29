@@ -1,0 +1,133 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Pointages du {{date | date: 'yyyy-MM-dd'}}
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="nouveau">
+                        <a (click)="actualiser()" class="btn nouveau">
+                            Actualiser
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Zone
+                            </span>
+                        </div>
+
+                        <select type="text" [(ngModel)]="zone" class="form-control">
+                            <option [ngValue]="''"></option>
+                            <option [ngValue]="zone" *ngFor="let zone of zones">
+                                {{zone.libelle}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Date
+                            </span>
+                        </div>
+                        <input type="date" class="form-control" [ngModel]="date |date:'yyyy-MM-dd'" (ngModelChange)="date = $event">
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Horaire
+                            </span>
+                        </div>
+                        <select type="date" name="date" class="form-control" [(ngModel)]="horaire">
+                            <option value="jour">Jour</option>
+                            <option value="nuit">Nuit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn primaire" (click)="getPointages()">Rechercher</button>
+                </div>
+            </div>
+
+            <div #fiche id="fiche">
+                <div class="page-contenu-corps">
+
+                    <div style="margin-bottom: 20px;">
+                        <span *ngIf="zone">
+                            Zone : <b>{{zone?.libelle}}</b>
+                        </span><span *ngIf="zone && horaire">,</span>
+                        <span *ngIf="zone">
+                            Horaire : <b>{{horaire}}</b>
+                        </span>
+                    </div>
+
+                    <div class="card shadow-1" style="padding: 0;">
+                        <table class="table table-bordered row-border hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Vigile</th>
+                                    <th>Longitude</th>
+                                    <th>Latitude</th>
+                                    <th>Affectation</th>
+                                    <th>Longitude</th>
+                                    <th>Latitude</th>
+                                    <th>Commentaire</th>
+                                    <th style="text-align: center;">Pointage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let affectation of pointages.reverse()">
+                                    <td>{{toDate(affectation.date) | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                                    <td>{{affectation.nomsVigile}}</td>
+                                    <td>{{affectation.longitude}}</td>
+                                    <td>{{affectation.latitude}}</td>
+                                    <td>
+                                        <ng-container *ngIf="getAffectation(affectation.idvigile)">
+                                            {{getPoste(getAffectation(affectation.idvigile).idposte.idposte).libelle }}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        <ng-container *ngIf="getAffectation(affectation.idvigile)">
+                                            {{getPoste(getAffectation(affectation.idvigile).idposte.idposte).longitude }}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        <ng-container *ngIf="getAffectation(affectation.idvigile)">
+                                            {{getPoste(getAffectation(affectation.idvigile).idposte.idposte).latitude }}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        <div *ngIf="affectation.raison">
+                                            <b>{{affectation.raison}}</b>
+                                        </div>
+                                        <div>
+                                            {{affectation.commentaire}}
+                                        </div>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span *ngIf="affectation.latitude && affectation.latitude > 0" style="margin-right: 10px; color: green;">
+                                            <i class="bi-geo-alt"></i>
+                                        </span>
+                                        <span *ngIf="!affectation.absence" style="margin-right: 10px; color: green;">
+                                            <i class="bi-fingerprint"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>

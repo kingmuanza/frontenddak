@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Utilisateur } from '../models/utilisateur.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  currentUser: any;
-  currentUserSubject = new Subject<any>();
+  currentUser: any = new Utilisateur();
+  currentUserSubject = new Subject<Utilisateur | null>();
   stockage: any;
 
   constructor() {
-    this.stockage = sessionStorage;
+    this.stockage = localStorage;
   }
 
   actualiser() {
     console.log('actualiser');
-    this.currentUser = this.getUser().then((user)=> {
+    this.getUser().then((user)=> {
       this.currentUser = user;
       this.notifier();
     });
@@ -24,29 +25,62 @@ export class AuthService {
 
   isAuthUser(): boolean {
     let reponse = false;
-    this.currentUser = this.getUser();
+    this.getUser();
     if (this.currentUser) {
       reponse = true;
     }
     return reponse;
   }
 
-  connexion(serveur: string, l: string, passe: string): Promise<void> {
+  connexion(serveur: string, login: string, passe: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.currentUser = {
-        login: l
+      if (login === 'admin' && passe === 'admin') {
+        this.currentUser = {
+          login: 'admin',
+          role: 'Administrateur',
+          id: 0
+        }
+        this.saveUser(this.currentUser);
+        this.notifier();
+        resolve();
       }
-      this.saveUser(this.currentUser);
-      this.notifier();
-      resolve();
+      if (login === 'contrat' && passe === 'contrat') {
+        this.currentUser = {
+          login: 'contrat',
+          role: 'Contrat',
+          id: 0
+        }
+        this.saveUser(this.currentUser);
+        this.notifier();
+        resolve();
+      }
+      if (login === 'rh' && passe === 'rh') {
+        this.currentUser = {
+          login: 'rh',
+          role: 'RH',
+          id: 0
+        }
+        this.saveUser(this.currentUser);
+        this.notifier();
+        resolve();
+      }
+      if (login === 'suivi' && passe === 'suivi') {
+        this.currentUser = {
+          login: 'suivi',
+          role: 'suivi',
+          id: 0
+        }
+        this.saveUser(this.currentUser);
+        this.notifier();
+        resolve();
+      }
+      reject();
     });
   }
 
   getUser(): Promise<any> {
     return new Promise((resolve, reject) => {
-      if (this.currentUser) {
-        resolve(this.currentUser);
-      } else {
+      {
         resolve(this.getSessionUser());
       }
     });
@@ -56,8 +90,10 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.currentUser = null;
       this.stockage.removeItem('dak-user');
-      this.actualiser();
-      resolve();
+      this.currentUserSubject.next(null);
+      setTimeout(() => {
+        resolve();        
+      }, 500);
     });
   }
 

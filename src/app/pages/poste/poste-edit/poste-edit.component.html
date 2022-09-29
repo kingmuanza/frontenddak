@@ -15,30 +15,43 @@
     </div>
     <div class="page-contenu">
         <div class="page-contenu-titre">
-            <ul class="nav nav-pills nav-fill" role="tablist">
+            <ul class="nav  nav-tabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#infos-poste" type="button" role="tab" aria-controls="home" aria-selected="true">
                         Informations
                     </a>
                 </li>
-                <li *ngIf="poste.idposte != 0" class="nav-item" role="presentation">
-                    <a class="nav-link " id="photo-tab" data-bs-toggle="tab" data-bs-target="#vigiles-poste" type="button" role="tab" aria-controls="photo" aria-selected="false">
-                        Vigiles en poste 
-                        [ Jour: {{this.affVigilesJour}}/{{poste.nombreVigileJour}} ; {{this.affVigilesNuit}}/{{poste.nombreVigileNuit}} ]
-                    </a>
-                </li>
-                <li *ngIf="poste.idposte != 0" class="nav-item" role="presentation">
-                    <a class="nav-link " id="photo-tab" data-bs-toggle="tab" data-bs-target="#affectation-poste" type="button" role="tab" aria-controls="photo" aria-selected="false">
-                        Dernières affectations
-                    </a>
-                </li>
             </ul>
         </div>
         <div class="page-contenu-titre">
-            <div class="tab-content" id="myTabContent2">
+            <div class="tab-content" id="myTabContent2" style="background-color: #fff; padding: 10px; padding-left: 16px; padding-right: 16px; padding-top: 2px;">
                 <div class="tab-pane fade show active" id="infos-poste" role="tabpanel" aria-labelledby="home-tab">
                     <div class="page-contenu-corps">
                         <div class="row">
+                            <div class="col-lg-12">
+                                <div class="categorie">
+                                    Contrat lié au poste
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Contrat
+                                        </span>
+                                    </div>
+                                    <select type="text" [(ngModel)]="poste.idcontrat" class="form-control">
+                                        <option [ngValue]="contrat" *ngFor="let contrat of contrats">
+                                            {{contrat.libelle}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="categorie">
+                                    Informations sur le poste
+                                </div>
+                            </div>
                             <div class="col-lg-3">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -93,7 +106,9 @@
                                     </div>
                                     <select type="text" [(ngModel)]="poste.idquartier" class="form-control">
                                         <ng-container *ngFor="let quartier of quartiers">
-                                            <option *ngIf="poste.zone && quartier.idzone && poste.zone.idzone === quartier.idzone.idzone" [ngValue]="quartier">
+                                            <option
+                                                *ngIf="poste.zone && quartier.idzone && poste.zone.idzone === quartier.idzone.idzone"
+                                                [ngValue]="quartier">
                                                 {{quartier.nom}}
                                             </option>
                                         </ng-container>
@@ -111,90 +126,6 @@
                                         <option value="true">Oui</option>
                                         <option value="false">Non</option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Contrat
-                                        </span>
-                                    </div>
-                                    <select [(ngModel)]="poste.contrat" class="form-control">
-                                        <option value="ENCOURS">En cours</option>
-                                        <option value="SUSPENDU">Suspendu</option>
-                                        <option value="ROMPU">Rompu</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Début du contrat
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="poste.debutContrat" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Fin du contrat
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="poste.finContrat" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Nombre Vigile Jour
-                                        </span>
-                                    </div>
-                                    <input type="number" [(ngModel)]="poste.nombreVigileJour" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Nombre Vigile Nuit
-                                        </span>
-                                    </div>
-                                    <input type="number" [(ngModel)]="poste.nombreVigileNuit" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Nombre MC
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="poste.nombreMC" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Nombre ESC
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="poste.nombreESC" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Nombre Radio
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="poste.nombreRadio" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -237,69 +168,16 @@
                                     <input type="number" [(ngModel)]="poste.latitude" class="form-control">
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div style="margin-top:15px; margin-bottom: 15px;">
+                                    <input type="checkbox" [(ngModel)]="poste.organisme"> &nbsp; Organisme
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group">
+                        <div class="input-group" style="margin-top: 20px; margin-bottom: 20px">
                             <button [disabled]="processing" (click)="save()" class="btn btn-primary">Enregistrer</button> &nbsp;
                             <button *ngIf="poste.idposte != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
                         </div>
-                    </div>
-                </div>
-                <div *ngIf="poste.idposte != 0" class="tab-pane fade" id="affectation-poste" role="tabpanel" aria-labelledby="photo-tab">
-                    <div class="page-contenu-corps">
-                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date</th>
-                                    <th>Poste</th>
-                                    <th>Vigile</th>
-                                    <th>Repos</th>
-                                    <th>Remplacant</th>
-                                    <th>Arrêt</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
-                                    <td>{{affectation.idaffectation}}</td>
-                                    <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
-                                    <td>{{affectation.idposte.libelle}}</td>
-                                    <td>{{affectation.idvigile.noms}}</td>
-                                    <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
-                                    <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
-                                    <td>{{affectation.arret?.split('T')[0]}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div *ngIf="poste.idposte != 0" class="tab-pane fade" id="vigiles-poste" role="tabpanel" aria-labelledby="vigiles-tab">
-                    <div class="page-contenu-corps">
-                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date</th>
-                                    <th>Poste</th>
-                                    <th>Vigile</th>
-                                    <th>Repos</th>
-                                    <th>Remplacant</th>
-                                    <th>Arrêt</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <ng-container *ngFor="let affectation of affectations">
-                                    <tr *ngIf="!affectation.arret" (click)="edit(affectation.idaffectation)">
-                                        <td>{{affectation.idaffectation}}</td>
-                                        <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
-                                        <td>{{affectation.idposte.libelle}}</td>
-                                        <td>{{affectation.idvigile.noms}}</td>
-                                        <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
-                                        <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
-                                        <td>{{affectation.arret?.split('T')[0]}}</td>
-                                    </tr>
-                                </ng-container>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>

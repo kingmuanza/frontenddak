@@ -27,12 +27,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
   sanctions = new Array<any>();
   permissions = new Array<Permission>();
   zones = new Array<ZoneDak>();
+
   postes = new Array<Poste>();
+  resultatsPostes = new Array<Poste>();
+
   vigiles = new Array<Vigile>();
+  resultats = new Array<Vigile>();
+
+  vigile: any;
+  poste: any;
+  horaire: any;
 
   besoinVigile = new BesoinVigile();
 
   terminee = false;
+
+  mot = '';
+  afficherResultats = false;
+  afficherResultatsPostes = false;
 
   
   public barChartOptions = {
@@ -62,6 +74,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.posteService.getAll('poste').then((data)=> {
+      this.postes = data;
+    });
     this.vigileService.getAll('vigile').then((data) => {
       console.log('data');
       console.log(data);
@@ -169,6 +184,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return "" + jour ? jour : "";
   }
 
+  rechercher() {
+    this.rechercherPoste();
+    this.rechercherVigile();
+  }
+
+  rechercherVigile() {
+    this.afficherResultats = true;
+    console.log('Recherche en cours');
+    let mot = '';
+    if (this.vigile) {
+      mot = this.vigile as string;
+    }
+    console.log(mot);
+    this.resultats = this.vigiles.filter((v) => {
+      const isBonNom = v.noms.toLowerCase().indexOf(mot.toLowerCase()) !== -1;
+      const isBonPoste = this.poste;
+      return isBonNom;
+    });
+  }
+
+  rechercherPoste() {
+    this.afficherResultatsPostes = true;
+    console.log('Recherche en cours');
+    let mot = '';
+    if (this.poste) {
+      mot = this.poste as string;
+    }
+    console.log(mot);
+    this.resultatsPostes = this.postes.filter((p) => {
+      const isBonLibelle = p.libelle.toLowerCase().indexOf(mot.toLowerCase()) !== -1;
+      const isBonCode = p.code.toLowerCase().indexOf(mot.toLowerCase()) !== -1;
+      return isBonLibelle || isBonCode;
+    });
+  }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();

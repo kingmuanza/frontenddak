@@ -13,9 +13,9 @@ export class Vigile {
     zone: any;
     tel = "";
     horaire = "";
-    fonction = "";
+    fonction = "AGENT";
     dateEntree = new Date();
-    dateSortie = new Date();
+    dateSortie: Date = new Date(2050, 5, 15);
     debutConge = new Date();
     finConge = new Date();
     statut = "";
@@ -24,6 +24,17 @@ export class Vigile {
     estRemplacant = false;
     estRemplacantConge = false;
     idremplacantConge: any;
+    image = '';
+    badge = false;
+
+    constructor() {
+        let dateLimite = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 18 * 365);
+        this.dteNce = dateLimite;
+    }
+
+    static getDateLimite() {
+        return new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 18 * 365);
+    }
 
     copy(vigile: Vigile) {
         this.idvigile = vigile.idvigile;
@@ -49,7 +60,7 @@ export class Vigile {
         this.jourRepos = vigile.jourRepos;
         this.parrain = vigile.parrain;
         this.estRemplacant = vigile.estRemplacant;
-        this.estRemplacantConge = vigile.estRemplacantConge ? vigile.estRemplacantConge : false ;
+        this.estRemplacantConge = vigile.estRemplacantConge ? vigile.estRemplacantConge : false;
     }
 
 

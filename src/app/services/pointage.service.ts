@@ -3,23 +3,53 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
+import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
+import { collection, getDoc, getDocs } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+import { Poste } from 'src/app/models/poste.model';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class PointageService {
 
+  app: any;
+
   URL = 'http://localhost:8080/dakBack/webresources/';
 
   constructor(
     private http: HttpClient
-  ) { }
+  ) {
 
-  getAll() {
-    return new Promise((resolve, reject)  => {
-      this.http.get(this.URL + 'zone').subscribe((data) => {
-        resolve(data);
+    this.app = initializeApp(FIREBASECONFIG);
+  }
+
+  getPointages(): Promise<Array<any>> {
+    return new Promise((resolve, reject) => {
+      const pointages = new Array<any>();
+      const db = getFirestore(this.app);
+      getDocs(collection(db, "pointage")).then((resultats) => {
+        resultats.forEach((resultat) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(resultat.id);
+          console.log(resultat.data());
+          pointages.push(resultat.data());
+        });
+      });
+      resolve(pointages);
+    });
+  }
+
+  getRemotePoste(id: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const db = getFirestore(this.app);
+      getDoc(doc(db, "poste", id)).then((resultat) => {
+        resolve(resultat.data());
       });
     });
   }
+
 }

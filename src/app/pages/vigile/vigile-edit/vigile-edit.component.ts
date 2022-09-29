@@ -1,10 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute, ResolveEnd } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import * as bootstrap from 'bootstrap';
+import { ZoneDak } from 'src/app/models/zone.model';
+import { Quartier } from 'src/app/models/quartier.model';
+import { Ville } from 'src/app/models/ville.model';
+import { Nationalite } from 'src/app/models/nationalite.model';
+import { Affectation } from 'src/app/models/affectation.model';
+import { DataTableDirective } from 'angular-datatables';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { ParrainService } from 'src/app/services/parrain.service';
+import { getFirestore, doc, getDoc, collection, query, where, getDocs, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { initializeApp } from 'firebase/app';
+import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
 
 @Component({
   selector: 'app-vigile-edit',
@@ -13,35 +25,53 @@ import * as bootstrap from 'bootstrap';
 })
 export class VigileEditComponent implements OnInit {
 
-  dtOptions: DataTables.Settings = {};
+  app: any;
+
+  // Datatables
+  dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
-  affectations = new Array<any>();
-  quartiers = new Array<any>();
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtInstance!: Promise<DataTables.Api>;
+
+  affectations = new Array<Affectation>();
+  quartiers = new Array<Quartier>();
 
   vigile = new Vigile();
+  affectation: Affectation | null = null;
   processing = false;
-  villes = new Array<any>();
-  vigiles = new Array<any>();
-  zones = new Array<any>();
-  nationalites = new Array<any>();
+  villes = new Array<Ville>();
+  vigiles = new Array<Vigile>();
+  zones = new Array<ZoneDak>();
+  nationalites = new Array<Nationalite>();
 
   url: any;
   parrainSelectionnee = false;
 
-  parrains = new Array<Vigile>();;
-
+  parrains = new Array<Vigile>();
+  fichiers!: FileList;
+  imagechange = false;
+  
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
-    private jarvisService: JarvisService<any>
-  ) { }
+    private parrainService: ParrainService,
+    private vigileService: JarvisService<Vigile>,
+    private affectationService: JarvisService<Affectation>,
+    private zoneService: JarvisService<ZoneDak>,
+    private quartierService: JarvisService<Quartier>,
+    private villeService: JarvisService<Ville>,
+    private nationaliteService: JarvisService<Nationalite>,
+  ) {
+    
+    this.app = initializeApp(FIREBASECONFIG);
+  }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      order: [[0, 'desc']]
-    };
+    this.init();
+  }
+
+  private init() {
     this.getZones().then((zones) => {
       this.zones = zones;
       this.getQuartiers().then((quartiers) => {
@@ -53,59 +83,7 @@ export class VigileEditComponent implements OnInit {
             this.route.paramMap.subscribe((paramMap) => {
               const id = paramMap.get('id');
               if (id) {
-                this.jarvisService.get('vigile', Number(id)).then((vigile) => {
-                  console.log('le vigile recupéré');
-                  this.vigile = new Vigile();
-                  this.vigile.copy(vigile);
-                  if (!this.vigile.nom) {
-                    this.vigile.nom = this.vigile.noms;
-                  }
-                  console.log(this.vigile);
-
-                  this.vigile.dateEntree = vigile.dateEntree?.split('T')[0];
-                  this.vigile.dateSortie = vigile.dateSortie?.split('T')[0];
-                  this.vigile.dteNce = vigile.dteNce?.split('T')[0];
-
-                  this.jarvisService.getAll('affectation').then((data) => {
-                    console.log('data');
-                    console.log(data);
-                    data.forEach((affectation) => {
-                      if (affectation.idvigile.idvigile === vigile.idvigile) {
-                        this.affectations.push(affectation);
-                      }
-                    });
-                    this.dtTrigger.next('');
-                  });
-
-                  villes.forEach((ville) => {
-                    if (this.vigile.ville && ville.idville == this.vigile.ville.idville) {
-                      this.vigile.ville = ville;
-                    }
-                  });
-
-                  zones.forEach((zone) => {
-                    if (this.vigile.zone && zone.idzone == this.vigile.zone.idzone) {
-                      this.vigile.zone = zone;
-                    }
-                  });
-
-                  nationalites.forEach((nationalite) => {
-                    if (this.vigile.nationalite && nationalite.idnationalite == this.vigile.nationalite.idnationalite) {
-                      this.vigile.nationalite = nationalite;
-                    }
-                  });
-                  this.getVigiles().then((vigiles) => {
-                    this.vigiles = vigiles;
-                    vigiles.forEach((v) => {
-                      if (this.vigile.parrain && v.idvigile === this.vigile.parrain.idvigile) {
-                        this.vigile.parrain = v;
-                        this.parrainSelectionnee = true;
-                      }
-                    });
-                    this.parrainSelectionnee = true;
-                    this.parrains = this.arborscenceDesParrains(vigile);
-                  });
-                });
+                this.initialiserVigile(id, villes, zones, nationalites);
               }
             });
           });
@@ -114,9 +92,76 @@ export class VigileEditComponent implements OnInit {
     });
   }
 
+  initialiserVigile(id: string, villes: any[], zones: any[], nationalites: any[]) {
+    this.vigileService.get('vigile', Number(id)).then((vigile) => {
+      console.log('le vigile recupéré');
+      this.vigile = vigile;
+
+      if (!this.vigile.nom) {
+        this.vigile.nom = this.vigile.noms;
+      }
+
+      if (this.vigile.image) {
+        this.url = this.vigile.image;
+      }
+      console.log(this.vigile);
+      /*
+        this.vigile.dateEntree = vigile.dateEntree?.split('T')[0];
+        this.vigile.dateSortie = vigile.dateSortie?.split('T')[0];
+        this.vigile.dteNce = vigile.dteNce?.split('T')[0]; 
+      */
+      this.getAffectionOfVigile(vigile).then(() => {
+        this.getAffectationActuelle();
+        this.dtTrigger.next('');
+      });
+      this.initInputsSelect(villes, zones, nationalites);
+      this.getVigiles().then((vigiles) => {
+        this.vigiles = vigiles;
+        this.initParrain(vigile, vigiles);
+      });
+    });
+  }
+
+  savePhotoAndVigile() {
+    this.saveImages(this.fichiers).then((url) => {
+      if (url.length > 0) {
+        this.vigile.image = url[0];
+        this.save();
+      }      
+    });
+  }
+
+  saveImages(fichiers: FileList): Promise<Array<string>> {
+    console.log('saveImages');
+    const liens = new Array<string>();
+    return new Promise((resolve, reject) => {
+      if (fichiers) {
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < fichiers.length; i++) {
+          const fichier = fichiers[i];
+          const storage = getStorage(this.app);
+          const imagesRef = ref(storage, 'pp/' + this.vigile.idvigile + '/' + Math.floor(Math.random() * 1000000) + fichier.name);
+          uploadBytes(imagesRef, fichier).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+            getDownloadURL(snapshot.ref).then((downloadURL) => {
+              console.log('File available at', downloadURL);
+              liens.push(downloadURL);
+              if (liens.length === fichiers.length) {
+                resolve(liens);
+              }
+            });
+          });
+        }
+      } else {
+        resolve([]);
+      }
+
+    });
+  }
+
   getVigiles(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('vigile').then((vigiles) => {
+      this.vigileService.getAll('vigile').then((vigiles) => {
         console.log('vigiles');
         console.log(vigiles);
         resolve(vigiles);
@@ -124,9 +169,62 @@ export class VigileEditComponent implements OnInit {
     });
   }
 
+  async initParrain(vigile: Vigile, vigiles: Array<Vigile>) {
+    this.parrains = await this.parrainService.initParrain(vigile, vigiles);
+    this.parrainSelectionnee = true;
+  }
+
+  initInputsSelect(villes: any[], zones: any[], nationalites: any[]) {
+    villes.forEach((ville) => {
+      if (this.vigile.ville && ville.idville == this.vigile.ville.idville) {
+        this.vigile.ville = ville;
+      }
+    });
+
+    zones.forEach((zone) => {
+      if (this.vigile.zone && zone.idzone == this.vigile.zone.idzone) {
+        this.vigile.zone = zone;
+      }
+    });
+
+    nationalites.forEach((nationalite) => {
+      if (this.vigile.nationalite && nationalite.idnationalite == this.vigile.nationalite.idnationalite) {
+        this.vigile.nationalite = nationalite;
+      }
+    });
+  }
+
+  getAffectionOfVigile(vigile: Vigile): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.affectationService.getAll('affectation').then((data) => {
+        console.log('data');
+        console.log(data);
+        data.forEach((affectation) => {
+          if (affectation.idvigile.idvigile === vigile.idvigile) {
+            this.affectations.push(affectation);
+          }
+        });
+        resolve();
+      });
+    });
+  }
+
+  getAffectationActuelle() {
+    let affectation: Affectation | null;
+    affectation = null;
+    this.affectations.forEach((aff) => {
+      if (!aff.arret) {
+        affectation = aff;
+      }
+    });
+    return affectation;
+  }
+
+  
+
   getVilles(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('ville').then((villes) => {
+      this.villeService.getAll('ville').then((villes) => {
         console.log('villes');
         console.log(villes);
         resolve(villes);
@@ -136,7 +234,7 @@ export class VigileEditComponent implements OnInit {
 
   getNationalites(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('nationalite').then((nationalites) => {
+      this.nationaliteService.getAll('nationalite').then((nationalites) => {
         console.log('nationalites');
         console.log(nationalites);
         resolve(nationalites);
@@ -146,7 +244,7 @@ export class VigileEditComponent implements OnInit {
 
   getQuartiers(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('quartier').then((quartiers) => {
+      this.quartierService.getAll('quartier').then((quartiers) => {
         console.log('quartiers');
         console.log(quartiers);
         resolve(quartiers);
@@ -156,7 +254,7 @@ export class VigileEditComponent implements OnInit {
 
   getZones(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('zone').then((zones) => {
+      this.zoneService.getAll('zone').then((zones) => {
         console.log('zones');
         console.log(zones);
         resolve(zones);
@@ -165,8 +263,10 @@ export class VigileEditComponent implements OnInit {
   }
 
   onSelectFile(event: any) { // called each time file input changes
+    this.fichiers = event.target.files;
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
+      this.imagechange = true;
 
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
@@ -176,96 +276,69 @@ export class VigileEditComponent implements OnInit {
     }
   }
 
-  setConges() {
-    const annee = new Date().getFullYear();
-    if (this.vigile.dateEntree) {
-      const dateDebutConges = new Date(this.vigile.dateEntree);
-      dateDebutConges.setFullYear(annee);
-      this.vigile.debutConge = dateDebutConges;
-    }
-  }
-
-
-  calculerConges() {
-    const annee = new Date().getFullYear();
-    if (this.vigile.dateEntree && !this.vigile.debutConge) {
-      const dateDebutConges = new Date(this.vigile.dateEntree);
-      if (new Date(this.vigile.dateEntree).getFullYear() === new Date().getFullYear()) {
-        dateDebutConges.setFullYear(annee + 1);
-      } else {
-        dateDebutConges.setFullYear(annee);
-      }
-      this.vigile.debutConge = dateDebutConges;
-      let dateFinConges = new Date(dateDebutConges);
-      dateFinConges.setDate(dateFinConges.getDate() + 21);
-      this.vigile.finConge = dateFinConges;
-    }
-    if (this.vigile.debutConge) {
-      let dateFinConges = new Date(this.vigile.debutConge);
-
-      let joursConges = 0;
-      while (joursConges < 14) {
-        dateFinConges.setDate(dateFinConges.getDate() + 1);
-        const jourDeLaSemaine = dateFinConges.getDay();
-        if (jourDeLaSemaine !== 0 && jourDeLaSemaine !== 6) {
-          joursConges++;
-        }
-      }
-      this.vigile.finConge = dateFinConges;
-    }
+  isFormulaireValide(): boolean {
+    const isDateNaiss = this.vigile.dteNce ? true : false;
+    const isMajeur = new Date(this.vigile.dteNce).getTime() < Vigile.getDateLimite().getTime();
+    return isDateNaiss && isMajeur;
   }
 
   save() {
-    console.log('vigile à enregistrer');
-    console.log(this.vigile);
-    if (this.vigile.dteNce) {
-      this.vigile.dteNce = new Date(this.vigile.dteNce);
-    }
-    if (this.vigile.dateEntree) {
-      this.vigile.dateEntree = new Date(this.vigile.dateEntree);
-    }
-    if (this.vigile.dateSortie) {
-      this.vigile.dateSortie = new Date(this.vigile.dateSortie);
-    }
 
-    if (this.vigile.debutConge) {
-      this.vigile.debutConge = new Date(this.vigile.debutConge);
-    }
-    if (this.vigile.finConge) {
-      this.vigile.finConge = new Date(this.vigile.finConge);
-    }
+    if (this.isFormulaireValide()) {
+      console.log('vigile à enregistrer');
+      console.log(this.vigile);
+      if (this.vigile.dteNce) {
+        this.vigile.dteNce = new Date(this.vigile.dteNce);
+      }
+      if (this.vigile.dateEntree) {
+        this.vigile.dateEntree = new Date(this.vigile.dateEntree);
+      }
+      if (this.vigile.dateSortie) {
+        this.vigile.dateSortie = new Date(this.vigile.dateSortie);
+      }
+  
+      if (this.vigile.debutConge) {
+        this.vigile.debutConge = new Date(this.vigile.debutConge);
+      }
+      if (this.vigile.finConge) {
+        this.vigile.finConge = new Date(this.vigile.finConge);
+      }
 
-    this.vigile.noms = this.vigile.nom ? this.vigile.nom : '';
-    this.vigile.noms = this.vigile.noms + ' ' + (this.vigile.prenom ? this.vigile.prenom : '');
-    if (this.vigile.idvigile == 0) {
-      this.processing = true;
-      this.jarvisService.ajouter('vigile', this.vigile).then((data) => {
-        console.log('data');
-        console.log(data);
-        this.processing = false;
-        this.notifierService.notify('success', "Ajout effectué avec succès");
-        this.router.navigate(['vigile']);
-      }).catch((e) => {
-        this.processing = false;
-      });
+      this.vigile.noms = this.vigile.nom ? this.vigile.nom : '';
+      this.vigile.noms = this.vigile.noms + ' ' + (this.vigile.prenom ? this.vigile.prenom : '');
+      if (this.vigile.idvigile == 0) {
+        this.processing = true;
+        this.vigileService.ajouter('vigile', this.vigile).then((data) => {
+          console.log('data');
+          console.log(data);
+          this.processing = false;
+          this.notifierService.notify('success', "Ajout effectué avec succès");
+          this.router.navigate(['vigile']);
+        }).catch((e) => {
+          this.processing = false;
+        });
+      } else {
+        this.processing = true;
+        this.vigileService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
+          console.log('data');
+          console.log(data);
+          this.processing = false;
+          this.notifierService.notify('success', "Modification effectuée avec succès");
+          this.router.navigate(['vigile']);
+        }).catch((e) => {
+          this.processing = false;
+        });
+      } 
     } else {
-      this.processing = true;
-      this.jarvisService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
-        console.log('data');
-        console.log(data);
-        this.processing = false;
-        this.notifierService.notify('success', "Modification effectuée avec succès");
-        this.router.navigate(['vigile']);
-      }).catch((e) => {
-        this.processing = false;
-      });
+      alert('Le formulaire n\'est pas valide ');
     }
+
   }
 
   remplacant() {
     this.processing = true;
     this.vigile.estRemplacant = true;
-    this.jarvisService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
+    this.vigileService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
       console.log('data');
       console.log(data);
       this.processing = false;
@@ -279,7 +352,7 @@ export class VigileEditComponent implements OnInit {
   unRemplacant() {
     this.processing = true;
     this.vigile.estRemplacant = false;
-    this.jarvisService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
+    this.vigileService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
       console.log('data');
       console.log(data);
       this.processing = false;
@@ -294,7 +367,7 @@ export class VigileEditComponent implements OnInit {
     const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
     if (reponse) {
       this.processing = true;
-      this.jarvisService.supprimer('vigile', this.vigile.idvigile).then((data) => {
+      this.vigileService.supprimer('vigile', this.vigile.idvigile).then((data) => {
         console.log('data');
         console.log(data);
         this.processing = false;
@@ -304,33 +377,22 @@ export class VigileEditComponent implements OnInit {
     }
   }
 
-  edit(id: string) {
+  edit(id: string | number) {
     this.router.navigate(['affectation', 'edit', id]);
   }
 
-  jourSemaine(jour: number) {
-    if (jour == 1)
-      return "Lundi";
-    if (jour == 2)
-      return "Mardi";
-    if (jour == 3)
-      return "Mercredi";
-    if (jour == 4)
-      return "Jeudi";
-    if (jour == 5)
-      return "Vendredi";
-    if (jour == 6)
-      return "Samedi";
-    if (jour == 7)
-      return "Dimanche";
+  libelleFonction(fonction: string) {
+    return this.vigileService.libelleFonction(fonction);
+  }
 
-    return "" + jour ? jour : "";
+  jourSemaine(jour: number) {
+    return this.vigileService.jourSemaine(jour);
   }
 
   voirParrain() {
-    console.log('open modal');
+    console.log('open modal parrainModal');
     const modale = document.getElementById('parrainModal');
-    
+
     console.log(modale);
     if (modale != null) {
       const myModal = new bootstrap.Modal(modale);
@@ -338,38 +400,14 @@ export class VigileEditComponent implements OnInit {
     }
   }
 
-  getVigileLocalByID(id: number) {
-    let vigile = new Vigile();
-    this.vigiles.forEach((v) => {
-      if (v.idvigile === id) {
-        vigile = v;
-      }
-    });
-    return vigile;
-  }
-
-  arborscenceDesParrains(vigile: Vigile): Array<Vigile> {
-    let parrains = new Array<Vigile>();
-    
-    console.log('parrains vigile');
-    console.log(vigile.noms);
-    if (vigile.parrain) {
-      parrains = parrains.concat(this.arborscenceDesParrains(this.getVigileLocalByID(vigile.parrain)));
-    } else {
-    }
-    parrains.push(vigile);
-    console.log('parrains');
-    console.log(parrains);
-    return parrains
-  }
-
   fermerParrain() {
-    const modale = document.getElementById('exampleModal');
-    
+    const modale = document.getElementById('parrainModal');
+
     console.log(modale);
     if (modale != null) {
       const myModal = bootstrap.Modal.getInstance(modale);
       myModal?.hide();
     }
   }
+
 }

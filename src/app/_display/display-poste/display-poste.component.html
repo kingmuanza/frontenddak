@@ -1,0 +1,12 @@
+<div class="shadow-1 app-poste" (click)="goTo()">
+    <div class="cliquable">
+        <b>
+            {{poste.libelle}}
+        </b>
+    </div>
+    <div>Zone :
+        <a [routerLink]=" '/zone/edit/' + poste?.zone?.idzone ">
+             {{poste.zone?.libelle}}
+        </a>
+    </div>
+</div>

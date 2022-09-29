@@ -1,0 +1,57 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Ajouter une nouveau equipement
+        </div>
+        <div class="">
+            <a routerLink="/equipement" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des equipements
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+
+            <div class="page-contenu-corps">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Code
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="equipement.code" name="date" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Libellé
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="equipement.libelle" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Nombre par défaut
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="equipement.defaut" class="form-control">
+                        </div>
+                        <div class="input-group">
+
+                            <div style="margin-top:15px; margin-bottom: 15px;">
+                                <input type="checkbox" [(ngModel)]="equipement.basique"> &nbsp; Equipement de base
+
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
+                            <button *ngIf="equipement.idequipement != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

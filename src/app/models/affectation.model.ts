@@ -1,7 +1,9 @@
+import { Vigile } from "./vigile.model";
+
 export class Affectation {
     idaffectation = 0;
     idposte: any;
-    idvigile: any;
+    idvigile!: Vigile;
     dateAffectation: any;
     arret: any;
     horaire = '';

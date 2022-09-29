@@ -1,0 +1,252 @@
+<div class="page-contenu-corps">
+
+    <div class="categorie" style="margin-top: 0;">
+        Informations primordiales
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Date de recrutement
+                    </span>
+                </div>
+                <input [ngModel]="vigile.dateEntree | date:'yyyy-MM-dd'" readonly type="date" class="form-control">
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Jours de congés légaux
+                    </span>
+                </div>
+                <input [(ngModel)]="dette" type="number" readonly class="form-control">
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Jours de congés dûs
+                    </span>
+                </div>
+                <input [(ngModel)]="dette" type="number" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="categorie">
+        Prochains congés : 14 jours légaux + {{dette}} jours dûs
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Date prévue des prochains congés
+                    </span>
+                </div>
+                <input [ngModel]="vigile.debutConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.debutConge = $event" type="date" class="form-control">
+
+                <button (click)="calculerDebutProchainConges()" class="btn btn-outline-secondary" type="button">Calculer</button>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Date de fin congés
+                    </span>
+                </div>
+                <input [ngModel]="vigile.finConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.finConge = $event" type="date" class="form-control">
+
+                <button (click)="calculerConges()" class="btn btn-outline-secondary" type="button">Calculer</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="categorie">
+        Remplaçant congés
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Filtre
+                    </span>
+                </div>
+                <select [(ngModel)]="filtre" class="form-control">
+                    <option value="TOUS">
+                        Tous les remplacants congés
+                    </option>
+                    <option value="DISPONIBLES">
+                        Uniquement les disponibles
+                    </option>
+
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        Remplaçant congés
+                    </span>
+                </div>
+                <select [(ngModel)]="vigile.idremplacantConge" class="form-control">
+                    <ng-container *ngFor="let v of vigiles">
+                        <option *ngIf="v.estRemplacantConge && v.idvigile !== vigile.idvigile" [ngValue]="v">
+                            {{v.noms}}
+                        </option>
+                    </ng-container>
+                </select>
+                <button (click)="supprimerRemplacant()" class="btn btn-outline-secondary" type="button">Supprimer</button>
+            </div>
+            <div *ngIf="vigile.idremplacantConge" class="remplacant-detail">
+                Remplacements actuels : {{getRemplacementsConges(vigile.idremplacantConge).length}}
+
+                <a (click)="openModal()" class="voir-programme">Voir le programme </a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 30px">
+        <div class="col-lg-2">
+            <div class="input-group">
+                <button (click)="save()" class="btn nouveau" style="width: 100%;">
+                    Enregistrer
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="categorie">
+        Historique des congés
+    </div>
+
+    <div>
+        <div>
+            <a class="btn btn-link" style="padding: 0px; margin-top: 10px; margin-bottom: 10px;" (click)="declarerConges()">Déclarer une prise de congés</a>
+        </div>
+        <div class="">
+            <table class="table table-border row-border hover">
+                <thead>
+                    <tr>
+                        <th>Année</th>
+                        <th>Vigile</th>
+                        <th>Date début</th>
+                        <th>Date fin</th>
+                        <th style="text-align: center;">Nombre de jours ouvrés</th>
+                        <th style="text-align: center;">Dette</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let conge of conges">
+                        <td>{{conge.dateDebut | date: 'yyyy'}}</td>
+                        <td>{{conge.idvigile.noms}}</td>
+                        <td>{{conge.dateDebut | date: 'yyyy-MM-dd'}}</td>
+                        <td>{{conge.dateFin | date: 'yyyy-MM-dd'}}</td>
+                        <td style="text-align: center;">{{getNombreJoursOuvreesEntreDeuxDates(conge.dateDebut, conge.dateFin)}}</td>
+                        <td style="text-align: center;">{{14 - getJoursRestantsParAnnee(conge)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade back-red" #remplacantconges id="remplacantconges" data-bs-backdrop="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                Calendrier congés : {{vigile?.idremplacantConge?.noms}}
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <table class="table table-bordered row-border hover">
+                    <thead>
+                        <tr>
+                            <th>Année</th>
+                            <th>Début</th>
+                            <th>Fin</th>
+                            <th>Noms</th>
+                            <th>Nombre de jour ouvrés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let v of getRemplacementsConges(vigile.idremplacantConge)">
+                            <tr>
+                                <td>
+                                    {{v.debutConge | date: 'MMMM YYYY'}}
+                                </td>
+                                <td>
+                                    {{v.debutConge | date: 'YYYY-MM-dd'}}
+                                </td>
+                                <td>
+                                    {{v.finConge | date: 'YYYY-MM-dd'}}
+                                </td>
+                                <td>
+                                    {{v.noms}}
+                                </td>
+                                <td>
+                                    {{getNombreJoursOuvrees(v)}}
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button> &nbsp;
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" #congeModal id="congeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Déclarer un congé
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Date début
+                                </span>
+                            </div>
+                            <input [ngModel]="debutConge | date:'yyyy-MM-dd'" (ngModelChange)="debutConge = $event" type="date" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Date fin
+                                </span>
+                            </div>
+                            <input [ngModel]="finConge | date:'yyyy-MM-dd'" (ngModelChange)="finConge = $event" type="date" class="form-control">
+                            <button (click)="calculerFin()" class="btn btn-outline-secondary" type="button">Calculer</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button (click)="saveConge()" type="button" data-bs-dismiss="modal" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>

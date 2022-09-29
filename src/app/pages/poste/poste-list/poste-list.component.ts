@@ -35,7 +35,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
   }
 
   edit(id: string) {
-    this.router.navigate(['poste', 'edit', id]);
+    this.router.navigate(['poste', 'view', id]);
   }
 
   libellePrime(libelle: string) {

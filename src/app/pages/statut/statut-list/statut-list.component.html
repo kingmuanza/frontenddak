@@ -27,7 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let statut of statuts">
+                            <tr *ngFor="let statut of statuts" (click)="edit(statut.idstatut)">
                                 <td>{{statut.idstatut}}</td>
                                 <td>{{statut.libelle}}</td>
                             </tr>

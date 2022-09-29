@@ -41,6 +41,8 @@ export class VacantListComponent implements OnInit, OnDestroy {
     remplacant?: Vigile,
   }>();
 
+  zone: any
+
   constructor(
     private router: Router,
     private affectationService: JarvisService<Affectation>,
@@ -238,7 +240,14 @@ export class VacantListComponent implements OnInit, OnDestroy {
   }
 
   reorganiser() {
+    console.log('open modal');
+    const modale = document.getElementById('exampleModal');
     
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
   }
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();

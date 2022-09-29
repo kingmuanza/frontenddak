@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { initializeApp } from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +14,12 @@ export class AppComponent {
   title = 'dak';
   user: any;
   userSubscription!: Subscription;
+  loading = false;
+  loadingSubscription!: Subscription;
 
   constructor(
     private authService: AuthService,
+    private loadingService: LoadingService,
     private router: Router,
   ) {
     const firebaseConfig = {
@@ -29,6 +33,9 @@ export class AppComponent {
     };
     const app = initializeApp(firebaseConfig);
     this.getUser();
+    this.loadingSubscription = this.loadingService.loadingSubject.subscribe((loading) => {
+      this.loading = loading;
+    });
   }
 
   getUser() {
@@ -38,17 +45,11 @@ export class AppComponent {
       console.log(user);
       if (user) {
         this.user = user;
+      } else {
+        this.user = null;
       }
     });
     this.authService.actualiser();
   }
 
-  deconnexion() {
-    const oui = confirm("Etes vous sûr de vouloir vous déconnecter ?");
-    if (oui) {
-      this.authService.deconnexion().then(()=> {
-        this.router.navigate(['connexion']);
-      });
-    }
-  }
 }

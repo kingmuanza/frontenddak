@@ -1,26 +1,37 @@
 <div class="page">
     <div class="page-entete">
-        <div *ngIf="vigile.idvigile==0" class="page-entete-titre">
-            Ajouter un nouveau vigile
-        </div>
         <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
-            Modifier le vigile : {{vigile.noms}}
+            {{vigile.noms}}
+        </div>
+        <div *ngIf="vigile.idvigile==0" class="page-entete-titre">
+            Ajouter un vigile
+        </div>
+        <div>
+            <div>
+                {{libelleFonction(vigile.fonction)}}
+            </div>
+            <div>
+                {{affectation?.idposte.libelle}}
+            </div>
         </div>
         <div class="">
+            <a [routerLink]="'/vigile/view/' + vigile.idvigile" class="btn btn-link" style="padding: 0; margin-right: 20px;">
+                Voir
+            </a>
             <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
                 Revenir à la liste des vigiles
             </a>
         </div>
     </div>
     <div class="page-contenu">
-        <div class="page-contenu-titre">
-            <ul class="nav nav-pills nav-fill" role="tablist">
+        <div class="">
+            <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-                        Informations personnelles
+                        Informations
                     </a>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li *ngIf="vigile.idvigile != 0" class="nav-item" role="presentation">
                     <a class="nav-link" id="conges-tab" data-bs-toggle="tab" data-bs-target="#conges" type="button" role="tab" aria-controls="conges" aria-selected="false">
                         Congés
                     </a>
@@ -31,518 +42,88 @@
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">
-                        Dernières affectations
-                    </a>
-                </li>
-                <li *ngIf="vigile.idvigile != 0" class="nav-item" role="presentation">
                     <a class="nav-link " id="photo-tab" data-bs-toggle="tab" data-bs-target="#photo" type="button" role="tab" aria-controls="photo" aria-selected="false">
                         Photo
                     </a>
                 </li>
             </ul>
         </div>
-        <div class="page-contenu-titre">
-            <div class="tab-content" id="myTabContent">
-                <div *ngIf="vigile.idvigile != 0" class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
-                    <img [src]="url" height="200"> <br />
-                    <input type='file' (change)="onSelectFile($event)">
-                </div>
-                <div class="tab-pane fade" id="conges" role="tabpanel" aria-labelledby="conges-tab">
-                    <div class="page-contenu-corps">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Date début congés
-                                        </span>
-                                    </div>
-                                    <input [ngModel]="vigile.debutConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.debutConge = $event" type="date" class="form-control">
 
-                                    <button (click)="calculerConges()" class="btn btn-outline-secondary" type="button">Calculer</button>
-                                </div>
-                            </div>
-                            <div class="col-lg-8">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Date fin congés
-                                        </span>
-                                    </div>
-                                    <input [ngModel]="vigile.finConge | date:'yyyy-MM-dd'" (ngModelChange)="vigile.finConge = $event" type="date" class="form-control">
+        <div class="tab-content" id="myTabContent" style="background-color: #fff; padding: 10px; padding-left: 16px; padding-right: 16px; padding-top: 2px;">
 
-                                    <button (click)="calculerConges()" class="btn btn-outline-secondary" type="button">Calculer</button>
-                                </div>
-                            </div>
-                            <div class="col-lg-8">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Remplaçant congés
-                                        </span>
-                                    </div>
-                                    <select [(ngModel)]="vigile.idremplacantConge" class="form-control">
-                                        <ng-container *ngFor="let v of vigiles">
-                                            <option *ngIf="v.estRemplacantConge && v.idvigile !== vigile.idvigile"
-                                                [ngValue]="v">
-                                                {{v.noms}}
-                                            </option>
-                                        </ng-container>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <button [disabled]="processing" (click)="save()" class="btn nouveau">
-                                Enregistrer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <div class="page-contenu-corps">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Matricule
-                                        </span>
-                                    </div>
-                                    <input type="text" [(ngModel)]="vigile.matricule" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Numéro
-                                        </span>
-                                    </div>
-                                    <input type="text" [(ngModel)]="vigile.numero" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Horaire
-                                        </span>
-                                    </div>
-                                    <select [(ngModel)]="vigile.horaire" class="form-control">
-                                        <option value="jour">Jour</option>
-                                        <option value="nuit">Nuit</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Noms
-                                        </span>
-                                    </div>
-                                    <input type="text" [(ngModel)]="vigile.nom" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Prénoms
-                                        </span>
-                                    </div>
-                                    <input type="text" [(ngModel)]="vigile.prenom" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Date de naissance
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="vigile.dteNce" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Numéro CNI
-                                        </span>
-                                    </div>
-                                    <input type="text" [(ngModel)]="vigile.mumCni" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Ville
-                                        </span>
-                                    </div>
-                                    <select type="text" [(ngModel)]="vigile.ville" class="form-control">
-                                        <option [ngValue]="ville" *ngFor="let ville of villes">
-                                            {{ville.libelle}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Zone
-                                        </span>
-                                    </div>
-                                    <select type="text" [(ngModel)]="vigile.zone" class="form-control">
-                                        <option [ngValue]="zone" *ngFor="let zone of zones">
-                                            {{zone.libelle}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Quartier
-                                        </span>
-                                    </div>
-                                    <select type="text" [(ngModel)]="vigile.quartier" class="form-control">
-                                        <ng-container *ngFor="let quartier of quartiers">
-                                            <option
-                                                *ngIf="vigile.zone && quartier.idzone && vigile.zone.idzone === quartier.idzone.idzone"
-                                                [ngValue]="quartier">
-                                                {{quartier.nom}}
-                                            </option>
-                                        </ng-container>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Nationalité
-                                        </span>
-                                    </div>
-                                    <select type="text" [(ngModel)]="vigile.nationalite" class="form-control">
-                                        <option [ngValue]="nationalite" *ngFor="let nationalite of nationalites">
-                                            {{nationalite.libelle}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Téléphone
-                                        </span>
-                                    </div>
-                                    <input type="text" [(ngModel)]="vigile.tel" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Fonction
-                                        </span>
-                                    </div>
-                                    <select [(ngModel)]="vigile.fonction" class="form-control">
-                                        <option value="AGENT">Agent de sécurité</option>
-                                        <option value="ESCORTEUR">Escorteur</option>
-                                        <option value="CONTROLEUR">Contrôleur</option>
-                                        <option value="CHAUFFEUR">Chauffeur</option>
-                                        <option value="MAITRECHIEN">Maitre Chien</option>
-                                        <option value="ENTRETIEN">Agent d'entretien</option>
-                                        <option value="SUPERVISEUR">Superviseur</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Statut
-                                        </span>
-                                    </div>
-                                    <select [(ngModel)]="vigile.statut" class="form-control">
-                                        <option [value]="1">Absent[e]</option>
-                                        <option [value]="2">Actif[ve]</option>
-                                        <option [value]="3">Licencié(e)</option>
-                                        <option [value]="4">Standby</option>
-                                        <option [value]="5">Suspendu[e]</option>
-                                        <option [value]="6">Démissionné[e]</option>
-                                        <option [value]="7">Décédé[e]</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Jour de repos
-                                        </span>
-                                    </div>
-                                    <select [(ngModel)]="vigile.jourRepos" class="form-control">
-                                        <option [value]="1">Lundi</option>
-                                        <option [value]="2">Mardi</option>
-                                        <option [value]="3">Mercredi</option>
-                                        <option [value]="4">Jeudi</option>
-                                        <option [value]="5">Vendredi</option>
-                                        <option [value]="6">Samedi</option>
-                                        <option [value]="7">Dimanche</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Date entrée
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="vigile.dateEntree" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Date sortie
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="vigile.dateSortie" type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div *ngIf="parrainSelectionnee" class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Parrain
-                                        </span>
-                                    </div>
-                                    <select [(ngModel)]="vigile.parrain" type="text" class="form-control">
-                                        <ng-container *ngFor="let v of vigiles">
-                                            <option *ngIf="v.idvigile !== vigile.idvigile" [value]="v.idvigile">
-                                                {{v.noms}}
-                                            </option>
-                                        </ng-container>
-                                    </select>
-                                    <button (click)="voirParrain()" class="btn btn-outline-secondary" type="button">Voir</button>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div style="margin-top:15px; margin-bottom: 15px;">
-                                    <input type="checkbox" [(ngModel)]="vigile.estRemplacant"> &nbsp; Est remplacant
-
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div style="margin-top:15px; margin-bottom: 15px;">
-                                    <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge"> &nbsp; Est remplacant congés
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <button [disabled]="processing" (click)="save()" class="btn nouveau">
-                                Enregistrer
-                            </button>&nbsp;
-                            <button *ngIf="vigile.idvigile != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-                    <div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Casquette
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Porte matraque
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Pull over
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Chemisette
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Matraque/toufa
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Manteau
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Sifflet
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Combinaison MC
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Epaulettes
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Pantalon
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Veste
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Fourragère
-                                        </span>
-                                    </div>
-                                    <input type="number" class="form-control">
-                                </div>
+            <div *ngIf="vigile.idvigile != 0" class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
+                <div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div style="margin-bottom: 20px; margin-top: 20px;">
+                                <input class="form-control" type='file' (change)="onSelectFile($event)">
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    <div class="page-contenu-corps">
-                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Poste</th>
-                                    <th>Vigile</th>
-                                    <th>Repos</th>
-                                    <th>Remplacant</th>
-                                    <th>Arrêt</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
-                                    <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
-                                    <td>{{affectation.idposte.libelle}}</td>
-                                    <td>{{affectation.idvigile.noms}}</td>
-                                    <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
-                                    <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
-                                    <td>{{affectation.arret?.split('T')[0]}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div style="margin-bottom: 20px; margin-top: 20px;">
+                                <img [src]="url" style="width: 100%;">
+                            </div>
+                            <div *ngIf="imagechange" style="margin-bottom: 20px; margin-top: 20px;">
+                                <button (click)="savePhotoAndVigile()" class="btn primaire">
+                                    Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div style="margin-bottom: 20px; margin-top: 20px;">
+                                <app-display-badge [vigile]="vigile"></app-display-badge>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div style="height: 25vh;">
 
+            <div class="tab-pane fade" id="conges" role="tabpanel" aria-labelledby="conges-tab">
+                <app-form-conge [idvigile]="vigile.idvigile" [vigiles]="vigiles" (onSaveEvent)="save()">
+                </app-form-conge>
+            </div>
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div>
+                    <app-form-vigile [vigile]="vigile" (onSupprimerEvent)="supprimer()" (onSaveEvent)="save()">
+                    </app-form-vigile>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <app-form-equipement [vigile]="vigile"></app-form-equipement>
+            </div>
+        </div>
+        <div style="height: 25vh;">
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #parrainModal id="parrainModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Arborescence des parrains
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <ul *ngFor="let p of parrains">
+                    <li [ngClass]="{'bold': p.idvigile === vigile.idvigile}">
+                        {{p.noms}}
+                        <br> Tel : {{p.tel}}
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
             </div>
         </div>
     </div>
-
-    <!-- Modal -->
-    <div class="modal fade" #parrainModal id="parrainModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        Arborescence des parrains
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <ul>
-                        <li *ngFor="let p of parrains">
-                            {{p.noms}}
-                            <br> Tel : {{p.tel}}
-                        </li>
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>

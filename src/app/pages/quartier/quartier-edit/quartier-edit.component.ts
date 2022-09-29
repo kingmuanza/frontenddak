@@ -36,6 +36,14 @@ export class QuartierEditComponent implements OnInit {
             console.log('quartier');
             console.log(quartier);
             this.quartier = quartier;
+
+            zones.forEach((z) => {
+              if (this.quartier.idzone) {
+                if (this.quartier.idzone.idzone === z.idzone) {
+                  this.quartier.idzone = z;
+                }
+              }
+            });
           });
         }
       });

@@ -7,7 +7,14 @@ import { AffectationListComponent } from './pages/affectation/affectation-list/a
 import { CongeEditComponent } from './pages/conge/conge-edit/conge-edit.component';
 import { CongeListComponent } from './pages/conge/conge-list/conge-list.component';
 import { ConnexionComponent } from './pages/connexion/connexion.component';
+import { ContratEditComponent } from './pages/contrat/contrat-edit/contrat-edit.component';
+import { ContratListComponent } from './pages/contrat/contrat-list/contrat-list.component';
+import { ContratViewComponent } from './pages/contrat/contrat-view/contrat-view.component';
+import { ControleListComponent } from './pages/controle/controle-list/controle-list.component';
+import { ControleViewComponent } from './pages/controle/controle-view/controle-view.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { EquipementEditComponent } from './pages/equipement/equipement-edit/equipement-edit.component';
+import { EquipementListComponent } from './pages/equipement/equipement-list/equipement-list.component';
 import { IncidentEditComponent } from './pages/incident/incident-edit/incident-edit.component';
 import { IncidentListComponent } from './pages/incident/incident-list/incident-list.component';
 import { MotifEditComponent } from './pages/motif/motif-edit/motif-edit.component';
@@ -20,6 +27,7 @@ import { PointageEditComponent } from './pages/pointage/pointage-edit/pointage-e
 import { PointageListComponent } from './pages/pointage/pointage-list/pointage-list.component';
 import { PosteEditComponent } from './pages/poste/poste-edit/poste-edit.component';
 import { PosteListComponent } from './pages/poste/poste-list/poste-list.component';
+import { PosteViewComponent } from './pages/poste/poste-view/poste-view.component';
 import { QuartierEditComponent } from './pages/quartier/quartier-edit/quartier-edit.component';
 import { QuartierListComponent } from './pages/quartier/quartier-list/quartier-list.component';
 import { ReposGrapheComponent } from './pages/repos/repos-graphe/repos-graphe.component';
@@ -35,8 +43,10 @@ import { VacantRemplacantCongeEditComponent } from './pages/vacant/vacant-rempla
 import { VacantRemplacantCongeListComponent } from './pages/vacant/vacant-remplacant-conge-list/vacant-remplacant-conge-list.component';
 import { VacantRemplacantListComponent } from './pages/vacant/vacant-remplacant-list/vacant-remplacant-list.component';
 import { VacantVigileListComponent } from './pages/vacant/vacant-vigile-list/vacant-vigile-list.component';
+import { VigileBadgeListComponent } from './pages/vigile/vigile-badge-list/vigile-badge-list.component';
 import { VigileEditComponent } from './pages/vigile/vigile-edit/vigile-edit.component';
 import { VigileListComponent } from './pages/vigile/vigile-list/vigile-list.component';
+import { VigileViewComponent } from './pages/vigile/vigile-view/vigile-view.component';
 import { VilleEditComponent } from './pages/ville/ville-edit/ville-edit.component';
 import { VilleListComponent } from './pages/ville/ville-list/ville-list.component';
 import { ZoneEditComponent } from './pages/zone/zone-edit/zone-edit.component';
@@ -64,13 +74,14 @@ const routes: Routes = [
   { path: 'conge/edit', component: CongeEditComponent },
   { path: 'conge/edit/:id', component: CongeEditComponent },
 
-  { path: 'sanction', component: SanctionListComponent },
-  { path: 'sanction/edit', component: SanctionEditComponent },
-  { path: 'sanction/edit/:id', component: SanctionEditComponent },
+  { path: 'contrat', component: ContratListComponent },
+  { path: 'contrat/edit', component: ContratEditComponent },
+  { path: 'contrat/edit/:id', component: ContratEditComponent },
+  { path: 'contrat/view/:id', component: ContratViewComponent },
 
-  { path: 'permission', component: PermissionListComponent },
-  { path: 'permission/edit', component: PermissionEditComponent },
-  { path: 'permission/edit/:id', component: PermissionEditComponent },
+  { path: 'equipement', component: EquipementListComponent },
+  { path: 'equipement/edit', component: EquipementEditComponent },
+  { path: 'equipement/edit/:id', component: EquipementEditComponent },
 
   { path: 'incident', component: IncidentListComponent },
   { path: 'incident/edit', component: IncidentEditComponent },
@@ -80,6 +91,9 @@ const routes: Routes = [
   { path: 'pointage/edit', component: PointageEditComponent },
   { path: 'pointage/edit/:id', component: PointageEditComponent },
 
+  { path: 'controle', component: ControleListComponent },
+  { path: 'controle/view/:id', component: ControleViewComponent },
+
   { path: 'motif', component: MotifListComponent },
   { path: 'motif/edit', component: MotifEditComponent },
   { path: 'motif/edit/:id', component: MotifEditComponent },
@@ -88,9 +102,18 @@ const routes: Routes = [
   { path: 'nationalite/edit', component: NationaliteEditComponent },
   { path: 'nationalite/edit/:id', component: NationaliteEditComponent },
 
+  { path: 'permission', component: PermissionListComponent },
+  { path: 'permission/edit', component: PermissionEditComponent },
+  { path: 'permission/edit/:id', component: PermissionEditComponent },
+
   { path: 'poste', component: PosteListComponent },
   { path: 'poste/edit', component: PosteEditComponent },
   { path: 'poste/edit/:id', component: PosteEditComponent },
+  { path: 'poste/view/:id', component: PosteViewComponent },
+
+  { path: 'sanction', component: SanctionListComponent },
+  { path: 'sanction/edit', component: SanctionEditComponent },
+  { path: 'sanction/edit/:id', component: SanctionEditComponent },
 
   { path: 'statut', component: StatutListComponent },
   { path: 'statut/edit', component: StatutEditComponent },
@@ -105,7 +128,9 @@ const routes: Routes = [
   { path: 'vigile', component: VigileListComponent },
   { path: 'vigile/edit', component: VigileEditComponent },
   { path: 'vigile/edit/:id', component: VigileEditComponent },
-  { path: 'vigile/view/:id', component: VigileEditComponent },
+  { path: 'vigile/view/:id', component: VigileViewComponent },
+
+  { path: 'vigile-badge', component: VigileBadgeListComponent },
 
   { path: 'ville', component: VilleListComponent },
   { path: 'ville/edit', component: VilleEditComponent },

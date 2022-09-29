@@ -1,1 +1,42 @@
-<p>nationalite-edit works!</p>
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Ajouter une nouvelle nationalité
+        </div>
+        <div class="">
+            <a routerLink="/nationalite" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des nationalites
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+
+            <div class="page-contenu-corps">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Code
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="nationalite.code" name="date" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Libellé
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="nationalite.libelle" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
+                            <button *ngIf="nationalite.idnationalite != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

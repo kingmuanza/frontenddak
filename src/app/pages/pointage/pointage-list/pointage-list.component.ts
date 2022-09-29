@@ -11,6 +11,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { Poste } from 'src/app/models/poste.model';
+import { PointageService } from 'src/app/services/pointage.service';
+import { ZoneDak } from 'src/app/models/zone.model';
 
 
 @Component({
@@ -25,9 +27,11 @@ export class PointageListComponent implements OnInit {
   affectations = new Array<Affectation>();
   postes = new Array<any>();
   pointages = new Array<any>();
-  zones = new Array<any>();
+  resultats = new Array<any>();
+  zones = new Array<ZoneDak>();
 
-  date = new Date();
+  du = new Date();
+  au = new Date();
   jourDeLaSemaine = -1;
   horaire = "";
   zone: any;
@@ -37,56 +41,45 @@ export class PointageListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private jarvisService: JarvisService<Affectation>,
-    private zoneService: JarvisService<Zone>,
+    private zoneService: JarvisService<ZoneDak>,
     private affectationService: JarvisService<Affectation>,
-    private posteService: JarvisService<Poste>,
+    private pointageService: PointageService,
   ) {
     this.app = initializeApp(FIREBASECONFIG);
-    this.actualiser();
+    this.du.setMonth(this.du.getMonth() - 1);
   }
 
-  actualiser() {
-    this.getPostes().then(() => {
-      this.getAffectations().then((affectations) => {
-        this.affectations = affectations;
-        this.getPointages().then(() => {
+
+  ngOnInit(): void {
+    // this.init();*
+    this.init();
+  }
+
+  init() {
+    this.getZones().then((zones) => {
+      this.zones = zones;
+      this.getPostes().then(() => {
+        this.getAffectations().then((affectations) => {
+          this.affectations = affectations;
 
         });
       });
     });
   }
 
+  actualiser() {
+    this.getPointages().then(() => {
+      this.rechercher();
+    });
+  }
+
   async getPointages() {
-    this.pointages = new Array<any>();
-    const db = getFirestore(this.app);
-    const querySnapshot = await getDocs(collection(db, "pointage"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-      this.pointages.push(doc.data());
+    this.pointageService.getPointages().then((pointages) => {
+      this.pointages = pointages;
     });
   }
 
-  ngOnInit(): void {
-    this.getZones().then((zones) => {
-      this.zones = zones;
-      this.route.paramMap.subscribe((paramMap) => {
-        const idzone = paramMap.get('idzone');
-        if (idzone) {
-          this.zones.forEach((zone) => {
-            if (zone.idzone == idzone) {
-              this.zone = zone;
-              this.rechercher();
-            }
-          });
-        } else {
-          this.rechercher();
-        }
-      });
-    });
-  }
-
-  getZones(): Promise<Array<any>> {
+  getZones(): Promise<Array<ZoneDak>> {
     return new Promise((resolve, reject) => {
       this.zoneService.getAll('zone').then((zones) => {
         console.log('zones');
@@ -130,7 +123,7 @@ export class PointageListComponent implements OnInit {
     return poste;
   }
 
-  getAffectation(idvigile: string): any {
+  getAffectation(idvigile: number): any {
     let affectation: any;
     this.affectations.forEach((aff) => {
       if (aff.idvigile.idvigile === idvigile) {
@@ -140,45 +133,18 @@ export class PointageListComponent implements OnInit {
     return affectation;
   }
 
-  rechercher() {
-    if (this.date) {
-      this.recherche = true;
-      this.jourDeLaSemaine = new Date(this.date).getDay();
-      this.jarvisService.getAll('affectation').then((data) => {
-        console.log('data');
-        console.log(data);
-        this.affectations = [];
-        data.forEach((aff) => {
-          if (this.zone) {
-            if (aff.idposte.zone?.idzone === this.zone.idzone) {
-              if (!this.horaire || (this.horaire && aff.horaire === this.horaire)) {
-                if (!aff.arret) {
-                  this.affectations.push(aff);
-                }
-                if (aff.arret) {
-                  if (new Date(aff.arret).getTime() > new Date(this.date).getTime()) {
-                    this.affectations.push(aff);
-                  }
-                }
-              }
-            }
-          } else {
-            if (!this.horaire || (this.horaire && aff.horaire === this.horaire)) {
-              if (!aff.arret) {
-                this.affectations.push(aff);
-              }
-              if (aff.arret) {
-                if (new Date(aff.arret).getTime() > new Date(this.date).getTime()) {
-                  this.affectations.push(aff);
-                }
-              }
-            }
-          }
-        });
-      });
-    } else {
-      alert('Veuillez remplir le formulaire');
+  isBonneDate(pointage: any) {
+    if (pointage.date) {
+      const date = new Date(pointage.date);
+      if (date.getTime() < new Date(this.au).getTime() && new Date(this.du).getTime() < date.getTime()) {
+        return true;
+      }
     }
+    return true;
+  }
+
+  rechercher() {
+    this.resultats = this.pointages;
   }
 
   edit(id: string) {
@@ -227,4 +193,47 @@ export class PointageListComponent implements OnInit {
       return new Date();
     }
   }
+
+  isBonneLocalisation(pointage: any): boolean {
+    if (pointage.idvigile) {
+      const affectation = this.getAffectation(pointage.idvigile)
+      if (affectation) {
+        const identifiantposte = affectation.idposte.idposte;
+        if (identifiantposte) {
+          const poste = this.getPoste(identifiantposte);
+          if (poste) {
+            const lat1 = pointage.latitude;
+            const lat2 = poste.latitude;
+
+            if (lat1 && lat2) {
+              if (Math.floor(lat1) === Math.floor(lat2)) {
+                return true;
+              }
+            }
+
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  isBonHoraire(pointage: any) {
+    const date = this.toDate(pointage.date);
+    if (date.getHours()) {
+      const heure = date.getHours();
+      const affectation = this.getAffectation(pointage.idvigile);
+      if (affectation) {
+        const horaire = affectation.horaire;
+        if (horaire === 'jour' && (heure < 18 && 6 <= heure)) {
+          return true
+        }
+        if (horaire === 'nuit' && !(heure < 18 && 6 <= heure)) {
+          return true
+        }
+      }
+    }
+    return false;
+  }
+
 }

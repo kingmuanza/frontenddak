@@ -1,0 +1,63 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Liste des equipements
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="nouveau">
+                        <a routerLink="/equipement/edit" class="btn nouveau">
+                            Ajouter un equipement
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Ville</span>
+                        </div>
+                        <select [(ngModel)]="ville" class="form-control">
+                            <option [ngValue]="null">Toutes les villes</option>
+                            <option [ngValue]="ville" *ngFor="let ville of villes">
+                                {{ville.libelle}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button (click)="filtrer(ville)" class="btn primaire">Filtrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+            <div class="page-contenu-corps">
+                <div class="card shadow-1">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table-border row-border hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Libellé</th>
+                                <th>Basique</th>
+                                <th>Qté par défaut par Vigile</th>
+                                <th>Qté totale octroyée</th>
+                                <th>Qté restituée</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let equipement of resultats" (click)="edit(equipement.idequipement)">
+                                <td>{{equipement.idequipement}}</td>
+                                <td>{{equipement.libelle}}</td>
+                                <td>{{equipement.basique ? "Oui": "Non"}}</td>
+                                <td>{{equipement.defaut}}</td>
+                                <td>{{equipement.defaut}}</td>
+                                <td>{{equipement.defaut}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

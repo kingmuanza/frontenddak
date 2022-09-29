@@ -43,27 +43,12 @@ export class VigileListComponent implements OnInit, OnDestroy {
     });
   }
 
-  edit(id: string | number) {
-    this.router.navigate(['vigile', 'edit', id]);
+  view(id: string | number) {
+    this.router.navigate(['vigile', 'view', id]);
   }
 
   libelleFonction(fonction: string) {
-    if (fonction == "AGENT")
-      return "Agent de sécurité";
-    if (fonction == "ESCORTEUR")
-      return "Escorteur";
-    if (fonction == "CONTROLEUR")
-      return "Contrôleur";
-    if (fonction == "CHAUFFEUR")
-      return "Chauffeur";
-    if (fonction == "MAITRECHIEN")
-      return "Maitre Chien";
-    if (fonction == "ENTRETIEN")
-      return "Agent d'entretien";
-    if (fonction == "SUPERVISEUR")
-      return "Superviseur";
-
-    return "";
+    return this.jarvisService.libelleFonction(fonction);
   }
 
   libelleStatut(jour: number) {

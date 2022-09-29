@@ -1,0 +1,43 @@
+.input-group {
+    margin-top: 10px;
+}
+
+.equipements {
+    padding: 20px;
+    padding-top: 10px;
+    border: 2px solid #303030;
+    margin-top: 20px;
+    &-titre {
+        font-weight: bold;
+    }
+}
+
+.petit-titre {
+    margin-bottom: 10px;
+    color: #303030;
+}
+
+.nav-link.active {
+    background-color: #fff;
+    color: #231709;
+    // font-weight: bold;
+    // font-weight: bold;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.stat {
+    height: 100px;
+    padding: 16px;
+    text-align: center;
+    color: white;
+    line-height: 1.15;
+    background-color: #231709;
+    &-titre {}
+    &-valeur {
+        font-size: 2.5em;
+        font-weight: bold;
+    }
+}

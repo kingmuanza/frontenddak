@@ -57,6 +57,25 @@ import { SynchroniserComponent } from './pages/synchroniser/synchroniser.compone
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { TestConnexionComponent } from './composants/test-connexion/test-connexion.component';
 import { MenuHautComponent } from './composants/menu-haut/menu-haut.component';
+import { PointageSuiviComponent } from './pages/pointage/pointage-suivi/pointage-suivi.component';
+import { ControleListComponent } from './pages/controle/controle-list/controle-list.component';
+import { ControleViewComponent } from './pages/controle/controle-view/controle-view.component';
+import { FormVigileComponent } from './_forms/form-vigile/form-vigile.component';
+import { FormEquipementComponent } from './_forms/form-equipement/form-equipement.component';
+import { FormCongeComponent } from './_forms/form-conge/form-conge.component';
+import { RequiredComponent } from './composants/required/required.component';
+import { EquipementListComponent } from './pages/equipement/equipement-list/equipement-list.component';
+import { EquipementEditComponent } from './pages/equipement/equipement-edit/equipement-edit.component';
+import { VigileComponent } from './_display/vigile/vigile.component';
+import { DisplayPosteComponent } from './_display/display-poste/display-poste.component';
+import { PosteViewComponent } from './pages/poste/poste-view/poste-view.component';
+import { TableauAffectationsComponent } from './_tableaux/tableau-affectations/tableau-affectations.component';
+import { DisplayBadgeComponent } from './_display/display-badge/display-badge.component';
+import { VigileBadgeListComponent } from './pages/vigile/vigile-badge-list/vigile-badge-list.component';
+import { DisplayEquipementComponent } from './_display/display-equipement/display-equipement.component';
+import { ContratListComponent } from './pages/contrat/contrat-list/contrat-list.component';
+import { ContratEditComponent } from './pages/contrat/contrat-edit/contrat-edit.component';
+import { ContratViewComponent } from './pages/contrat/contrat-view/contrat-view.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +127,26 @@ import { MenuHautComponent } from './composants/menu-haut/menu-haut.component';
     SwitchEditComponent,
     SynchroniserComponent,
     TestConnexionComponent,
-    MenuHautComponent
+    MenuHautComponent,
+    PointageSuiviComponent,
+    ControleListComponent,
+    ControleViewComponent,
+    FormVigileComponent,
+    FormEquipementComponent,
+    FormCongeComponent,
+    RequiredComponent,
+    EquipementListComponent,
+    EquipementEditComponent,
+    VigileComponent,
+    DisplayPosteComponent,
+    PosteViewComponent,
+    TableauAffectationsComponent,
+    DisplayBadgeComponent,
+    VigileBadgeListComponent,
+    DisplayEquipementComponent,
+    ContratListComponent,
+    ContratEditComponent,
+    ContratViewComponent,
   ],
   imports: [
     BrowserModule,

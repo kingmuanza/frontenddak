@@ -1,0 +1,20 @@
+<div class="shadow-1 app-vigile">
+    <div>
+
+        <b class="cliquable" (click)="goTo()">
+                {{vigile?.noms}}
+            </b>
+
+    </div>
+    <div>
+        <small>
+            {{libelleFonction(vigile.fonction)}}
+        </small>
+    </div>
+    <div>
+        Poste :
+        <a [routerLink]=" '/poste/edit/' + affectation?.idposte?.idposte ">
+            {{affectation?.idposte?.libelle}}
+        </a>, Horaire : {{affectation.horaire}}
+    </div>
+</div>

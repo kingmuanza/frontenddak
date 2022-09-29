@@ -1,0 +1,37 @@
+.input-group {
+    margin-top: 10px;
+}
+
+.equipements {
+    padding: 20px;
+    padding-top: 10px;
+    border: 2px solid #303030;
+    margin-top: 20px;
+    &-titre {
+        font-weight: bold;
+    }
+}
+
+.vigile {
+    height: 100px;
+    padding: 16px;
+    background-color: #efeefe;
+}
+
+.nav-link.active {
+    background-color: #fff;
+    color: #231709;
+    // font-weight: bold;
+    // font-weight: bold;
+}
+
+.infos-titre {
+    font-size: 1.5em;
+}
+
+ul li.erreur {
+    color: red;
+    span {
+        color: #000;
+    }
+}

@@ -3,11 +3,6 @@
         <div class="page-entete-titre">
             Tableau de bord
         </div>
-        <div class="">
-
-            Listes des zones et des postes
-
-        </div>
     </div>
     <div class="page-contenu">
         <div class="page-contenu-titre">
@@ -16,22 +11,21 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Noms
+                                Vigile
                             </span>
                         </div>
-                        <select type="date" name="date" class="form-control">
-                        </select>
+                        <input [(ngModel)]="vigile" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Matricule
+                                Poste
                             </span>
                         </div>
-                        <select type="date" name="date" class="form-control">
-                        </select>
+
+                        <input [(ngModel)]="poste" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -41,12 +35,35 @@
                                 Horaire
                             </span>
                         </div>
-                        <select type="date" name="date" class="form-control">
+
+                        <select class="form-control">
+                            <option value="jour">Jour</option>
+                            <option value="nuit">Nuit</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn primaire">Rechercher</button>
+                    <button (click)="rechercher()" class="btn primaire">Rechercher</button>
+                </div>
+            </div>
+            <div *ngIf="afficherResultats" class="page-contenu-corps">
+                <div class="petit-titre">
+                    Résultats de la recherche : Vigiles
+                </div>
+                <div class="row">
+                    <div *ngFor="let v of resultats" class="col-lg-3">
+                        <app-vigile [vigile]="v"></app-vigile>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="afficherResultatsPostes" class="page-contenu-corps">
+                <div class="petit-titre">
+                    Résultats de la recherche : Postes
+                </div>
+                <div class="row">
+                    <div *ngFor="let p of resultatsPostes" class="col-lg-3">
+                        <app-display-poste [poste]="p"></app-display-poste>
+                    </div>
                 </div>
             </div>
             <div *ngIf="terminee" class="page-contenu-corps">

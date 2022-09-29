@@ -23,12 +23,14 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Code</th>
                                 <th>Libellé</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let motif of motifs">
+                            <tr *ngFor="let motif of motifs" (click)="edit(motif.idmotif)">
                                 <td>{{motif.idmotif}}</td>
+                                <td>{{motif.code}}</td>
                                 <td>{{motif.libelle}}</td>
                             </tr>
                         </tbody>

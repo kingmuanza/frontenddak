@@ -26,7 +26,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let nationalite of nationalites">
+                            <tr *ngFor="let nationalite of nationalites" (click)="edit(nationalite.idnationalite)">
                                 <td>{{nationalite.idnationalite}}</td>
                                 <td>{{nationalite.code}}</td>
                                 <td>{{nationalite.libelle}}</td>

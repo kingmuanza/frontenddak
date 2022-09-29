@@ -1,0 +1,37 @@
+<div *ngIf="vigile" class="badge">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="vigile-image" *ngIf="vigile.image" style="height: 300px; width: 100%;" [ngStyle]="{'background-image': 'url(' + vigile.image +')'}">
+
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div style="height: 300px;">
+                <h1>
+                    {{vigile.noms}}
+                </h1>
+                <h2>
+                    {{vigile.fonction}}
+                </h2>
+                <h2>
+                    {{vigile.matricule}}
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-lg-6">
+            <button class="btn primaire">Imprimer le badge</button>
+        </div>
+        <div *ngIf="!vigile.badge" class="col-lg-6">
+            <button (click)="remis()" class="btn primaire">Badge remis</button>
+        </div>
+        <div *ngIf="vigile.badge" class="col-lg-6">
+            <button (click)="nonRemis()" style="width: 100%;" class="btn btn-danger">Badge non remis</button>
+        </div>
+    </div>
+
+
+</div>

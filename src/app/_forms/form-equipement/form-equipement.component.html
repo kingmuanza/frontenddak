@@ -1,0 +1,19 @@
+<div>
+    <div class="row">
+        <div *ngFor="let equipement of equipements" class="col-lg-4">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        {{equipement.libelle}}
+                    </span>
+                </div>
+                <input [(ngModel)]="equipement.defaut" type="number" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="input-group">
+        <button (click)="save()" class="btn nouveau">
+            Enregistrer les équipements
+        </button>
+    </div>
+</div>

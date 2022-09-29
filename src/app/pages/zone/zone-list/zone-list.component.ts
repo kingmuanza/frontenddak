@@ -40,7 +40,7 @@ export class ZoneListComponent implements OnInit, OnDestroy {
       this.resultats = data;
       this.dtTrigger.next('');
     });
-    this.zoneService.getAll('ville').then((data) => {
+    this.villeService.getAll('ville').then((data) => {
       console.log('data');
       console.log(data);
       this.villes = data;

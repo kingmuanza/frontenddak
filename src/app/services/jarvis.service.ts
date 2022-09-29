@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ export class JarvisService<T> {
   URL = 'http://localhost:8080/dakBack/webresources/';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private loadingService: LoadingService,
   ) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
@@ -27,11 +29,21 @@ export class JarvisService<T> {
     sessionStorage.setItem('serveur-dak', urlServeur);
   }
 
+  showLoader() {
+    this.loadingService.afficher();
+  }
+
+  hideLoader() {
+    this.loadingService.cacher();
+  }
+
   getAll(table: string): Promise<Array<T>> {
     this.infos();
+    this.showLoader();
     return new Promise((resolve, reject)  => {
       this.http.get(this.URL + table).subscribe((data) => {
         const donnees = data as Array<T>;
+        this.hideLoader();
         resolve(donnees);
       });
     });
@@ -39,37 +51,45 @@ export class JarvisService<T> {
  
   get(table: string, id: number): Promise<T> {
     this.infos();
+    this.showLoader();
     return new Promise((resolve, reject)  => {
       this.http.get(this.URL + table + '/' + id).subscribe((data) => {
         const resulat = data as T;
+        this.hideLoader();
         resolve(resulat);
       });
     });
   }
 
-  ajouter(table: string, objet: T): Promise<boolean> {
+  ajouter(table: string, objet: T): Promise<any> {
     this.infos();
+    this.showLoader();
     return new Promise((resolve, reject)  => {
       this.http.post(this.URL + table, objet).subscribe((data) => {
-        resolve(true);
+        this.hideLoader();
+        resolve(data);
       });
     });
   }
 
-  modifier(table: string, id: number, objet: T): Promise<boolean> {
+  modifier(table: string, id: number, objet: T): Promise<any> {
     this.infos();
+    this.showLoader();
     return new Promise((resolve, reject)  => {
       this.http.put(this.URL + table + '/' + id, objet).subscribe((data) => {
         const resulat = data as T;
-        resolve(true);
+        this.hideLoader();
+        resolve(data);
       });
     });
   }
 
   supprimer(table: string, id: number): Promise<boolean> {
     this.infos();
+    this.showLoader();
     return new Promise((resolve, reject)  => {
       this.http.delete(this.URL + table + '/' + id).subscribe((data) => {
+        this.hideLoader();
         resolve(true);
       });
     });
@@ -92,6 +112,25 @@ export class JarvisService<T> {
       return "Dimanche";
 
     return "" + jour ? jour : "";
+  }
+
+  libelleFonction(fonction: string) {
+    if (fonction == "AGENT")
+      return "Agent de sécurité";
+    if (fonction == "ESCORTEUR")
+      return "Escorteur";
+    if (fonction == "CONTROLEUR")
+      return "Contrôleur";
+    if (fonction == "CHAUFFEUR")
+      return "Chauffeur";
+    if (fonction == "MAITRECHIEN")
+      return "Maitre Chien";
+    if (fonction == "ENTRETIEN")
+      return "Agent d'entretien";
+    if (fonction == "SUPERVISEUR")
+      return "Superviseur";
+
+    return "";
   }
 
 }

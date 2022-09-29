@@ -1,0 +1,94 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Liste des vigiles ayant reçu leurs badges
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Horaire
+                            </span>
+                        </div>
+                        <select [(ngModel)]="horaire" name="date" class="form-control">
+                            <option value="TOUS">Tous</option>
+                            <option value="JOUR">Jour</option>
+                            <option value="NUIT">Nuit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Ville
+                            </span>
+                        </div>
+                        <select type="date" name="date" class="form-control">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn primaire">Rechercher</button>
+                </div>
+            </div>
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="type">
+                        <input (ngModelChange)="afficherTitulaires($event)" type="checkbox" [(ngModel)]="sontTitulaires"> &nbsp;Titulaires &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherRemplacants($event)" type="checkbox" [(ngModel)]="sontRemplacants"> &nbsp;Remplacants &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherRemplacantsConges($event)" type="checkbox" [(ngModel)]="sontRemplacantsConges"> &nbsp;Remplacants congés
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="card shadow-1">
+            <div class="page-contenu-corps">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Noms</th>
+                            <th>Horaire</th>
+                            <th>Fonction</th>
+                            <th>Repos</th>
+                            <th>Zone</th>
+                            <th>Quartier</th>
+                            <th>Ville</th>
+                            <th style="text-align: center;">Remplacant</th>
+                            <th style="text-align: center;">Rempl. Congés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let vigile of resultats" (click)="view(vigile.idvigile)" style="cursor: pointer;">
+                            <td>{{vigile.idvigile}}</td>
+                            <td>{{vigile.noms}}</td>
+                            <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
+                            <td>{{libelleFonction(vigile.fonction)}}</td>
+                            <td>{{jourSemaine(vigile.jourRepos)}}</td>
+                            <td>{{vigile.zone?.libelle}}</td>
+                            <td>{{vigile.quartier?.nom}}</td>
+                            <td>{{vigile.ville?.libelle}}</td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+                            </td>
+                            <td style="">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
+                                <small style="margin-left: 20px;">
+                                    {{vigile.idremplacantConge ? vigile.idremplacantConge.noms : ''}}
+                                </small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

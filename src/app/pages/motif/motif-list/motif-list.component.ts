@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
@@ -20,6 +21,7 @@ export class MotifListComponent implements OnInit, OnDestroy {
   motifs = new Array<any>();
 
   constructor(
+    private router: Router,
     private jarvisService: JarvisService<any> 
   ) { }
 
@@ -30,6 +32,10 @@ export class MotifListComponent implements OnInit, OnDestroy {
       this.motifs = data;
       this.dtTrigger.next('');
     });
+  }
+
+  edit(id: number) {
+    this.router.navigate(['motif', 'edit', id]);
   }
 
   ngOnDestroy(): void {

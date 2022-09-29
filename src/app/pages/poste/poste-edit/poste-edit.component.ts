@@ -4,6 +4,13 @@ import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
 import { Poste } from 'src/app/models/poste.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import { PointageService } from 'src/app/services/pointage.service';
+import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
+import { collection, getDocs } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+import { Contrat } from 'src/app/models/contrat.model';
 
 @Component({
   selector: 'app-poste-edit',
@@ -11,6 +18,8 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   styleUrls: ['./poste-edit.component.scss']
 })
 export class PosteEditComponent implements OnInit {
+
+  app: any;
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
@@ -22,73 +31,99 @@ export class PosteEditComponent implements OnInit {
   affVigilesJour = 0;
   affVigilesNuit = 0;
 
+  contrats = new Array<Contrat>();
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
-    private jarvisService: JarvisService<any>
-  ) { }
+    private pointageService: PointageService,
+    private jarvisService: JarvisService<any>,
+    private contratService: JarvisService<Contrat>
+  ) {
+
+    this.app = initializeApp(FIREBASECONFIG);
+  }
 
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers',
       order: [[0, 'desc']]
     };
-    this.getVilles().then((zones) => {
-      this.zones = zones;
-      this.getNationalites().then((quartiers) => {
-        this.quartiers = quartiers;
-        this.route.paramMap.subscribe((paramMap) => {
-          const id = paramMap.get('id');
-          if (id) {
-            this.jarvisService.get('poste', Number(id)).then((poste) => {
-              console.log('le poste recupéré');
-              console.log(poste);
-              this.poste = poste;
 
-              this.poste.debutContrat = poste.debutContrat?.split('T')[0];
-              this.poste.finContrat = poste.finContrat?.split('T')[0];
+this.getContrats().then((contrats) => {
+  this.contrats = contrats;
+  this.getVilles().then((zones) => {
+    this.zones = zones;
+    this.getNationalites().then((quartiers) => {
+      this.quartiers = quartiers;
+      this.route.paramMap.subscribe((paramMap) => {
+        const id = paramMap.get('id');
+        if (id) {
 
-              this.jarvisService.getAll('affectation').then((data) => {
-                console.log('data');
-                console.log(data);
-                data.forEach((affectation) => {
-                  if (affectation.idposte.idposte === poste.idposte) {
-                    this.affectations.push(affectation);
-                  }
-                });
-                this.affVigilesJour = 0;
-                this.affVigilesNuit = 0;
-                this.affectations.forEach((aff) => {
-                  if (!aff.arret) {
-                    let horaire: string;
-                    horaire = aff.horaire;
-                    if (horaire.toLocaleLowerCase() == 'jour') {
-                      this.affVigilesJour += 1;
-                    }
-                    if (horaire.toLocaleLowerCase() == 'nuit') {
-                      this.affVigilesNuit += 1;
-                    }
-                  }
-                });
-                this.dtTrigger.next('');
-              });
+          this.jarvisService.get('poste', Number(id)).then((poste) => {
+            console.log('le poste recupéré');
+            console.log(poste);
+            this.poste = poste;
 
-              zones.forEach((zone) => {
-                if (this.poste.zone && zone.idzone == this.poste.zone.idzone) {
-                  this.poste.zone = zone;
+            this.pointageService.getRemotePoste(id).then((posteRemote) => {
+              console.log('posteRemote');
+              console.log(posteRemote);
+
+              if (posteRemote) {
+                if (posteRemote.latitude) {
+                  this.poste.latitude = posteRemote.latitude
                 }
-              });
-              quartiers.forEach((quartier) => {
-                if (this.poste.idquartier && quartier.idquartier == this.poste.idquartier.idquartier) {
-                  this.poste.idquartier = quartier;
+                if (posteRemote.longitude) {
+                  this.poste.longitude = posteRemote.longitude
                 }
-              });
+              }
             });
-          }
-        });
+
+            this.poste.debutContrat = poste.debutContrat?.split('T')[0];
+            this.poste.finContrat = poste.finContrat?.split('T')[0];
+
+            this.jarvisService.getAll('affectation').then((data) => {
+              console.log('data');
+              console.log(data);
+              data.forEach((affectation) => {
+                if (affectation.idposte.idposte === poste.idposte) {
+                  this.affectations.push(affectation);
+                }
+              });
+              this.affVigilesJour = 0;
+              this.affVigilesNuit = 0;
+              this.affectations.forEach((aff) => {
+                if (!aff.arret) {
+                  let horaire: string;
+                  horaire = aff.horaire;
+                  if (horaire.toLocaleLowerCase() == 'jour') {
+                    this.affVigilesJour += 1;
+                  }
+                  if (horaire.toLocaleLowerCase() == 'nuit') {
+                    this.affVigilesNuit += 1;
+                  }
+                }
+              });
+              this.dtTrigger.next('');
+            });
+
+            zones.forEach((zone) => {
+              if (this.poste.zone && zone.idzone == this.poste.zone.idzone) {
+                this.poste.zone = zone;
+              }
+            });
+            quartiers.forEach((quartier) => {
+              if (this.poste.idquartier && quartier.idquartier == this.poste.idquartier.idquartier) {
+                this.poste.idquartier = quartier;
+              }
+            });
+          });
+        }
       });
     });
+  });
+});
   }
 
   getVilles(): Promise<Array<any>> {
@@ -185,5 +220,22 @@ export class PosteEditComponent implements OnInit {
       return "Dimanche";
 
     return "" + jour ? jour : "";
+  }
+
+  getContrats(): Promise<Array<Contrat>> {
+    return new Promise((resolve, reject) => {
+      this.contratService.getAll('contrat').then((contrats) => {
+        console.log('contrats');
+        console.log(contrats);
+        resolve(contrats);
+      });
+    });
+  }
+
+  getPosteFirebase() {
+    this.pointageService.getRemotePoste(this.poste.idposte + '').then((data) => {
+      this.poste.latitude = data.latitude;
+      this.poste.longitude = data.longitude;
+    });
   }
 }

@@ -1,3 +1,5 @@
+import { Vigile } from "./vigile.model";
+
 export class Suivi {
     idsuiviPoste = 0;
     dateSuivi = new Date();
@@ -7,7 +9,7 @@ export class Suivi {
     numero = '';
     zone?: Zone;
     poste: any;
-    idvigile: any;
+    idvigile!: Vigile;
     remplacant: any;
     nombreAbsence = 0;
     motifSanction = '';
