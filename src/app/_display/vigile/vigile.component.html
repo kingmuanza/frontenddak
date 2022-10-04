@@ -1,4 +1,4 @@
-<div class="shadow-1 app-vigile">
+<div class="app-vigile">
     <div>
 
         <b class="cliquable" (click)="goTo()">
@@ -11,9 +11,9 @@
             {{libelleFonction(vigile.fonction)}}
         </small>
     </div>
-    <div>
+    <div *ngIf="affectation">
         Poste :
-        <a [routerLink]=" '/poste/edit/' + affectation?.idposte?.idposte ">
+        <a [routerLink]=" '/poste/edit/' + affectation.idposte?.idposte ">
             {{affectation?.idposte?.libelle}}
         </a>, Horaire : {{affectation.horaire}}
     </div>

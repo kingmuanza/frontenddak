@@ -63,7 +63,7 @@ export class VacantListComponent implements OnInit, OnDestroy {
       console.log(data);
       this.postes = [];
       data.forEach((poste) => {
-        if (poste.contrat == 'ENCOURS') {
+        if (!poste.bon) {
           this.postes.push(poste);
         }
       });

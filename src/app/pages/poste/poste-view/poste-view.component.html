@@ -1,8 +1,10 @@
-<div class="page">
+<div class="page" style="overflow-y: auto;">
     <div class="page-entete">
         <div *ngIf="poste.idposte!=0" class="page-entete-titre">
             Poste : {{poste.libelle}}
-
+            <ng-container *ngIf="poste.bon">
+                *
+            </ng-container>
         </div>
         <div *ngIf="poste.idcontrat">
             Contrat : {{poste.idcontrat.libelle}}, <span *ngIf="poste.organisme">
@@ -28,42 +30,41 @@
     </div>
     <div class="page-contenu">
         <div class="row">
-            <div class="col-lg-4">
-                <div class="shadow-1" style="padding: 20px;">
+            <div class="col-lg-5">
+                <div class="card shadow-1">
                     <div>
-                        <div class="infos-titre">
-                            <b>
-                                Informations
-                            </b>
+                        <div class="petit-titre">
+                            Informations
                         </div>
                         <div>
                             <div>
                                 Ville : <a href="#">{{poste.zone?.idville?.libelle}}</a> , Zone : <a href="#">{{poste.zone?.libelle}}</a>, Quartier : <a href="#">{{poste.idquartier?.libelle}}</a>, Laltitude : <a href="#">{{poste.latitude}}</a>, Longitude
                                 : <a href="#">{{poste.longitude}}</a>
                             </div>
-                            <div>
-                                Contrat : <a href="#">{{poste.contrat}}</a>, Début : {{poste.debutContrat}}
+                            <div *ngIf="poste.idcontrat">
+                                Contrat : <a [routerLink]="'/contrat/view/' + poste.idcontrat.idcontrat">{{poste.idcontrat.libelle}}</a>
                             </div>
                             <div>
                                 Personne à contacter : <a href="#">{{poste.contact}}</a>, Téléphone : {{poste.tel}}
                             </div>
                         </div>
                     </div>
+
+                </div>
+                <div class="card shadow-1">
                     <div>
-                        <div class="infos-titre">
+                        <div class="petit-titre">
+                            Exigences du contrat :
                             <b>
-                                Exigences du contrat
+                                Personnel
                             </b>
                         </div>
                         <div>
                             <div>
-                                <b>
-                                    Personnel
-                                </b>
-                                <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
+                                <button *ngIf="!showFormulairePersonnel" class="btn nouveau" (click)="showFormulairePersonnel = true">
                                     Ajouter une exigence
                                 </button>
-                                <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
+                                <button *ngIf="showFormulairePersonnel" class="btn nouveau" (click)="showFormulairePersonnel = false">
                                     Annuler
                                 </button>
                             </div>
@@ -116,19 +117,29 @@
                                         <span>
                                             {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
                                         </span>
+                                        <span class="supprimer" (click)="supprimerPosteVigile(item)" style="color: red;">
+                                            Supprimer
+                                        </span>
                                     </li>
                                 </ul>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card shadow-1">
+                    <div>
+                        <div class="petit-titre">
+                            Exigences du contrat :
+                            <b>
+                                Equipements
+                            </b>
+                        </div>
                         <div>
                             <div>
-                                <b>
-                                    Equipements
-                                </b>
-                                <button *ngIf="!showFormulaireEquipement" class="btn btn-link" (click)="showFormulaireEquipement = true">
+                                <button *ngIf="!showFormulaireEquipement" class="btn nouveau" (click)="showFormulaireEquipement = true">
                                     Ajouter une exigence
                                 </button>
-                                <button *ngIf="showFormulaireEquipement" class="btn btn-link" (click)="showFormulaireEquipement = false">
+                                <button *ngIf="showFormulaireEquipement" class="btn nouveau" (click)="showFormulaireEquipement = false">
                                     Annuler
                                 </button>
                             </div>
@@ -163,6 +174,9 @@
                                         <span>
                                             {{item.quantite}} {{item.idequipement.libelle}}
                                         </span>
+                                        <span class="supprimer" (click)="supprimerEquipement(item)" style="color: red;">
+                                            Supprimer
+                                        </span>
                                     </li>
                                 </ul>
                             </div>
@@ -170,23 +184,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
-                <div class="">
+            <div class="col-lg-7">
+                <div class="card shadow-1">
                     <div style="margin-bottom: 10px;">
                         Liste des vigiles titulaires en poste
+                        <button class="btn btn-link" (click)="openModal()">
+                            Ajouter un vigile
+                        </button>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4" *ngFor="let affectation of affectations">
-                            <div>
-                                Depuis le {{affectation.dateAffectation}}
-                            </div>
-                            <div>
+                        <div class="col-lg-6" *ngFor="let affectation of affectations">
+
+                            <div style="border: 1px solid #aaa;">
                                 <app-vigile [vigile]="affectation.idvigile"></app-vigile>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="margin-bottom: 40px;">
+                <div class="card shadow-1">
                     <div style="margin-top: 20px; margin-bottom: 16px;">
                         Equipements reçus non basiques
                     </div>
@@ -195,12 +210,49 @@
                     </div>
                     <div *ngIf="equipementsvigiles.length  > 0">
                         <ng-container *ngFor="let equipement of equipementsvigiles">
-                            <ng-container *ngIf="equipement.quantite && !equipement.idequipement.basique">
+                            <ng-container *ngIf="equipement.quantite">
                                 <app-display-equipement [equipement]="equipement"></app-display-equipement>
                             </ng-container>
                         </ng-container>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 25vh;">
+
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" #vigilesPropositionsModal id="vigilesPropositionsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Propositions d'affectation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div *ngFor="let item of postevigiles">
+                        <div *ngIf="!verifierExigenceAgent(item)">
+                            <div>
+                                <b>
+                                    Exigence : 
+                                </b> {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>

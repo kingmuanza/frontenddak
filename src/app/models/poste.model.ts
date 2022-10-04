@@ -25,4 +25,6 @@ export class Poste {
     latitude = 0;
     organisme = false;
     idcontrat: Contrat | undefined;
+    description = '';
+    bon = false;
 }

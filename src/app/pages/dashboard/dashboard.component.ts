@@ -185,8 +185,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   rechercher() {
-    this.rechercherPoste();
-    this.rechercherVigile();
+    if (this.poste) {
+      this.rechercherPoste();
+    }
+    if (this.vigile) {
+      this.rechercherVigile();
+    }
   }
 
   rechercherVigile() {

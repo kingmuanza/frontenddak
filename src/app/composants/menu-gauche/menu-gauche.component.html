@@ -69,11 +69,18 @@
     <div class="menu-gauche-item" *ngIf="contrat">
         <a routerLinkActive="active" routerLink="contrat">
             Contrats
+
+            <span *ngIf="nbContratsMauvais" class="important" style="float: right;">
+                {{nbContratsMauvais}}
+            </span>
         </a>
     </div>
     <div class="menu-gauche-item" *ngIf="poste">
         <a routerLinkActive="active" routerLink="poste">
             Postes
+            <span *ngIf="nbPostesMauvais" class="important" style="float: right;">
+                {{nbPostesMauvais}}
+            </span>
         </a>
     </div>
     <div class="menu-gauche-item" *ngIf="repos">

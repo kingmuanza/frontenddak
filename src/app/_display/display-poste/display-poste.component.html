@@ -4,9 +4,13 @@
             {{poste.libelle}}
         </b>
     </div>
-    <div>Zone :
-        <a [routerLink]=" '/zone/edit/' + poste?.zone?.idzone ">
+    <div *ngIf="poste.zone">
+        Zone :
+        <a [routerLink]=" '/zone/edit/' + poste.zone?.idzone ">
              {{poste.zone?.libelle}}
         </a>
+    </div>
+    <div>
+        Vigile Jour : {{nbJour}}, Vigile Nuit : {{nbNuit}}
     </div>
 </div>

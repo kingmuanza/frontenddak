@@ -35,3 +35,20 @@ ul li.erreur {
         color: #000;
     }
 }
+
+.supprimer {
+    color: red;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.5;
+    }
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.petit-titre {
+    margin-bottom: 10px;
+    color: #231709;
+}

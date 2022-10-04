@@ -12,6 +12,7 @@ import { Poste } from 'src/app/models/poste.model';
 import { PosteVigile } from 'src/app/models/poste.vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { PointageService } from 'src/app/services/pointage.service';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-poste-view',
@@ -29,8 +30,6 @@ export class PosteViewComponent implements OnInit {
   zones = new Array<any>();
   quartiers = new Array<any>();
   affectations = new Array<Affectation>();
-  affVigilesJour = 0;
-  affVigilesNuit = 0;
 
   equipementsvigiles = new Array<EquipementVigile>();
   equipements = new Array<Equipement>();
@@ -43,6 +42,8 @@ export class PosteViewComponent implements OnInit {
 
   showFormulairePersonnel = false;
   showFormulaireEquipement = false;
+
+  myModal?: bootstrap.Modal;
 
   constructor(
     private router: Router,
@@ -67,115 +68,87 @@ export class PosteViewComponent implements OnInit {
       });
     });
 
-    this.getVilles().then((zones) => {
-      this.zones = zones;
-      this.getNationalites().then((quartiers) => {
-        this.quartiers = quartiers;
-        this.route.paramMap.subscribe((paramMap) => {
-          const id = paramMap.get('id');
-          if (id) {
+    this.route.paramMap.subscribe((paramMap) => {
+      const id = paramMap.get('id');
+      if (id) {
+        this.jarvisService.get('poste', Number(id)).then((poste) => {
+          console.log('le poste recupéré');
+          console.log(poste);
+          this.poste = poste;
 
-            this.jarvisService.get('poste', Number(id)).then((poste) => {
-              console.log('le poste recupéré');
-              console.log(poste);
-              this.poste = poste;
+          this.pointageService.getRemotePoste(id).then((posteRemote) => {
+            console.log('posteRemote');
+            console.log(posteRemote);
 
-              this.pointageService.getRemotePoste(id).then((posteRemote) => {
-                console.log('posteRemote');
-                console.log(posteRemote);
+            if (posteRemote) {
+              if (posteRemote.latitude) {
+                this.poste.latitude = posteRemote.latitude
+              }
+              if (posteRemote.longitude) {
+                this.poste.longitude = posteRemote.longitude
+              }
+            }
+          });
 
-                if (posteRemote) {
-                  if (posteRemote.latitude) {
-                    this.poste.latitude = posteRemote.latitude
-                  }
-                  if (posteRemote.longitude) {
-                    this.poste.longitude = posteRemote.longitude
-                  }
-                }
-              });
+          this.poste.debutContrat = poste.debutContrat?.split('T')[0];
+          this.poste.finContrat = poste.finContrat?.split('T')[0];
 
-              this.getDemandesVigiles().then((postevigiles) => {
-                this.postevigiles = postevigiles.filter((pv) => {
-                  return pv.idposte.idposte === this.poste.idposte;
+          this.jarvisService.getAll('affectation').then((data) => {
+            console.log('data');
+            console.log(data);
+            data.forEach((affectation) => {
+              if (affectation.idposte.idposte === poste.idposte) {
+                this.affectations.push(affectation);
+                /**  equipementVigileService */
+                this.equipementVigileService.getAll('equipementvigile').then((data) => {
+                  this.equipementsvigiles = data.filter((equipementVigile) => {
+                    return equipementVigile.idvigile.idvigile === affectation.idvigile.idvigile;
+                  }).concat(this.equipementsvigiles);
                 });
+              }
+            });
+            this.getDemandesVigiles().then((postevigiles) => {
+              this.postevigiles = postevigiles.filter((pv) => {
+                return pv.idposte.idposte === this.poste.idposte;
               });
+              this.updatePoste();
+            });
 
-              this.getDemandesEquipements().then((posteequipements) => {
-                this.posteequipements = posteequipements.filter((pv) => {
-                  return pv.idposte.idposte === this.poste.idposte;
-                });
-              });
-
-              this.poste.debutContrat = poste.debutContrat?.split('T')[0];
-              this.poste.finContrat = poste.finContrat?.split('T')[0];
-
-              this.jarvisService.getAll('affectation').then((data) => {
-                console.log('data');
-                console.log(data);
-                data.forEach((affectation) => {
-                  if (affectation.idposte.idposte === poste.idposte) {
-                    this.affectations.push(affectation);
-                    /**  equipementVigileService */
-                    this.equipementVigileService.getAll('equipementvigile').then((data) => {
-                      this.equipementsvigiles = data.filter((equipementVigile) => {
-                        return equipementVigile.idvigile.idvigile === affectation.idvigile.idvigile;
-                      }).concat(this.equipementsvigiles);
-                    });
-                  }
-                });
-                this.affVigilesJour = 0;
-                this.affVigilesNuit = 0;
-                this.affectations.forEach((aff) => {
-                  if (!aff.arret) {
-                    let horaire: string;
-                    horaire = aff.horaire;
-                    if (horaire.toLocaleLowerCase() == 'jour') {
-                      this.affVigilesJour += 1;
-                    }
-                    if (horaire.toLocaleLowerCase() == 'nuit') {
-                      this.affVigilesNuit += 1;
-                    }
-                  }
-                });
-                this.dtTrigger.next('');
-
-              });
-
-              zones.forEach((zone) => {
-                if (this.poste.zone && zone.idzone == this.poste.zone.idzone) {
-                  this.poste.zone = zone;
-                }
-              });
-              quartiers.forEach((quartier) => {
-                if (this.poste.idquartier && quartier.idquartier == this.poste.idquartier.idquartier) {
-                  this.poste.idquartier = quartier;
-                }
+            this.getDemandesEquipements().then((posteequipements) => {
+              this.posteequipements = posteequipements.filter((pv) => {
+                return pv.idposte.idposte === this.poste.idposte;
               });
             });
-          }
+
+            this.dtTrigger.next('');
+
+          });
+
         });
-      });
+      }
     });
   }
 
-  getVilles(): Promise<Array<any>> {
-    return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('zone').then((zones) => {
-        console.log('zones');
-        console.log(zones);
-        resolve(zones);
-      });
+  private updatePoste() {
+    this.poste.bon = true;
+    let exigenceVigileJour = 0;
+    let exigenceVigileNuit = 0;
+    this.postevigiles.forEach((pv) => {
+      if (!this.verifierExigenceAgent(pv)) {
+        this.poste.bon = false;
+      }
+      if (pv.horaire === 'jour') {
+        exigenceVigileJour += pv.quantite;
+      }
+      if (pv.horaire === 'nuit') {
+        exigenceVigileNuit += pv.quantite;
+      }
     });
-  }
 
-  getNationalites(): Promise<Array<any>> {
-    return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('quartier').then((quartiers) => {
-        console.log('quartiers');
-        console.log(quartiers);
-        resolve(quartiers);
-      });
-    });
+    this.poste.nombreVigileJour = exigenceVigileJour;
+    this.poste.nombreVigileNuit = exigenceVigileNuit;
+
+    this.jarvisService.modifier('poste', this.poste.idposte, this.poste).then((data) => { });
   }
 
   getDemandesVigiles(): Promise<Array<PosteVigile>> {
@@ -266,22 +239,7 @@ export class PosteViewComponent implements OnInit {
   }
 
   jourSemaine(jour: number) {
-    if (jour == 1)
-      return "Lundi";
-    if (jour == 2)
-      return "Mardi";
-    if (jour == 3)
-      return "Mercredi";
-    if (jour == 4)
-      return "Jeudi";
-    if (jour == 5)
-      return "Vendredi";
-    if (jour == 6)
-      return "Samedi";
-    if (jour == 7)
-      return "Dimanche";
-
-    return "" + jour ? jour : "";
+    return this.jarvisService.jourSemaine(jour);
   }
 
   getPosteFirebase() {
@@ -294,14 +252,17 @@ export class PosteViewComponent implements OnInit {
   verifierExigenceAgent(postevigile: PosteVigile) {
     let resultat = false;
     let nombre = 0;
-    this.affectations.forEach((affectation) => {
-      if (affectation.idvigile.fonction === postevigile.typeVigile) {
-        if (affectation.horaire === postevigile.horaire) {
-          nombre++;
+    if (postevigile) {
+      this.affectations.forEach((affectation) => {
+        if (affectation.idvigile.fonction === postevigile.typeVigile) {
+          if (affectation.horaire === postevigile.horaire) {
+            nombre++;
+          }
         }
-      }
-    });
-    return nombre >= postevigile.quantite;
+      });
+      return nombre >= postevigile.quantite;
+    }
+    return true;
   }
 
   verifierExigenceMateriel(posteequipement: PosteEquipement) {
@@ -324,6 +285,7 @@ export class PosteViewComponent implements OnInit {
       }
     }
   }
+
   ajouterExigenceEquipement() {
     if (this.posteequipement.idequipement && this.posteequipement.quantite) {
       if (this.posteequipement.quantite > 0) {
@@ -334,4 +296,34 @@ export class PosteViewComponent implements OnInit {
       }
     }
   }
+
+  supprimerPosteVigile(item: PosteVigile) {
+    const oui = confirm('Etes vous sûr de vouloir supprimer cette exigence ?');
+    if (oui) {
+      this.postevigileService.supprimer('postevigile', item.idposteVigile).then(() => {
+        window.location.reload();
+      });
+    }
+  }
+
+  supprimerEquipement(item: PosteEquipement) {
+    const oui = confirm('Etes vous sûr de vouloir supprimer cette exigence ?');
+    if (oui) {
+      this.postevigileService.supprimer('posteequipement', item.idposteEquipement).then(() => {
+        window.location.reload();
+      });
+    }
+  }
+
+  openModal() {
+    console.log('open modal remplacantconges');
+    const modale = document.getElementById('vigilesPropositionsModal');
+
+    console.log(modale);
+    if (modale != null) {
+      this.myModal = new bootstrap.Modal(modale);
+      this.myModal.show();
+    }
+  }
+
 }

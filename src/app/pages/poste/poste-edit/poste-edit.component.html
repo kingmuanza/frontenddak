@@ -4,7 +4,7 @@
             Ajouter un nouveau poste
         </div>
         <div *ngIf="poste.idposte!=0" class="page-entete-titre">
-            Modifier le poste
+            Modifier le poste : {{poste.libelle}}
         </div>
 
         <div class="">
@@ -45,6 +45,11 @@
                                             {{contrat.libelle}}
                                         </option>
                                     </select>
+                                    <ng-container *ngIf="poste.idcontrat">
+                                        <button (click)="voirContrat(poste.idcontrat.idcontrat)" class="btn btn-outline-secondary" type="button">
+                                            Voir le contrat
+                                        </button>
+                                    </ng-container>
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -166,6 +171,17 @@
                                         </span>
                                     </div>
                                     <input type="number" [(ngModel)]="poste.latitude" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+                                        Description 
+                                        <br>
+                                        Localisation
+                                    </span>
+                                    <textarea [(ngModel)]="poste.description" type="text" class="form-control"></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-4">

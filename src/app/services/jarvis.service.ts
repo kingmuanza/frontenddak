@@ -49,6 +49,16 @@ export class JarvisService<T> {
     });
   }
  
+  getAllSilent(table: string): Promise<Array<T>> {
+    this.infos();
+    return new Promise((resolve, reject)  => {
+      this.http.get(this.URL + table).subscribe((data) => {
+        const donnees = data as Array<T>;
+        resolve(donnees);
+      });
+    });
+  }
+ 
   get(table: string, id: number): Promise<T> {
     this.infos();
     this.showLoader();

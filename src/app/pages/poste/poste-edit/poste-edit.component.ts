@@ -51,79 +51,87 @@ export class PosteEditComponent implements OnInit {
       order: [[0, 'desc']]
     };
 
-this.getContrats().then((contrats) => {
-  this.contrats = contrats;
-  this.getVilles().then((zones) => {
-    this.zones = zones;
-    this.getNationalites().then((quartiers) => {
-      this.quartiers = quartiers;
-      this.route.paramMap.subscribe((paramMap) => {
-        const id = paramMap.get('id');
-        if (id) {
+    this.getContrats().then((contrats) => {
+      this.contrats = contrats.filter((contrat) => {
+        return !contrat.idparent;
+      });
+      this.getVilles().then((zones) => {
+        this.zones = zones;
+        this.getNationalites().then((quartiers) => {
+          this.quartiers = quartiers;
+          this.route.paramMap.subscribe((paramMap) => {
+            const id = paramMap.get('id');
+            if (id) {
 
-          this.jarvisService.get('poste', Number(id)).then((poste) => {
-            console.log('le poste recupéré');
-            console.log(poste);
-            this.poste = poste;
+              this.jarvisService.get('poste', Number(id)).then((poste) => {
+                console.log('le poste recupéré');
+                console.log(poste);
+                this.poste = poste;
 
-            this.pointageService.getRemotePoste(id).then((posteRemote) => {
-              console.log('posteRemote');
-              console.log(posteRemote);
-
-              if (posteRemote) {
-                if (posteRemote.latitude) {
-                  this.poste.latitude = posteRemote.latitude
-                }
-                if (posteRemote.longitude) {
-                  this.poste.longitude = posteRemote.longitude
-                }
-              }
-            });
-
-            this.poste.debutContrat = poste.debutContrat?.split('T')[0];
-            this.poste.finContrat = poste.finContrat?.split('T')[0];
-
-            this.jarvisService.getAll('affectation').then((data) => {
-              console.log('data');
-              console.log(data);
-              data.forEach((affectation) => {
-                if (affectation.idposte.idposte === poste.idposte) {
-                  this.affectations.push(affectation);
-                }
-              });
-              this.affVigilesJour = 0;
-              this.affVigilesNuit = 0;
-              this.affectations.forEach((aff) => {
-                if (!aff.arret) {
-                  let horaire: string;
-                  horaire = aff.horaire;
-                  if (horaire.toLocaleLowerCase() == 'jour') {
-                    this.affVigilesJour += 1;
+                this.contrats.forEach((contrat)  => {
+                  if (this.poste.idcontrat && this.poste.idcontrat.idcontrat === contrat.idcontrat) {
+                    this.poste.idcontrat = contrat;
                   }
-                  if (horaire.toLocaleLowerCase() == 'nuit') {
-                    this.affVigilesNuit += 1;
-                  }
-                }
-              });
-              this.dtTrigger.next('');
-            });
+                });
 
-            zones.forEach((zone) => {
-              if (this.poste.zone && zone.idzone == this.poste.zone.idzone) {
-                this.poste.zone = zone;
-              }
-            });
-            quartiers.forEach((quartier) => {
-              if (this.poste.idquartier && quartier.idquartier == this.poste.idquartier.idquartier) {
-                this.poste.idquartier = quartier;
-              }
-            });
+                this.pointageService.getRemotePoste(id).then((posteRemote) => {
+                  console.log('posteRemote');
+                  console.log(posteRemote);
+
+                  if (posteRemote) {
+                    if (posteRemote.latitude) {
+                      this.poste.latitude = posteRemote.latitude
+                    }
+                    if (posteRemote.longitude) {
+                      this.poste.longitude = posteRemote.longitude
+                    }
+                  }
+                });
+
+                this.poste.debutContrat = poste.debutContrat?.split('T')[0];
+                this.poste.finContrat = poste.finContrat?.split('T')[0];
+
+                this.jarvisService.getAll('affectation').then((data) => {
+                  console.log('data');
+                  console.log(data);
+                  data.forEach((affectation) => {
+                    if (affectation.idposte.idposte === poste.idposte) {
+                      this.affectations.push(affectation);
+                    }
+                  });
+                  this.affVigilesJour = 0;
+                  this.affVigilesNuit = 0;
+                  this.affectations.forEach((aff) => {
+                    if (!aff.arret) {
+                      let horaire: string;
+                      horaire = aff.horaire;
+                      if (horaire.toLocaleLowerCase() == 'jour') {
+                        this.affVigilesJour += 1;
+                      }
+                      if (horaire.toLocaleLowerCase() == 'nuit') {
+                        this.affVigilesNuit += 1;
+                      }
+                    }
+                  });
+                  this.dtTrigger.next('');
+                });
+
+                zones.forEach((zone) => {
+                  if (this.poste.zone && zone.idzone == this.poste.zone.idzone) {
+                    this.poste.zone = zone;
+                  }
+                });
+                quartiers.forEach((quartier) => {
+                  if (this.poste.idquartier && quartier.idquartier == this.poste.idquartier.idquartier) {
+                    this.poste.idquartier = quartier;
+                  }
+                });
+              });
+            }
           });
-        }
+        });
       });
     });
-  });
-});
   }
 
   getVilles(): Promise<Array<any>> {
@@ -202,7 +210,9 @@ this.getContrats().then((contrats) => {
   edit(id: string) {
     this.router.navigate(['affectation', 'edit', id]);
   }
-
+  voirContrat(id: string | number) {
+    this.router.navigate(['contrat', 'view', id]);
+  }
   jourSemaine(jour: number) {
     if (jour == 1)
       return "Lundi";

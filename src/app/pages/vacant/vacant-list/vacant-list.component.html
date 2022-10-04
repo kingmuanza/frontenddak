@@ -46,7 +46,6 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Zone</th>
                                 <th>Libellé</th>
                                 <th>Contrat</th>
                                 <th class="text-right">Nbr Vigil Jr.</th>
@@ -57,9 +56,8 @@
                         </thead>
                         <tbody>
                             <ng-container *ngFor="let poste of postes">
-                                <tr *ngIf="poste.nombreVigileJour > getNombreAffectationJour(poste) || poste.nombreVigileNuit > getNombreAffectationNuit(poste)">
+                                <tr>
                                     <td>{{poste.idposte}}</td>
-                                    <td>{{poste.zone.libelle}}</td>
                                     <td>{{poste.libelle}}</td>
                                     <td>{{poste.contrat}}</td>
                                     <td class="text-right">

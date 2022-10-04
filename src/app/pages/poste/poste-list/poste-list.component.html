@@ -47,28 +47,24 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Zone</th>
-                            <th>Quartier</th>
                             <th>Libellé</th>
                             <th>Code</th>
                             <th>Contrat</th>
-                            <th style="text-align: right; ">Nbr Vigil Jr.</th>
-                            <th style="text-align: right; ">Nbr Vigil Nt.</th>
-                            <th>Prime</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let poste of postes " (click)="edit(poste.idposte) ">
-                            <td>{{poste.idposte}}</td>
-                            <td>{{poste.zone?.libelle}}</td>
-                            <td>{{poste.idquartier?.nom}}</td>
+                            <td>
+                                <span [ngClass]="{'important': !poste.bon}">
+                                    {{poste.idposte}}
+                                </span>
+                            </td>
                             <td>{{poste.libelle}}</td>
                             <td>{{poste.code}}</td>
-                            <td>{{poste.contrat}}</td>
-                            <td style="text-align: right; ">{{poste.nombreVigileJour ?poste.nombreVigileJour:0}}</td>
-                            <td style="text-align: right; ">{{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}</td>
                             <td>
-                                {{libellePrime(poste.prime)}}
+                                <b>
+                                    {{poste.idcontrat?.libelle}}
+                                </b>
                             </td>
                         </tr>
                     </tbody>

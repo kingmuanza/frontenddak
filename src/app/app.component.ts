@@ -4,6 +4,7 @@ import { initializeApp } from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { LoadingService } from './services/loading.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +17,13 @@ export class AppComponent {
   userSubscription!: Subscription;
   loading = false;
   loadingSubscription!: Subscription;
+  afficherMenu = true;
 
   constructor(
     private authService: AuthService,
     private loadingService: LoadingService,
     private router: Router,
+    private location: Location,
   ) {
     const firebaseConfig = {
       apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
@@ -35,6 +38,15 @@ export class AppComponent {
     this.getUser();
     this.loadingSubscription = this.loadingService.loadingSubject.subscribe((loading) => {
       this.loading = loading;
+    });
+    this.router.events.subscribe((val) => {
+      const url = location.path();
+      console.log(url);
+      if (location.path().indexOf('connexion') !== -1) {
+        this.afficherMenu = false;
+      } else {
+        this.afficherMenu = true;
+      }
     });
   }
 

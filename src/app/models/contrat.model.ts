@@ -28,4 +28,6 @@ export class Contrat {
 
     idparent: any;
     date = new Date();
+
+    bon = false;
 }
