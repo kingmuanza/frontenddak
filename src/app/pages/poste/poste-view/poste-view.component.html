@@ -237,21 +237,31 @@
             </div>
             <div class="modal-body">
                 <div>
-                    <div *ngFor="let item of postevigiles">
-                        <div *ngIf="!verifierExigenceAgent(item)">
-                            <div>
+                    <div *ngFor="let exigence of postevigiles">
+                        <div *ngIf="!verifierExigenceAgent(exigence)">
+                            <div class="exigence">
                                 <b>
                                     Exigence : 
-                                </b> {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
-
+                                </b> {{exigence.quantite}} {{exigence.typeVigile}} {{exigence.horaire}}
                             </div>
 
-
+                            <div class="row">
+                                <ng-container *ngFor="let v of vigiles">
+                                    <div class="col-lg-4" *ngIf="isVigileVerifieExigence(v, exigence)">
+                                        <div class="shadow-1" [ngClass]="{'selectionnee': vigile && v.idvigile === vigile.idvigile}" (click)="selectionnerVigile(v)">
+                                            <app-vigile [vigile]="v" [cliquable]="false"></app-vigile>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
+                <button *ngIf="vigile" type="button" (click)="affecter(vigile)" class="btn btn-primary" data-bs-dismiss="modal">
+                    Affecter {{vigile.noms}} à ce poste
+                </button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>

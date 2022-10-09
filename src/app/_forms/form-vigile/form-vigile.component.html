@@ -200,7 +200,7 @@
                         <select [(ngModel)]="vigile.horaire" class="form-control">
                             <option value="jour">Jour</option>
                             <option value="nuit">Nuit</option>
-                            <option value="journuit">Jour et nuit</option>
+                            <option *ngIf="vigile.estRemplacant" value="journuit">Jour et nuit</option>
                         </select>
                     </div>
                 </div>

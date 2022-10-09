@@ -33,6 +33,8 @@ export class PosteEditComponent implements OnInit {
 
   contrats = new Array<Contrat>();
 
+  erreurContrat = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -155,6 +157,13 @@ export class PosteEditComponent implements OnInit {
   }
 
   save() {
+
+    if (!this.poste.idcontrat) {
+      this.erreurContrat = true;
+      return
+    } else {
+      this.erreurContrat = false;
+    }
     console.log('poste à enregistrer');
     console.log(this.poste);
     this.poste.libelle = this.poste.code;

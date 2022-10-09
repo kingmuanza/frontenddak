@@ -37,10 +37,10 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            Contrat
+                                            Contrat <app-required></app-required>
                                         </span>
                                     </div>
-                                    <select type="text" [(ngModel)]="poste.idcontrat" class="form-control">
+                                    <select type="text" [(ngModel)]="poste.idcontrat" [ngClass]="{'is-invalid': erreurContrat}" class="form-control">
                                         <option [ngValue]="contrat" *ngFor="let contrat of contrats">
                                             {{contrat.libelle}}
                                         </option>
@@ -50,6 +50,9 @@
                                             Voir le contrat
                                         </button>
                                     </ng-container>
+                                </div>
+                                <div *ngIf="erreurContrat" class="indication">
+                                    Le poste doit être lié à un contrat
                                 </div>
                             </div>
                             <div class="col-lg-12">

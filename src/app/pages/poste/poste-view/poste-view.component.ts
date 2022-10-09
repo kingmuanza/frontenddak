@@ -13,6 +13,7 @@ import { PosteVigile } from 'src/app/models/poste.vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { PointageService } from 'src/app/services/pointage.service';
 import * as bootstrap from 'bootstrap';
+import { Vigile } from 'src/app/models/vigile.model';
 
 @Component({
   selector: 'app-poste-view',
@@ -30,6 +31,9 @@ export class PosteViewComponent implements OnInit {
   zones = new Array<any>();
   quartiers = new Array<any>();
   affectations = new Array<Affectation>();
+  vigiles = new Array<Vigile>();
+
+  vigile: any;
 
   equipementsvigiles = new Array<EquipementVigile>();
   equipements = new Array<Equipement>();
@@ -51,6 +55,8 @@ export class PosteViewComponent implements OnInit {
     private notifierService: NotifierService,
     private pointageService: PointageService,
     private jarvisService: JarvisService<any>,
+    private affectationService: JarvisService<Affectation>,
+    private vigileService: JarvisService<Vigile>,
     private equipementService: JarvisService<Equipement>,
     private equipementVigileService: JarvisService<EquipementVigile>,
     private postevigileService: JarvisService<any>,
@@ -120,6 +126,12 @@ export class PosteViewComponent implements OnInit {
               });
             });
 
+            this.getVigiles().then((vigiles) => {
+              this.vigiles = vigiles.filter((v) => {
+                return true;
+              });
+            });
+
             this.dtTrigger.next('');
 
           });
@@ -181,6 +193,46 @@ export class PosteViewComponent implements OnInit {
     });
   }
 
+  getVigiles(): Promise<Array<Vigile>> {
+    return new Promise((resolve, reject) => {
+      this.vigileService.getAll('vigile').then((vigiles) => {
+        console.log('vigiles');
+        console.log(vigiles);
+        resolve(vigiles);
+      });
+    });
+  }
+
+  isVigileVerifieExigence(vigile: Vigile, exigence: PosteVigile): boolean {
+    let resultat = false;
+    const isNotRemplacant = !vigile.estRemplacant && !vigile.estRemplacantConge;
+    const isBonneHoraire = !(!vigile.horaire) && vigile.horaire === exigence.horaire;
+    const isAgent = !(!vigile.fonction) && vigile.fonction === exigence.typeVigile;
+    
+    resultat = isNotRemplacant && isBonneHoraire && isAgent;
+    return resultat;
+  }
+
+  selectionnerVigile(vigile: Vigile) {
+    console.log(vigile.idvigile);
+    console.log(this.vigile?.idvigile);
+    if (this.vigile) {
+      this.vigile = null;
+    } else {
+      this.vigile = JSON.parse(JSON.stringify(vigile));
+    }
+  }
+
+  affecter(vigile: Vigile) {
+    const affectation = new Affectation();
+    affectation.dateAffectation = new Date();
+    affectation.horaire = vigile.horaire;
+    affectation.idposte = this.poste;
+    affectation.idvigile = vigile;
+    this.affectationService.ajouter('affectation', affectation).then(() => {
+      window.location.reload();
+    });
+  }
   save() {
     console.log('poste à enregistrer');
     console.log(this.poste);

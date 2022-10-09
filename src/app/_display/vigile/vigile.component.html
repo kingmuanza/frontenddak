@@ -9,11 +9,17 @@
     <div>
         <small>
             {{libelleFonction(vigile.fonction)}}
+            <ng-container *ngIf="!affectation">
+                Horaire : {{vigile.horaire | uppercase}}
+
+            </ng-container>
+            
         </small>
     </div>
+    <div *ngIf="!affectation" style="color: red; margin-top: 5px;">Aucune affectation actuellement</div>
     <div *ngIf="affectation">
         Poste :
-        <a [routerLink]=" '/poste/edit/' + affectation.idposte?.idposte ">
+        <a class="cliquable" (click)="voirPoste()">
             {{affectation?.idposte?.libelle}}
         </a>, Horaire : {{affectation.horaire}}
     </div>

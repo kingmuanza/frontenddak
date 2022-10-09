@@ -12,6 +12,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 export class VigileComponent implements OnInit {
 
   @Input() vigile = new Vigile();
+  @Input() cliquable = true;
   affectation: any;
   affectations = new Array<Affectation>();
 
@@ -58,7 +59,15 @@ export class VigileComponent implements OnInit {
   }
 
   goTo() {
-    this.router.navigate(['vigile', 'view', this.vigile.idvigile]);
+    if (this.cliquable) {
+      this.router.navigate(['vigile', 'view', this.vigile.idvigile]);
+    }
+  }
+
+  voirPoste() {
+    if (this.cliquable) {
+      this.router.navigate(['poste', 'edit', this.affectation.idposte?.idposte]);
+    }
   }
 
 }
