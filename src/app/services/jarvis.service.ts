@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { LoadingService } from './loading.service';
 
@@ -9,6 +9,7 @@ import { LoadingService } from './loading.service';
 })
 export class JarvisService<T> {
   URL = 'http://localhost:8080/dakBack/webresources/';
+  urlSubject = new Subject<string>();
 
   constructor(
     private http: HttpClient,
@@ -27,6 +28,7 @@ export class JarvisService<T> {
   setServeur(urlServeur: string) {
     this.URL = urlServeur;
     sessionStorage.setItem('serveur-dak', urlServeur);
+    this.urlSubject.next(urlServeur);
   }
 
   showLoader() {
@@ -142,5 +144,4 @@ export class JarvisService<T> {
 
     return "";
   }
-
 }

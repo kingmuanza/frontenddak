@@ -32,6 +32,7 @@ export class PosteViewComponent implements OnInit {
   quartiers = new Array<any>();
   affectations = new Array<Affectation>();
   vigiles = new Array<Vigile>();
+  remplacants = new Array<Vigile>();
 
   vigile: any;
 
@@ -132,6 +133,12 @@ export class PosteViewComponent implements OnInit {
               });
             });
 
+            this.getVigiles().then((vigiles) => {
+              this.remplacants = vigiles.filter((v) => {
+                return v.estRemplacant;
+              });
+            });
+
             this.dtTrigger.next('');
 
           });
@@ -208,7 +215,7 @@ export class PosteViewComponent implements OnInit {
     const isNotRemplacant = !vigile.estRemplacant && !vigile.estRemplacantConge;
     const isBonneHoraire = !(!vigile.horaire) && vigile.horaire === exigence.horaire;
     const isAgent = !(!vigile.fonction) && vigile.fonction === exigence.typeVigile;
-    
+
     resultat = isNotRemplacant && isBonneHoraire && isAgent;
     return resultat;
   }
@@ -223,16 +230,43 @@ export class PosteViewComponent implements OnInit {
     }
   }
 
-  affecter(vigile: Vigile) {
-    const affectation = new Affectation();
-    affectation.dateAffectation = new Date();
-    affectation.horaire = vigile.horaire;
-    affectation.idposte = this.poste;
-    affectation.idvigile = vigile;
-    this.affectationService.ajouter('affectation', affectation).then(() => {
-      window.location.reload();
-    });
+  affecter(vigile: Vigile, i: number) {
+    let remplacantSelect: any;
+    remplacantSelect = document.getElementsByName("remplacant" + i)[0];
+    const idremplacant = remplacantSelect.value;
+    console.log('remplacant');
+    console.log(idremplacant);
+
+    if (idremplacant === '0') {
+      console.log('Aucun remplacant');
+      const affectation = new Affectation();
+      affectation.dateAffectation = new Date();
+      affectation.horaire = vigile.horaire;
+      affectation.idposte = this.poste;
+      affectation.idvigile = vigile;
+      this.affectationService.ajouter('affectation', affectation).then(() => {
+        window.location.reload();
+      });
+    } else {
+
+      this.vigileService.get('vigile', Number(idremplacant)).then((remplacant) => {
+        console.log('remplacant ' + remplacant.noms);
+        const affectation = new Affectation();
+        affectation.dateAffectation = new Date();
+        affectation.horaire = vigile.horaire;
+        affectation.idposte = this.poste;
+        affectation.idvigile = vigile;
+        affectation.remplacant = remplacant;
+
+        this.affectationService.ajouter('affectation', affectation).then(() => {
+          window.location.reload();
+        });
+
+      });
+    }
+
   }
+
   save() {
     console.log('poste à enregistrer');
     console.log(this.poste);
@@ -378,4 +412,11 @@ export class PosteViewComponent implements OnInit {
     }
   }
 
+  score(vigile: Vigile, poste: Poste) {
+    return 0;
+  }
+
+  getSanctions(vigile: Vigile) {
+    return 0;
+  }
 }

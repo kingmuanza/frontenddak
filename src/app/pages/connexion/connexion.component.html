@@ -7,32 +7,34 @@
     </div>
     <div class="connexion-contenu">
         <div class="connexion-champ">
-            <app-test-connexion #serveur></app-test-connexion>
+            <app-test-connexion (onServeurChange)="onServeurChange()" (onConnexionEtablie)="autoriser()" #serveur></app-test-connexion>
         </div>
-        <div class="connexion-champ">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        Login
-                    </span>
+        <div *ngIf="autorisation">
+            <div class="connexion-champ">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            Login
+                        </span>
+                    </div>
+                    <input [(ngModel)]="login" type="text" class="form-control">
                 </div>
-                <input [(ngModel)]="login" type="text" class="form-control">
             </div>
-        </div>
-        <div class="connexion-champ">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        Mot de passe
-                    </span>
+            <div class="connexion-champ">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            Mot de passe
+                        </span>
+                    </div>
+                    <input [(ngModel)]="passe" type="password" class="form-control">
                 </div>
-                <input [(ngModel)]="passe" type="password" class="form-control">
             </div>
-        </div>
-        <div class="connexion-champ">
-            <button class="btn nouveau" (click)="connexion()" style="width: 100%">
-                Connexion
-            </button>
+            <div class="connexion-champ">
+                <button class="btn nouveau" (click)="connexion()" style="width: 100%">
+                    Connexion
+                </button>
+            </div>
         </div>
     </div>
 </div>

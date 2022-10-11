@@ -10,6 +10,10 @@ import { LoadingService } from 'src/app/services/loading.service';
 })
 export class TestConnexionComponent implements OnInit {
 
+  @Output() onConnexionEtablie = new EventEmitter<string>();
+  @Output() onConnexionErreur = new EventEmitter<string>();
+  @Output() onServeurChange = new EventEmitter<string>();
+
   urlServeur = 'http://localhost:8080/dakBack';
   jsonFileConfigUrl = '/assets/json/config.json';
 
@@ -55,9 +59,11 @@ export class TestConnexionComponent implements OnInit {
     this.get(this.urlServeur).then((data) => {
       this.hideLoader();
       this.notifierService.notify('success', "Connexion établie");
+      this.onConnexionEtablie.emit(this.urlServeur);
     }).catch((e) => {
       this.hideLoader();
       this.notifierService.notify('error', "Impossible d'établir la connexion avec le serveur : " + this.urlServeur);
+      this.onConnexionErreur.emit(this.urlServeur);
     });
   }
 
@@ -85,6 +91,11 @@ export class TestConnexionComponent implements OnInit {
         resolve(response);
       });
     });
+  }
+
+  onURLServeurChange() {
+    console.log('Le serveur a changé');
+    this.onServeurChange.emit('');
   }
 
 }

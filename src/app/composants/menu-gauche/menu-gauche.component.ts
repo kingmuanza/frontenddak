@@ -126,7 +126,6 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
       this.vigile = true;
       this.vigileBadge = true;
       this.conge = true;
-      this.contrat = true;
       this.poste = true;
       this.repos = true;
     

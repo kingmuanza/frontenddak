@@ -26,6 +26,8 @@ export class ConnexionComponent implements OnInit {
   login = "admin";
   passe = "admin";
 
+  autorisation = false;
+
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -50,6 +52,14 @@ export class ConnexionComponent implements OnInit {
 
   setServeur() {
     this.jarvisService.setServeur(this.urlServeur);
+  }
+
+  autoriser() {
+    this.autorisation = true;
+  }
+
+  onServeurChange() {
+    this.autorisation = false;
   }
 
 }

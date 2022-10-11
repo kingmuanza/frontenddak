@@ -2,9 +2,6 @@
     <div class="page-entete">
         <div *ngIf="poste.idposte!=0" class="page-entete-titre">
             Poste : {{poste.libelle}}
-            <ng-container *ngIf="poste.bon">
-                *
-            </ng-container>
         </div>
         <div *ngIf="poste.idcontrat">
             Contrat : {{poste.idcontrat.libelle}}, <span *ngIf="poste.organisme">
@@ -53,21 +50,22 @@
                 </div>
                 <div class="card shadow-1">
                     <div>
+                        <div style="float: right;">
+                            <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
+                                Ajouter une exigence
+                            </button>
+                            <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
+                                Annuler
+                            </button>
+                        </div>
                         <div class="petit-titre">
                             Exigences du contrat :
                             <b>
                                 Personnel
                             </b>
+
                         </div>
                         <div>
-                            <div>
-                                <button *ngIf="!showFormulairePersonnel" class="btn nouveau" (click)="showFormulairePersonnel = true">
-                                    Ajouter une exigence
-                                </button>
-                                <button *ngIf="showFormulairePersonnel" class="btn nouveau" (click)="showFormulairePersonnel = false">
-                                    Annuler
-                                </button>
-                            </div>
                             <div *ngIf="showFormulairePersonnel">
                                 <div>
                                     Nouvelle exigence du contrat
@@ -113,7 +111,7 @@
                             </div>
                             <div>
                                 <ul>
-                                    <li [ngClass]="{'erreur': !verifierExigenceAgent(item)}" *ngFor="let item of postevigiles">
+                                    <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigenceAgent(item)}" *ngFor="let item of postevigiles">
                                         <span>
                                             {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
                                         </span>
@@ -129,21 +127,24 @@
                 <div class="card shadow-1">
                     <div>
                         <div class="petit-titre">
+                            <div style="float: right;">
+                                <button *ngIf="!showFormulaireEquipement" class="btn btn-link" (click)="showFormulaireEquipement = true">
+                                    Ajouter une exigence
+                                </button>
+                                <button *ngIf="showFormulaireEquipement" class="btn btn-link" (click)="showFormulaireEquipement = false">
+                                    Annuler
+                                </button>
+                            </div>
                             Exigences du contrat :
                             <b>
                                 Equipements
                             </b>
                         </div>
                         <div>
-                            <div>
-                                <button *ngIf="!showFormulaireEquipement" class="btn nouveau" (click)="showFormulaireEquipement = true">
-                                    Ajouter une exigence
-                                </button>
-                                <button *ngIf="showFormulaireEquipement" class="btn nouveau" (click)="showFormulaireEquipement = false">
-                                    Annuler
-                                </button>
-                            </div>
                             <div *ngIf="showFormulaireEquipement">
+                                <div>
+                                    Nouvelle exigence du contrat
+                                </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -170,7 +171,7 @@
                             </div>
                             <div>
                                 <ul>
-                                    <li [ngClass]="{'erreur': !verifierExigenceMateriel(item)}" *ngFor="let item of posteequipements">
+                                    <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigenceMateriel(item)}" *ngFor="let item of posteequipements">
                                         <span>
                                             {{item.quantite}} {{item.idequipement.libelle}}
                                         </span>
@@ -188,17 +189,31 @@
                 <div class="card shadow-1">
                     <div style="margin-bottom: 10px;">
                         Liste des vigiles titulaires en poste
-                        <button class="btn btn-link" (click)="openModal()">
+                        <button *ngIf="!poste.bon" class="btn btn-link" style="float: right;" (click)="openModal()">
                             Ajouter un vigile
                         </button>
                     </div>
                     <div class="row">
                         <div class="col-lg-6" *ngFor="let affectation of affectations">
 
-                            <div style="border: 1px solid #aaa;">
+                            <div style="border: 1px solid #aaa; margin-bottom: 20px;">
                                 <app-vigile [vigile]="affectation.idvigile"></app-vigile>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card shadow-1">
+                    <div style="margin-bottom: 10px;">
+                        Liste des remplacants
+                    </div>
+                    <div class="row">
+                        <ng-container *ngFor="let affectation of affectations">
+                            <div class="col-lg-6" *ngIf="affectation.remplacant">
+                                <div style="border: 1px solid #aaa; margin-bottom: 20px;">
+                                    <app-vigile [vigile]="affectation.remplacant"></app-vigile>
+                                </div>
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
                 <div class="card shadow-1">
@@ -241,27 +256,61 @@
                         <div *ngIf="!verifierExigenceAgent(exigence)">
                             <div class="exigence">
                                 <b>
-                                    Exigence : 
+                                    Exigence :
                                 </b> {{exigence.quantite}} {{exigence.typeVigile}} {{exigence.horaire}}
                             </div>
 
-                            <div class="row">
-                                <ng-container *ngFor="let v of vigiles">
-                                    <div class="col-lg-4" *ngIf="isVigileVerifieExigence(v, exigence)">
-                                        <div class="shadow-1" [ngClass]="{'selectionnee': vigile && v.idvigile === vigile.idvigile}" (click)="selectionnerVigile(v)">
-                                            <app-vigile [vigile]="v" [cliquable]="false"></app-vigile>
-                                        </div>
-                                    </div>
-                                </ng-container>
+                            <div>
+                                <table class="table table-bordered table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">#</th>
+                                            <th style="width: 30%;">Vigile</th>
+                                            <th style="width: 30%;">Rempl.</th>
+                                            <th style="text-align: center;">Score</th>
+                                            <th style="text-align: center;">Sanctions</th>
+                                            <th style="text-align: center;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let v of vigiles; let i=index">
+                                            <tr *ngIf="isVigileVerifieExigence(v, exigence)">
+                                                <td style="text-align: center;"> {{i+1}} </td>
+                                                <td>
+                                                    {{v.noms}}
+                                                </td>
+                                                <td>
+                                                    <div class="input-group input-group-sm" style="margin-top: 0;">
+                                                        <select [name]="'remplacant'+i" type="text" class="form-control">
+                                                            <option value="0">Aucun remplacant</option>
+                                                            <ng-container *ngFor="let r of remplacants">
+                                                                <option [value]="r.idvigile"
+                                                                    *ngIf="r.jourRepos !== v.jourRepos && r.horaire === v.horaire">
+                                                                    {{r.noms}}
+                                                                </option>
+                                                            </ng-container>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td style="text-align: right;">
+                                                    {{score(v, poste)}}
+                                                </td>
+                                                <td style="text-align: right;">
+                                                    {{getSanctions(v)}}
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <button (click)="affecter(v, i)" type="button" class="btn btn-primary btn-sm">Appliquer</button>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button *ngIf="vigile" type="button" (click)="affecter(vigile)" class="btn btn-primary" data-bs-dismiss="modal">
-                    Affecter {{vigile.noms}} à ce poste
-                </button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>

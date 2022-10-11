@@ -9,6 +9,7 @@ export class Contrat {
     dateSignature = new Date();
     dateDebut = new Date();
     dateFin: Date | undefined;
+    montant = 0;
     
     nbPostes = 0;
     nbVigileJour = 0;

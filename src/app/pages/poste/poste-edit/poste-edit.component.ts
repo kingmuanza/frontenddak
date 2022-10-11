@@ -157,7 +157,6 @@ export class PosteEditComponent implements OnInit {
   }
 
   save() {
-
     if (!this.poste.idcontrat) {
       this.erreurContrat = true;
       return
@@ -166,7 +165,6 @@ export class PosteEditComponent implements OnInit {
     }
     console.log('poste à enregistrer');
     console.log(this.poste);
-    this.poste.libelle = this.poste.code;
     if (this.poste.debutContrat)
       this.poste.debutContrat = new Date(this.poste.debutContrat);
 

@@ -33,7 +33,11 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let contrat of contrats " (click)="edit(contrat.idcontrat) ">
-                            <td>{{contrat.idcontrat}}</td>
+                            <td>
+                                <span [ngClass]="{'important': !contrat.bon}">
+                                    {{contrat.idcontrat}}
+                                </span>
+                            </td>
                             <td>{{contrat.libelle}}</td>
                             <td>{{contrat.dateSignature | date: 'yyyy-MM-dd'}}</td>
                             <td>{{contrat.dateDebut | date: 'yyyy-MM-dd'}}</td>

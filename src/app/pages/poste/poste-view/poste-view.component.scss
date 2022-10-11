@@ -61,3 +61,21 @@ ul li.erreur {
     border: 2px solid green;
     margin-bottom: 20px;
 }
+
+.element-supprimable {
+    .supprimer {
+        display: none;
+    }
+    &:hover {
+        .supprimer {
+            display: inline;
+        }
+    }
+}
+
+.vigile-proposition {
+    cursor: pointer;
+    &:hover {
+        opacity: 0.5;
+    }
+}

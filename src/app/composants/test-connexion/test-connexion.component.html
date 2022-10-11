@@ -4,7 +4,7 @@
             Adresse du serveur
         </span>
     </div>
-    <select [disabled]="loaderVisible" type="date" name="date" class="form-control" [(ngModel)]="urlServeur">
+    <select (ngModelChange)="onURLServeurChange()" [disabled]="loaderVisible" type="date" name="date" class="form-control" [(ngModel)]="urlServeur">
         <option *ngFor="let url of urls" [value]="url">{{url}}</option>
     </select>
     <button *ngIf="loaderVisible" class="btn" type="button" disabled>

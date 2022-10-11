@@ -14,12 +14,17 @@ export class MenuHautComponent implements OnInit {
   @Input() user: any;
   userSubscription!: Subscription;
   serveur = "";
+  serveurSubscription: any;
 
   constructor(
     private authService: AuthService,
     private jarvisService: JarvisService<any>,
     private router: Router,
-  ) { }
+  ) {
+    this.serveurSubscription = this.jarvisService.urlSubject.subscribe((url) => {
+      this.serveur = this.formatUrl(url);
+    });
+  }
 
   ngOnInit(): void {
     this.getUser();

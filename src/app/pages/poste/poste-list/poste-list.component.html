@@ -62,9 +62,12 @@
                             <td>{{poste.libelle}}</td>
                             <td>{{poste.code}}</td>
                             <td>
-                                <b>
+                                <b *ngIf="poste.idcontrat">
                                     {{poste.idcontrat?.libelle}}
                                 </b>
+                                <span *ngIf="!poste.idcontrat" style="color: red;">
+                                    Aucun contrat
+                                </span>
                             </td>
                         </tr>
                     </tbody>
