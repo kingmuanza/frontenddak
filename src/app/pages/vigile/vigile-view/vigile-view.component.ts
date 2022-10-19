@@ -30,6 +30,7 @@ export class VigileViewComponent implements OnInit {
   dtInstance!: Promise<DataTables.Api>;
 
   affectations = new Array<Affectation>();
+  affectationsActuelles = new Array<Affectation>();
   quartiers = new Array<Quartier>();
 
   vigile = new Vigile();
@@ -121,8 +122,11 @@ export class VigileViewComponent implements OnInit {
         this.sanctions = sanctions;
       });
       this.getAffectionOfVigile(vigile).then(() => {
-        this.affectation = this.getAffectationActuelle();
-        this.dtTrigger.next('');
+        if (vigile.estRemplacant) {
+          this.affectationsActuelles = this.getAffectationActuelles();
+        } else {
+          this.affectation = this.getAffectationActuelle();
+        }
       });
       this.initInputsSelect(villes, zones, nationalites);
       this.getVigiles().then((vigiles) => {
@@ -178,8 +182,14 @@ export class VigileViewComponent implements OnInit {
         console.log('data');
         console.log(data);
         data.forEach((affectation) => {
-          if (affectation.idvigile.idvigile === vigile.idvigile) {
-            this.affectations.push(affectation);
+          if (vigile.estRemplacant) {
+            if (affectation.remplacant && affectation.remplacant.idvigile === vigile.idvigile) {
+              this.affectations.push(affectation);
+            }
+          } else {
+            if (affectation.idvigile.idvigile === vigile.idvigile) {
+              this.affectations.push(affectation);
+            }
           }
         });
         resolve();
@@ -196,6 +206,15 @@ export class VigileViewComponent implements OnInit {
       }
     });
     return affectation;
+  }
+
+  getAffectationActuelles() {
+    const affectations = this.affectations.filter((aff) => {
+      return !aff.arret
+    });
+    return affectations.sort((a, b) => {
+      return a.idvigile.jourRepos - b.idvigile.jourRepos > 0 ? 1 : -1;
+    });;
   }
 
 

@@ -1,0 +1,71 @@
+<div class="card">
+    <div class="card-body">
+
+        <div style="margin-bottom: 20px;">
+            {{site.nom}}
+        </div>
+        <div>
+            <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
+                Ajouter une exigence
+            </button>
+            <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
+                Annuler
+            </button>
+        </div>
+        <div>
+            <div *ngIf="showFormulairePersonnel">
+                <div>
+                    Nouvelle exigence du contrat
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            Fonction
+                        </span>
+                    </div>
+                    <select [(ngModel)]="exigence.typeVigile" class="form-control">
+                        <option value="AGENT">Agent de sécurité</option>
+                        <option value="ESCORTEUR">Escorteur</option>
+                        <option value="CONTROLEUR">Contrôleur</option>
+                        <option value="CHAUFFEUR">Chauffeur</option>
+                        <option value="MAITRECHIEN">Maitre Chien</option>
+                        <option value="ENTRETIEN">Agent d'entretien</option>
+                        <option value="SUPERVISEUR">Superviseur</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            Horaire
+                        </span>
+                    </div>
+                    <select [(ngModel)]="exigence.horaire" class="form-control">
+                        <option value="jour">Jour</option>
+                        <option value="nuit">Nuit</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            Nombre
+                        </span>
+                    </div>
+                    <input type="number" [(ngModel)]="exigence.quantite" class="form-control">
+                </div>
+                <div class="input-group" style="margin-top: 20px; margin-bottom: 20px">
+                    <button (click)="ajouterExigencePersonnel()" class="btn primaire">Enregistrer</button>
+                </div>
+            </div>
+            <ul>
+                <li *ngFor="let item of exigences">
+                    <span>
+                        {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
+                    </span>
+                    <span class="supprimer" (click)="supprimerPosteVigile(item)" style="color: red;">
+                        Supprimer
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

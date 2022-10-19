@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="">
-            <a [routerLink]="'/vigile/view/' + vigile.idvigile" class="btn btn-link" style="padding: 0; margin-right: 20px;">
+            <a *ngIf="vigile.idvigile!=0" [routerLink]="'/vigile/view/' + vigile.idvigile" class="btn btn-link" style="padding: 0; margin-right: 20px;">
                 Voir
             </a>
             <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">

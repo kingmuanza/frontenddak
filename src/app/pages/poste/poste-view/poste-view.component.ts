@@ -14,6 +14,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 import { PointageService } from 'src/app/services/pointage.service';
 import * as bootstrap from 'bootstrap';
 import { Vigile } from 'src/app/models/vigile.model';
+import { contratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
 
 @Component({
   selector: 'app-poste-view',
@@ -50,6 +51,8 @@ export class PosteViewComponent implements OnInit {
 
   myModal?: bootstrap.Modal;
 
+  exigences = new Array<contratSiteVigile>();
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -61,6 +64,7 @@ export class PosteViewComponent implements OnInit {
     private equipementService: JarvisService<Equipement>,
     private equipementVigileService: JarvisService<EquipementVigile>,
     private postevigileService: JarvisService<any>,
+    private contratSiteVigileService: JarvisService<contratSiteVigile>,
     private posteEquipementService: JarvisService<PosteEquipement>,
   ) {
 
@@ -121,6 +125,8 @@ export class PosteViewComponent implements OnInit {
               this.updatePoste();
             });
 
+            this.getExigences();
+
             this.getDemandesEquipements().then((posteequipements) => {
               this.posteequipements = posteequipements.filter((pv) => {
                 return pv.idposte.idposte === this.poste.idposte;
@@ -145,6 +151,16 @@ export class PosteViewComponent implements OnInit {
 
         });
       }
+    });
+  }
+
+  getExigences(): void {
+    this.contratSiteVigileService.getAll('contratsitevigile').then((data) => {
+      console.log('contratsitevigile');
+      console.log(data);
+      this.exigences = data.filter((d) => {
+        return d.idcontratsite.idcontratSite === this.poste.idcontratsite?.idcontratSite
+      });
     });
   }
 
@@ -333,6 +349,22 @@ export class PosteViewComponent implements OnInit {
       this.poste.latitude = data.latitude;
       this.poste.longitude = data.longitude;
     });
+  }
+
+  verifierExigence(exigence: contratSiteVigile) {
+    let resultat = false;
+    let nombre = 0;
+    if (exigence) {
+      this.affectations.forEach((affectation) => {
+        if (affectation.idvigile.fonction === exigence.typeVigile) {
+          if (affectation.horaire === exigence.horaire) {
+            nombre++;
+          }
+        }
+      });
+      return nombre >= exigence.quantite;
+    }
+    return true;
   }
 
   verifierExigenceAgent(postevigile: PosteVigile) {

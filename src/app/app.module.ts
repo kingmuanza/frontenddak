@@ -76,6 +76,7 @@ import { DisplayEquipementComponent } from './_display/display-equipement/displa
 import { ContratListComponent } from './pages/contrat/contrat-list/contrat-list.component';
 import { ContratEditComponent } from './pages/contrat/contrat-edit/contrat-edit.component';
 import { ContratViewComponent } from './pages/contrat/contrat-view/contrat-view.component';
+import { DisplaySiteComponent } from './_display/display-site/display-site.component';
 
 @NgModule({
   declarations: [
@@ -147,6 +148,7 @@ import { ContratViewComponent } from './pages/contrat/contrat-view/contrat-view.
     ContratListComponent,
     ContratEditComponent,
     ContratViewComponent,
+    DisplaySiteComponent,
   ],
   imports: [
     BrowserModule,

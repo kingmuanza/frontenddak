@@ -1,10 +1,10 @@
 <div class="page">
     <div class="page-entete">
         <div *ngIf="affectation.idaffectation==0" class="page-entete-titre">
-            Ajouter une nouveau affectation
+            Ajouter une nouvelle affectation
         </div>
         <div *ngIf="affectation.idaffectation!=0" class="page-entete-titre">
-            Modifier le affectation
+            Modifier l'affectation
         </div>
         <div class="">
             <a routerLink="/affectation" class="btn btn-link" style="padding: 0; margin: 0;">
@@ -17,7 +17,7 @@
 
             <div *ngIf="etape === 1" class="page-contenu-corps">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -26,8 +26,6 @@
                             </div>
                             <input [(ngModel)]="affectation.dateAffectation" type="date" class="form-control">
                         </div>
-                    </div>
-                    <div class="col-lg-5">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -40,8 +38,6 @@
                                 </option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-lg-3">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -53,55 +49,78 @@
                                 <option value="nuit">Nuit</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Vigile
-                                </span>
-                            </div>
-                            <select type="text" [(ngModel)]="affectation.idvigile" class="form-control">
-                                <option [ngValue]="vigile" *ngFor="let vigile of vigiles">
-                                    {{vigile.noms}}
-                                </option>
-                            </select>
-                        </div>
-                        <small *ngIf="affectation.idvigile">
-                            Jour de repos : {{affectation.idvigile ? jourSemaine(affectation.idvigile.jourRepos) :
-                            "Aucun jour défini"}}
-                        </small>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Remplacant
-                                </span>
-                            </div>
-                            <select type="text" [(ngModel)]="affectation.remplacant" class="form-control">
-                                <option *ngIf="!affectation.idvigile">Veuillez choisir premièrement un vigile</option>
-                                <ng-container *ngFor="let vigile of vigiles">
-                                    <option [ngValue]="vigile"
-                                        *ngIf="affectation.idvigile && affectation.idvigile.idvigile != vigile.idvigile && vigile.estRemplacant">
+                        <div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Vigile
+                                    </span>
+                                </div>
+                                <select type="text" [(ngModel)]="affectation.idvigile" class="form-control">
+                                    <option [ngValue]="vigile" *ngFor="let vigile of vigiles">
                                         {{vigile.noms}}
                                     </option>
-                                </ng-container>
-                            </select>
+                                </select>
+                            </div>
+                            <small *ngIf="affectation.idvigile">
+                                Jour de repos : {{affectation.idvigile ? jourSemaine(affectation.idvigile.jourRepos) :
+                                "Aucun jour défini"}}
+                            </small>
                         </div>
-                        <small *ngIf="affectation.idvigile">
-                            Jour de repos : {{affectation.remplacant ? jourSemaine(affectation.remplacant?.jourRepos) :
-                            "Aucun jour défini"}},
-                            Statut : {{affectation.remplacant ? affectation.remplacant.statut ?
-                            affectation.remplacant?.statut :
-                            "Aucun statut" :
-                            "..."}}
-                        </small>
+                        <div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Remplacant
+                                    </span>
+                                </div>
+                                <select type="text" [(ngModel)]="affectation.remplacant" class="form-control">
+                                    <option *ngIf="!affectation.idvigile">Veuillez choisir premièrement un vigile</option>
+                                    <ng-container *ngFor="let vigile of vigiles">
+                                        <option [ngValue]="vigile"
+                                            *ngIf="affectation.idvigile && affectation.idvigile.idvigile != vigile.idvigile && vigile.estRemplacant">
+                                            {{vigile.noms}}
+                                        </option>
+                                    </ng-container>
+                                </select>
+                                <button (click)="retirerRemplacant()" class="btn btn-outline-secondary">
+                                    Retirer
+                                </button>
+                            </div>
+                            <small *ngIf="affectation.idvigile">
+                                Jour de repos : {{affectation.remplacant ? jourSemaine(affectation.remplacant?.jourRepos) :
+                                "Aucun jour défini"}},
+                                Statut : {{affectation.remplacant ? affectation.remplacant.statut ?
+                                affectation.remplacant?.statut :
+                                "Aucun statut" :
+                                "..."}}
+                            </small>
+                        </div>
+                        <div class="input-group">
+                            <button [disabled]="processing" (click)="terminerEtape1()" class="btn nouveau">Enregistrer</button> &nbsp;
+                            <button *ngIf="affectation.idaffectation != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                        </div>
                     </div>
-                </div>
-                <div class="input-group">
-                    <button [disabled]="processing" (click)="terminerEtape1()" class="btn nouveau">Enregistrer</button> &nbsp;
-                    <button *ngIf="affectation.idaffectation != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                    <div class="col-lg-6">
+                        <div *ngIf="affectation.idposte">
+                            <div>
+                                Poste concerné
+                            </div>
+                            <app-display-poste [poste]="affectation.idposte"></app-display-poste>
+                        </div>
+                        <div *ngIf="affectation.idvigile">
+                            <div>
+                                Vigile affecté
+                            </div>
+                            <app-vigile [vigile]="affectation.idvigile"></app-vigile>
+                        </div>
+                        <div *ngIf="affectation.remplacant">
+                            <div>
+                                Remplacant
+                            </div>
+                            <app-vigile [vigile]="affectation.remplacant" [long]="true"></app-vigile>
+                        </div>
+                    </div>
                 </div>
             </div>
 

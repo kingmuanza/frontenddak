@@ -11,6 +11,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { Contrat } from 'src/app/models/contrat.model';
+import { ContratSite } from 'src/app/models/contrat.site.model';
 
 @Component({
   selector: 'app-poste-edit',
@@ -32,8 +33,12 @@ export class PosteEditComponent implements OnInit {
   affVigilesNuit = 0;
 
   contrats = new Array<Contrat>();
+  contratsites = new Array<ContratSite>();
 
   erreurContrat = false;
+  isPosteContractuel = true;
+
+  contrat = new Contrat();
 
   constructor(
     private router: Router,
@@ -41,6 +46,8 @@ export class PosteEditComponent implements OnInit {
     private notifierService: NotifierService,
     private pointageService: PointageService,
     private jarvisService: JarvisService<any>,
+    private posteService: JarvisService<Poste>,
+    private siteService: JarvisService<ContratSite>,
     private contratService: JarvisService<Contrat>
   ) {
 
@@ -65,17 +72,17 @@ export class PosteEditComponent implements OnInit {
             const id = paramMap.get('id');
             if (id) {
 
-              this.jarvisService.get('poste', Number(id)).then((poste) => {
+              this.posteService.get('poste', Number(id)).then((poste) => {
                 console.log('le poste recupéré');
                 console.log(poste);
                 this.poste = poste;
-
-                this.contrats.forEach((contrat)  => {
+/* 
+                this.contrats.forEach((contrat) => {
                   if (this.poste.idcontrat && this.poste.idcontrat.idcontrat === contrat.idcontrat) {
                     this.poste.idcontrat = contrat;
                   }
                 });
-
+ */
                 this.pointageService.getRemotePoste(id).then((posteRemote) => {
                   console.log('posteRemote');
                   console.log(posteRemote);
@@ -89,9 +96,6 @@ export class PosteEditComponent implements OnInit {
                     }
                   }
                 });
-
-                this.poste.debutContrat = poste.debutContrat?.split('T')[0];
-                this.poste.finContrat = poste.finContrat?.split('T')[0];
 
                 this.jarvisService.getAll('affectation').then((data) => {
                   console.log('data');
@@ -157,12 +161,6 @@ export class PosteEditComponent implements OnInit {
   }
 
   save() {
-    if (!this.poste.idcontrat) {
-      this.erreurContrat = true;
-      return
-    } else {
-      this.erreurContrat = false;
-    }
     console.log('poste à enregistrer');
     console.log(this.poste);
     if (this.poste.debutContrat)
@@ -174,12 +172,18 @@ export class PosteEditComponent implements OnInit {
     if (this.poste.idposte == 0) {
       if (this.poste.code && this.poste.libelle) {
         this.processing = true;
-        this.jarvisService.ajouter('poste', this.poste).then((data) => {
+        this.posteService.ajouter('poste', this.poste).then((data) => {
           console.log('data');
           console.log(data);
           this.processing = false;
           this.notifierService.notify('success', "Ajout effectué avec succès");
           this.router.navigate(['poste']);
+          this.posteService.getAll('contrat').then((postes) => {
+            const c = postes.sort((a, b) => {
+              return a.idposte - b.idposte > 0 ? -1 : 1;
+            })[0];
+            this.router.navigate(['poste', 'view', c.idposte]);
+          });
         }).catch((e) => {
           this.processing = false;
         });
@@ -193,7 +197,7 @@ export class PosteEditComponent implements OnInit {
         console.log(data);
         this.processing = false;
         this.notifierService.notify('success', "Modification effectuée avec succès");
-        this.router.navigate(['poste']);
+        this.router.navigate(['poste', 'view', this.poste.idposte]);
       }).catch((e) => {
         this.processing = false;
       });
@@ -254,5 +258,33 @@ export class PosteEditComponent implements OnInit {
       this.poste.latitude = data.latitude;
       this.poste.longitude = data.longitude;
     });
+  }
+
+  checkContrat(event: any) {
+    console.log('event');
+    console.log(event);
+  }
+
+  getSitesOfContrat(contrat?: Contrat) {
+    setTimeout(() => {
+      console.log('getSitesOfContrat');
+      console.log(contrat?.libelle);
+      if (contrat) {
+        this.siteService.getAllSilent('contratsite').then((contratsites) => {
+          console.log('contratsites');
+          this.contratsites = contratsites.filter((contratsite) => {
+            return contratsite.idcontrat.idcontrat === contrat.idcontrat;
+          });
+          console.log(this.contratsites);
+        });
+      }
+    }, 500);
+  }
+  
+  sinspirerDuSite(site: ContratSite) {
+    console.log('site');
+    console.log(site);
+    this.poste.libelle = site.nom;
+    this.poste.description = site.description;
   }
 }

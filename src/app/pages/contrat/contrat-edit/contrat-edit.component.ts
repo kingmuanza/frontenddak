@@ -44,7 +44,7 @@ export class ContratEditComponent implements OnInit {
           this.nbVigileNuit = contrat.nbVigileNuit + 0;
           this.nbVigileJour = contrat.nbVigileJour + 0;
           this.nbPostes = contrat.nbPostes + 0;
-          this.description = contrat.description + ''; 
+          this.description = contrat.description + '';
 
           this.contratService.getAll('contrat').then((data) => {
             console.log('data');
@@ -96,7 +96,7 @@ export class ContratEditComponent implements OnInit {
     if (this.contrat.idcontrat == 0) {
       if (this.contrat.libelle) {
         this.processing = true;
-        this.ajouter(this.contrat);
+        this.creerNouveauContrat(this.contrat);
       } else {
         this.notifierService.notify('error', "Veuillez renseigner un code et un libellé");
       }
@@ -106,12 +106,28 @@ export class ContratEditComponent implements OnInit {
     }
   }
 
+  creerNouveauContrat(contrat: Contrat) {
+    this.contratService.ajouter('contrat', contrat).then((data) => {
+      console.log('data');
+      console.log(data);
+      this.notifierService.notify('success', "Ajout effectué avec succès");
+      this.contratService.getAll('contrat').then((contrats) => {
+        const c = contrats.sort((a, b) => {
+          return a.idcontrat - b.idcontrat > 0 ? -1 : 1;
+        })[0];
+        this.router.navigate(['contrat', 'view', c.idcontrat]);
+      });
+    }).catch((e) => {
+      this.processing = false;
+    });
+  }
+
   ajouter(contrat: Contrat) {
     this.contratService.ajouter('contrat', contrat).then((data) => {
       console.log('data');
       console.log(data);
       this.notifierService.notify('success', "Ajout effectué avec succès");
-      this.router.navigate(['contrat']);
+      this.router.navigate(['contrat', 'view', this.contrat.idcontrat]);
     }).catch((e) => {
       this.processing = false;
     });
@@ -124,14 +140,12 @@ export class ContratEditComponent implements OnInit {
       this.contrat.description === this.description &&
       this.contrat.nbVigileNuit === this.nbVigileNuit
     ) {
-
       this.contratService.modifier('contrat', this.contrat.idcontrat, this.contrat).then((data) => {
         console.log('data');
         console.log(data);
         this.processing = false;
         this.notifierService.notify('success', "Modification effectuée avec succès");
-
-        this.router.navigate(['contrat']);
+        this.router.navigate(['contrat', 'view', this.contrat.idcontrat]);
       }).catch((e) => {
         this.processing = false;
       });

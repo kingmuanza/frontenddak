@@ -242,4 +242,8 @@ export class AffectationEditComponent implements OnInit {
     return dernieresAffectations.length;
   }
 
+  retirerRemplacant() {
+    this.affectation.remplacant = null;
+  }
+
 }

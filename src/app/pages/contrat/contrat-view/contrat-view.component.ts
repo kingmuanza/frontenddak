@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contrat } from 'src/app/models/contrat.model';
+import { ContratSite } from 'src/app/models/contrat.site.model';
 import { Poste } from 'src/app/models/poste.model';
 import { PosteVigile } from 'src/app/models/poste.vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
@@ -15,21 +16,21 @@ import { NotifierService } from 'angular-notifier';
 export class ContratViewComponent implements OnInit {
 
   contrat = new Contrat();
-  avenants = new Array<any>();
+  sites = new Array<any>();
   postes = new Array<Poste>();
   postesVigiles = new Array<PosteVigile>();
 
   contrats = new Array<Contrat>();
   myModal?: bootstrap.Modal;
 
-  poste = new Poste();
+  site = new ContratSite();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private contratService: JarvisService<Contrat>,
     private posteService: JarvisService<Poste>,
-    private avenantService: JarvisService<any>,
+    private siteService: JarvisService<ContratSite>,
     private notifierService: NotifierService,
     private postevigileService: JarvisService<PosteVigile>,
   ) { }
@@ -62,6 +63,11 @@ export class ContratViewComponent implements OnInit {
             this.contratService.modifier('contrat', this.contrat.idcontrat, contrat).then((data) => {                
             });
           });
+
+          this.getSites().then((sites) => {
+            this.sites = sites;
+          });
+
         });
       }
       
@@ -78,12 +84,12 @@ export class ContratViewComponent implements OnInit {
     });
   }
 
-  getAvenants(): Promise<Array<any>> {
+  getSites(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.avenantService.getAll('contratavenant').then((avenants) => {
-        console.log('avenants');
-        console.log(avenants);
-        resolve(avenants);
+      this.siteService.getAll('contratsite').then((contratsites) => {
+        console.log('contratsites');
+        console.log(contratsites);
+        resolve(contratsites);
       });
     });
   }
@@ -92,7 +98,7 @@ export class ContratViewComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.posteService.getAll('poste').then((postes) => {
         postes = postes.filter((poste) => {
-          return poste.idcontrat && poste.idcontrat.idcontrat === this.contrat.idcontrat;
+          // return poste.idcontrat && poste.idcontrat.idcontrat === this.contrat.idcontrat;
         });
         resolve(postes);
       });
@@ -120,19 +126,14 @@ export class ContratViewComponent implements OnInit {
     }
   }
 
-  savePoste() {
+  saveSite() {
     console.log('poste à enregistrer');
-    console.log(this.poste);
-    this.poste.idcontrat = this.contrat;
-    if (this.poste.debutContrat)
-      this.poste.debutContrat = new Date(this.poste.debutContrat);
-
-    if (this.poste.finContrat)
-      this.poste.finContrat = new Date(this.poste.finContrat);
-
-    if (this.poste.idposte == 0) {
-      if (this.poste.code && this.poste.libelle) {
-        this.posteService.ajouter('poste', this.poste).then((data) => {
+    console.log(this.site);
+    this.site.idcontrat = this.contrat;
+    
+    if (this.site.idcontratSite == 0) {
+      if (this.site.nom) {
+        this.siteService.ajouter('contratsite', this.site).then((data) => {
           console.log('data');
           console.log(data);
           this.notifierService.notify('success', "Ajout effectué avec succès");

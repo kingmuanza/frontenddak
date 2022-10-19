@@ -1,9 +1,9 @@
 <div class="app-vigile">
     <div>
 
-        <b class="cliquable" (click)="goTo()">
-                {{vigile?.noms}}
-            </b>
+        <b class="cliquable" (click)="goTo(vigile)">
+            {{vigile?.noms}}
+        </b>
 
     </div>
     <div>
@@ -13,14 +13,27 @@
                 Horaire : {{vigile.horaire | uppercase}}
 
             </ng-container>
-            
+
         </small>
     </div>
-    <div *ngIf="!affectation" style="color: red; margin-top: 5px;">Aucune affectation actuellement</div>
     <div *ngIf="affectation">
         Poste :
         <a class="cliquable" (click)="voirPoste()">
             {{affectation?.idposte?.libelle}}
         </a>, Horaire : {{affectation.horaire}}
+    </div>
+    <ul *ngIf="vigile.estRemplacant && long">
+        <li *ngFor="let item of affectationsActuelles">
+            {{jourSemaine(item.idvigile.jourRepos)}}, Poste :
+            <a class="cliquable" (click)="voirPoste()">
+                {{item.idposte?.libelle}}
+            </a>, Horaire : {{item.horaire}}, Vigile :
+            <a class="cliquable" (click)="goTo(item.idvigile)">
+                {{item.idvigile.noms}}
+            </a>
+        </li>
+    </ul>
+    <div *ngIf="vigile.estRemplacant && !long">
+        {{affectationsActuelles.length}}/6 affectations actuellement
     </div>
 </div>

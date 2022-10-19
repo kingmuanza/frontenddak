@@ -183,35 +183,50 @@ export class FormVigileComponent implements OnInit {
     const isDateNaiss = this.vigile.dteNce ? true : false;
     if (!isDateNaiss) {
       this.erreurs.datenaiss = true;
+    } else {
+      this.erreurs.datenaiss = false;
     }
     const isMajeur = new Date(this.vigile.dteNce).getTime() < Vigile.getDateLimite().getTime();
     if (!isMajeur) {
       this.erreurs.majeur = true;
+    } else {
+      this.erreurs.majeur = false;
     }
     const isNom = this.vigile.nom ? true : false;
     if (!isNom) {
       this.erreurs.nom = true;
+    } else {
+      this.erreurs.nom = false;
     }
     const isCNI = this.vigile.mumCni ? true : false;
     if (!isCNI) {
       this.erreurs.cni = true;
+    } else {
+      this.erreurs.cni = false;
     }
     const isTel = this.vigile.tel ? true : false;
     if (!isTel) {
       this.erreurs.tel = true;
+    } else {
+      this.erreurs.tel = false;
     }
     const isFonction = this.vigile.fonction ? true : false;
     if (!isFonction) {
       this.erreurs.fonction = true;
+    } else {
+      this.erreurs.fonction = false;
     }
     const isMatricule = this.vigile.matricule ? true : false;
     if (!isMatricule) {
       this.erreurs.matricule = true;
+    } else {
+      this.erreurs.matricule = false;
     }
     return isDateNaiss && isMajeur && isNom && isCNI && isTel && isFonction && isMatricule;
   }
 
   save() {
+    this.montrerErreurs = false;
     if (this.isFormulaireValide()) {
       this.onSaveEvent.emit(this.vigile);
     } else {

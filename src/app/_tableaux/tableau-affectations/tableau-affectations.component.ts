@@ -31,13 +31,17 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.refresh();
+    if (this.vigile) {
+      this.refresh();
+    }
   }
 
   ngOnInit(): void {
-    this.getAffectionOfVigile(this.vigile).then(() => {
-      this.dtTrigger.next('');
-    });
+    if (this.vigile) {
+      this.getAffectionOfVigile(this.vigile).then(() => {
+        this.dtTrigger.next('');
+      });
+    }
   }
 
   edit(id: string | number) {
@@ -55,8 +59,14 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
         console.log('data');
         console.log(data);
         data.forEach((affectation) => {
-          if (affectation.idvigile.idvigile === vigile.idvigile) {
-            this.affectations.push(affectation);
+          if (vigile.estRemplacant) {
+            if (affectation.remplacant && affectation.remplacant.idvigile === vigile.idvigile) {
+              this.affectations.push(affectation);
+            }
+          } else {
+            if (affectation.idvigile.idvigile === vigile.idvigile) {
+              this.affectations.push(affectation);
+            }
           }
         });
         resolve();

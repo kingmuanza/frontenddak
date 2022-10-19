@@ -1,4 +1,5 @@
 import { Contrat } from "./contrat.model";
+import { ContratSite } from "./contrat.site.model";
 
 export class Poste {
     code = '';
@@ -24,7 +25,7 @@ export class Poste {
     longitude = 0;
     latitude = 0;
     organisme = false;
-    idcontrat: Contrat | undefined;
     description = '';
     bon = false;
+    idcontratsite: ContratSite | undefined;
 }

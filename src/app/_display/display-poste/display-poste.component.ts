@@ -11,8 +11,8 @@ import { PosteVigile } from 'src/app/models/poste.vigile.model';
 export class DisplayPosteComponent implements OnInit, OnChanges {
 
   @Input() poste = new Poste();
-  @Input() postesVigiles? = new Array<PosteVigile>();
-  myPostesVigiles =  new Array<PosteVigile>();
+  @Input() postesVigiles?= new Array<PosteVigile>();
+  myPostesVigiles = new Array<PosteVigile>();
   nbJour = 0;
   nbNuit = 0;
   constructor(
@@ -28,28 +28,36 @@ export class DisplayPosteComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.postesVigiles) {
-      this.myPostesVigiles = this.postesVigiles.filter((pv) => {
-        return pv.idposte.idposte === this.poste.idposte;
-      });
-      this.nbJour = this.getJour();
-      this.nbNuit = this.getNuit();
+      if (this.postesVigiles.length > 0) {
+        this.myPostesVigiles = this.postesVigiles.filter((pv) => {
+          return pv.idposte.idposte === this.poste.idposte;
+        });
+        this.nbJour = this.getJour();
+        this.nbNuit = this.getNuit();
+      } else {
+        this.nbJour = this.poste.nombreVigileJour;
+        this.nbNuit = this.poste.nombreVigileNuit;
+      }
+    } else {
+      this.nbJour = this.poste.nombreVigileJour;
+      this.nbNuit = this.poste.nombreVigileNuit;
     }
   }
 
   getJour(): number {
     let nombre = 0;
-    this.myPostesVigiles.forEach((pv)=> {
+    this.myPostesVigiles.forEach((pv) => {
       if (pv.horaire == 'jour') {
-        nombre+=pv.quantite;
+        nombre += pv.quantite;
       }
     });
     return nombre;
   }
   getNuit(): number {
     let nombre = 0;
-    this.myPostesVigiles.forEach((pv)=> {
+    this.myPostesVigiles.forEach((pv) => {
       if (pv.horaire == 'nuit') {
-        nombre+=pv.quantite;
+        nombre += pv.quantite;
       }
     });
     return nombre;
