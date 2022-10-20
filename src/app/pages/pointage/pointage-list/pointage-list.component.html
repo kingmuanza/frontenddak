@@ -88,6 +88,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Vigile</th>
+                                    <th>Zone</th>
                                     <th>Poste</th>
                                     <th>Horaire</th>
 
@@ -96,18 +97,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <ng-container *ngFor="let pointage of resultats.reverse()">
-                                    <tr>
-                                        <td>{{toDate(pointage.date) | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
-                                        <td>{{pointage.nomsVigile}}</td>
+                                <ng-container *ngFor="let pointage of dataLogiques.reverse()">
+                                    <tr *ngIf="(pointage.horaire && horaire && pointage.horaire === horaire) && (pointage.poste && pointage.poste.zone && zone && pointage.poste.zone.idzone === zone.idzone)">
+                                        <td>{{pointage.date | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                                        <td>{{pointage.noms}}</td>
                                         <td>
-                                            <ng-container *ngIf="getAffectation(pointage.idvigile)">
-                                                {{getPoste(getAffectation(pointage.idvigile).idposte.idposte).libelle }}
+                                            <ng-container *ngIf="pointage.poste">
+                                                {{pointage.poste.libelle }}
                                             </ng-container>
                                         </td>
                                         <td>
-                                            <ng-container *ngIf="getAffectation(pointage.idvigile)">
-                                                {{getAffectation(pointage.idvigile).horaire}}
+                                            <ng-container *ngIf="pointage.poste">
+                                                {{pointage.poste.zone ? pointage.poste.zone.libelle: ''}}
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="pointage.horaire">
+                                                {{pointage.horaire}}
                                             </ng-container>
                                         </td>
                                         <td>
@@ -125,7 +131,7 @@
                                             <span *ngIf="!pointage.absence" style="margin-right: 10px; color: green;">
                                             <i class="bi-fingerprint"></i>
                                         </span>
-                                            <span *ngIf="!pointage.absence" [ngClass]="{'bon': isBonHoraire(pointage)}">
+                                            <span *ngIf="!pointage.absence" [ngClass]="{'bon': pointage.isBonHoraire}">
                                             <i class="bi-clock"></i>
                                         </span>
                                         </td>

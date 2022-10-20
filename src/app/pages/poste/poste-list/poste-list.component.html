@@ -49,6 +49,7 @@
                             <th>ID</th>
                             <th>Libellé</th>
                             <th>Code</th>
+                            <th>Zone</th>
                             <th>Contrat</th>
                         </tr>
                     </thead>
@@ -61,11 +62,12 @@
                             </td>
                             <td>{{poste.libelle}}</td>
                             <td>{{poste.code}}</td>
+                            <td>{{poste.zone?.libelle}}</td>
                             <td>
-                                <b *ngIf="poste.idcontrat">
-                                    {{poste.idcontrat?.libelle}}
+                                <b *ngIf="poste.idcontratsite">
+                                    {{poste.idcontratsite.idcontrat?.libelle}}
                                 </b>
-                                <span *ngIf="!poste.idcontrat" style="color: red;">
+                                <span *ngIf="!poste.idcontratsite" style="color: red;">
                                     Aucun contrat
                                 </span>
                             </td>

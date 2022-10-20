@@ -37,6 +37,8 @@ export class PointageListComponent implements OnInit {
   zone: any;
   recherche = false;
 
+  dataLogiques = new Array<any>();
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -47,6 +49,45 @@ export class PointageListComponent implements OnInit {
   ) {
     this.app = initializeApp(FIREBASECONFIG);
     this.du.setMonth(this.du.getMonth() - 1);
+  }
+
+  genererDataLogiques() {
+    let dataLogiques = new Array<any>();
+    this.pointageService.getPointages().then((pointages) => {
+      for (let i = 0; i < pointages.length; i++) {
+        const pointage = pointages[i];
+        console.log(pointage);
+        const d = this.toDate(pointage.date);
+        const noms = pointage.nomsVigile;
+        const affectation = this.getAffectation(pointage.idvigile);
+        const poste = affectation ? affectation.idposte: new Poste();
+        const horaire = affectation ? affectation.horaire : '';
+        const raison = pointage.raison;
+        const commentaire = pointage.commentaire;
+        const latitude = pointage.latitude;
+        const longitude = pointage.longitude;
+        const absence = pointage.absence;
+        const isBonHoraire = this.isBonHoraire(pointage);
+
+        const item = {
+          date: d,
+          noms: noms,
+          affectation: affectation,
+          poste: poste,
+          horaire: horaire,
+          raison: raison,
+          commentaire: commentaire,
+          latitude: latitude,
+          longitude: longitude,
+          absence: absence,
+          isBonHoraire: isBonHoraire,
+        };
+        console.log('item');
+        console.log(item);
+        dataLogiques.push(item);
+      }
+      this.dataLogiques = dataLogiques;
+    });
   }
 
 
@@ -61,20 +102,22 @@ export class PointageListComponent implements OnInit {
       this.getPostes().then(() => {
         this.getAffectations().then((affectations) => {
           this.affectations = affectations;
-
         });
       });
     });
   }
 
   actualiser() {
-    this.getPointages().then(() => {
+    this.genererDataLogiques();
+    /* this.getPointages().then(() => {
       this.rechercher();
-    });
+    }); */
   }
 
   async getPointages() {
     this.pointageService.getPointages().then((pointages) => {
+      console.log('pointages');
+      console.log(pointages);
       this.pointages = pointages;
     });
   }
@@ -108,7 +151,7 @@ export class PointageListComponent implements OnInit {
     const querySnapshot = await getDocs(collection(db, "poste"));
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
+      // console.log(doc.id, " => ", doc.data());
       this.postes.push(doc.data());
     });
   }
@@ -126,7 +169,7 @@ export class PointageListComponent implements OnInit {
   getAffectation(idvigile: number): any {
     let affectation: any;
     this.affectations.forEach((aff) => {
-      if (aff.idvigile.idvigile === idvigile) {
+      if (aff.idvigile.idvigile === idvigile && !aff.arret) {
         affectation = aff;
       }
     });

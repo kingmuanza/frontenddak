@@ -34,12 +34,12 @@ export class PointageService {
       getDocs(collection(db, "pointage")).then((resultats) => {
         resultats.forEach((resultat) => {
           // doc.data() is never undefined for query doc snapshots
-          console.log(resultat.id);
-          console.log(resultat.data());
+          /* console.log(resultat.id);
+          console.log(resultat.data()); */
           pointages.push(resultat.data());
         });
+        resolve(pointages);
       });
-      resolve(pointages);
     });
   }
 
