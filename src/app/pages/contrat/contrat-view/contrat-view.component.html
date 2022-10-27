@@ -4,8 +4,10 @@
             Contrat : {{contrat.libelle}}
         </div>
         <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut | date: 'yyyy-MM-dd'}}</div>
-        <div style="margin-top: 20px;">
-            {{contrat.description}}
+        <div style="margin-top: 0px;">
+            <i>
+                {{contrat.description}}
+            </i>
         </div>
         <div class="">
             <a routerLink="/contrat" class="btn btn-link" style="padding: 0; margin: 0;">
@@ -27,32 +29,32 @@
     <div class="page-contenu">
         <div class="row">
             <div class="col-4">
-                <div class="stat red">
+                <div class="stat" [ngClass]="{'red': sites.length!==contrat.nbPostes}">
                     <div class="stat-titre">
                         Sites
                     </div>
                     <div class="stat-valeur">
-                        {{contrat.nbPostes}}
+                        {{sites.length}}/{{contrat.nbPostes}}
                     </div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="stat green">
+                <div class="stat" [ngClass]="{'red': vigilesJourDansLesExigences!==contrat.nbVigileJour}">
                     <div class="stat-titre">
                         Vigiles Jour
                     </div>
                     <div class="stat-valeur">
-                        {{contrat.nbVigileJour}}
+                        {{vigilesJourDansLesExigences}}/{{contrat.nbVigileJour}}
                     </div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="stat red">
+                <div class="stat" [ngClass]="{'red': vigilesNuitDansLesExigences!==contrat.nbVigileNuit}">
                     <div class="stat-titre">
-                        Vigile Nuit
+                        Vigiles Nuit
                     </div>
                     <div class="stat-valeur">
-                        {{contrat.nbVigileNuit}}
+                        {{vigilesNuitDansLesExigences}}/{{contrat.nbVigileNuit}}
                     </div>
                 </div>
             </div>
@@ -62,13 +64,22 @@
         <div style="margin-bottom: 16px;">
             Liste des sites
 
-            <button *ngIf="postes.length < contrat.nbPostes" (click)="openModal()" style="margin-left: 10px;" class="btn btn-link">
+            <button *ngIf="sites.length < contrat.nbPostes" (click)="openModal()" style="margin-left: 10px;" class="btn btn-link">
                 Créer un site
             </button>
         </div>
         <div class="row">
-            <div class="col-lg-4" *ngFor="let site of sites">
-                <app-display-site [site]="site"></app-display-site>
+            <div class="col-lg-4 site" *ngFor="let site of sites">
+
+                <app-display-site [site]="site" [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences" [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences" (onVigileCalcul)="getData(site, $event)">
+
+                </app-display-site>
+                <div class="suppression">
+                    <button (click)="supprimerSite(site)" class="btn btn-danger btn-error" style="width: 100%;">
+                        Supprimer
+
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -88,13 +99,11 @@
     <div class="page-contenu">
         <div class="row">
             <div class="col-lg-12">
-
                 <div>
-                    <div style="margin-top: 20px">
+                    <div style="margin-top: 20px; margin-bottom: 20px;">
                         Historique du contrat
                     </div>
-                    <div class="">
-
+                    <div class="card">
                         <div class="page-contenu-corps ">
                             <table class="table row-border hover ">
                                 <thead>
@@ -131,6 +140,9 @@
         </div>
     </div>
 </div>
+<div style="height: 25vh;">
+
+</div>
 
 
 <!-- Modal -->
@@ -139,7 +151,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    Ajouter un poste à ce contrat
+                    Ajouter un site à ce contrat : {{contrat.nom}}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -147,24 +159,57 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="categorie" style="margin-top: 0;">
-                            Informations sur le poste
+                            Informations sur le site
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-8">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                Code
-                            </span>
+                                    Nom du site
+                                </span>
                             </div>
                             <input type="text" [(ngModel)]="site.nom" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <datalist id="quartiers">
+                            <option [value]="q.nom" *ngFor="let q of quartiers">{{q.nom}}</option>
+                        </datalist>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Quartier
+                                </span>
+                            </div>
+                            <input list="quartiers" type="text" [(ngModel)]="quartier" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Personne à contacter
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="site.personne" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Tel
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="site.tel" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="input-group">
 
                             <span class="input-group-text">
-                                Description 
+                                Description
                                 <br>
                                 Localisation
                             </span>

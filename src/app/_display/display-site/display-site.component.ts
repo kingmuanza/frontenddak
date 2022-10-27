@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContratSite } from 'src/app/models/contrat.site.model';
 import { contratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
 import { Vigile } from 'src/app/models/vigile.model';
@@ -12,6 +12,20 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 export class DisplaySiteComponent implements OnInit {
 
   @Input() site = new ContratSite();
+  @Input() nbAutorisationJour = 0;
+  @Input() nbAutorisationNuit = 0;
+
+
+  @Output() onVigileCalcul = new EventEmitter<{
+    jour: number,
+    nuit: number,
+  }>();
+
+  calcul = {
+    jour: 0,
+    nuit: 0,
+  };
+  
   exigences = new Array<contratSiteVigile>();
   showFormulairePersonnel = false;
 
@@ -28,16 +42,50 @@ export class DisplaySiteComponent implements OnInit {
       this.exigences = data.filter((d) => {
         return d.idcontratsite.idcontratSite === this.site.idcontratSite
       });
+      this.exigences.forEach((e) => {
+        if (e.horaire === 'jour') {
+          this.calcul.jour += e.quantite;
+        }
+        if (e.horaire === 'nuit') {
+          this.calcul.nuit += e.quantite;
+        }
+      });
+      this.onVigileCalcul.emit(this.calcul);
     });
   }
 
   ajouterExigencePersonnel() {
     if (this.exigence.horaire && this.exigence.quantite && this.exigence.typeVigile) {
       if (this.exigence.quantite > 0) {
-        this.exigence.idcontratsite = this.site;
-        this.contratSiteVigileService.ajouter('contratsitevigile', this.exigence).then(() => {
-          window.location.reload();
-        });
+        const exigenceJour = this.exigence.horaire === 'jour' && this.exigence.quantite <= this.nbAutorisationJour;
+        const exigenceNuit = this.exigence.horaire === 'nuit' && this.exigence.quantite <= this.nbAutorisationNuit;
+        if (exigenceJour || exigenceNuit) {
+          let exigenceAModifier: contratSiteVigile | undefined;
+          this.exigences.forEach((exigence) => {
+            if (exigence.typeVigile === this.exigence.typeVigile && exigence.horaire === this.exigence.horaire) {
+              exigence.quantite += this.exigence.quantite;
+              exigenceAModifier = exigence;
+            }
+          });
+          if (exigenceAModifier) {
+            this.contratSiteVigileService.modifier('contratsitevigile', exigenceAModifier.idcontratSiteVigile, exigenceAModifier).then(() => {
+              window.location.reload();
+            });
+          } else {
+            this.exigence.idcontratsite = this.site;
+            this.contratSiteVigileService.ajouter('contratsitevigile', this.exigence).then(() => {
+              window.location.reload();
+            });
+          }
+        } else {
+          alert('Le nombre de vigiles va au dela des termes du contrat');
+          if (this.exigence.horaire === 'jour') {
+            this.exigence.quantite = this.nbAutorisationJour;
+          }
+          if (this.exigence.horaire === 'nuit') {
+            this.exigence.quantite = this.nbAutorisationNuit;
+          }
+        }
       }
     }
   }

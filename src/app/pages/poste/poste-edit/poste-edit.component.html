@@ -45,7 +45,7 @@
                                             {{contrat.libelle}}
                                         </option>
                                     </select>
-                                    <ng-container *ngIf="contrat">
+                                    <ng-container *ngIf="contrat.idcontrat !== 0">
                                         <button (click)="voirContrat(contrat.idcontrat)" class="btn btn-outline-secondary" type="button">
                                             Voir le contrat
                                         </button>
@@ -58,13 +58,53 @@
                                     <div style="margin-bottom: 16px;">
                                         Veuillez choisir le site correspondant au poste
                                     </div>
+
                                     <div class="row">
-                                        <div class="col-4" *ngFor="let site of contratsites">
-                                            <div>
-                                                <input type="radio" (change)="sinspirerDuSite(site)" name="site" id="">&nbsp;&nbsp;&nbsp;{{site.nom}}
+                                        <div class="col-lg-4 site" *ngFor="let site of contratsites">
+
+                                            <div class="card" [ngClass]="{'selectionnee': site.idcontratSite === siteChoisi.idcontratSite}">
+                                                <div class="card-body">
+
+                                                    <div style="margin-bottom: 20px;">
+                                                        <h5 class="card-title">
+                                                            <input type="radio" (change)="sinspirerDuSite(site)" name="site"> {{site.nom}}
+                                                        </h5>
+
+                                                        <div>
+                                                            Quartier : {{site.idquartier? site.idquartier.nom: 'Indéfini'}}
+                                                        </div>
+                                                        <div>
+                                                            Personne à contacter : {{site.personne? site.personne: 'Indéfini'}}
+                                                        </div>
+                                                        <div>
+                                                            Tel : {{site.tel? site.tel: 'Indéfini'}}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-4" *ngFor="let site of contratsites">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="categorie">
+                                    Horaire du poste
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="">
+                                    <input type="radio" value="jour" [(ngModel)]="poste.horaire" name="horaire"> Jour
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="">
+                                    <input type="radio" value="nuit" [(ngModel)]="poste.horaire" name="horaire"> Nuit
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -126,8 +166,7 @@
                                     </div>
                                     <select type="text" [(ngModel)]="poste.idquartier" class="form-control">
                                         <ng-container *ngFor="let quartier of quartiers">
-                                            <option
-                                                *ngIf="poste.zone && quartier.idzone && poste.zone.idzone === quartier.idzone.idzone"
+                                            <option                                                
                                                 [ngValue]="quartier">
                                                 {{quartier.nom}}
                                             </option>
@@ -152,7 +191,7 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            Contact
+                                            Personne à contacter
                                         </span>
                                     </div>
                                     <input type="text" [(ngModel)]="poste.contact" class="form-control">
@@ -192,7 +231,7 @@
                                 <div class="input-group">
 
                                     <span class="input-group-text">
-                                        Description 
+                                        Description
                                         <br>
                                         Localisation
                                     </span>
@@ -214,3 +253,7 @@
             </div>
         </div>
     </div>
+</div>
+<div style="height: 25vh;">
+
+</div>

@@ -24,7 +24,7 @@ export class JarvisService<T> {
   infos() {
     console.log(this.URL);
   }
-  
+
   setServeur(urlServeur: string) {
     this.URL = urlServeur;
     sessionStorage.setItem('serveur-dak', urlServeur);
@@ -42,33 +42,51 @@ export class JarvisService<T> {
   getAll(table: string): Promise<Array<T>> {
     this.infos();
     this.showLoader();
-    return new Promise((resolve, reject)  => {
-      this.http.get(this.URL + table).subscribe((data) => {
-        const donnees = data as Array<T>;
-        this.hideLoader();
-        resolve(donnees);
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + table).subscribe({
+        next: (data) => {
+          const donnees = data as Array<T>;
+          this.hideLoader();
+          resolve(donnees);
+        },
+        error: (e) => {
+          this.hideLoader();
+          reject(e);
+        }
       });
     });
   }
- 
+
   getAllSilent(table: string): Promise<Array<T>> {
     this.infos();
-    return new Promise((resolve, reject)  => {
-      this.http.get(this.URL + table).subscribe((data) => {
-        const donnees = data as Array<T>;
-        resolve(donnees);
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + table).subscribe({
+        next: (data) => {
+          const donnees = data as Array<T>;
+          resolve(donnees);
+        },
+        error: (e) => {
+          this.hideLoader();
+          reject(e);
+        }
       });
     });
   }
- 
+
   get(table: string, id: number): Promise<T> {
     this.infos();
     this.showLoader();
-    return new Promise((resolve, reject)  => {
-      this.http.get(this.URL + table + '/' + id).subscribe((data) => {
-        const resulat = data as T;
-        this.hideLoader();
-        resolve(resulat);
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + table + '/' + id).subscribe({
+        next: (data) => {
+          const resulat = data as T;
+          this.hideLoader();
+          resolve(resulat);
+        },
+        error: (e) => {
+          this.hideLoader();
+          reject(e);
+        }
       });
     });
   }
@@ -76,10 +94,16 @@ export class JarvisService<T> {
   ajouter(table: string, objet: T): Promise<any> {
     this.infos();
     this.showLoader();
-    return new Promise((resolve, reject)  => {
-      this.http.post(this.URL + table, objet).subscribe((data) => {
-        this.hideLoader();
-        resolve(data);
+    return new Promise((resolve, reject) => {
+      this.http.post(this.URL + table, objet).subscribe({
+        next: (data) => {
+          this.hideLoader();
+          resolve(data);
+        },
+        error: (e) => {
+          this.hideLoader();
+          reject(e);
+        }
       });
     });
   }
@@ -87,11 +111,17 @@ export class JarvisService<T> {
   modifier(table: string, id: number, objet: T): Promise<any> {
     this.infos();
     this.showLoader();
-    return new Promise((resolve, reject)  => {
-      this.http.put(this.URL + table + '/' + id, objet).subscribe((data) => {
-        const resulat = data as T;
-        this.hideLoader();
-        resolve(data);
+    return new Promise((resolve, reject) => {
+      this.http.put(this.URL + table + '/' + id, objet).subscribe({
+        next: (data) => {
+          const resulat = data as T;
+          this.hideLoader();
+          resolve(data);
+        },
+        error: (e) => {
+          this.hideLoader();
+          reject(e);
+        }
       });
     });
   }
@@ -99,10 +129,16 @@ export class JarvisService<T> {
   supprimer(table: string, id: number): Promise<boolean> {
     this.infos();
     this.showLoader();
-    return new Promise((resolve, reject)  => {
-      this.http.delete(this.URL + table + '/' + id).subscribe((data) => {
-        this.hideLoader();
-        resolve(true);
+    return new Promise((resolve, reject) => {
+      this.http.delete(this.URL + table + '/' + id).subscribe({
+        next: (data) => {
+          this.hideLoader();
+          resolve(true);
+        },
+        error: (e) => {
+          this.hideLoader();
+          reject(e);
+        }
       });
     });
   }

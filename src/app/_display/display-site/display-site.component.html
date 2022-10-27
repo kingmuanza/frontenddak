@@ -2,17 +2,19 @@
     <div class="card-body">
 
         <div style="margin-bottom: 20px;">
-            {{site.nom}}
+            <h5 class="card-title">{{site.nom}}</h5>
+
+            <div>
+                Quartier : {{site.idquartier? site.idquartier.nom: 'Indéfini'}}
+            </div>
+            <div>
+                Personne à contacter : {{site.personne? site.personne: 'Indéfini'}}
+            </div>
+            <div>
+                Tel : {{site.tel? site.tel: 'Indéfini'}}
+            </div>
         </div>
-        <div>
-            <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
-                Ajouter une exigence
-            </button>
-            <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
-                Annuler
-            </button>
-        </div>
-        <div>
+        <div style="margin-bottom: 20px;">
             <div *ngIf="showFormulairePersonnel">
                 <div>
                     Nouvelle exigence du contrat
@@ -56,16 +58,25 @@
                     <button (click)="ajouterExigencePersonnel()" class="btn primaire">Enregistrer</button>
                 </div>
             </div>
-            <ul>
-                <li *ngFor="let item of exigences">
-                    <span>
-                        {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
-                    </span>
-                    <span class="supprimer" (click)="supprimerPosteVigile(item)" style="color: red;">
-                        Supprimer
-                    </span>
-                </li>
-            </ul>
+
+            <li *ngFor="let item of exigences">
+                <span>
+                    {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
+                </span>
+                <span class="supprimer" (click)="supprimerPosteVigile(item)" style="color: red;">
+                    Supprimer
+                </span>
+            </li>
+
+        </div>
+
+        <div *ngIf="nbAutorisationNuit || nbAutorisationJour">
+            <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
+                Ajouter une exigence
+            </button>
+            <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
+                Annuler
+            </button>
         </div>
     </div>
 </div>

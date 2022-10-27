@@ -23,6 +23,21 @@ export class ContratEditComponent implements OnInit {
 
   contrats = new Array<Contrat>();
 
+  montrerErreurs = false;
+
+  erreurs = {
+    libelle: false,
+    dateDebut: false,
+    nom: false,
+    tel: false,
+    adresse: false,
+    representant: false,
+    nbPostes: false,
+    nbJourNegatif: false,
+    nbNuitNegatif: false,
+    nbVigiles: false,
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -78,7 +93,40 @@ export class ContratEditComponent implements OnInit {
     });
   }
 
+  isFormulaireValide(): boolean {
+    let resultat = true;
+    this.montrerErreurs = true;
+    this.erreurs.libelle = false;
+    this.erreurs.dateDebut = false;
+    this.erreurs.nom = false;
+    this.erreurs.tel = false;
+    this.erreurs.adresse = false;
+    this.erreurs.representant = false;
+    this.erreurs.nbPostes = false;
+    this.erreurs.nbJourNegatif = false;
+    this.erreurs.nbNuitNegatif = false;
+    this.erreurs.nbVigiles = false;
+
+    this.erreurs.libelle = !this.contrat.libelle;
+    this.erreurs.dateDebut = !this.contrat.dateDebut;
+    this.erreurs.nom = !this.contrat.nom;
+    this.erreurs.tel = !this.contrat.tel;
+    this.erreurs.adresse = !this.contrat.adresse;
+    this.erreurs.representant = !this.contrat.particulier && !this.contrat.representant;
+    this.erreurs.nbPostes = !this.contrat.nbPostes || (!!this.contrat.nbPostes && this.contrat.nbPostes < 0);
+    this.erreurs.nbJourNegatif = (!!this.contrat.nbVigileJour && this.contrat.nbVigileJour < 0);
+    this.erreurs.nbNuitNegatif = (!!this.contrat.nbVigileNuit && this.contrat.nbVigileNuit < 0);
+    this.erreurs.nbVigiles = this.contrat.nbVigileNuit + this.contrat.nbVigileJour < 1;
+
+    resultat = !this.erreurs.libelle && !this.erreurs.dateDebut && !this.erreurs.nom && !this.erreurs.tel && !this.erreurs.adresse && !this.erreurs.representant;
+    resultat = resultat && !this.erreurs.nbPostes && !this.erreurs.nbJourNegatif && !this.erreurs.nbNuitNegatif && !this.erreurs.nbVigiles
+    return resultat;
+  }
+
   save() {
+    if (!this.isFormulaireValide()) {
+      return
+    }
     console.log('contrat à enregistrer');
     console.log(this.contrat);
     console.log(this.contrat);
@@ -94,14 +142,8 @@ export class ContratEditComponent implements OnInit {
       this.contrat.dateSignature = new Date(this.contrat.dateSignature);
 
     if (this.contrat.idcontrat == 0) {
-      if (this.contrat.libelle) {
-        this.processing = true;
-        this.creerNouveauContrat(this.contrat);
-      } else {
-        this.notifierService.notify('error', "Veuillez renseigner un code et un libellé");
-      }
+      this.creerNouveauContrat(this.contrat);
     } else {
-      this.processing = true;
       this.modifier();
     }
   }
@@ -126,14 +168,14 @@ export class ContratEditComponent implements OnInit {
     this.contratService.ajouter('contrat', contrat).then((data) => {
       console.log('data');
       console.log(data);
-      this.notifierService.notify('success', "Ajout effectué avec succès");
+      // this.notifierService.notify('success', "Ajout effectué avec succès");
       this.router.navigate(['contrat', 'view', this.contrat.idcontrat]);
     }).catch((e) => {
-      this.processing = false;
     });
   }
 
   modifier() {
+    // Si les terme du contrat n'o nt pas chzangé
     if (
       this.contrat.nbPostes === this.nbPostes &&
       this.contrat.nbVigileJour === this.nbVigileJour &&
@@ -149,16 +191,18 @@ export class ContratEditComponent implements OnInit {
       }).catch((e) => {
         this.processing = false;
       });
-    } else {
+    } else 
+    // Si les termes du contrat ont changé
+    {
+      // Date de modifcation du contrat
       const date = new Date(this.contrat.date);
       this.contrat.date = new Date();
+      
       this.contratService.modifier('contrat', this.contrat.idcontrat, this.contrat).then((data) => {
         console.log('data');
         console.log(data);
-        this.processing = false;
         this.notifierService.notify('success', "Modification effectuée avec succès");
         this.createFils(date);
-
       }).catch((e) => {
         this.processing = false;
       });
@@ -168,11 +212,13 @@ export class ContratEditComponent implements OnInit {
   createFils(date: Date) {
     const fils = JSON.parse(JSON.stringify(this.contrat));
     fils.idparent = this.contrat;
-    fils.nbPostes === this.nbPostes;
-    fils.nbVigileJour === this.nbVigileJour;
-    fils.description === this.description;
-    fils.nbVigileNuit === this.nbVigileNuit;
+    fils.nbPostes = this.nbPostes;
+    fils.nbVigileJour = this.nbVigileJour;
+    fils.description = this.description;
+    fils.nbVigileNuit = this.nbVigileNuit;
     fils.date = date;
+    console.log('fils');
+    console.log(fils);
     this.ajouter(fils);
   }
 
@@ -186,6 +232,8 @@ export class ContratEditComponent implements OnInit {
         this.processing = false;
         this.notifierService.notify('success', "Suppression effectuée avec succès");
         this.router.navigate(['contrat']);
+      }).catch((e) => {
+        this.notifierService.notify('error', "Impossible de supprimer cet élément car il est lié à d'autres éléments dans le système");
       });
     }
   }

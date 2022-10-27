@@ -12,6 +12,7 @@ import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { Contrat } from 'src/app/models/contrat.model';
 import { ContratSite } from 'src/app/models/contrat.site.model';
+import { Quartier } from 'src/app/models/quartier.model';
 
 @Component({
   selector: 'app-poste-edit',
@@ -27,7 +28,7 @@ export class PosteEditComponent implements OnInit {
   poste = new Poste();
   processing = false;
   zones = new Array<any>();
-  quartiers = new Array<any>();
+  quartiers = new Array<Quartier>();
   affectations = new Array<any>();
   affVigilesJour = 0;
   affVigilesNuit = 0;
@@ -39,6 +40,8 @@ export class PosteEditComponent implements OnInit {
   isPosteContractuel = true;
 
   contrat = new Contrat();
+  siteChoisi = new ContratSite();
+
 
   constructor(
     private router: Router,
@@ -47,6 +50,7 @@ export class PosteEditComponent implements OnInit {
     private pointageService: PointageService,
     private jarvisService: JarvisService<any>,
     private posteService: JarvisService<Poste>,
+    private quartierService: JarvisService<Quartier>,
     private siteService: JarvisService<ContratSite>,
     private contratService: JarvisService<Contrat>
   ) {
@@ -59,6 +63,7 @@ export class PosteEditComponent implements OnInit {
       pagingType: 'full_numbers',
       order: [[0, 'desc']]
     };
+
 
     this.getContrats().then((contrats) => {
       this.contrats = contrats.filter((contrat) => {
@@ -76,13 +81,13 @@ export class PosteEditComponent implements OnInit {
                 console.log('le poste recupéré');
                 console.log(poste);
                 this.poste = poste;
-/* 
-                this.contrats.forEach((contrat) => {
-                  if (this.poste.idcontrat && this.poste.idcontrat.idcontrat === contrat.idcontrat) {
-                    this.poste.idcontrat = contrat;
-                  }
-                });
- */
+                /* 
+                                this.contrats.forEach((contrat) => {
+                                  if (this.poste.idcontrat && this.poste.idcontrat.idcontrat === contrat.idcontrat) {
+                                    this.poste.idcontrat = contrat;
+                                  }
+                                });
+                 */
                 this.pointageService.getRemotePoste(id).then((posteRemote) => {
                   console.log('posteRemote');
                   console.log(posteRemote);
@@ -133,6 +138,10 @@ export class PosteEditComponent implements OnInit {
                   }
                 });
               });
+            } else {
+              this.quartierService.getAll('quartier').then((quartiers) => {
+                this.quartiers = quartiers;
+              });
             }
           });
         });
@@ -175,10 +184,9 @@ export class PosteEditComponent implements OnInit {
         this.posteService.ajouter('poste', this.poste).then((data) => {
           console.log('data');
           console.log(data);
-          this.processing = false;
           this.notifierService.notify('success', "Ajout effectué avec succès");
           this.router.navigate(['poste']);
-          this.posteService.getAll('contrat').then((postes) => {
+          this.posteService.getAll('poste').then((postes) => {
             const c = postes.sort((a, b) => {
               return a.idposte - b.idposte > 0 ? -1 : 1;
             })[0];
@@ -221,8 +229,12 @@ export class PosteEditComponent implements OnInit {
   edit(id: string) {
     this.router.navigate(['affectation', 'edit', id]);
   }
+
   voirContrat(id: string | number) {
-    this.router.navigate(['contrat', 'view', id]);
+    let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+
+    window.open('/#/contrat/view/' + id, 'Contrat', params);
+    // this.router.navigate(['contrat', 'view', id]);
   }
   jourSemaine(jour: number) {
     if (jour == 1)
@@ -280,11 +292,20 @@ export class PosteEditComponent implements OnInit {
       }
     }, 500);
   }
-  
+
   sinspirerDuSite(site: ContratSite) {
+    this.siteChoisi = site;
     console.log('site');
     console.log(site);
     this.poste.libelle = site.nom;
     this.poste.description = site.description;
+    this.poste.contact = site.personne;
+    this.poste.tel = site.tel;
+    this.poste.idcontratsite = site;
+    this.quartiers.forEach((quartier) => {
+      if (quartier.idquartier === site.idquartier?.idquartier) {
+        this.poste.idquartier = quartier;
+      }
+    })
   }
 }

@@ -5,88 +5,94 @@
             {{user?.role }}
         </div>
     </div>
+
     <div class="menu-gauche-sous-titre">
         Suivi
     </div>
-    <div class="menu-gauche-item">
-        <a routerLinkActive="active" routerLink="dashboard">
-            Tableau de bord
-        </a>
+    <div>
+        <div class="menu-gauche-item">
+            <a routerLinkActive="active" routerLink="dashboard">
+                Tableau de bord
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="pointage">
+            <a routerLinkActive="active" routerLink="pointage">
+                Pointages
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="repos">
+            <a routerLinkActive="active" routerLink="repos">
+                Jours de repos
+            </a>
+        </div>
+        <div class="menu-gauche-item" style="display: none;">
+            <a routerLinkActive="active" routerLink="synchroniser">
+                Synchroniser
+            </a>
+        </div>
+        <div class="menu-gauche-item" style="display: none;">
+            <a routerLinkActive="active" routerLink="controle">
+                Contrôle des vigiles
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="conge">
+            <a routerLinkActive="active" routerLink="conge">
+                Congés
+            </a>
+        </div>
     </div>
-    <div class="menu-gauche-item" style="display: none;">
-        <a routerLinkActive="active" routerLink="synchroniser">
-            Synchroniser
-        </a>
-    </div>
-    <div class="menu-gauche-item" style="display: none;">
-        <a routerLinkActive="active" routerLink="controle">
-            Contrôle des vigiles
-        </a>
-    </div>
+
     <div class="menu-gauche-sous-titre">
         Edition
     </div>
-    <div class="menu-gauche-item" *ngIf="pointage">
-        <a routerLinkActive="active" routerLink="pointage">
-            Pointages
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="affectation">
-        <a routerLinkActive="active" routerLink="affectation">
-            Affectation
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="switch">
-        <a routerLinkActive="active" routerLink="switch">
-            Switchs
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="sanction">
-        <a routerLinkActive="active" routerLink="sanction">
-            Sanctions
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="permission">
-        <a routerLinkActive="active" routerLink="permission">
-            Permissions
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="vigile">
-        <a routerLinkActive="active" routerLink="vigile">
-            Vigiles
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="vigileBadge">
-        <a routerLinkActive="active" routerLink="vigile-badge">
-            Vigiles Badges
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="conge">
-        <a routerLinkActive="active" routerLink="conge">
-            Congés
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="contrat">
-        <a routerLinkActive="active" routerLink="contrat">
-            Contrats
-
-            <span *ngIf="nbContratsMauvais" class="important" style="float: right;">
-                {{nbContratsMauvais}}
-            </span>
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="poste">
-        <a routerLinkActive="active" routerLink="poste">
-            Postes
-            <span *ngIf="nbPostesMauvais" class="important" style="float: right;">
-                {{nbPostesMauvais}}
-            </span>
-        </a>
-    </div>
-    <div class="menu-gauche-item" *ngIf="repos">
-        <a routerLinkActive="active" routerLink="repos">
-            Jours de repos
-        </a>
+    <div>
+        <div class="menu-gauche-item" *ngIf="contrat">
+            <a routerLinkActive="active" routerLink="contrat">
+                Contrats
+    
+                <span *ngIf="nbContratsMauvais" class="important" style="float: right;">
+                    {{nbContratsMauvais}}
+                </span>
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="poste">
+            <a routerLinkActive="active" routerLink="poste">
+                Postes
+                <span *ngIf="nbPostesMauvais" class="important" style="float: right;">
+                    {{nbPostesMauvais}}
+                </span>
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="vigile">
+            <a routerLinkActive="active" routerLink="vigile">
+                Vigiles
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="affectation">
+            <a routerLinkActive="active" routerLink="affectation">
+                Affectation
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="switch">
+            <a routerLinkActive="active" routerLink="switch">
+                Switchs
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="sanction">
+            <a routerLinkActive="active" routerLink="sanction">
+                Sanctions
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="permission">
+            <a routerLinkActive="active" routerLink="permission">
+                Permissions
+            </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="vigileBadge">
+            <a routerLinkActive="active" routerLink="vigile-badge">
+                Vigiles Badges
+            </a>
+        </div>
     </div>
 
     <div class="menu-gauche-sous-titre">

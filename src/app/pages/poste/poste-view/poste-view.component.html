@@ -1,7 +1,8 @@
 <div class="page" style="overflow-y: auto;">
     <div class="page-entete">
         <div *ngIf="poste.idposte!=0" class="page-entete-titre">
-            Poste : {{poste.libelle}}
+            Poste : {{poste.libelle}}, <b>{{poste.horaire | uppercase}}</b>
+
         </div>
         <div *ngIf="poste.idcontratsite">
             Contrat : {{poste.idcontratsite.idcontrat.libelle}},
@@ -29,14 +30,14 @@
     <div class="page-contenu">
         <div class="row">
             <div class="col-lg-5">
-                <div class="card shadow-1">
+                <div class="card">
                     <div>
                         <div class="petit-titre">
                             Informations
                         </div>
                         <div>
                             <div>
-                                Ville : <a href="#">{{poste.zone?.idville?.libelle}}</a> , Zone : <a href="#">{{poste.zone?.libelle}}</a>, Quartier : <a href="#">{{poste.idquartier?.libelle}}</a>, Laltitude : <a href="#">{{poste.latitude}}</a>, Longitude
+                                Ville : <a href="#">{{poste.zone?.idville?.libelle}}</a> , Zone : <a href="#">{{poste.zone?.libelle}}</a>, Quartier : <a href="#">{{poste.idquartier?.nom}}</a>, Laltitude : <a href="#">{{poste.latitude}}</a>, Longitude
                                 : <a href="#">{{poste.longitude}}</a>
                             </div>
                             <div>
@@ -46,7 +47,7 @@
                     </div>
 
                 </div>
-                <div class="card shadow-1">
+                <div class="card">
                     <div>
                         <div class="petit-titre">
                             Exigences du contrat :
@@ -57,17 +58,19 @@
                         <div>
                             <div>
                                 <ul>
-                                    <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(item)}" *ngFor="let item of exigences">
-                                        <span>
-                                            {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
-                                        </span>
-                                    </li>
+                                    <ng-container *ngFor="let item of exigences">
+                                        <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(item)}" *ngIf="item.horaire === poste.horaire">
+                                            <span>
+                                                {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
+                                            </span>
+                                        </li>
+                                    </ng-container>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card shadow-1">
+                <div class="card" style="display: none;">
                     <div>
                         <div class="petit-titre">
                             <div style="float: right; display: none;">
@@ -129,10 +132,10 @@
                 </div>
             </div>
             <div class="col-lg-7">
-                <div class="card shadow-1">
+                <div class="card">
                     <div style="margin-bottom: 10px;">
                         Liste des vigiles titulaires en poste
-                        <button *ngIf="!poste.bon" class="btn btn-link" style="float: right;" (click)="openModal()">
+                        <button class="btn btn-link" style="float: right;" (click)="openModal()">
                             Ajouter un vigile
                         </button>
                     </div>
@@ -145,7 +148,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card shadow-1">
+                <div class="card">
                     <div style="margin-bottom: 10px;">
                         Liste des remplacants
                     </div>
@@ -159,7 +162,7 @@
                         </ng-container>
                     </div>
                 </div>
-                <div class="card shadow-1">
+                <div class="card" style="display: none;">
                     <div style="margin-top: 20px; margin-bottom: 16px;">
                         Equipements reçus non basiques
                     </div>

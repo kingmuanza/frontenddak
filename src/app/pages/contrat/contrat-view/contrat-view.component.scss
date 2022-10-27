@@ -1,13 +1,16 @@
 .stat {
-    height: 100px;
-    padding: 16px;
+    height: 70px;
+    padding: 10px;
     text-align: center;
     color: white;
+    &.red {
+        color: #E3B505;
+    }
     line-height: 1.15;
     background-color: #231709;
     &-titre {}
     &-valeur {
-        font-size: 2.5em;
+        font-size: 1.5em;
         font-weight: bold;
     }
 }
@@ -23,4 +26,15 @@
 
 .input-group {
     margin-top: 10px;
+}
+
+.site {
+    .suppression {
+        display: none;
+    }
+    &:hover {
+        .suppression {
+            display: inline;
+        }
+    }
 }

@@ -27,5 +27,6 @@ export class Poste {
     organisme = false;
     description = '';
     bon = false;
+    horaire = '';
     idcontratsite: ContratSite | undefined;
 }
