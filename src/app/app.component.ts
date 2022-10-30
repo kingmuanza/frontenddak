@@ -41,7 +41,7 @@ export class AppComponent {
     });
     this.router.events.subscribe((val) => {
       const url = location.path();
-      console.log(url);
+      // console.log(url);
       if (location.path().indexOf('connexion') !== -1) {
         this.afficherMenu = false;
       } else {
@@ -51,10 +51,10 @@ export class AppComponent {
   }
 
   getUser() {
-    console.log('GET USER');
+    // console.log('GET USER');
     this.userSubscription = this.authService.currentUserSubject.subscribe((user) => {
-      console.log('userSubscription');
-      console.log(user);
+      // console.log('userSubscription');
+      // console.log(user);
       if (user) {
         this.user = user;
       } else {

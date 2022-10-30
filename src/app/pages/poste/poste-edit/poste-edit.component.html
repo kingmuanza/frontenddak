@@ -30,7 +30,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div>
-                                    <input (ngModelChange)="checkContrat($event)" [(ngModel)]="isPosteContractuel" type="checkbox"> Contrat lié au poste
+                                    <input (ngModelChange)="checkContrat($event)" [(ngModel)]="isPosteContractuel" type="checkbox"> Poste lié à un contrat
                                 </div>
                             </div>
                             <div [hidden]="!isPosteContractuel" class="col-lg-12">
@@ -67,7 +67,7 @@
 
                                                     <div style="margin-bottom: 20px;">
                                                         <h5 class="card-title">
-                                                            <input type="radio" (change)="sinspirerDuSite(site)" name="site"> {{site.nom}}
+                                                            <input type="radio" (change)="sinspirerDuSite(site)" name="site" [checked]="site.idcontratSite === siteChoisi.idcontratSite"> {{site.nom}}
                                                         </h5>
 
                                                         <div>
@@ -91,160 +91,174 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="categorie">
-                                    Horaire du poste
+                            <ng-container *ngIf="(siteChoisi.idcontratSite !== 0 && isPosteContractuel) || !isPosteContractuel">
+                                <div class="col-lg-12">
+                                    <div class="categorie">
+                                        Horaire du poste
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-6">
-                                <div class="">
-                                    <input type="radio" value="jour" [(ngModel)]="poste.horaire" name="horaire"> Jour
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="">
-                                    <input type="radio" value="nuit" [(ngModel)]="poste.horaire" name="horaire"> Nuit
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="categorie">
-                                    Informations sur le poste
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Code
+                                <div class="col-lg-6">
+                                    <div [ngClass]="{'is-invalid': montrerErreurs && erreurs.horaire}">
+                                        <input type="radio" [disabled]="existeDejaJour" (change)="changerAbreger('jour')" value="jour" [(ngModel)]="poste.horaire" name="horaire"> Jour
+                                        <span *ngIf="existeDejaJour">
+                                            : Le poste a déjà été créé
                                         </span>
                                     </div>
-                                    <input type="text" [(ngModel)]="poste.code" class="form-control">
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Libellé
+                                <div class="col-lg-6">
+                                    <div [ngClass]="{'is-invalid': montrerErreurs && erreurs.horaire}">
+                                        <input type="radio" [disabled]="existeDejaNuit" (change)="changerAbreger('nuit')" value="nuit" [(ngModel)]="poste.horaire" name="horaire"> Nuit
+                                        <span *ngIf="existeDejaNuit">
+                                            : Le poste a déjà été créé
                                         </span>
                                     </div>
-                                    <input type="text" [(ngModel)]="poste.libelle" class="form-control">
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Abrégé
-                                        </span>
-                                    </div>
-                                    <input [(ngModel)]="poste.abrege" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Zone
-                                        </span>
-                                    </div>
+                            </ng-container>
+                            <ng-container *ngIf="(isPosteContractuel && (!existeDejaJour || !existeDejaNuit)) || !isPosteContractuel">
 
-                                    <select type="text" [(ngModel)]="poste.zone" class="form-control">
-                                        <option [ngValue]="zone" *ngFor="let zone of zones">
-                                            {{zone.libelle}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Quartier
-                                        </span>
+                                <div class="col-lg-12">
+                                    <div class="categorie">
+                                        Informations sur le poste
                                     </div>
-                                    <select type="text" [(ngModel)]="poste.idquartier" class="form-control">
-                                        <ng-container *ngFor="let quartier of quartiers">
-                                            <option                                                
-                                                [ngValue]="quartier">
-                                                {{quartier.nom}}
-                                            </option>
-                                        </ng-container>
-                                    </select>
                                 </div>
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Prime
-                                        </span>
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Code
+                                            </span>
+                                        </div>
+                                        <input type="text" [(ngModel)]="poste.code" class="form-control">
                                     </div>
-                                    <select [(ngModel)]="poste.prime" class="form-control">
-                                        <option value="true">Oui</option>
-                                        <option value="false">Non</option>
-                                    </select>
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Personne à contacter
-                                        </span>
+                                <div class="col-lg-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Libellé
+                                            </span>
+                                        </div>
+                                        <input type="text" [(ngModel)]="poste.libelle" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.libelle}">
                                     </div>
-                                    <input type="text" [(ngModel)]="poste.contact" class="form-control">
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Téléphone
-                                        </span>
+                                <div class="col-lg-5">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Abrégé
+                                            </span>
+                                        </div>
+                                        <input [(ngModel)]="poste.abrege" type="text" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.abrege}">
                                     </div>
-                                    <input type="text" [(ngModel)]="poste.tel" class="form-control">
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Longitude
-                                        </span>
-                                    </div>
-                                    <input type="number" [(ngModel)]="poste.longitude" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Latitude
-                                        </span>
-                                    </div>
-                                    <input type="number" [(ngModel)]="poste.latitude" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="input-group">
+                                <div class="col-lg-5">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Zone
+                                            </span>
+                                        </div>
 
-                                    <span class="input-group-text">
-                                        Description
-                                        <br>
-                                        Localisation
-                                    </span>
-                                    <textarea [(ngModel)]="poste.description" type="text" class="form-control"></textarea>
+                                        <select type="text" [(ngModel)]="poste.zone" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.zone}">
+                                            <ng-container *ngFor="let zone of zones">
+                                                <option [ngValue]="zone"
+                                                    *ngIf="zone.horaire && zone.horaire === poste.horaire">
+                                                    {{zone.libelle}}
+                                                </option>
+                                            </ng-container>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div style="margin-top:15px; margin-bottom: 15px;">
-                                    <input type="checkbox" [(ngModel)]="poste.organisme"> &nbsp; Organisme
+                                <div class="col-lg-5">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Quartier
+                                            </span>
+                                        </div>
+                                        <select type="text" [(ngModel)]="poste.idquartier" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.idquartier }">
+                                            <ng-container *ngFor="let quartier of quartiers">
+                                                <option [ngValue]="quartier">
+                                                    {{quartier.nom}}
+                                                </option>
+                                            </ng-container>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="col-lg-2">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Prime
+                                            </span>
+                                        </div>
+                                        <select [(ngModel)]="poste.prime" class="form-control">
+                                            <option value="true">Oui</option>
+                                            <option value="false">Non</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Personne à contacter
+                                            </span>
+                                        </div>
+                                        <input type="text" [(ngModel)]="poste.contact" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Téléphone
+                                            </span>
+                                        </div>
+                                        <input type="text" [(ngModel)]="poste.tel" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Longitude
+                                            </span>
+                                        </div>
+                                        <input type="number" [(ngModel)]="poste.longitude" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                Latitude
+                                            </span>
+                                        </div>
+                                        <input type="number" [(ngModel)]="poste.latitude" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            Description
+                                            <br>
+                                            Localisation
+                                        </span>
+                                        <textarea [(ngModel)]="poste.description" type="text" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div style="margin-top:15px; margin-bottom: 15px;">
+                                        <input type="checkbox" [(ngModel)]="poste.organisme"> &nbsp; Organisme
+                                    </div>
+                                </div>
+                            </ng-container>
+
                         </div>
-                        <div class="input-group" style="margin-top: 20px; margin-bottom: 20px">
+                        <div *ngIf="(isPosteContractuel && poste.idcontratsite && (!existeDejaJour || !existeDejaNuit)) || !isPosteContractuel" class="input-group" style="margin-top: 20px; margin-bottom: 20px">
                             <button [disabled]="processing" (click)="save()" class="btn btn-primary">Enregistrer</button> &nbsp;
                             <button *ngIf="poste.idposte != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
                         </div>

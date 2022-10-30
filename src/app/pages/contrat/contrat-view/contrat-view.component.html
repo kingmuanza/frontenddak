@@ -28,7 +28,7 @@
     </div>
     <div class="page-contenu">
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <div class="stat" [ngClass]="{'red': sites.length!==contrat.nbPostes}">
                     <div class="stat-titre">
                         Sites
@@ -38,7 +38,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-3">
+                <div class="stat" [ngClass]="{'red': postes.length!==(postesJourDansLesExigences + postesNuitDansLesExigences)}">
+                    <div class="stat-titre">
+                        Postes
+                    </div>
+                    <div class="stat-valeur">
+                        {{postes.length}}/{{postesJourDansLesExigences + postesNuitDansLesExigences}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
                 <div class="stat" [ngClass]="{'red': vigilesJourDansLesExigences!==contrat.nbVigileJour}">
                     <div class="stat-titre">
                         Vigiles Jour
@@ -48,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-3">
                 <div class="stat" [ngClass]="{'red': vigilesNuitDansLesExigences!==contrat.nbVigileNuit}">
                     <div class="stat-titre">
                         Vigiles Nuit
@@ -69,30 +79,28 @@
             </button>
         </div>
         <div class="row">
-            <div class="col-lg-4 site" *ngFor="let site of sites">
+            <div class="col-lg-4" *ngFor="let site of sites">
 
-                <app-display-site [site]="site" [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences" [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences" (onVigileCalcul)="getData(site, $event)">
+                <div class="site">
+                    <app-display-site [site]="site" [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences" [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences" (onVigileCalcul)="getData(site, $event)">
 
-                </app-display-site>
-                <div class="suppression">
-                    <button (click)="supprimerSite(site)" class="btn btn-danger btn-error" style="width: 100%;">
-                        Supprimer
-
-                    </button>
+                    </app-display-site>
+                    <div class="suppression">
+                        <button (click)="supprimerSite(site)" class="btn btn-danger btn-error" style="width: 100%;">
+                            Supprimer
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="page-contenu">
-        <div style="margin-bottom: 8px;">
-            Liste des postes
-        </div>
-        <div *ngIf="!contrat.bon" style="margin-bottom: 8px;color: red;">
-            Le nombre de poste ne correspond pas au contrat
-        </div>
-        <div class="row">
-            <div class="col-lg-4" *ngFor="let poste of postes">
-                <app-display-poste [poste]="poste" [postesVigiles]="postesVigiles"></app-display-poste>
+
+                <div style="margin-top: 20px; margin-bottom:5px;">
+                    Liste des postes
+                </div>
+
+                <div class="" *ngFor="let poste of postes">
+                    <div *ngIf="poste.idcontratsite?.idcontratSite === site.idcontratSite">
+                        <app-display-poste [poste]="poste" [postesVigiles]="postesVigiles"></app-display-poste>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

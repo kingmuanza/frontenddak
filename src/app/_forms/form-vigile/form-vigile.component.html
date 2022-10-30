@@ -237,26 +237,24 @@
                                 Ville
                             </span>
                         </div>
-                        <select type="text" [(ngModel)]="vigile.ville" class="form-control">
+                        <select [(ngModel)]="vigile.ville" class="form-control">
                             <option [ngValue]="ville" *ngFor="let ville of villes">
                                 {{ville.libelle}}
                             </option>
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div *ngIf="this.vigile.quartier" class="col-lg-6">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
                                 Quartier
                             </span>
                         </div>
-                        <select type="text" [(ngModel)]="vigile.quartier" class="form-control">
-                            <ng-container *ngFor="let quartier of quartiers">
-                                <option [ngValue]="quartier">
-                                    {{quartier.nom}}
-                                </option>
-                            </ng-container>
+                        <select [(ngModel)]="vigile.quartier" class="form-control">
+                            <option [ngValue]="quartier" *ngFor="let quartier of quartiers">
+                                {{quartier.nom}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -291,9 +289,9 @@
         </div>
     </div>
     <div class="input-group" style="margin-top: 20px; margin-bottom: 20px;">
-        <button [disabled]="processing" (click)="save()" class="btn nouveau">
+        <button (click)="save()" class="btn nouveau">
             Enregistrer
         </button>&nbsp;
-        <button *ngIf="vigile.idvigile != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+        <button *ngIf="vigile.idvigile != 0" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
     </div>
 </div>

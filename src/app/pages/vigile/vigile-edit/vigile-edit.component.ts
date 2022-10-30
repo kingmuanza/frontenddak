@@ -50,7 +50,7 @@ export class VigileEditComponent implements OnInit {
   parrains = new Array<Vigile>();
   fichiers!: FileList;
   imagechange = false;
-  
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -63,7 +63,7 @@ export class VigileEditComponent implements OnInit {
     private villeService: JarvisService<Ville>,
     private nationaliteService: JarvisService<Nationalite>,
   ) {
-    
+
     this.app = initializeApp(FIREBASECONFIG);
   }
 
@@ -105,11 +105,7 @@ export class VigileEditComponent implements OnInit {
         this.url = this.vigile.image;
       }
       console.log(this.vigile);
-      /*
-        this.vigile.dateEntree = vigile.dateEntree?.split('T')[0];
-        this.vigile.dateSortie = vigile.dateSortie?.split('T')[0];
-        this.vigile.dteNce = vigile.dteNce?.split('T')[0]; 
-      */
+
       this.getAffectionOfVigile(vigile).then(() => {
         this.getAffectationActuelle();
         this.dtTrigger.next('');
@@ -127,7 +123,7 @@ export class VigileEditComponent implements OnInit {
       if (url.length > 0) {
         this.vigile.image = url[0];
         this.save();
-      }      
+      }
     });
   }
 
@@ -220,8 +216,6 @@ export class VigileEditComponent implements OnInit {
     return affectation;
   }
 
-  
-
   getVilles(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
       this.villeService.getAll('ville').then((villes) => {
@@ -242,7 +236,7 @@ export class VigileEditComponent implements OnInit {
     });
   }
 
-  getQuartiers(): Promise<Array<any>> {
+  getQuartiers(): Promise<Array<Quartier>> {
     return new Promise((resolve, reject) => {
       this.quartierService.getAll('quartier').then((quartiers) => {
         console.log('quartiers');
@@ -296,7 +290,7 @@ export class VigileEditComponent implements OnInit {
       if (this.vigile.dateSortie) {
         this.vigile.dateSortie = new Date(this.vigile.dateSortie);
       }
-  
+
       if (this.vigile.debutConge) {
         this.vigile.debutConge = new Date(this.vigile.debutConge);
       }
@@ -334,7 +328,7 @@ export class VigileEditComponent implements OnInit {
         }).catch((e) => {
           this.processing = false;
         });
-      } 
+      }
     } else {
       alert('Le formulaire n\'est pas valide ');
     }

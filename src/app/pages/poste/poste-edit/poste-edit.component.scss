@@ -28,4 +28,9 @@
 
 .selectionnee {
     border-color: rgb(70, 127, 208);
+    background-color: rgba(70, 127, 208, 0.05);
+}
+
+div.is-invalid {
+    color: red;
 }

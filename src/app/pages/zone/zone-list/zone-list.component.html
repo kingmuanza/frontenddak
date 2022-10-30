@@ -41,6 +41,7 @@
                                 <th>ID</th>
                                 <th>Code</th>
                                 <th>Libellé</th>
+                                <th>Horaire</th>
                                 <th>Ville</th>
                             </tr>
                         </thead>
@@ -49,6 +50,7 @@
                                 <td>{{zone.idzone}}</td>
                                 <td>{{zone.code}}</td>
                                 <td>{{zone.libelle}}</td>
+                                <td>{{zone.horaire | uppercase}}</td>
                                 <td>{{zone.idville?.libelle}}</td>
                             </tr>
                         </tbody>

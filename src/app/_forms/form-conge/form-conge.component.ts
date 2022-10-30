@@ -46,9 +46,9 @@ export class FormCongeComponent implements OnInit, OnChanges {
   init() {
     if (this.idvigile) {
       this.vigileService.get('vigile', this.idvigile).then((vigile) => {
-        console.log('Form Conge Component'.toUpperCase());
-        console.log('le vigile recupéré');
-        console.log(vigile.debutConge);
+        // console.log('Form Conge Component'.toUpperCase());
+        // console.log('le vigile recupéré');
+        // console.log(vigile.debutConge);
         this.vigile = vigile;
 
         if (vigile.idremplacantConge) {
@@ -61,8 +61,8 @@ export class FormCongeComponent implements OnInit, OnChanges {
 
 
         this.congeService.getAll('vigileconge').then((conges) => {
-          console.log('conges');
-          console.log(conges);
+          // console.log('conges');
+          // console.log(conges);
           conges = conges.filter((conge) => {
             return conge.idvigile.idvigile === this.vigile.idvigile;
           })

@@ -22,7 +22,7 @@ export class JarvisService<T> {
   }
 
   infos() {
-    console.log(this.URL);
+    // console.log(this.URL);
   }
 
   setServeur(urlServeur: string) {

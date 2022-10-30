@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   actualiser() {
-    console.log('actualiser');
+    // console.log('actualiser');
     this.getUser().then((user)=> {
       this.currentUser = user;
       this.notifier();

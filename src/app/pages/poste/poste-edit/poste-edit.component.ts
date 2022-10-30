@@ -41,6 +41,16 @@ export class PosteEditComponent implements OnInit {
 
   contrat = new Contrat();
   siteChoisi = new ContratSite();
+  existeDejaJour = false;
+  existeDejaNuit = false;
+  montrerErreurs = false;
+  erreurs = {
+    zone: false,
+    horaire: false,
+    idquartier: false,
+    libelle: false,
+    abrege: false,
+  };
 
 
   constructor(
@@ -81,13 +91,25 @@ export class PosteEditComponent implements OnInit {
                 console.log('le poste recupéré');
                 console.log(poste);
                 this.poste = poste;
-                /* 
-                                this.contrats.forEach((contrat) => {
-                                  if (this.poste.idcontrat && this.poste.idcontrat.idcontrat === contrat.idcontrat) {
-                                    this.poste.idcontrat = contrat;
-                                  }
-                                });
-                 */
+
+                if (this.poste.idcontratsite) {
+                  this.isPosteContractuel = true;
+                  this.contrats.forEach((contrat) => {
+                    if (this.poste.idcontratsite && this.poste.idcontratsite.idcontrat.idcontrat === contrat.idcontrat) {
+                      this.contrat = contrat;
+                    }
+                  });
+
+                  this.getSitesOfContrat(this.contrat).then(() => {
+                    this.contratsites.forEach((cs) => {
+                      if (this.poste.idcontratsite && cs.idcontratSite === this.poste.idcontratsite.idcontratSite) {
+                        this.siteChoisi = cs;
+                      }
+                    });
+                    this.checkPosteDejaCree();
+                  });
+                }
+
                 this.pointageService.getRemotePoste(id).then((posteRemote) => {
                   console.log('posteRemote');
                   console.log(posteRemote);
@@ -169,7 +191,28 @@ export class PosteEditComponent implements OnInit {
     });
   }
 
+  changerAbreger(horaire: string) {
+    let contraction = this.poste.libelle.split(' ').join('');
+    this.poste.abrege = contraction + horaire.toUpperCase();
+    this.poste.code = contraction + horaire.toUpperCase();
+    this.poste.libelle = this.poste.libelle + ' ' + horaire.toUpperCase();
+  }
+
+  isFormulaireCorrect() {
+    this.montrerErreurs = true;
+    this.erreurs.zone = !this.poste.zone;
+    this.erreurs.horaire = !this.poste.horaire;
+    this.erreurs.libelle = !this.poste.libelle;
+    this.erreurs.abrege = !this.poste.abrege;
+    this.erreurs.idquartier = !this.poste.idquartier;
+    
+    return !this.erreurs.zone && !this.erreurs.horaire && !this.erreurs.libelle && !this.erreurs.abrege && !this.erreurs.idquartier;
+  }
+
   save() {
+    if (!this.isFormulaireCorrect()) {
+      return;
+    }
     console.log('poste à enregistrer');
     console.log(this.poste);
     if (this.poste.debutContrat)
@@ -179,8 +222,8 @@ export class PosteEditComponent implements OnInit {
       this.poste.finContrat = new Date(this.poste.finContrat);
 
     if (this.poste.idposte == 0) {
-      if (this.poste.code && this.poste.libelle) {
-        this.processing = true;
+      if (this.poste.libelle) {
+        
         this.posteService.ajouter('poste', this.poste).then((data) => {
           console.log('data');
           console.log(data);
@@ -193,10 +236,9 @@ export class PosteEditComponent implements OnInit {
             this.router.navigate(['poste', 'view', c.idposte]);
           });
         }).catch((e) => {
-          this.processing = false;
         });
       } else {
-        this.notifierService.notify('error', "Veuillez renseigner un code et un libellé");
+        this.notifierService.notify('error', "Veuillez renseigner un libellé");
       }
     } else {
       this.processing = true;
@@ -278,19 +320,22 @@ export class PosteEditComponent implements OnInit {
   }
 
   getSitesOfContrat(contrat?: Contrat) {
-    setTimeout(() => {
-      console.log('getSitesOfContrat');
-      console.log(contrat?.libelle);
-      if (contrat) {
-        this.siteService.getAllSilent('contratsite').then((contratsites) => {
-          console.log('contratsites');
-          this.contratsites = contratsites.filter((contratsite) => {
-            return contratsite.idcontrat.idcontrat === contrat.idcontrat;
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log('getSitesOfContrat');
+        console.log(contrat?.libelle);
+        if (contrat) {
+          this.siteService.getAllSilent('contratsite').then((contratsites) => {
+            console.log('contratsites');
+            this.contratsites = contratsites.filter((contratsite) => {
+              return contratsite.idcontrat.idcontrat === contrat.idcontrat;
+            });
+            console.log(this.contratsites);
+            resolve(this.contratsites);
           });
-          console.log(this.contratsites);
-        });
-      }
-    }, 500);
+        }
+      }, 500);
+    });
   }
 
   sinspirerDuSite(site: ContratSite) {
@@ -306,6 +351,36 @@ export class PosteEditComponent implements OnInit {
       if (quartier.idquartier === site.idquartier?.idquartier) {
         this.poste.idquartier = quartier;
       }
-    })
+    });
+    this.checkPosteDejaCree();
+  }
+
+  private checkPosteDejaCree() {
+    this.existeDejaJour = false;
+    this.existeDejaNuit = false;
+    this.chercherPosteSimilaire('jour').then((resultat) => {
+      if (resultat)
+        this.existeDejaJour = true;
+    });
+    this.chercherPosteSimilaire('nuit').then((resultat) => {
+      if (resultat)
+        this.existeDejaNuit = true;
+    });
+  }
+
+  chercherPosteSimilaire(horaire: string) {
+
+    return new Promise((resolve, reject) => {
+      console.log('On recherche un poste similaire');
+      this.posteService.getAll('poste').then((data) => {
+        const resultat = data.filter((poste) => {
+          return poste.idposte !== this.poste.idposte && poste.idcontratsite && poste.horaire === horaire && poste.idcontratsite.idcontratSite === this.siteChoisi.idcontratSite;
+        });
+        console.log('poste similaire ' + horaire);
+        console.log(resultat);
+        resolve(resultat.length);
+      });
+    });
+
   }
 }

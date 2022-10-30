@@ -61,7 +61,7 @@ export class ZoneEditComponent implements OnInit {
         console.log(data);
         this.processing = false;
         this.notifierService.notify('success', "Ajout effectué avec succès");
-        // this.router.navigate(['zone']);
+        this.router.navigate(['zone']);
       });
     } else {
       this.processing = true;
@@ -70,7 +70,7 @@ export class ZoneEditComponent implements OnInit {
         console.log(data);
         this.processing = false;
         this.notifierService.notify('success', "Modification effectuée avec succès");
-        // this.router.navigate(['zone']);
+        this.router.navigate(['zone']);
       });
     }
   }

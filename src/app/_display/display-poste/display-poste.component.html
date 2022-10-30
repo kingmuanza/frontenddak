@@ -1,16 +1,15 @@
-<div class="shadow-1 app-poste" (click)="goTo()">
+<div class="app-poste" (click)="goTo()">
     <div class="cliquable">
         <b>
             {{poste.libelle}}
         </b>
     </div>
-    <div *ngIf="poste.zone">
-        Zone :
-        <a [routerLink]=" '/zone/edit/' + poste.zone?.idzone ">
-             {{poste.zone?.libelle}}
-        </a>
-    </div>
     <div>
-        Vigile Jour : {{nbJour}}, Vigile Nuit : {{nbNuit}}
+        <span *ngIf="poste.zone">
+            Zone : {{poste.zone?.libelle}},
+        </span>
+        <span *ngIf="poste.horaire">
+            Horaire : {{poste.horaire | uppercase}}
+        </span>
     </div>
 </div>

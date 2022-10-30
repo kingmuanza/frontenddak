@@ -17,7 +17,7 @@ import { Quartier } from 'src/app/models/quartier.model';
 export class ContratViewComponent implements OnInit {
 
   contrat = new Contrat();
-  sites = new Array<any>();
+  sites = new Array<ContratSite>();
   postes = new Array<Poste>();
   postesVigiles = new Array<PosteVigile>();
 
@@ -29,10 +29,13 @@ export class ContratViewComponent implements OnInit {
 
   site = new ContratSite();
 
-  infosVigiles:any = {};
+  infosVigiles: any = {};
 
   vigilesJourDansLesExigences = 0;
   vigilesNuitDansLesExigences = 0;
+
+  postesJourDansLesExigences = 0;
+  postesNuitDansLesExigences = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -114,7 +117,7 @@ export class ContratViewComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.posteService.getAll('poste').then((postes) => {
         postes = postes.filter((poste) => {
-          // return poste.idcontrat && poste.idcontrat.idcontrat === this.contrat.idcontrat;
+          return poste.idcontratsite && poste.idcontratsite.idcontrat.idcontrat === this.contrat.idcontrat;
         });
         resolve(postes);
       });
@@ -143,8 +146,8 @@ export class ContratViewComponent implements OnInit {
   }
 
   async setQuartier(libelle: string) {
-    let quartier : Quartier | undefined;
-    
+    let quartier: Quartier | undefined;
+
     this.quartiers.forEach((element) => {
       if (element.nom === libelle) {
         quartier = element;
@@ -223,10 +226,15 @@ export class ContratViewComponent implements OnInit {
   infosToDataUtiles() {
     this.vigilesJourDansLesExigences = 0;
     this.vigilesNuitDansLesExigences = 0;
+    this.postesJourDansLesExigences = 0;
+    this.postesNuitDansLesExigences = 0;
     const keys = Object.keys(this.infosVigiles);
     keys.forEach(key => {
-      this.vigilesJourDansLesExigences+= this.infosVigiles[key].jour;
-      this.vigilesNuitDansLesExigences+= this.infosVigiles[key].nuit;
+      this.vigilesJourDansLesExigences += this.infosVigiles[key].jour;
+      this.vigilesNuitDansLesExigences += this.infosVigiles[key].nuit;
+
+      this.postesJourDansLesExigences += this.infosVigiles[key].jour ? 1 : 0;
+      this.postesNuitDansLesExigences += this.infosVigiles[key].nuit ? 1 : 0;
     });
   }
 

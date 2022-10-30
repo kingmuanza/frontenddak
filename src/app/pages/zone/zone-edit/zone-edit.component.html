@@ -34,6 +34,17 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
+                                    Horaire
+                                </span>
+                            </div>
+                            <select [(ngModel)]="zone.horaire" class="form-control">
+                                <option value="jour">Jour</option>
+                                <option value="nuit">Nuit</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
                                     Ville
                                 </span>
                             </div>

@@ -85,8 +85,12 @@
                 </app-form-conge>
             </div>
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div>
-                    <app-form-vigile [vigile]="vigile" (onSupprimerEvent)="supprimer()" (onSaveEvent)="save()">
+                <div *ngIf="vigile.idvigile === 0">
+                    <app-form-vigile [vigile]="vigile" [vigiles]="vigiles" [quartiers]="quartiers" [villes]="villes" [nationalites]="nationalites" (onSupprimerEvent)="supprimer()" (onSaveEvent)="save()">
+                    </app-form-vigile>
+                </div>
+                <div *ngIf="vigile.idvigile !== 0">
+                    <app-form-vigile [vigile]="vigile" [vigiles]="vigiles" [quartiers]="quartiers" [villes]="villes" [nationalites]="nationalites" (onSupprimerEvent)="supprimer()" (onSaveEvent)="save()">
                     </app-form-vigile>
                 </div>
             </div>
