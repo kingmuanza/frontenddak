@@ -126,14 +126,14 @@
                                         </td>
                                         <td style="text-align: center;">
                                             <span *ngIf="pointage.latitude && pointage.latitude > 0" [ngClass]="{'bon': isBonneLocalisation(pointage)}">
-                                            <i class="bi-geo-alt"></i>
-                                        </span>
+                                                <i class="bi-geo-alt"></i>
+                                            </span>
                                             <span *ngIf="!pointage.absence" style="margin-right: 10px; color: green;">
-                                            <i class="bi-fingerprint"></i>
-                                        </span>
+                                                <i class="bi-fingerprint"></i>
+                                            </span>
                                             <span *ngIf="!pointage.absence" [ngClass]="{'bon': pointage.isBonHoraire}">
-                                            <i class="bi-clock"></i>
-                                        </span>
+                                                <i class="bi-clock"></i>
+                                            </span>
                                         </td>
                                     </tr>
                                 </ng-container>

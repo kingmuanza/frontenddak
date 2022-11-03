@@ -118,7 +118,7 @@ export class PointageListComponent implements OnInit {
     this.pointageService.getPointages().then((pointages) => {
       console.log('pointages');
       console.log(pointages);
-      this.pointages = pointages;
+      this.pointages = pointages; 
     });
   }
 

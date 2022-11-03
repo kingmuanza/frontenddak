@@ -40,12 +40,55 @@
     </div>
     <div class="page-contenu">
         <div *ngIf="zone.idzone !== 0 && date">
-            Liste des vigiles en service dans la zone <b>{{zone.libelle}}</b> le <b>{{date | date: 'EEEE dd-MM-yyyy'}}</b>
+            <ng-container>
+                Liste des vigiles en service dans la zone <b>{{zone.libelle}}</b>
+            </ng-container>
+            <ng-container>
+                le <b>{{date | date: 'EEEE dd-MM-yyyy'}}</b>
+            </ng-container>
         </div>
         <div style="margin-top: 20px;">
-            <div *ngFor="let aff of resultatsAffectations">
-                {{aff.idvigile.noms}} {{aff.dateAffectation}}
-            </div>
+            <table class="table table-bordered row-border hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Vigile</th>
+                        <th>Zone</th>
+                        <th>Poste</th>
+                        <th>Horaire</th>
+                        <th>Commentaire</th>
+                        <th style="text-align: center;">Pointage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let affectation of resultatsAffectations">
+                        <tr>
+                            <td>
+                                <div *ngIf="getPointageVigileDate(affectation, date)">
+                                    {{ toDate(getPointageVigileDate(affectation, date)?.date) | date: 'yyyy-MM-dd HH:mm:ss'}}
+                                </div>
+                            </td>
+                            <td>{{showVigile(affectation, date).noms}}</td>
+                            <td>{{affectation.idposte.zone.libelle}}</td>
+                            <td>{{affectation.idposte.libelle}}</td>
+                            <td>{{affectation.horaire | uppercase}}</td>
+                            <td></td>
+                            <td>
+
+                                <span *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude " [ngClass]="{'bon': isBonneLocalisation(getPointageVigileDate(affectation, date))}">
+                                    <i class="bi-geo-alt"></i>&nbsp;&nbsp;&nbsp;
+                                </span>
+                                <span *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence" style="color: green;">
+                                    <i class="bi-fingerprint"></i>&nbsp;&nbsp;&nbsp;
+                                </span>
+                                <span *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence" [ngClass]="{'bon': isBonHoraire(affectation, date)}">
+                                    <i class="bi-clock"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
