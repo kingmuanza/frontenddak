@@ -17,27 +17,29 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Date
-                            </span>
-                        </div>
-                        <input type="date" name="date" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
                                 Horaire
                             </span>
                         </div>
-                        <select type="date" name="date" class="form-control">
+                        <select [(ngModel)]="horaire" class="form-control">
+                            <option value="jour">Tous</option>
                             <option value="jour">Jour</option>
                             <option value="nuit">Nuit</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn primaire">Rechercher</button>
+                    <button class="btn primaire" (click)="rechercher(horaire)">Rechercher</button>
+                </div>
+            </div>
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="type">
+                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="encours" type="radio" name="afficher"> &nbsp;En cours &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="arret" type="radio" name="afficher"> &nbsp;Arrêtées &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="tous" type="radio" name="afficher"> &nbsp;Toutes &nbsp;&nbsp;
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,6 +50,7 @@
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Date</th>
                             <th>Poste</th>
                             <th>Horaire</th>
@@ -58,12 +61,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idaffectation)">
+                        <tr *ngFor="let affectation of resultats" (click)="edit(affectation.idaffectation)">
+                            <td>{{affectation.idaffectation}}</td>
                             <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
                             <td>{{affectation.idposte?.libelle}}</td>
                             <td>{{affectation.horaire}}</td>
                             <td>{{affectation.idvigile?.noms}}</td>
-                            <td>{{jourSemaine(affectation.idvigile?.jourRepos)}}</td>
+                            <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
                             <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
                             <td>{{affectation.arret?.split('T')[0]}}</td>
                         </tr>

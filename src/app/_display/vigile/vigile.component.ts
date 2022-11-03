@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Vigile } from 'src/app/models/vigile.model';
@@ -9,14 +9,20 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   templateUrl: './vigile.component.html',
   styleUrls: ['./vigile.component.scss']
 })
-export class VigileComponent implements OnInit {
+export class VigileComponent implements OnInit, OnChanges {
 
   @Input() vigile = new Vigile();
   @Input() cliquable = true;
   @Input() long = false;
+  @Output() isVigileVacant = new EventEmitter<boolean>();
+  
   affectation: any;
   affectations = new Array<Affectation>();
   affectationsActuelles = new Array<Affectation>();
+
+  joursSemaine = [1,2,3,4,5,6,7];
+
+  vacant = true;
 
   constructor(
     private vigileService: JarvisService<Vigile>,
@@ -24,34 +30,55 @@ export class VigileComponent implements OnInit {
     private router: Router
   ) { }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('Le vigile a changé');
+    console.log(this.vigile.noms);
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    this.init();
+  }
+
   ngOnInit(): void {
-    this.getAffectionOfVigile(this.vigile).then(() => {
+    this.init();
+  }
+  
+  private init() {
+    this.getAffectionsOfVigile(this.vigile).then(() => {
       if (this.vigile.estRemplacant) {
-        this.affectationsActuelles = this.getAffectationActuelles();
+        // this.affectationsActuelles = this.affectations.concat([]);
       } else {
         this.affectation = this.getAffectationActuelle();
+        console.log('this.affectation');
+        console.log(this.affectation);
+        if (this.affectation) {
+          this.vacant = false;
+        } else {
+          this.vacant = true;
+        }
+        this.isVigileVacant.emit(this.vacant)
       }
     });
   }
-  
+
   libelleFonction(fonction: string) {
     return this.vigileService.libelleFonction(fonction);
   }
 
-  getAffectionOfVigile(vigile: Vigile): Promise<void> {
+  getAffectionsOfVigile(vigile: Vigile): Promise<void> {
     return new Promise((resolve, reject) => {
       this.affectationService.getAll('affectation').then((data) => {
         /* console.log('data');
         console.log(data); */
+        this.affectationsActuelles = new Array<Affectation>();
         if (vigile.estRemplacant) {
           data.forEach((affectation) => {
             if (affectation.remplacant && affectation.remplacant.idvigile === vigile.idvigile) {
-              this.affectations.push(affectation);
+              this.affectationsActuelles.push(affectation);
             }
           });
         } else {
           data.forEach((affectation) => {
-            if (affectation.idvigile.idvigile === vigile.idvigile) {
+            if (affectation.idvigile.idvigile === vigile.idvigile && !affectation.arret) {
               this.affectations.push(affectation);
             }
           });
@@ -65,7 +92,7 @@ export class VigileComponent implements OnInit {
     let affectation: Affectation | null;
     affectation = null;
     this.affectations.forEach((aff) => {
-      if (!aff.arret) {
+      if (!aff.arret && aff.idvigile.idvigile === this.vigile.idvigile) {
         affectation = aff;
       }
     });

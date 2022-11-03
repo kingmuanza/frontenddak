@@ -44,12 +44,13 @@ export class FormCongeComponent implements OnInit, OnChanges {
   }
 
   init() {
-    if (this.idvigile) {
+    if (this.idvigile !== 0) {
       this.vigileService.get('vigile', this.idvigile).then((vigile) => {
         // console.log('Form Conge Component'.toUpperCase());
         // console.log('le vigile recupéré');
         // console.log(vigile.debutConge);
         this.vigile = vigile;
+        this.dette = this.vigile.detteConges ? this.vigile.detteConges: 0;
 
         if (vigile.idremplacantConge) {
           this.vigiles.forEach((v) => {
@@ -58,7 +59,6 @@ export class FormCongeComponent implements OnInit, OnChanges {
             }
           });
         }
-
 
         this.congeService.getAll('vigileconge').then((conges) => {
           // console.log('conges');
@@ -69,7 +69,6 @@ export class FormCongeComponent implements OnInit, OnChanges {
           this.conges = conges.sort((a, b) => {
             return new Date(a.dateDebut).getTime() - new Date(b.dateDebut).getTime() > 0 ? -1 : 1;
           });
-          this.dette = 14 - this.calculerDette();
         });
       });
     }
@@ -158,6 +157,7 @@ export class FormCongeComponent implements OnInit, OnChanges {
   save() {
     console.log('this.vigile.debutConge');
     console.log(this.vigile.debutConge);
+    this.vigile.detteConges = this.dette;
     this.vigile.debutConge = new Date(this.vigile.debutConge);
     this.vigile.finConge = new Date(this.vigile.finConge);
     this.vigileService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {

@@ -5,7 +5,7 @@
 
         </div>
         <div *ngIf="poste.idcontratsite">
-            Contrat : {{poste.idcontratsite.idcontrat.libelle}}, Site : {{poste.idcontratsite.nom}},
+            Contrat : <a [routerLink]="'/contrat/view/' + poste.idcontratsite.idcontrat.idcontrat">{{poste.idcontratsite.idcontrat.libelle}}</a>, Site : {{poste.idcontratsite.nom}},
         </div>
         <div class="">
             <a routerLink="/poste" class="btn btn-link" style="padding: 0; margin: 0;">
@@ -160,10 +160,10 @@
                         Liste des remplacants
                     </div>
                     <div class="row">
-                        <ng-container *ngFor="let affectation of affectations">
-                            <div class="col-lg-6" *ngIf="affectation.remplacant">
-                                <div style="border: 1px solid #aaa; margin-bottom: 20px;">
-                                    <app-vigile [vigile]="affectation.remplacant"></app-vigile>
+                        <ng-container *ngFor="let remplacant of remplacantsDuPoste">
+                            <div class="col-lg-6" *ngIf="remplacant">
+                                <div style="border: 0px solid #aaa; margin-bottom: 20px;">
+                                    <app-vigile [vigile]="remplacant"></app-vigile>
                                 </div>
                             </div>
                         </ng-container>

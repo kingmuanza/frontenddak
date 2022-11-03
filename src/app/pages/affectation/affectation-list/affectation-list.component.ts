@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { Affectation } from 'src/app/models/affectation.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -18,43 +19,82 @@ export class AffectationListComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   dtInstance!: Promise<DataTables.Api>;
 
-  affectations = new Array<any>();
+  affectations = new Array<Affectation>();
+  resultats = new Array<Affectation>();
+  resultatsPrimaires = new Array<Affectation>();
+
+  afficher = 'encours';
+  horaire = 'jour';
 
   constructor(
     private router: Router,
-    private jarvisService: JarvisService<any> 
+    private affectationService: JarvisService<any> 
   ) { }
 
   ngOnInit(): void {
-    this.jarvisService.getAll('affectation').then((data) => {
+    this.affectationService.getAll('affectation').then((data) => {
       console.log('data');
       console.log(data);
       this.affectations = data;
+      this.resultats = data;
+      this.resultatsPrimaires = data;
+      this.afficherAffectationsEnCours(this.afficher);
       this.dtTrigger.next('');
     });
   }
 
-  edit(id: string) {
+  edit(id: string | number) {
     this.router.navigate(['affectation', 'edit', id]);
   }
 
   jourSemaine(jour: number) {
-    if (jour == 1)
-    return "Lundi";
-    if (jour == 2)
-    return "Mardi";
-    if (jour == 3)
-    return "Mercredi";
-    if (jour == 4)
-    return "Jeudi";
-    if (jour == 5)
-    return "Vendredi";
-    if (jour == 6)
-    return "Samedi";
-    if (jour == 7)
-    return "Dimanche";
+    return this.affectationService.jourSemaine(jour);
+  }
 
-    return "" + jour ? jour: "";
+  rechercher(horaire: string) {
+    this.resultatsPrimaires = new Array<Affectation>();
+    if (horaire==='tous') {
+      const affectationsHoraire = this.affectations.filter((affectation) => {
+      return true;
+    });
+    this.resultatsPrimaires = this.resultatsPrimaires.concat(affectationsHoraire);
+    } else {
+      const affectationsHoraire = this.affectations.filter((affectation) => {
+        return affectation.horaire === horaire;
+      });
+      this.resultatsPrimaires = this.resultatsPrimaires.concat(affectationsHoraire);
+    }
+    this.afficherAffectationsEnCours(this.afficher);
+  }
+
+  afficherAffectationsEnCours(ev: any) {
+    setTimeout(() => {
+      console.log('afficherAffectationsEnCours');
+      console.log(ev);
+      this.resultats = new Array<Affectation>();
+      if (this.afficher === 'encours') {
+        const affectationsEnCours = this.resultatsPrimaires.filter((affectation) => {
+          return !affectation.arret;
+        });
+        this.resultats = this.resultats.concat(affectationsEnCours);
+      }
+      if (this.afficher === 'arret') {
+        const affectationsEnCours = this.resultatsPrimaires.filter((affectation) => {
+          return affectation.arret;
+        });
+        this.resultats = this.resultats.concat(affectationsEnCours);
+      }
+      if (this.afficher === 'tous') {
+        const affectationsEnCours = this.resultatsPrimaires.filter((affectation) => {
+          return true;
+        });
+        this.resultats = this.resultats.concat(affectationsEnCours);
+      }
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next('');
+      });
+    }, 500);
   }
   
   ngOnDestroy(): void {

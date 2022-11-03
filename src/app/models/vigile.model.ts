@@ -26,6 +26,7 @@ export class Vigile {
     idremplacantConge: any;
     image = '';
     badge = false;
+    detteConges = 0;
 
     constructor() {
         let dateLimite = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 18 * 365);

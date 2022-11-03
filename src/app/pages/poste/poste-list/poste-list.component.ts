@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { Affectation } from 'src/app/models/affectation.model';
+import { Poste } from 'src/app/models/poste.model';
+import { ZoneDak } from 'src/app/models/zone.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -18,35 +21,131 @@ export class PosteListComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   dtInstance!: Promise<DataTables.Api>;
 
-  postes = new Array<any>();
+  postes = new Array<Poste>();
+  resultatsPrimaires = new Array<Poste>();
+  resultats = new Array<Poste>();
+
+  zones = new Array<ZoneDak>();
+  zone = new ZoneDak();
+  horaire = 'tous';
+  affectations = new Array<Affectation>();
+  afficher = 'tous';
+
+  vacanteur: any = {};
 
   constructor(
     private router: Router,
-    private jarvisService: JarvisService<any> 
+    private posteService: JarvisService<Poste>,
+    private zoneService: JarvisService<ZoneDak>,
+    private affectationService: JarvisService<Affectation>,
   ) { }
 
   ngOnInit(): void {
-    this.jarvisService.getAll('poste').then((data) => {
+    this.zoneService.getAll('zone').then((zones) => {
       console.log('data');
-      console.log(data);
-      this.postes = data;
-      this.dtTrigger.next('');
+      console.log(zones);
+      this.zones = zones;
+
+      this.affectationService.getAll('affectation').then((affectations) => {
+        console.log('affectations');
+        console.log(affectations);
+        this.affectations = affectations;
+
+        this.posteService.getAll('poste').then((data) => {
+          console.log('data');
+          console.log(data);
+          this.postes = data;
+          this.resultatsPrimaires = data;
+          this.resultats = data;
+          this.dtTrigger.next('');
+        });
+        
+      });
     });
   }
 
-  edit(id: string) {
+  rechercher(horaire: string, zone?: ZoneDak) {
+    this.resultatsPrimaires = new Array<Poste>();
+    if (horaire === 'tous') {
+      const postesHoraire = this.postes.filter((poste) => {
+        return true;
+      });
+      this.resultatsPrimaires = this.resultatsPrimaires.concat(postesHoraire);
+    } else {
+      const postesHoraire = this.postes.filter((poste) => {
+        return poste.horaire === horaire;
+      });
+      this.resultatsPrimaires = this.resultatsPrimaires.concat(postesHoraire);
+    }
+
+    
+    if (zone && zone.idzone !==0) {
+      const postesEnCours = this.resultatsPrimaires.filter((poste) => {
+        return poste.zone.idzone === zone.idzone;
+      });
+      this.resultatsPrimaires = postesEnCours;
+    } else {
+      const postesEnCours = this.resultatsPrimaires.filter((poste) => {
+        return true;
+      });
+      this.resultatsPrimaires = postesEnCours;
+    }
+    this.afficherPostes(this.afficher);
+  }
+  
+  afficherPostes(afficher?: string) {
+    setTimeout(() => {
+      this.resultats = new Array<Poste>();
+      if (afficher === 'parfait') {
+        const postes = this.resultatsPrimaires.filter((poste) => {
+          return this.vacanteur[poste.idposte];
+        });
+        this.resultats = this.resultats.concat(postes);
+      }
+      if (afficher === 'vacant') {
+        const postes = this.resultatsPrimaires.filter((poste) => {
+          return !this.vacanteur[poste.idposte];
+        });
+        this.resultats = this.resultats.concat(postes);
+      }
+      if (afficher === 'tous') {
+        const postes = this.resultatsPrimaires.filter((poste) => {
+          return true;
+        });
+        this.resultats = this.resultats.concat(postes);
+      }
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next('');
+      });
+    }, 500);
+  }
+
+  initZone() {
+    this.zone = new ZoneDak();
+  }
+
+  edit(id: string | number) {
     this.router.navigate(['poste', 'view', id]);
   }
 
   libellePrime(libelle: string) {
     if (libelle)
-    return "OUI";
+      return "OUI";
 
     return "NON";
+  }
+
+  isNotVacant(poste: Poste, is: boolean) {
+    console.log('poste.libelle');
+    console.log(poste.libelle);
+    console.log('vacant : ' + !is);
+    this.vacanteur[poste.idposte] = is
+    
   }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-  
+
 }

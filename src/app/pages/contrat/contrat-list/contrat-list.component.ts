@@ -20,6 +20,9 @@ export class ContratListComponent implements OnInit, OnDestroy {
   dtInstance!: Promise<DataTables.Api>;
 
   contrats = new Array<Contrat>();
+  resultatsPrimaires = new Array<Contrat>();
+  resultats = new Array<Contrat>();
+  afficher = 'encours';
 
   constructor(
     private router: Router,
@@ -33,8 +36,50 @@ export class ContratListComponent implements OnInit, OnDestroy {
       this.contrats = data.filter((contrat) => {
         return !contrat.idparent;
       });
+      this.resultatsPrimaires = data.filter((contrat) => {
+        return !contrat.idparent;
+      });
+      this.resultats = data.filter((contrat) => {
+        return !contrat.idparent;
+      });
       this.dtTrigger.next('');
     });
+  }
+
+  afficherContrat(ev: any) {
+    setTimeout(() => {
+      console.log('afficherAffectationsEnCours');
+      console.log(ev);
+      this.resultats = new Array<Contrat>();
+      if (this.afficher === 'CREATION') {
+        const contratsEnCours = this.resultatsPrimaires.filter((contrat) => {
+          return contrat.statut === 'CREATION';
+        });
+        this.resultats = this.resultats.concat(contratsEnCours);
+      }
+      if (this.afficher === 'CREE') {
+        const contratsEnCours = this.resultatsPrimaires.filter((contrat) => {
+          return contrat.statut === 'CREE';
+        });
+        this.resultats = this.resultats.concat(contratsEnCours);
+      }
+      if (this.afficher === 'PARFAIT') {
+        const contratsEnCours = this.resultatsPrimaires.filter((contrat) => {
+          return  contrat.statut === 'PARFAIT';
+        });
+        this.resultats = this.resultats.concat(contratsEnCours);
+      }
+      if (this.afficher === 'tous') {
+        const contratsEnCours = this.resultatsPrimaires.filter((contrat) => {
+          return true;
+        });
+        this.resultats = this.resultats.concat(contratsEnCours);
+      }
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next('');
+      });
+    }, 500);
   }
 
   edit(id: string | number) {
@@ -46,6 +91,16 @@ export class ContratListComponent implements OnInit, OnDestroy {
     return "OUI";
 
     return "NON";
+  }
+
+  libelleStatut(libelle: string): string {
+    if (libelle === 'CREATION') {
+      return 'En cours de création';
+    }
+    if (libelle === 'CREE') {
+      return 'Créé';
+    }
+    return libelle;
   }
 
   ngOnDestroy(): void {

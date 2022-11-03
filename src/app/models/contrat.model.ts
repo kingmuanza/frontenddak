@@ -31,4 +31,5 @@ export class Contrat {
     date = new Date();
 
     bon = false;
+    statut = "CREATION";
 }

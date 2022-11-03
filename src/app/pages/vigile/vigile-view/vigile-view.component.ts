@@ -50,6 +50,8 @@ export class VigileViewComponent implements OnInit {
   sanctions = new Array<Suivi>();
   equipements = new Array<EquipementVigile>();
 
+  statut = 'Titulaire';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -90,6 +92,15 @@ export class VigileViewComponent implements OnInit {
     });
   }
 
+  setStatut(vigile: Vigile) {
+    if (vigile.estRemplacant) {
+      this.statut = 'Remplaçant'
+    }
+    if (vigile.estRemplacantConge) {
+      this.statut = 'Remplaçant Congé'
+    }
+  }
+
   getSanctions(): Promise<Array<Suivi>> {
     const resultats = new Array<Suivi>();
     return new Promise((resolve, reject) => {
@@ -110,6 +121,7 @@ export class VigileViewComponent implements OnInit {
     this.vigileService.get('vigile', Number(id)).then((vigile) => {
       console.log('le vigile recupéré');
       this.vigile = vigile;
+      this.setStatut(this.vigile);
 
       if (!this.vigile.nom) {
         this.vigile.nom = this.vigile.noms;

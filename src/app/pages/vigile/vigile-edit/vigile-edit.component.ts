@@ -308,7 +308,7 @@ export class VigileEditComponent implements OnInit {
           this.processing = false;
           this.notifierService.notify('success', "Ajout effectué avec succès");
           // this.router.navigate(['vigile']);
-          this.vigileService.getAll('contrat').then((vigiles) => {
+          this.vigileService.getAll('vigile').then((vigiles) => {
             const c = vigiles.sort((a, b) => {
               return a.idvigile - b.idvigile > 0 ? -1 : 1;
             })[0];

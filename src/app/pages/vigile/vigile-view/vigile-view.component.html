@@ -10,18 +10,29 @@
                 </div>
                 <div>
                     <div>
-                        Fonction : {{libelleFonction(vigile.fonction)}}, Tel : {{vigile.tel}}, Poste : <a [routerLink]="'/poste/view/' + affectation?.idposte?.idposte">{{affectation?.idposte.libelle}}</a>
+                        Fonction : {{libelleFonction(vigile.fonction)}}, Tel : {{vigile.tel}}
+                        <br>
+                        <ng-container *ngIf="affectation">
+                            Poste : <a [routerLink]="'/poste/view/' + affectation.idposte?.idposte">{{affectation.idposte?.libelle}}</a>
+                        </ng-container>
+                        <ng-container *ngIf="!affectation && !vigile.estRemplacant">
+                            Poste : <b style="color: red;">VACANT</b>
+                        </ng-container>
+
                     </div>
                 </div>
-                <div class="">
-                    <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
-                        Revenir à la liste des vigiles
-                    </a>
+                <div>
+                    Statut : {{statut}}
                 </div>
                 <div *ngIf="vigile.badge">
                     Badge reçu
                 </div>
             </div>
+        </div>
+        <div class="">
+            <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des vigiles
+            </a>
         </div>
     </div>
     <div class="boutons">
@@ -78,7 +89,8 @@
                 </div>
             </div>
         </div>
-        <div class="remplacant-programme">
+
+        <div *ngIf="vigile.estRemplacant" class="remplacant-programme">
             <div style="margin-top: 20px; margin-bottom: 20px">
                 Programme de la semaine
             </div>
@@ -95,6 +107,7 @@
                 </div>
             </div>
         </div>
+
         <div style="margin-bottom: 40px; display: none;">
             <div style="margin-top: 20px; margin-bottom: 16px;">
                 Equipements reçus

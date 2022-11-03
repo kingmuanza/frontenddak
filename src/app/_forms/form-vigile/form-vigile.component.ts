@@ -6,6 +6,7 @@ import { Nationalite } from 'src/app/models/nationalite.model';
 import { Quartier } from 'src/app/models/quartier.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { Ville } from 'src/app/models/ville.model';
+import { CongeService } from 'src/app/services/conge.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { ParrainService } from 'src/app/services/parrain.service';
 
@@ -44,6 +45,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     tel: false,
     fonction: false,
     matricule: false,
+    dateEntree: false,
   }
 
   montrerErreurs = false;
@@ -52,6 +54,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     private router: Router,
     private notifierService: NotifierService,
     private parrainService: ParrainService,
+    private congeService: CongeService,
     private vigileService: JarvisService<Vigile>,
   ) { }
 
@@ -163,12 +166,19 @@ export class FormVigileComponent implements OnInit, OnChanges {
     } else {
       this.erreurs.matricule = false;
     }
-    return isDateNaiss && isMajeur && isNom && isCNI && isTel && isFonction && isMatricule;
+    
+    const isDateEntree = !!this.vigile.dateEntree;
+    this.erreurs.dateEntree = !this.vigile.dateEntree;
+    return isDateNaiss && isMajeur && isNom && isCNI && isTel && isFonction && isMatricule && isDateEntree;
   }
 
   save() {
     this.montrerErreurs = false;
     if (this.isFormulaireValide()) {
+      if (true/* this.vigile.idvigile !== 0 */) {
+        this.vigile = this.congeService.calculerConges(this.vigile, 0);
+        this.vigile.finConge = this.congeService.calculerFin(this.vigile.debutConge, this.vigile.detteConges);
+      }
       this.onSaveEvent.emit(this.vigile);
     } else {
       this.afficherLesErreurs();

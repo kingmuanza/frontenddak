@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="col-3">
-                <div class="stat" [ngClass]="{'red': postes.length!==(postesJourDansLesExigences + postesNuitDansLesExigences)}">
+                <div class="stat" [ngClass]="{'red': postes.length === 0 || (postes.length!==(postesJourDansLesExigences + postesNuitDansLesExigences))}">
                     <div class="stat-titre">
                         Postes
                     </div>
@@ -98,7 +98,7 @@
 
                 <div class="" *ngFor="let poste of postes">
                     <div *ngIf="poste.idcontratsite?.idcontratSite === site.idcontratSite">
-                        <app-display-poste [poste]="poste" [postesVigiles]="postesVigiles"></app-display-poste>
+                        <app-display-poste (isNotVacant)="getDataVacant(poste, $event)" [affectations]="affectations" [poste]="poste" [postesVigiles]="postesVigiles"></app-display-poste>
                     </div>
                 </div>
             </div>

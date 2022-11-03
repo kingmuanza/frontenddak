@@ -1,4 +1,7 @@
-<div class="app-poste" (click)="goTo()">
+<div class="app-poste" [ngClass]="{'vacant': !notVacant}" (click)="goTo()">
+    <span *ngIf="!notVacant" style="float: right; color:red">
+        VACANT
+    </span>
     <div class="cliquable">
         <b>
             {{poste.libelle}}
@@ -11,5 +14,17 @@
         <span *ngIf="poste.horaire">
             Horaire : {{poste.horaire | uppercase}}
         </span>
+    </div>
+    <div>
+
+        <div>
+            <ng-container *ngFor="let item of exigences">
+                <li class="element-supprimable" [ngClass]="{'erreur': !isExigenceVerifiee(item)}" *ngIf="item.horaire === poste.horaire">
+                    <span>
+                        {{item.quantite}} {{item.typeVigile}}
+                    </span>
+                </li>
+            </ng-container>
+        </div>
     </div>
 </div>

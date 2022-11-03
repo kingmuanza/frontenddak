@@ -98,4 +98,11 @@
             </div>
         </div>
     </div>
+    <div [hidden]="true">
+        <div *ngFor="let vigile of vigiles">
+            <app-vigile [vigile]="vigile">
+
+            </app-vigile>
+        </div>
+    </div>
 </div>

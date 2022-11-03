@@ -14,7 +14,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 import { PointageService } from 'src/app/services/pointage.service';
 import * as bootstrap from 'bootstrap';
 import { Vigile } from 'src/app/models/vigile.model';
-import { contratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
+import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
 
 @Component({
   selector: 'app-poste-view',
@@ -34,6 +34,7 @@ export class PosteViewComponent implements OnInit {
   affectations = new Array<Affectation>();
   vigiles = new Array<Vigile>();
   remplacants = new Array<Vigile>();
+  remplacantsDuPoste = new Array<Vigile>();
 
   vigile: any;
 
@@ -51,7 +52,7 @@ export class PosteViewComponent implements OnInit {
 
   myModal?: bootstrap.Modal;
 
-  exigences = new Array<contratSiteVigile>();
+  exigences = new Array<ContratSiteVigile>();
 
   constructor(
     private router: Router,
@@ -64,7 +65,7 @@ export class PosteViewComponent implements OnInit {
     private equipementService: JarvisService<Equipement>,
     private equipementVigileService: JarvisService<EquipementVigile>,
     private postevigileService: JarvisService<any>,
-    private contratSiteVigileService: JarvisService<contratSiteVigile>,
+    private contratSiteVigileService: JarvisService<ContratSiteVigile>,
     private posteEquipementService: JarvisService<PosteEquipement>,
   ) {
 
@@ -108,7 +109,7 @@ export class PosteViewComponent implements OnInit {
             console.log('data');
             console.log(data);
             data.forEach((affectation) => {
-              if (affectation.idposte.idposte === poste.idposte) {
+              if (affectation.idposte.idposte === poste.idposte && !affectation.arret) {
                 this.affectations.push(affectation);
                 /**  equipementVigileService */
                 this.equipementVigileService.getAll('equipementvigile').then((data) => {
@@ -118,6 +119,19 @@ export class PosteViewComponent implements OnInit {
                 });
               }
             });
+
+            this.affectations.forEach((element) => {
+              const vigile = element.remplacant;
+              const remplacantEstDejaLa = this.remplacantsDuPoste.filter((remplacant) => {
+                return remplacant.idvigile === vigile.idvigile;
+              });
+              if (remplacantEstDejaLa.length > 0) {
+
+              } else {
+                this.remplacantsDuPoste.push(vigile);
+              }
+            });
+
             this.getDemandesVigiles().then((postevigiles) => {
               this.postevigiles = postevigiles.filter((pv) => {
                 return pv.idposte.idposte === this.poste.idposte;
@@ -351,7 +365,7 @@ export class PosteViewComponent implements OnInit {
     });
   }
 
-  verifierExigence(exigence: contratSiteVigile) {
+  verifierExigence(exigence: ContratSiteVigile) {
     let resultat = false;
     let nombre = 0;
     if (exigence) {

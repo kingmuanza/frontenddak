@@ -18,13 +18,15 @@
             <div *ngIf="etape === 1" class="page-contenu-corps">
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Date affectation
-                                </span>
+                        <div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Date affectation
+                                    </span>
+                                </div>
+                                <input [(ngModel)]="affectation.dateAffectation" type="date" class="form-control">
                             </div>
-                            <input [(ngModel)]="affectation.dateAffectation" type="date" class="form-control">
                         </div>
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -32,22 +34,28 @@
                                     Poste
                                 </span>
                             </div>
-                            <select type="text" [(ngModel)]="affectation.idposte" class="form-control">
+                            <select (ngModelChange)="setAffectationACauseDuPoste()" type="text" [(ngModel)]="affectation.idposte" class="form-control">
                                 <option [ngValue]="poste" *ngFor="let poste of postes">
                                     {{poste.libelle}}
                                 </option>
                             </select>
                         </div>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Horaire
-                                </span>
+                        <div *ngIf="affectation.idposte" style="margin-top: 20px; margin-bottom: 20px;">
+
+                            <app-display-poste [poste]="affectation.idposte" [affectations]="affectations" (isNotVacant)="isNotVacant(affectation.idposte, $event)">
+
+                            </app-display-poste>
+
+                            <div style="margin-top: 10px;" *ngIf="canNotBeAffectation">
+                                <div>
+                                    Ce poste ne peut plus recevoir d'affectation. Veuillez choisir l'affectation qui sera mise à l'arrêt
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <div *ngFor="let item of affectationsDuPoste">
+                                        <input (change)="setAffectationACauseDuPoste(item)" type="radio" name="affectationArretee"> {{item.idvigile.noms}}
+                                    </div>
+                                </div>
                             </div>
-                            <select [(ngModel)]="affectation.horaire" class="form-control">
-                                <option value="jour">Jour</option>
-                                <option value="nuit">Nuit</option>
-                            </select>
                         </div>
                         <div>
                             <div class="input-group">
@@ -57,15 +65,28 @@
                                     </span>
                                 </div>
                                 <select type="text" [(ngModel)]="affectation.idvigile" class="form-control">
-                                    <option [ngValue]="vigile" *ngFor="let vigile of vigiles">
-                                        {{vigile.noms}}
-                                    </option>
+                                    <ng-container *ngFor="let vigile of vigiles">
+                                        <option [ngValue]="vigile"
+                                            *ngIf="!vigile.estRemplacant && !estDejaAffecteAuPoste(vigile) && (affectation.idposte && affectation.idposte.horaire === vigile.horaire)">
+                                            {{vigile.noms}}
+                                        </option>
+                                    </ng-container>
                                 </select>
                             </div>
                             <small *ngIf="affectation.idvigile">
                                 Jour de repos : {{affectation.idvigile ? jourSemaine(affectation.idvigile.jourRepos) :
                                 "Aucun jour défini"}}
                             </small>
+                        </div>
+                        <div *ngIf="affectation.idvigile" style="margin-top: 20px; margin-bottom: 20px;">
+
+                            <app-vigile [vigile]="affectation.idvigile" (isVigileVacant)="isVigileVacant($event)">
+                            </app-vigile>
+                            <div *ngIf="!leVigileEstVacant">
+                                L'affectation du vigile
+                                <b>{{affectation.idvigile.noms}}</b> au poste
+                                <b>{{getAffectationActuelle(affectation.idvigile)?.idposte?.libelle}}</b> sera mise à l'arrêt
+                            </div>
                         </div>
                         <div>
                             <div class="input-group">
@@ -75,7 +96,8 @@
                                     </span>
                                 </div>
                                 <select type="text" [(ngModel)]="affectation.remplacant" class="form-control">
-                                    <option *ngIf="!affectation.idvigile">Veuillez choisir premièrement un vigile</option>
+                                    <option *ngIf="!affectation.idvigile">Veuillez choisir premièrement un vigile
+                                    </option>
                                     <ng-container *ngFor="let vigile of vigiles">
                                         <option [ngValue]="vigile"
                                             *ngIf="affectation.idvigile && affectation.idvigile.idvigile != vigile.idvigile && vigile.estRemplacant">
@@ -88,7 +110,8 @@
                                 </button>
                             </div>
                             <small *ngIf="affectation.idvigile">
-                                Jour de repos : {{affectation.remplacant ? jourSemaine(affectation.remplacant?.jourRepos) :
+                                Jour de repos : {{affectation.remplacant ?
+                                jourSemaine(affectation.remplacant?.jourRepos) :
                                 "Aucun jour défini"}},
                                 Statut : {{affectation.remplacant ? affectation.remplacant.statut ?
                                 affectation.remplacant?.statut :
@@ -96,114 +119,110 @@
                                 "..."}}
                             </small>
                         </div>
-                        <div class="input-group">
-                            <button [disabled]="processing" (click)="terminerEtape1()" class="btn nouveau">Enregistrer</button> &nbsp;
-                            <button *ngIf="affectation.idaffectation != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                        <div *ngIf="affectation.remplacant" style="margin-top: 20px;">
+
+                            <app-vigile [vigile]="affectation.remplacant" [long]="true"></app-vigile>
+                            <div *ngIf="getAffectationActuelleRemplacant(affectation.remplacant, affectation.idvigile.jourRepos)">
+                                L'affectation du remplacant
+                                <b>{{affectation.remplacant.noms}}</b> au poste
+                                <b>{{getAffectationActuelleRemplacant(affectation.remplacant,
+                                    affectation.idvigile.jourRepos)?.idposte?.libelle}}</b> le
+                                <b>{{jourSemaine(affectation.idvigile.jourRepos)}}</b> sera mise à l'arrêt
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div *ngIf="affectation.idposte">
-                            <div>
-                                Poste concerné
+                        <div style="height: 10px;"></div>
+
+                        <div class="card" *ngIf="affectationAArreterACauseDuPoste.idaffectation !== 0">
+                            <div class="card-body" *ngIf="toJour(affectationAArreterACauseDuPoste.dateAffectation) < toJour(affectation.dateAffectation)">
+                                <div>
+                                    Affectation à arrêter à cause du poste
+                                </div>
+                                <div>
+                                    <b>{{affectationAArreterACauseDuPoste.idvigile?.noms}}</b> ne sera plus au poste
+                                    <b>{{affectationAArreterACauseDuPoste.idposte?.libelle}}</b> où il était de puis le {{affectationAArreterACauseDuPoste.dateAffectation | date: 'dd-MM-yyyy'}}
+                                </div>
                             </div>
-                            <app-display-poste [poste]="affectation.idposte"></app-display-poste>
+                            <div class="card-body" *ngIf="toJour(affectationAArreterACauseDuPoste.dateAffectation) >= toJour(affectation.dateAffectation)">
+                                <div>
+                                    Une affectation plus récente a été trouvée
+                                </div>
+                                <div>
+                                    <div>
+                                        L'affectation que vous allez créer est antérieure à l'affectation actuelle de
+                                        <b>{{affectationAArreterACauseDuPoste.idvigile.noms}}</b>. Elle sera automatiquement mise à l'arrêt le {{affectationAArreterACauseDuPoste.dateAffectation | date: 'dd-MM-yyy'}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div *ngIf="affectation.idvigile">
-                            <div>
-                                Vigile affecté
+                        <div class="card" *ngIf="affectationAArreterACauseDuVigile.idaffectation !== 0">
+                            <div class="card-body" *ngIf="toJour(affectationAArreterACauseDuVigile.dateAffectation) < toJour(affectation.dateAffectation)">
+                                <div>
+                                    Affectation à arrêter à cause du vigile
+                                </div>
+                                <div>
+                                    <b>{{affectationAArreterACauseDuVigile.idvigile?.noms}}</b> ne sera plus au poste
+                                    <b>{{affectationAArreterACauseDuVigile.idposte?.libelle}}</b> où il était de puis le {{affectationAArreterACauseDuVigile.dateAffectation | date: 'dd-MM-yyyy'}}
+                                </div>
                             </div>
-                            <app-vigile [vigile]="affectation.idvigile"></app-vigile>
+                            <div class="card-body" *ngIf="toJour(affectationAArreterACauseDuVigile.dateAffectation) >= toJour(affectation.dateAffectation)">
+                                <div>
+                                    Une affectation plus récente a été trouvée
+                                </div>
+                                <div>
+                                    <div>
+                                        L'affectation que vous allez créer est antérieure à l'affectation actuelle de
+                                        <b>{{affectationAArreterACauseDuVigile.idvigile.noms}}</b>. Elle sera automatiquement mise à l'arrêt le {{affectationAArreterACauseDuVigile.dateAffectation | date: 'dd-MM-yyy'}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div *ngIf="affectation.remplacant">
-                            <div>
-                                Remplacant
+                        <div class="card" *ngIf="affectationAArreterACauseDuRemplacant.idaffectation !== 0">
+                            <div class="card-body" *ngIf="toJour(affectationAArreterACauseDuRemplacant.dateAffectation) < toJour(affectation.dateAffectation)">
+                                <div>
+                                    Affectation à arrêter à cause du remplacant
+                                </div>
+                                <div>
+                                    <b>{{affectationAArreterACauseDuRemplacant.remplacant?.noms}}</b> ne sera plus remplacant au poste
+                                    <b>{{affectationAArreterACauseDuRemplacant.idposte?.libelle}}</b> le
+                                    <b>{{jourSemaine(affectationAArreterACauseDuRemplacant.idvigile.jourRepos)}}</b> où il était depuis le {{ affectationAArreterACauseDuRemplacant.dateAffectation | date: 'dd-MM-yyyy'}}
+                                </div>
                             </div>
-                            <app-vigile [vigile]="affectation.remplacant" [long]="true"></app-vigile>
+                            <div class="card-body" *ngIf="toJour(affectationAArreterACauseDuRemplacant.dateAffectation) >= toJour(affectation.dateAffectation)">
+                                <div>
+                                    Une affectation plus récente a été trouvée
+                                </div>
+                                <div>
+                                    <div>
+                                        L'affectation que vous allez créer est antérieure à l'affectation actuelle du remplacant
+                                        <b>{{affectationAArreterACauseDuRemplacant.remplacant.noms}}</b> le {{jourSemaine(affectationAArreterACauseDuRemplacant.idvigile.jourRepos)}}. Elle sera automatiquement mise à l'arrêt le {{affectationAArreterACauseDuRemplacant.dateAffectation
+                                        | date: 'dd-MM-yyy'}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="affectation.idvigile && affectation.idposte">
+                            <div class="card-body">
+                                Vous allez affecter
+                                <b>{{affectation.idvigile.noms}}</b> au poste <b>{{affectation.idposte.libelle}}</b>.
+                                <ng-container *ngIf="affectation.remplacant">
+                                    Il sera remplacé le <b>{{jourSemaine(affectation.idvigile.jourRepos)}}</b> par
+                                    <b>{{affectation.remplacant.noms}}</b>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="input-group" *ngIf="affectation.idvigile && affectation.idposte">
+                            <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
+                            <button *ngIf="affectation.idaffectation != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div *ngIf="etape === 2" class="page-contenu-corps">
-                <div>
-                    Détails du poste : {{affectation.idposte.libelle}}
-                </div>
-
-                <table class="table row-border hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Zone</th>
-                            <th>Libellé</th>
-                            <th>Contrat</th>
-                            <th class="text-right">Nbr Vigil Jr.</th>
-                            <th class="text-right">Nbr Vigil Aff Jr.</th>
-                            <th class="text-right">Nbr Vigil Nt.</th>
-                            <th class="text-right">Nbr Vigil Aff Nt.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{affectation.idposte.idposte}}</td>
-                            <td>{{affectation.idposte.zone.libelle}}</td>
-                            <td>{{affectation.idposte.libelle}}</td>
-                            <td>{{affectation.idposte.contrat}}</td>
-                            <td class="text-right">
-                                {{affectation.idposte.nombreVigileJour ? affectation.idposte.nombreVigileJour : 0}}
-                            </td>
-                            <td class="text-right">
-                                <div class="nombre" [ngClass]="{'red': affectation.idposte.nombreVigileJour  > getNombreAffectationJour(affectation.idposte) + impactNouvelleAffectation('jour')}">
-                                    {{getNombreAffectationJour(affectation.idposte)}} -> {{getNombreAffectationJour(affectation.idposte) + impactNouvelleAffectation("jour")}}
-                                </div>
-                            </td>
-                            <td class="text-right">
-                                {{affectation.idposte.nombreVigileNuit ? affectation.idposte.nombreVigileNuit:0}}
-                            </td>
-                            <td class="text-right">
-                                <div class="nombre" [ngClass]="{'red': affectation.idposte.nombreVigileJour > getNombreAffectationJour(affectation.idposte) + impactNouvelleAffectation('nuit')}">
-                                    {{getNombreAffectationNuit(affectation.idposte)}} -> {{getNombreAffectationNuit(affectation.idposte) + impactNouvelleAffectation('nuit')}}
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div>
-                    En ajoutant cette affectation, vous mettrez l'affectation suivante à l'arrêt
-                </div>
-                <table class="table row-border hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Poste</th>
-                            <th>Vigile</th>
-                            <th>Repos</th>
-                            <th>Remplacant</th>
-                            <th>Arrêt</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let aff of affectationsAffectees">
-                            <td>{{aff.idaffectation}}</td>
-                            <td>{{aff.dateAffectation?.split('T')[0]}}</td>
-                            <td>{{aff.idposte.libelle}}</td>
-                            <td>{{aff.idvigile.noms}}</td>
-                            <td>{{jourSemaine(aff.idvigile.jourRepos)}}</td>
-                            <td>{{aff.remplacant? affectation.remplacant.noms : ""}}</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm">
-                                    {{affectation.dateAffectation?.split('T')[0]}}
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="input-group">
-                    <button [disabled]="processing" (click)="save()" class="btn btn-primary">Enregistrer</button> &nbsp;
-                    <button [disabled]="processing" (click)="annuler()" class="btn">Annuler</button> &nbsp;
-                </div>
-
-            </div>
         </div>
+    </div>
+    <div style="height: 25vh;">
+
     </div>

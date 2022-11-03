@@ -1,19 +1,18 @@
-<div class="app-vigile">
+<div class="app-vigile" [ngClass]="{'vacant': vacant, 'remplacant': vigile.estRemplacant}">
+    <span *ngIf="vacant" style="float: right; color:red">
+        VACANT
+    </span>
     <div>
-
         <b class="cliquable" (click)="goTo(vigile)">
-            {{vigile?.noms}}
+            {{vigile.noms}}<span *ngIf="vigile.estRemplacant"> : Remplacant</span>
         </b>
-
     </div>
     <div>
         <small>
             {{libelleFonction(vigile.fonction)}}
             <ng-container *ngIf="!affectation">
                 Horaire : {{vigile.horaire | uppercase}}
-
             </ng-container>
-
         </small>
     </div>
     <div *ngIf="affectation">
@@ -22,18 +21,30 @@
             {{affectation?.idposte?.libelle}}
         </a>, Horaire : {{affectation.horaire}}
     </div>
-    <ul *ngIf="vigile.estRemplacant && long">
-        <li *ngFor="let item of affectationsActuelles">
-            {{jourSemaine(item.idvigile.jourRepos)}}, Poste :
-            <a class="cliquable" (click)="voirPoste()">
-                {{item.idposte?.libelle}}
-            </a>, Horaire : {{item.horaire}}, Vigile :
-            <a class="cliquable" (click)="goTo(item.idvigile)">
-                {{item.idvigile.noms}}
-            </a>
-        </li>
-    </ul>
-    <div *ngIf="vigile.estRemplacant && !long">
-        {{affectationsActuelles.length}}/6 affectations actuellement
+    <div *ngIf="vigile.estRemplacant && long">
+        <div *ngIf="long">
+            <ng-container *ngFor="let jour of joursSemaine">
+                <li>
+                    {{jourSemaine(jour)}},
+                    <ng-container *ngFor="let item of affectationsActuelles">
+                        <ng-container *ngIf="jour === item.idvigile.jourRepos && !item.arret">
+                            Poste :
+                            <a class="cliquable" (click)="voirPoste()">
+                                {{item.idposte?.libelle}}
+                            </a>, Horaire : {{item.horaire}}, Vigile :
+                            <a class="cliquable" (click)="goTo(item.idvigile)">
+                                {{item.idvigile.noms}}
+                            </a>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="jour === vigile.jourRepos">
+                        REPOS
+                    </ng-container>
+                </li>
+            </ng-container>
+        </div>
+        <div *ngIf="!long">
+            {{affectationsActuelles.length}}/6 affectations actuellement
+        </div>
     </div>
 </div>

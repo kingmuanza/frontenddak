@@ -1,6 +1,6 @@
 import { ContratSite } from "./contrat.site.model";
 
-export class contratSiteVigile {
+export class ContratSiteVigile {
     idcontratSiteVigile = 0;
     idcontratsite = new ContratSite();
     horaire = '';

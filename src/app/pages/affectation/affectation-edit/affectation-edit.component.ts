@@ -4,6 +4,7 @@ import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Poste } from 'src/app/models/poste.model';
+import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -21,19 +22,27 @@ export class AffectationEditComponent implements OnInit {
   vigiles = new Array<any>();
   affectationAffectee = new Affectation();
   affectationsAffectees = new Array<any>();
-  affectations = new Array<any>();
+  affectations = new Array<Affectation>();
+  affectationsDuPoste = new Array<Affectation>();
+
+  canNotBeAffectation = false;
+  leVigileEstVacant = false;
 
   etape = 1;
+
+  affectationAArreterACauseDuPoste = new Affectation();
+  affectationAArreterACauseDuVigile = new Affectation();
+  affectationAArreterACauseDuRemplacant = new Affectation();
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
-    private jarvisService: JarvisService<any>
+    private affectationService: JarvisService<Affectation>,
   ) { }
 
   ngOnInit(): void {
-    this.jarvisService.getAll('affectation').then((data) => {
+    this.affectationService.getAll('affectation').then((data) => {
       console.log('data');
       console.log(data);
       this.affectations = data;
@@ -45,7 +54,7 @@ export class AffectationEditComponent implements OnInit {
         this.route.paramMap.subscribe((paramMap) => {
           const id = paramMap.get('id');
           if (id) {
-            this.jarvisService.get('affectation', Number(id)).then((affectation) => {
+            this.affectationService.get('affectation', Number(id)).then((affectation) => {
               console.log('le affectation recupéré');
               console.log(affectation);
               this.affectation = affectation;
@@ -78,12 +87,12 @@ export class AffectationEditComponent implements OnInit {
 
   getPostes(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('poste').then((data) => {
+      this.affectationService.getAll('poste').then((data) => {
         const postes = new Array<any>();
         console.log('postes');
         console.log(postes);
         data.forEach((poste) => {
-          if ( true/* poste.contrat == 'ENCOURS' */) {
+          if (true/* poste.contrat == 'ENCOURS' */) {
             postes.push(poste);
           }
         });
@@ -94,7 +103,7 @@ export class AffectationEditComponent implements OnInit {
 
   getVigiles(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('vigile').then((vigiles) => {
+      this.affectationService.getAll('vigile').then((vigiles) => {
         console.log('vigiles');
         console.log(vigiles);
         resolve(vigiles);
@@ -110,7 +119,7 @@ export class AffectationEditComponent implements OnInit {
         console.log(this.affectation);
         console.log(this.affectation);
         this.affectationsAffectees = new Array<any>();
-        this.jarvisService.getAll('affectation').then((affectations) => {
+        this.affectationService.getAll('affectation').then((affectations) => {
           console.log('affectations');
           console.log(affectations);
           affectations.forEach((aff) => {
@@ -154,57 +163,74 @@ export class AffectationEditComponent implements OnInit {
   }
 
   async save() {
+    this.affectation.horaire = this.affectation.idposte.horaire;
 
-    if (this.affectationsAffectees.length > 0) {
-      this.processing = true;
-      for (let index = 0; index < this.affectationsAffectees.length; index++) {
-        const aff = this.affectationsAffectees[index];
-        aff.arret = new Date(this.affectation.dateAffectation);
-        await this.jarvisService.modifier('affectation', aff.idaffectation, aff);
-      }
-      this.processing = false;
-    }
     if (this.affectation.dateAffectation)
       this.affectation.dateAffectation = new Date(this.affectation.dateAffectation);
-
-    if (this.affectation.arret)
-      this.affectation.arret = new Date(this.affectation.arret);
 
     if (this.affectation.idaffectation == 0) {
 
       if (this.affectation.idposte && this.affectation.idvigile && this.affectation.dateAffectation) {
-        this.processing = true;
-        this.jarvisService.ajouter('affectation', this.affectation).then((data) => {
-          console.log('data');
-          console.log(data);
-          this.processing = false;
-          this.notifierService.notify('success', "Ajout effectué avec succès");
-          this.router.navigate(['affectation']);
-        }).catch((e) => {
-          this.processing = false;
-        });
+        let dateArret = await this.arreterLesAffectationsAArreter();
+        if (dateArret) {
+          this.affectation.arret = dateArret;
+        }
+        await this.affectationService.ajouter('affectation', this.affectation);
+        this.notifierService.notify('success', "Ajout effectué avec succès");
+        this.router.navigate(['affectation']);
       } else {
         this.notifierService.notify('error', "Veuillez renseigner une date, un vigile et un poste");
       }
-    } else {
-      this.processing = true;
-      this.jarvisService.modifier('affectation', this.affectation.idaffectation, this.affectation).then((data) => {
-        console.log('data');
-        console.log(data);
-        this.processing = false;
-        this.notifierService.notify('success', "Modification effectuée avec succès");
-        this.router.navigate(['affectation']);
-      }).catch((e) => {
-        this.processing = false;
-      });
     }
+  }
+
+  async arreterLesAffectationsAArreter(): Promise<Date | undefined> {
+    let dateArret: Date | undefined;
+    if (this.affectationAArreterACauseDuPoste.idaffectation !== 0) {
+      if (this.toJour(this.affectationAArreterACauseDuPoste.dateAffectation) < this.toJour(this.affectation.dateAffectation)) {
+        this.affectationAArreterACauseDuPoste.arret = new Date();
+        await this.affectationService.modifier('affectation', this.affectationAArreterACauseDuPoste.idaffectation, this.affectationAArreterACauseDuPoste);
+      } else {
+        dateArret = new Date(this.affectationAArreterACauseDuPoste.dateAffectation);
+      }
+    }
+    if (this.affectationAArreterACauseDuVigile.idaffectation !== 0) {
+      if (this.toJour(this.affectationAArreterACauseDuVigile.dateAffectation) < this.toJour(this.affectation.dateAffectation)) {
+        this.affectationAArreterACauseDuVigile.arret = new Date();
+        await this.affectationService.modifier('affectation', this.affectationAArreterACauseDuVigile.idaffectation, this.affectationAArreterACauseDuVigile);
+      } else {
+        dateArret = new Date(this.affectationAArreterACauseDuVigile.dateAffectation);
+      }
+    }
+    if (this.affectationAArreterACauseDuRemplacant.idaffectation !== 0) {
+      if (this.toJour(this.affectationAArreterACauseDuRemplacant.dateAffectation) < this.toJour(this.affectation.dateAffectation)) {
+        this.affectationAArreterACauseDuRemplacant.arret = new Date();
+
+        const affectationSansRemplacant = new Affectation()
+        affectationSansRemplacant.idposte = this.affectationAArreterACauseDuRemplacant.idposte;
+        affectationSansRemplacant.idvigile = this.affectationAArreterACauseDuRemplacant.idvigile;
+        affectationSansRemplacant.dateAffectation = new Date();
+        affectationSansRemplacant.horaire = this.affectationAArreterACauseDuRemplacant.horaire;
+
+        await this.affectationService.modifier('affectation', this.affectationAArreterACauseDuRemplacant.idaffectation, this.affectationAArreterACauseDuRemplacant);
+
+        console.log('affectationSansRemplacant');
+        console.log(affectationSansRemplacant);
+        
+        await this.affectationService.ajouter('affectation', affectationSansRemplacant);
+
+      } else {
+        dateArret = new Date(this.affectationAArreterACauseDuRemplacant.dateAffectation);
+      }
+    }
+    return dateArret
   }
 
   supprimer() {
     const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
     if (reponse) {
       this.processing = true;
-      this.jarvisService.supprimer('affectation', this.affectation.idaffectation).then((data) => {
+      this.affectationService.supprimer('affectation', this.affectation.idaffectation).then((data) => {
         console.log('data');
         console.log(data);
         this.processing = false;
@@ -215,7 +241,7 @@ export class AffectationEditComponent implements OnInit {
   }
 
   jourSemaine(jour: number | string) {
-    return this.jarvisService.jourSemaine(Number(jour))
+    return this.affectationService.jourSemaine(Number(jour))
   }
 
   getNombreAffectationJour(poste: Poste): number {
@@ -246,4 +272,91 @@ export class AffectationEditComponent implements OnInit {
     this.affectation.remplacant = null;
   }
 
+  isNotVacant(poste: Poste, is: boolean) {
+    console.log('poste.libelle');
+    console.log(poste.libelle);
+    console.log(is);
+    this.canNotBeAffectation = is;
+    this.getAffectationEncoursDuPoste(poste);
+  }
+
+  getAffectationEncoursDuPoste(poste: Poste) {
+    let affectationsDuPoste = new Array<Affectation>();
+    this.affectations.forEach((affectation) => {
+      if (!affectation.arret) {
+        if (affectation.idposte.idposte === poste.idposte) {
+          affectationsDuPoste.push(affectation);
+        }
+      }
+    });
+    this.affectationsDuPoste = affectationsDuPoste;
+  }
+
+  isVigileVacant(ev: any) {
+    this.leVigileEstVacant = ev;
+  }
+
+  estDejaAffecteAuPoste(vigile: Vigile): boolean {
+    if (vigile) {
+      let resultat = false;
+      this.affectationsDuPoste.forEach((aff) => {
+        if (aff.idvigile.idvigile === vigile.idvigile) {
+          resultat = true;
+        }
+      });
+      return resultat;
+    } else {
+      return false;
+    }
+  }
+
+  getAffectationActuelle(vigile: Vigile): Affectation | null {
+    let affectation: Affectation | null;
+    affectation = null;
+    this.affectations.forEach((aff) => {
+      if (!aff.arret && aff.idvigile.idvigile === vigile.idvigile) {
+        affectation = aff;
+      }
+    });
+    if (affectation) {
+      this.affectationAArreterACauseDuVigile = affectation;
+    } else {
+      this.affectationAArreterACauseDuVigile = new Affectation();
+    }
+    return affectation;
+  }
+
+  getAffectationActuelleRemplacant(vigile: Vigile, jour: number): Affectation | null {
+    let affectation: Affectation | null;
+    affectation = null;
+    this.affectations.forEach((aff) => {
+      if (!aff.arret && aff.remplacant.idvigile === vigile.idvigile && aff.idvigile.jourRepos === jour) {
+        affectation = aff;
+      }
+    });
+
+    if (affectation) {
+      this.affectationAArreterACauseDuRemplacant = affectation;
+    } else {
+      this.affectationAArreterACauseDuRemplacant = new Affectation();
+    }
+    return affectation;
+  }
+
+  setAffectationACauseDuPoste(item?: Affectation) {
+    if (item) {
+      this.affectationAArreterACauseDuPoste = item;
+    } else {
+      this.affectationAArreterACauseDuPoste = new Affectation();
+    }
+  }
+
+  toJour(d: Date): number {
+    const date = new Date(d);
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date.getTime();
+  }
 }

@@ -1,1 +1,51 @@
-<p>pointage-suivi works!</p>
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Fiche de pointage
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Zone
+                            </span>
+                        </div>
+                        <select type="text" [(ngModel)]="zone" class="form-control">
+                            <ng-container *ngFor="let z of zones">
+                                <option [ngValue]="z"
+                                    *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
+                                    {{z.libelle}}
+                                </option>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Date
+                            </span>
+                        </div>
+                        <input [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" type="date" class="form-control">
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn primaire" (click)="getAffectationByZone(zone, date)">Générer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div *ngIf="zone.idzone !== 0 && date">
+            Liste des vigiles en service dans la zone <b>{{zone.libelle}}</b> le <b>{{date | date: 'EEEE dd-MM-yyyy'}}</b>
+        </div>
+        <div style="margin-top: 20px;">
+            <div *ngFor="let aff of resultatsAffectations">
+                {{aff.idvigile.noms}} {{aff.dateAffectation}}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contrat } from 'src/app/models/contrat.model';
 import { ContratSite } from 'src/app/models/contrat.site.model';
@@ -8,18 +8,20 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 import * as bootstrap from 'bootstrap';
 import { NotifierService } from 'angular-notifier';
 import { Quartier } from 'src/app/models/quartier.model';
+import { Affectation } from 'src/app/models/affectation.model';
 
 @Component({
   selector: 'app-contrat-view',
   templateUrl: './contrat-view.component.html',
   styleUrls: ['./contrat-view.component.scss']
 })
-export class ContratViewComponent implements OnInit {
+export class ContratViewComponent implements OnInit, OnDestroy {
 
   contrat = new Contrat();
   sites = new Array<ContratSite>();
   postes = new Array<Poste>();
   postesVigiles = new Array<PosteVigile>();
+  affectations = new Array<Affectation>();
 
   quartier = '';
 
@@ -30,6 +32,7 @@ export class ContratViewComponent implements OnInit {
   site = new ContratSite();
 
   infosVigiles: any = {};
+  infosVacants: any = {};
 
   vigilesJourDansLesExigences = 0;
   vigilesNuitDansLesExigences = 0;
@@ -37,10 +40,13 @@ export class ContratViewComponent implements OnInit {
   postesJourDansLesExigences = 0;
   postesNuitDansLesExigences = 0;
 
+  interval: any;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private contratService: JarvisService<Contrat>,
+    private affecationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
     private quartierService: JarvisService<Quartier>,
     private siteService: JarvisService<ContratSite>,
@@ -51,6 +57,13 @@ export class ContratViewComponent implements OnInit {
   ngOnInit(): void {
     this.getDemandesVigiles().then((postesVigiles) => {
       this.postesVigiles = postesVigiles;
+    });
+    this.affecationService.getAll('affectation').then((data) => {
+      console.log('affectations');
+      console.log(data);
+      this.affectations = data.filter((affectation) => {
+        return true;
+      });
     });
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
@@ -74,17 +87,12 @@ export class ContratViewComponent implements OnInit {
 
           this.getPostes().then((postes) => {
             this.postes = postes;
-            if (postes.length === this.contrat.nbPostes) {
-              this.contrat.bon = true;
-            } else {
-              this.contrat.bon = false;
-            }
-            this.contratService.modifier('contrat', this.contrat.idcontrat, contrat).then((data) => {
-            });
           });
 
           this.getSites().then((sites) => {
-            this.sites = sites;
+            this.sites = sites.filter((site) => {
+              return site.idcontrat.idcontrat === this.contrat.idcontrat;
+            });
           });
 
         });
@@ -216,14 +224,49 @@ export class ContratViewComponent implements OnInit {
     jour: number,
     nuit: number,
   }) {
-    console.log('onVigileCalcul' + site.idcontratSite);
-    console.log(ev);
+    // console.log('onVigileCalcul' + site.idcontratSite);
+    // console.log(ev);
     this.infosVigiles[site.idcontratSite] = ev;
     console.log(this.infosVigiles);
     this.infosToDataUtiles();
   }
 
+  getDataVacant(poste: Poste, ev: boolean) {
+    console.log('getDataVacant' + poste.idposte);
+    console.log(ev);
+    this.infosVacants[poste.idposte] = ev;
+    console.log(this.infosVacants);
+    let resultat = this.resulatPostesVacants();
+    console.log('resultat');
+    console.log(resultat);
+  }
+
+  resulatPostesVacants() {
+    let resultat = true;
+    const keys = Object.keys(this.infosVacants);
+    if (keys.length === this.postesJourDansLesExigences + this.postesNuitDansLesExigences) {
+      keys.forEach(key => {
+        resultat = resultat && this.infosVacants[key];
+      });
+    } else {
+      resultat = false;
+    }
+    return resultat;
+  }
+
   infosToDataUtiles() {
+    // console.log('infosToDataUtiles');
+    this.interval = setInterval(() => {
+      this.checkStatus();
+      const keys = Object.keys(this.infosVacants);
+      if (keys.length === this.postesJourDansLesExigences + this.postesNuitDansLesExigences) {
+        clearInterval(this.interval);
+      } 
+    }, 1000);
+  }
+
+
+  private checkStatus() {
     this.vigilesJourDansLesExigences = 0;
     this.vigilesNuitDansLesExigences = 0;
     this.postesJourDansLesExigences = 0;
@@ -236,6 +279,49 @@ export class ContratViewComponent implements OnInit {
       this.postesJourDansLesExigences += this.infosVigiles[key].jour ? 1 : 0;
       this.postesNuitDansLesExigences += this.infosVigiles[key].nuit ? 1 : 0;
     });
+
+    if (this.postes.length === (this.postesJourDansLesExigences + this.postesNuitDansLesExigences)) {
+      console.log('1');
+      if (this.vigilesJourDansLesExigences === this.contrat.nbVigileJour) {
+        console.log('2');
+        if (this.vigilesNuitDansLesExigences === this.contrat.nbVigileNuit) {
+          console.log('3');
+          if (this.sites.length === this.contrat.nbPostes) {
+            console.log('4');
+            let resultat = this.resulatPostesVacants();
+            if (resultat) {
+              console.log('5');
+              this.contrat.statut = 'PARFAIT';
+              this.saveForStatut();
+            } else {
+              this.contrat.statut = 'CREE';
+              this.saveForStatut();
+            }
+          } else {
+            this.contrat.statut = 'CREATION';
+            this.saveForStatut();
+          }
+        } else {
+          this.contrat.statut = 'CREATION';
+          this.saveForStatut();
+        }
+      } else {
+        this.contrat.statut = 'CREATION';
+        this.saveForStatut();
+      }
+    } else {
+      this.contrat.statut = 'CREATION';
+      this.saveForStatut();
+    }
   }
 
+  private saveForStatut() {
+    this.contratService.modifierSilent('contrat', this.contrat.idcontrat, this.contrat).then(() => {
+    });
+  }
+
+  
+  ngOnDestroy(): void {
+    clearInterval(this.interval);
+  }
 }

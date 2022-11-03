@@ -1,8 +1,13 @@
 .app-poste {
-    height: 80px;
+    min-height: 80px;
     padding: 16px;
     margin-bottom: 16px;
     background-color: white;
+    border: 1px solid #fefefe;
+    &.vacant {
+        border: 1px solid rgba(red, 0.5);
+        background-color: rgba(red, 0.1);
+    }
     cursor: pointer;
     &:hover {
         opacity: 0.8;
@@ -14,5 +19,12 @@
     color: #231709;
     &:hover {
         opacity: 0.8;
+    }
+}
+
+li.erreur {
+    color: red;
+    span {
+        color: #000;
     }
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContratSite } from 'src/app/models/contrat.site.model';
-import { contratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
+import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
@@ -26,19 +26,19 @@ export class DisplaySiteComponent implements OnInit {
     nuit: 0,
   };
   
-  exigences = new Array<contratSiteVigile>();
+  exigences = new Array<ContratSiteVigile>();
   showFormulairePersonnel = false;
 
-  exigence = new contratSiteVigile();
+  exigence = new ContratSiteVigile();
 
   constructor(
-    private contratSiteVigileService: JarvisService<contratSiteVigile>,
+    private contratSiteVigileService: JarvisService<ContratSiteVigile>,
   ) { }
 
   ngOnInit(): void {
     this.contratSiteVigileService.getAll('contratsitevigile').then((data) => {
-      console.log('contratsitevigile');
-      console.log(data);
+      // console.log('contratsitevigile');
+      // console.log(data);
       this.exigences = data.filter((d) => {
         return d.idcontratsite.idcontratSite === this.site.idcontratSite
       });
@@ -60,7 +60,7 @@ export class DisplaySiteComponent implements OnInit {
         const exigenceJour = this.exigence.horaire === 'jour' && this.exigence.quantite <= this.nbAutorisationJour;
         const exigenceNuit = this.exigence.horaire === 'nuit' && this.exigence.quantite <= this.nbAutorisationNuit;
         if (exigenceJour || exigenceNuit) {
-          let exigenceAModifier: contratSiteVigile | undefined;
+          let exigenceAModifier: ContratSiteVigile | undefined;
           this.exigences.forEach((exigence) => {
             if (exigence.typeVigile === this.exigence.typeVigile && exigence.horaire === this.exigence.horaire) {
               exigence.quantite += this.exigence.quantite;
@@ -90,7 +90,7 @@ export class DisplaySiteComponent implements OnInit {
     }
   }
 
-  supprimerPosteVigile(item: contratSiteVigile) {
+  supprimerPosteVigile(item: ContratSiteVigile) {
     const oui = confirm('Etes vous sûr de vouloir supprimer cette exigence ?');
     if (oui) {
       this.contratSiteVigileService.supprimer('contratsitevigile', item.idcontratSiteVigile).then(() => {

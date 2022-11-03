@@ -25,6 +25,7 @@ import { PermissionEditComponent } from './pages/permission/permission-edit/perm
 import { PermissionListComponent } from './pages/permission/permission-list/permission-list.component';
 import { PointageEditComponent } from './pages/pointage/pointage-edit/pointage-edit.component';
 import { PointageListComponent } from './pages/pointage/pointage-list/pointage-list.component';
+import { PointageSuiviComponent } from './pages/pointage/pointage-suivi/pointage-suivi.component';
 import { PosteEditComponent } from './pages/poste/poste-edit/poste-edit.component';
 import { PosteListComponent } from './pages/poste/poste-list/poste-list.component';
 import { PosteViewComponent } from './pages/poste/poste-view/poste-view.component';
@@ -91,6 +92,8 @@ const routes: Routes = [
   { path: 'pointage/edit', component: PointageEditComponent },
   { path: 'pointage/edit/:id', component: PointageEditComponent },
 
+  { path: 'pointagesuivi', component: PointageSuiviComponent },
+  
   { path: 'controle', component: ControleListComponent },
   { path: 'controle/view/:id', component: ControleViewComponent },
 

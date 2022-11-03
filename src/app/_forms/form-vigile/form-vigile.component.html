@@ -162,16 +162,6 @@
                         {{erreursLibelles.required}}
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Numéro
-                            </span>
-                        </div>
-                        <input type="text" [(ngModel)]="vigile.numero" class="form-control">
-                    </div>
-                </div>
             </div>
 
             <div class="row">
@@ -244,7 +234,7 @@
                         </select>
                     </div>
                 </div>
-                <div *ngIf="this.vigile.quartier" class="col-lg-6">
+                <div class="col-lg-6">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
@@ -269,10 +259,10 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Date entrée
+                                Date entrée <app-required></app-required>
                             </span>
                         </div>
-                        <input [ngModel]="vigile.dateEntree | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dateEntree = $event" type="date" class="form-control">
+                        <input [ngModel]="vigile.dateEntree | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dateEntree = $event" type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateEntree}">
                     </div>
                 </div>
                 <div class="col-lg-6">

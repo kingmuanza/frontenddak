@@ -91,6 +91,24 @@ export class JarvisService<T> {
     });
   }
 
+  getSilent(table: string, id: number): Promise<T> {
+    this.infos();
+    // this.showLoader();
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + table + '/' + id).subscribe({
+        next: (data) => {
+          const resulat = data as T;
+          // this.hideLoader();
+          resolve(resulat);
+        },
+        error: (e) => {
+          this.hideLoader();
+          reject(e);
+        }
+      });
+    });
+  }
+
   ajouter(table: string, objet: T): Promise<any> {
     this.infos();
     this.showLoader();
@@ -101,7 +119,24 @@ export class JarvisService<T> {
           resolve(data);
         },
         error: (e) => {
-          this.hideLoader();
+          // this.hideLoader();
+          reject(e);
+        }
+      });
+    });
+  }
+
+  ajouterSilent(table: string, objet: T): Promise<any> {
+    this.infos();
+    // this.showLoader();
+    return new Promise((resolve, reject) => {
+      this.http.post(this.URL + table, objet).subscribe({
+        next: (data) => {
+          // this.hideLoader();
+          resolve(data);
+        },
+        error: (e) => {
+          // this.hideLoader();
           reject(e);
         }
       });
@@ -126,6 +161,24 @@ export class JarvisService<T> {
     });
   }
 
+  modifierSilent(table: string, id: number, objet: T): Promise<any> {
+    this.infos();
+    // this.showLoader();
+    return new Promise((resolve, reject) => {
+      this.http.put(this.URL + table + '/' + id, objet).subscribe({
+        next: (data) => {
+          const resulat = data as T;
+          // this.hideLoader();
+          resolve(data);
+        },
+        error: (e) => {
+          // this.hideLoader();
+          reject(e);
+        }
+      });
+    });
+  }
+
   supprimer(table: string, id: number): Promise<boolean> {
     this.infos();
     this.showLoader();
@@ -137,6 +190,23 @@ export class JarvisService<T> {
         },
         error: (e) => {
           this.hideLoader();
+          reject(e);
+        }
+      });
+    });
+  }
+
+  supprimerSilent(table: string, id: number): Promise<boolean> {
+    this.infos();
+    // this.showLoader();
+    return new Promise((resolve, reject) => {
+      this.http.delete(this.URL + table + '/' + id).subscribe({
+        next: (data) => {
+          // this.hideLoader();
+          resolve(true);
+        },
+        error: (e) => {
+          // this.hideLoader();
           reject(e);
         }
       });

@@ -16,10 +16,13 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Noms
+                                Horaire
                             </span>
                         </div>
-                        <select type="date" name="date" class="form-control">
+                        <select (ngModelChange)="initZone()" [(ngModel)]="horaire" class="form-control">
+                            <option value="tous">Tous</option>
+                            <option value="jour">Jour</option>
+                            <option value="nuit">Nuit</option>
                         </select>
                     </div>
                 </div>
@@ -27,15 +30,33 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                Matricule
+                                Zone
                             </span>
                         </div>
-                        <select type="date" name="date" class="form-control">
+
+                        <select type="text" [(ngModel)]="zone" class="form-control">
+                            <ng-container *ngFor="let z of zones">
+                                <option [ngValue]="z"
+                                    *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
+                                    {{z.libelle}}
+                                </option>
+                            </ng-container>
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn primaire">Rechercher</button>
+                    <button class="btn primaire" (click)="rechercher(horaire, zone)">Rechercher</button>
+                </div>
+            </div>
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="type">
+                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="parfait" type="radio" name="afficher"> &nbsp;Parfaits &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="vacant" type="radio" name="afficher"> &nbsp;Vacants &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="tous" type="radio" name="afficher"> &nbsp;Tous &nbsp;&nbsp;
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,9 +75,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let poste of postes " (click)="edit(poste.idposte) ">
+                        <tr *ngFor="let poste of resultats" (click)="edit(poste.idposte) ">
                             <td>
-                                <span [ngClass]="{'important': !poste.bon}">
+                                <span [ngClass]="{'important': !vacanteur[poste.idposte]}">
                                     {{poste.idposte}}
                                 </span>
                             </td>
@@ -78,4 +99,16 @@
             </div>
         </div>
     </div>
+
+    <div [hidden]="true">
+        <div *ngFor="let poste of postes">
+            <app-display-poste [poste]="poste" [affectations]="affectations" (isNotVacant)="isNotVacant(poste, $event)">
+
+            </app-display-poste>
+        </div>
+    </div>
+</div>
+
+<div style="height: 25vh;">
+
 </div>
