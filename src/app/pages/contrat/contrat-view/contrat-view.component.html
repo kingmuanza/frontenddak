@@ -177,7 +177,7 @@
                                     Nom du site
                                 </span>
                             </div>
-                            <input type="text" [(ngModel)]="site.nom" class="form-control">
+                            <input type="text" [(ngModel)]="site.nom" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -190,7 +190,7 @@
                                     Quartier
                                 </span>
                             </div>
-                            <input list="quartiers" type="text" [(ngModel)]="quartier" class="form-control">
+                            <input list="quartiers" type="text" [(ngModel)]="quartier" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.quartier}">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -200,7 +200,7 @@
                                     Personne à contacter
                                 </span>
                             </div>
-                            <input type="text" [(ngModel)]="site.personne" class="form-control">
+                            <input type="text" [(ngModel)]="site.personne" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.personne}">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -210,7 +210,7 @@
                                     Tel
                                 </span>
                             </div>
-                            <input type="text" [(ngModel)]="site.tel" class="form-control">
+                            <input type="text" [(ngModel)]="site.tel" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -228,7 +228,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button (click)="saveSite()" type="button" data-bs-dismiss="modal" class="btn btn-primary">Enregistrer</button>
+                <button (click)="saveSite()" type="button" class="btn btn-primary">Enregistrer</button>
             </div>
         </div>
     </div>

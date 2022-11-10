@@ -21,23 +21,23 @@
                                     Code
                                 </span>
                             </div>
-                            <input type="text" [(ngModel)]="zone.code" name="date" class="form-control">
+                            <input type="text" [(ngModel)]="zone.code" name="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.code}">
                         </div>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                    Libellé
+                                    Libellé <app-required></app-required>
                                 </span>
                             </div>
-                            <input type="text" [(ngModel)]="zone.libelle" class="form-control">
+                            <input type="text" [(ngModel)]="zone.libelle" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.libelle}">
                         </div>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                    Horaire
+                                    Horaire <app-required></app-required>
                                 </span>
                             </div>
-                            <select [(ngModel)]="zone.horaire" class="form-control">
+                            <select [(ngModel)]="zone.horaire" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.horaire}">
                                 <option value="jour">Jour</option>
                                 <option value="nuit">Nuit</option>
                             </select>
@@ -45,10 +45,10 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                    Ville
+                                    Ville <app-required></app-required>
                                 </span>
                             </div>
-                            <select [(ngModel)]="zone.idville" class="form-control">
+                            <select [(ngModel)]="zone.idville" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.ville}">
                                 <option [ngValue]="ville" *ngFor="let ville of villes">
                                     {{ville.libelle}}
                                 </option>

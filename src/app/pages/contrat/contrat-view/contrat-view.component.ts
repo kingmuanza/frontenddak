@@ -42,6 +42,16 @@ export class ContratViewComponent implements OnInit, OnDestroy {
 
   interval: any;
 
+  montrerErreurs = false;
+
+  erreurs = {
+    nom: false,
+    quartier: false,
+    personne: false,
+    tel: false,
+    description: false,
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -183,7 +193,35 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  isFormulaireValide(): boolean {
+    let resultat = true;
+
+    this.montrerErreurs = true;
+
+    this.erreurs.nom = false;
+    this.erreurs.quartier = false;
+    this.erreurs.personne = false;
+    this.erreurs.tel = false;
+    this.erreurs.description = false;
+
+    this.erreurs.nom = !this.site.nom;
+    this.erreurs.quartier = !this.quartier;
+    this.erreurs.personne = !this.site.personne;
+    this.erreurs.tel = !this.site.tel;
+    this.erreurs.description = !this.site.description;
+
+    resultat = !this.erreurs.nom && this.erreurs.quartier && this.erreurs.personne && this.erreurs.tel;
+
+    return resultat;
+  }
+
   async saveSite() {
+    
+    console.log('saveSite');
+    console.log(this.isFormulaireValide());
+    if (!this.isFormulaireValide()) {
+      return 
+    }
     console.log('poste à enregistrer');
     console.log(this.site);
     this.site.idcontrat = this.contrat;
@@ -261,7 +299,7 @@ export class ContratViewComponent implements OnInit, OnDestroy {
       const keys = Object.keys(this.infosVacants);
       if (keys.length === this.postesJourDansLesExigences + this.postesNuitDansLesExigences) {
         clearInterval(this.interval);
-      } 
+      }
     }, 1000);
   }
 
@@ -320,7 +358,7 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+
   ngOnDestroy(): void {
     clearInterval(this.interval);
   }

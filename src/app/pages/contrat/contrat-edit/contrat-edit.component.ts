@@ -28,6 +28,8 @@ export class ContratEditComponent implements OnInit {
   erreurs = {
     libelle: false,
     dateDebut: false,
+    dateFin: false,
+    dateSignature: false,
     nom: false,
     tel: false,
     adresse: false,
@@ -141,6 +143,24 @@ export class ContratEditComponent implements OnInit {
     if (this.contrat.dateSignature)
       this.contrat.dateSignature = new Date(this.contrat.dateSignature);
 
+    if (this.contrat.dateSignature && this.contrat.dateDebut) {
+      if (this.contrat.dateSignature.getTime() > this.contrat.dateDebut.getTime()) {
+        this.montrerErreurs = true;
+        this.erreurs.dateDebut = true;
+        this.erreurs.dateSignature = true;
+        return;
+      }
+    }
+
+    if (this.contrat.dateDebut && this.contrat.dateFin) {
+      if (this.contrat.dateDebut.getTime() > this.contrat.dateFin.getTime()) {
+        this.montrerErreurs = true;
+        this.erreurs.dateDebut = true;
+        this.erreurs.dateFin = true;
+        return;
+      }
+    }
+
     if (this.contrat.idcontrat == 0) {
       this.creerNouveauContrat(this.contrat);
     } else {
@@ -191,13 +211,13 @@ export class ContratEditComponent implements OnInit {
       }).catch((e) => {
         this.processing = false;
       });
-    } else 
+    } else
     // Si les termes du contrat ont changé
     {
       // Date de modifcation du contrat
       const date = new Date(this.contrat.date);
       this.contrat.date = new Date();
-      
+
       this.contratService.modifier('contrat', this.contrat.idcontrat, this.contrat).then((data) => {
         console.log('data');
         console.log(data);

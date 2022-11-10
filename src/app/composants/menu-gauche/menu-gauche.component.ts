@@ -59,7 +59,7 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
   private getMauvaisContrat() {
     this.contratService.getAllSilent('contrat').then((data) => {
       this.nbContratsMauvais = data.filter((contrat) => {
-        return !contrat.idparent && !contrat.bon;
+        return contrat.statut === 'CREE' && !contrat.idparent;
       }).length;
     });
   }

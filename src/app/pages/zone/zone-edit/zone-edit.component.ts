@@ -18,6 +18,14 @@ export class ZoneEditComponent implements OnInit {
   zone = new ZoneDak();
   villes = new Array<any>();
   processing = false;
+  montrerErreurs = false;
+
+  erreurs = {
+    libelle: false,
+    code: false,
+    horaire: false,
+    ville: false,
+  }
 
   constructor(
     private router: Router,
@@ -52,7 +60,31 @@ export class ZoneEditComponent implements OnInit {
     });
   }
 
+  isFormulaireValide(): boolean {
+    let resultat = true;
+
+    this.montrerErreurs = true;
+
+    this.erreurs.libelle = false;
+    this.erreurs.horaire = false;
+    this.erreurs.ville = false;
+    this.erreurs.code = false;
+
+    this.erreurs.libelle = !this.zone.libelle;
+    this.erreurs.horaire = !this.zone.horaire;
+    this.erreurs.ville = !this.zone.idville;
+    this.erreurs.code = !this.zone.code;
+
+    resultat = !this.erreurs.libelle && this.erreurs.horaire  && this.erreurs.ville  && this.erreurs.code;
+
+    return resultat;
+  }
+
   save() {
+    if (!this.isFormulaireValide()) {
+      return
+    }
+    
     console.log(this.zone);
     if (this.zone.idzone == 0) {
       this.processing = true;
