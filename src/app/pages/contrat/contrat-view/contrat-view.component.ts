@@ -216,11 +216,20 @@ export class ContratViewComponent implements OnInit, OnDestroy {
   }
 
   async saveSite() {
-    
+     
     console.log('saveSite');
     console.log(this.isFormulaireValide());
     if (!this.isFormulaireValide()) {
       return 
+    }
+    
+    console.log('open modal creation poste');
+    const modale = document.getElementById('posteModal');
+
+    console.log(modale);
+    if (modale != null) {
+      this.myModal = new bootstrap.Modal(modale);
+      this.myModal.hide();
     }
     console.log('poste à enregistrer');
     console.log(this.site);

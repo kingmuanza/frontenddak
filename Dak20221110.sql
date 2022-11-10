@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `dak` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `dak` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `dak`;
 -- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
@@ -46,7 +46,7 @@ CREATE TABLE `affectation` (
   CONSTRAINT `fk_affectation_poste` FOREIGN KEY (`idposte`) REFERENCES `poste` (`idposte`),
   CONSTRAINT `fk_affectation_remplacant` FOREIGN KEY (`remplacant`) REFERENCES `vigile` (`idvigile`),
   CONSTRAINT `fk_affectation_vigile` FOREIGN KEY (`idvigile`) REFERENCES `vigile` (`idvigile`)
-) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +97,7 @@ CREATE TABLE `contrat` (
   PRIMARY KEY (`idcontrat`),
   KEY `fk_contrat_contrat_idx` (`idparent`),
   CONSTRAINT `fk_contrat_contrat` FOREIGN KEY (`idparent`) REFERENCES `contrat` (`idcontrat`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +133,7 @@ CREATE TABLE `contrat_site` (
   KEY `fk_contratsite_quartier_idx` (`idquartier`),
   CONSTRAINT `fk_contratsite_contrat` FOREIGN KEY (`idcontrat`) REFERENCES `contrat` (`idcontrat`),
   CONSTRAINT `fk_contratsite_quartier` FOREIGN KEY (`idquartier`) REFERENCES `quartier` (`idquartier`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,7 +162,7 @@ CREATE TABLE `contrat_site_vigile` (
   PRIMARY KEY (`idcontrat_site_vigile`),
   KEY `fk_contratsitevigile_contratsite_idx` (`idcontratsite`),
   CONSTRAINT `fk_contratsitevigile_contratsite` FOREIGN KEY (`idcontratsite`) REFERENCES `contrat_site` (`idcontrat_site`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +189,7 @@ CREATE TABLE `equipement` (
   `basique` tinyint(1) DEFAULT NULL,
   `defaut` int DEFAULT NULL,
   PRIMARY KEY (`idequipement`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -220,7 +220,7 @@ CREATE TABLE `equipement_vigile` (
   KEY `fk_equipementvigile_equipement_idx` (`idequipement`),
   CONSTRAINT `fk_equipementvigile_equipement` FOREIGN KEY (`idequipement`) REFERENCES `equipement` (`idequipement`),
   CONSTRAINT `fk_equipementvigile_vigile` FOREIGN KEY (`idvigile`) REFERENCES `vigile` (`idvigile`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,7 +249,7 @@ CREATE TABLE `facture` (
   PRIMARY KEY (`idfacture`),
   KEY `fk_facture_contrat_idx` (`idcontrat`),
   CONSTRAINT `fk_facture_contrat` FOREIGN KEY (`idcontrat`) REFERENCES `facture` (`idfacture`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -277,7 +277,7 @@ CREATE TABLE `facture_ligne` (
   PRIMARY KEY (`idfacture_ligne`),
   KEY `fk_factureligne_facture_idx` (`idfacture`),
   CONSTRAINT `fk_factureligne_facture` FOREIGN KEY (`idfacture`) REFERENCES `facture` (`idfacture`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -302,7 +302,7 @@ CREATE TABLE `motif` (
   `libelle` varchar(45) DEFAULT NULL,
   `tarif` double DEFAULT NULL,
   PRIMARY KEY (`idmotif`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,7 +327,7 @@ CREATE TABLE `nationalite` (
   `code` varchar(45) DEFAULT NULL,
   `libelle` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idnationalite`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -357,7 +357,7 @@ CREATE TABLE `permission` (
   PRIMARY KEY (`idpermission`),
   KEY `fk_permission_vigile_idx` (`idvigile`),
   CONSTRAINT `fk_permission_vigile` FOREIGN KEY (`idvigile`) REFERENCES `vigile` (`idvigile`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -413,7 +413,7 @@ CREATE TABLE `poste` (
   CONSTRAINT `fk_poste_contratsite` FOREIGN KEY (`idcontratsite`) REFERENCES `contrat_site` (`idcontrat_site`),
   CONSTRAINT `fk_poste_quartier` FOREIGN KEY (`idquartier`) REFERENCES `quartier` (`idquartier`),
   CONSTRAINT `fk_poste_zone` FOREIGN KEY (`zone`) REFERENCES `zone` (`idzone`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -443,7 +443,7 @@ CREATE TABLE `poste_equipement` (
   KEY `fk_posteequipement_equipement_idx` (`idequipement`),
   CONSTRAINT `fk_posteequipement_equipement` FOREIGN KEY (`idequipement`) REFERENCES `equipement` (`idequipement`),
   CONSTRAINT `fk_posteequipement_poste` FOREIGN KEY (`idposte`) REFERENCES `poste` (`idposte`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -471,7 +471,7 @@ CREATE TABLE `poste_vigile` (
   PRIMARY KEY (`idposte_vigile`),
   KEY `fk_postevigile_poste_idx` (`idposte`),
   CONSTRAINT `fk_postevigile_poste` FOREIGN KEY (`idposte`) REFERENCES `poste` (`idposte`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -495,7 +495,7 @@ CREATE TABLE `prestation` (
   `code` varchar(45) DEFAULT NULL,
   `libelle` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idprestation`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -522,7 +522,7 @@ CREATE TABLE `quartier` (
   PRIMARY KEY (`idquartier`),
   KEY `fk_quartier_zone_idx` (`idzone`),
   CONSTRAINT `fk_quartier_zone` FOREIGN KEY (`idzone`) REFERENCES `zone` (`idzone`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -547,7 +547,7 @@ CREATE TABLE `statut` (
   `code` varchar(45) DEFAULT NULL,
   `libelle` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idstatut`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -591,7 +591,7 @@ CREATE TABLE `suivi_poste` (
   CONSTRAINT `fk__suivi_poste__poste` FOREIGN KEY (`poste`) REFERENCES `poste` (`idposte`),
   CONSTRAINT `fk__suivi_poste__vigile` FOREIGN KEY (`idvigile`) REFERENCES `vigile` (`idvigile`),
   CONSTRAINT `fk__suivi_poste__zone` FOREIGN KEY (`zone`) REFERENCES `zone` (`idzone`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -624,7 +624,7 @@ CREATE TABLE `switch` (
   CONSTRAINT `fk_switch_affectation` FOREIGN KEY (`idaffectation`) REFERENCES `affectation` (`idaffectation`),
   CONSTRAINT `fk_switch_vigile_base` FOREIGN KEY (`idvigile_base`) REFERENCES `vigile` (`idvigile`),
   CONSTRAINT `fk_switch_vigile_switch` FOREIGN KEY (`idvigile_switch`) REFERENCES `vigile` (`idvigile`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -691,7 +691,7 @@ CREATE TABLE `vigile` (
   CONSTRAINT `fk_vigile_remplancant_conge` FOREIGN KEY (`idremplacant_conge`) REFERENCES `vigile` (`idvigile`),
   CONSTRAINT `fk_vigile_ville` FOREIGN KEY (`ville`) REFERENCES `ville` (`idville`),
   CONSTRAINT `fk_vigile_zone` FOREIGN KEY (`zone`) REFERENCES `zone` (`idzone`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -719,7 +719,7 @@ CREATE TABLE `vigile_conge` (
   PRIMARY KEY (`idvigile_conge`),
   KEY `fk_vigileconge_vigile_idx` (`idvigile`),
   CONSTRAINT `fk_vigileconge_vigile` FOREIGN KEY (`idvigile`) REFERENCES `vigile` (`idvigile`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -743,7 +743,7 @@ CREATE TABLE `ville` (
   `code` varchar(45) DEFAULT NULL,
   `libelle` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idville`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -772,7 +772,7 @@ CREATE TABLE `zone` (
   PRIMARY KEY (`idzone`),
   KEY `fk_zone_ville_idx` (`idville`),
   CONSTRAINT `fk_zone_ville` FOREIGN KEY (`idville`) REFERENCES `ville` (`idville`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

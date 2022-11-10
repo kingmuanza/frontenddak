@@ -20,7 +20,10 @@ export class TestConnexionComponent implements OnInit {
   loaderVisible = false;
 
   urls = [
-    'http://localhost:8080/dakBack'
+    "http://localhost:8081/dakBack",
+    "https://localhost:8181/dakBack",
+    "http://192.168.1.17:8081/dakBack",
+    "http://localhost:8080/dakBackred2"
   ];
 
   constructor(
