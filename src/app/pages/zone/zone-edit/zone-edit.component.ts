@@ -75,7 +75,7 @@ export class ZoneEditComponent implements OnInit {
     this.erreurs.ville = !this.zone.idville;
     this.erreurs.code = !this.zone.code;
 
-    resultat = !this.erreurs.libelle && this.erreurs.horaire  && this.erreurs.ville  && this.erreurs.code;
+    resultat = !this.erreurs.libelle && !this.erreurs.horaire && !this.erreurs.ville && !this.erreurs.code;
 
     return resultat;
   }

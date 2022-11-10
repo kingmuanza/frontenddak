@@ -88,6 +88,8 @@ export class PosteViewComponent implements OnInit {
           console.log(poste);
           this.poste = poste;
 
+          this.getExigences();
+
           this.pointageService.getRemotePoste(id).then((posteRemote) => {
             console.log('posteRemote');
             console.log(posteRemote);
@@ -138,9 +140,6 @@ export class PosteViewComponent implements OnInit {
               });
               this.updatePoste();
             });
-
-            this.getExigences();
-
             this.getDemandesEquipements().then((posteequipements) => {
               this.posteequipements = posteequipements.filter((pv) => {
                 return pv.idposte.idposte === this.poste.idposte;
@@ -173,7 +172,7 @@ export class PosteViewComponent implements OnInit {
       console.log('contratsitevigile');
       console.log(data);
       this.exigences = data.filter((d) => {
-        return d.idcontratsite.idcontratSite === this.poste.idcontratsite?.idcontratSite
+        return this.poste.idcontratsite && d.idcontratsite.idcontratSite === this.poste.idcontratsite.idcontratSite
       });
     });
   }

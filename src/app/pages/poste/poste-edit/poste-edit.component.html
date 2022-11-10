@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6">
+                                <div *ngIf="afficherHoraireJour" class="col-lg-6">
                                     <div [ngClass]="{'is-invalid': montrerErreurs && erreurs.horaire}">
                                         <input type="radio" [disabled]="existeDejaJour" (change)="changerAbreger('jour')" value="jour" [(ngModel)]="poste.horaire" name="horaire"> Jour
                                         <span *ngIf="existeDejaJour">
@@ -106,7 +106,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div  *ngIf="afficherHoraireNuit" class="col-lg-6">
                                     <div [ngClass]="{'is-invalid': montrerErreurs && erreurs.horaire}">
                                         <input type="radio" [disabled]="existeDejaNuit" (change)="changerAbreger('nuit')" value="nuit" [(ngModel)]="poste.horaire" name="horaire"> Nuit
                                         <span *ngIf="existeDejaNuit">

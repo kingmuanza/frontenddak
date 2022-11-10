@@ -13,6 +13,7 @@ import { initializeApp } from 'firebase/app';
 import { Contrat } from 'src/app/models/contrat.model';
 import { ContratSite } from 'src/app/models/contrat.site.model';
 import { Quartier } from 'src/app/models/quartier.model';
+import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
 
 @Component({
   selector: 'app-poste-edit',
@@ -51,6 +52,8 @@ export class PosteEditComponent implements OnInit {
     libelle: false,
     abrege: false,
   };
+  afficherHoraireJour: boolean = false;
+  afficherHoraireNuit: boolean = false;
 
 
   constructor(
@@ -60,6 +63,7 @@ export class PosteEditComponent implements OnInit {
     private pointageService: PointageService,
     private jarvisService: JarvisService<any>,
     private posteService: JarvisService<Poste>,
+    private contratSiteVigileService: JarvisService<ContratSiteVigile>,
     private quartierService: JarvisService<Quartier>,
     private siteService: JarvisService<ContratSite>,
     private contratService: JarvisService<Contrat>
@@ -352,7 +356,31 @@ export class PosteEditComponent implements OnInit {
         this.poste.idquartier = quartier;
       }
     });
+    this.checkExigenceJour(site);
     this.checkPosteDejaCree();
+  }
+
+  checkExigenceJour(site: ContratSite) {
+    let exigences = new Array<ContratSiteVigile>();
+    this.contratSiteVigileService.getAll('contratsitevigile').then((data) => {
+      // console.log('contratsitevigile');
+      // console.log(data);
+      exigences = data.filter((d) => {
+        return d.idcontratsite.idcontratSite === site.idcontratSite
+      });
+      exigences.forEach((e) => {
+        if (e.horaire === 'jour') {
+          this.afficherHoraireJour = true;
+        }
+        if (e.horaire === 'nuit') {
+          this.afficherHoraireNuit = true;
+        }
+      });
+    });
+  }
+
+  checkExigenceNuit() {
+    
   }
 
   private checkPosteDejaCree() {

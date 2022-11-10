@@ -210,7 +210,7 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     this.erreurs.tel = !this.site.tel;
     this.erreurs.description = !this.site.description;
 
-    resultat = !this.erreurs.nom && this.erreurs.quartier && this.erreurs.personne && this.erreurs.tel;
+    resultat = !this.erreurs.nom && !this.erreurs.quartier && !this.erreurs.personne && !this.erreurs.tel;
 
     return resultat;
   }
