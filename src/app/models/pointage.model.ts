@@ -6,5 +6,6 @@ export class Pointage {
     longitude = 0;
     nomsVigile = '';
     absence: any;
+    raison = '';
     commentaire = '';
 }
