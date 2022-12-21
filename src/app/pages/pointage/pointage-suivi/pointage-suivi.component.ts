@@ -16,6 +16,7 @@ export class PointageSuiviComponent implements OnInit {
 
   zones = new Array<ZoneDak>();
   postes = new Array<Poste>();
+  remotePostes = new Array<any>();
   affectations = new Array<Affectation>();
   resultatsAffectations = new Array<Affectation>();
   vigiles = new Array<Vigile>();
@@ -23,6 +24,8 @@ export class PointageSuiviComponent implements OnInit {
   horaire = 'tous';
   date = new Date();
   pointages = new Array<Pointage>();
+
+  marge = 10;
 
   constructor(
     private pointageService: PointageService,
@@ -37,6 +40,12 @@ export class PointageSuiviComponent implements OnInit {
       console.log('pointages');
       console.log(pointages);
       this.pointages = pointages;
+    });
+
+    this.pointageService.getAllRemotePostes().then((remotePostes) => {
+      console.log('remotePostes');
+      console.log(remotePostes);
+      this.remotePostes = remotePostes;
     });
 
     this.zoneService.getAll('zone').then((zones) => {
@@ -104,7 +113,7 @@ export class PointageSuiviComponent implements OnInit {
 
   getPointage(vigile: Vigile, date: Date): Pointage | undefined {
     let pointage: Pointage | undefined;
-    
+
     this.pointages.forEach((p) => {
       const d = this.toDate(p.date)
       if (p.idvigile === vigile.idvigile && d && this.dateToJourAnnee(d) === this.dateToJourAnnee(date)) {
@@ -131,17 +140,103 @@ export class PointageSuiviComponent implements OnInit {
       return undefined;
     }
   }
-  
-  isBonneLocalisation(pointage: any): boolean {
-    if (pointage.idvigile) {
-      
+
+  isBonneLocalisation(affectation: Affectation, date: Date): boolean {
+    const pointage = this.getPointageVigileDate(affectation, date)
+    const distanceEnMetres = 1000 * this.calcCrow(0, 0, this.getMinDifferenceLatitude(affectation, date), this.getMinDifferenceLongitude(affectation, date))
+    if (distanceEnMetres > this.marge) {
+      return false;
     }
-    return false;
+    return true;
   }
 
   isBonHoraire(affectation: Affectation, date: Date) {
     return true
   }
 
+  getRemotePoste(poste: Poste) {
+    let remotePoste: any = new Poste();
+    this.remotePostes.forEach((p) => {
+      if (p.idposte === poste.idposte) {
+        remotePoste = p;
+      }
+    });
+    return remotePoste;
+  }
 
+  getDifferenceLatitude(affectation: Affectation, date: Date): {
+    diff: number,
+    diff1: number,
+    diff2: number,
+  } {
+    const triangle = {
+      diff: 1000,
+      diff1: 1000,
+      diff2: 1000,
+    }
+    const latitudeDuPointage = this.getPointageVigileDate(affectation, date);
+    if (latitudeDuPointage) {
+      if (this.getRemotePoste(affectation.idposte).latitude)
+      triangle.diff = this.getRemotePoste(affectation.idposte).latitude - latitudeDuPointage.latitude;
+      if (this.getRemotePoste(affectation.idposte).latitude1)
+      triangle.diff1 = this.getRemotePoste(affectation.idposte).latitude1 - latitudeDuPointage.latitude;
+      if (this.getRemotePoste(affectation.idposte).latitude2)
+      triangle.diff2 = this.getRemotePoste(affectation.idposte).latitude2 - latitudeDuPointage.latitude;
+    }
+    return triangle;
+  }
+
+  getDifferenceLongitude(affectation: Affectation, date: Date): {
+    diff: number,
+    diff1: number,
+    diff2: number,
+  } {
+    const triangle = {
+      diff: 1000,
+      diff1: 1000,
+      diff2: 1000,
+    }
+    const longitudeDuPointage = this.getPointageVigileDate(affectation, date);
+    if (longitudeDuPointage) {
+      if (this.getRemotePoste(affectation.idposte).longitude)
+      triangle.diff = this.getRemotePoste(affectation.idposte).longitude - longitudeDuPointage.longitude;
+      if (this.getRemotePoste(affectation.idposte).longitude1)
+      triangle.diff1 = this.getRemotePoste(affectation.idposte).longitude1 - longitudeDuPointage.longitude;
+      if (this.getRemotePoste(affectation.idposte).longitude2)
+      triangle.diff2 = this.getRemotePoste(affectation.idposte).longitude2 - longitudeDuPointage.longitude;
+    }
+    return triangle;
+  }
+
+  getMinDifferenceLatitude(affectation: Affectation, date: Date) {
+    const differences = this.getDifferenceLatitude(affectation, date);
+    return Math.min(Math.abs(differences.diff), Math.abs(differences.diff1), Math.abs(differences.diff2));
+  }
+
+
+  getMinDifferenceLongitude(affectation: Affectation, date: Date) {
+    const differences = this.getDifferenceLongitude(affectation, date);
+    return Math.min(Math.abs(differences.diff), Math.abs(differences.diff1), Math.abs(differences.diff2));
+  }
+
+  calcCrow(lat1: number, lon1: number, lat2: number, lon2: number) 
+  {
+    var R = 6371; // km
+    var dLat = this.toRad(lat2-lat1);
+    var dLon = this.toRad(lon2-lon1);
+    lat1 = this.toRad(lat1);
+    lat2 = this.toRad(lat2);
+
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c;
+    return d;
+  }
+
+  // Converts numeric degrees to radians
+  toRad(value: number) 
+  {
+      return value * Math.PI / 180;
+  }
 }

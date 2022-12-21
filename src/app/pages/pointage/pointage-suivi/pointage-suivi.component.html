@@ -39,6 +39,10 @@
         </div>
     </div>
     <div class="page-contenu">
+        <div class="mb-4">
+            <label for="customRange1" class="form-label">Marge de distance pour les pointages en mètres : {{marge}} mètres </label>
+            <input [(ngModel)]="marge" type="range" class="form-range" min="0" max="100" step="1">
+        </div>
         <div *ngIf="zone.idzone !== 0 && date">
             <ng-container>
                 Liste des vigiles en service dans la zone <b>{{zone.libelle}}</b>
@@ -59,6 +63,7 @@
                         <th>Horaire</th>
                         <th>Commentaire</th>
                         <th style="text-align: center;">Pointage</th>
+                        <th style="text-align: right">Appr.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,7 +83,9 @@
                             </td>
                             <td>{{showVigile(affectation, date).noms}}</td>
                             <td>{{affectation.idposte.zone.libelle}}</td>
-                            <td>{{affectation.idposte.libelle}}</td>
+                            <td>
+                                {{affectation.idposte.libelle}}
+                            </td>
                             <td>{{affectation.horaire | uppercase}}</td>
                             <td>
                                 <div *ngIf="getPointageVigileDate(affectation, date) ">
@@ -89,8 +96,9 @@
                             </td>
                             <td>
 
-                                <span *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude " [ngClass]="{ 'bon': isBonneLocalisation(getPointageVigileDate(affectation, date))} ">
+                                <span *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude " [ngClass]="{ 'bon': isBonneLocalisation(affectation, date), 'mauvais': !isBonneLocalisation(affectation, date)} ">
                                     <i class="bi-geo-alt "></i>&nbsp;&nbsp;&nbsp;
+                                    
                                 </span>
                                 <span *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence " style="color: green; ">
                                     <i class="bi-fingerprint "></i>&nbsp;&nbsp;&nbsp;
@@ -98,6 +106,11 @@
                                 <span *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence " [ngClass]="{ 'bon': isBonHoraire(affectation, date)} ">
                                     <i class="bi-clock "></i>
                                 </span>
+                            </td>
+                            <td style="text-align: right">
+                                <div *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude ">
+                                    {{1000 * calcCrow(0, 0, getMinDifferenceLatitude(affectation, date), getMinDifferenceLongitude(affectation, date)) | number}} m
+                                </div>
                             </td>
                         </tr>
                     </ng-container>
