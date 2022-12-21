@@ -72,7 +72,7 @@ export class PointageSuiviComponent implements OnInit {
     const date = new Date(d);
     this.resultatsAffectations = new Array<Affectation>();
     this.resultatsAffectations = this.affectations.filter((affectation) => {
-      const isBonneZone = affectation.idposte.zone.idzone === zone.idzone;
+      const isBonneZone = affectation.idposte?.zone?.idzone === zone.idzone;
       const isBonneDateDebut = date.getTime() >= new Date(affectation.dateAffectation).getTime();
       let isBonneDateFin = true;
       if (affectation.arret) {

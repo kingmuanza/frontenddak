@@ -32,11 +32,11 @@ export class JarvisService<T> {
   }
 
   showLoader() {
-    this.loadingService.afficher();
+    // this.loadingService.afficher();
   }
 
   hideLoader() {
-    this.loadingService.cacher();
+    // this.loadingService.cacher();
   }
 
   getAll(table: string): Promise<Array<T>> {
