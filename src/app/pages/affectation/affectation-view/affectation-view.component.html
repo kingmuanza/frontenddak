@@ -1,9 +1,6 @@
 <div class="page">
     <div class="page-entete">
-        <div *ngIf="affectation.idaffectation==0" class="page-entete-titre">
-            Ajouter une nouvelle affectation
-        </div>
-        <div *ngIf="affectation.idaffectation!=0" class="page-entete-titre">
+        <div *ngIf="affectation.idvigile" class="page-entete-titre">
             {{affectation.idvigile.noms}}
         </div>
         <div class="">
@@ -34,7 +31,7 @@
                                     Poste
                                 </span>
                             </div>
-                            <input readonly [value]="affectation.idposte.libelle" class="form-control">
+                            <input readonly [value]="affectation.idposte?.libelle" class="form-control">
                         </div>
                         <div>
                             <div class="input-group mb-3">
@@ -43,7 +40,7 @@
                                         Vigile
                                     </span>
                                 </div>
-                                <input readonly type="text" [value]="affectation.idvigile.noms" class="form-control">
+                                <input readonly type="text" [value]="affectation.idvigile?.noms" class="form-control">
                             </div>
                         </div>
 
@@ -53,7 +50,7 @@
                                     Remplacant
                                 </span>
                             </div>
-                            <input readonly type="text" [value]="affectation.remplacant.noms" class="form-control">
+                            <input readonly type="text" [value]="affectation.remplacant?.noms" class="form-control">
                         </div>
 
                         <div class="input-group mb-3">

@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div *ngIf="!canNotBeAffectation || (canNotBeAffectation && affectationAArreterACauseDuPoste.idaffectation!==0)">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
@@ -141,7 +141,7 @@
                                 </div>
                                 <div>
                                     <b>{{affectationAArreterACauseDuPoste.idvigile?.noms}}</b> ne sera plus au poste
-                                    <b>{{affectationAArreterACauseDuPoste.idposte?.libelle}}</b> où il était de puis le {{affectationAArreterACauseDuPoste.dateAffectation | date: 'dd-MM-yyyy'}}
+                                    <b>{{affectationAArreterACauseDuPoste.idposte?.libelle}}</b> où il était depuis le {{affectationAArreterACauseDuPoste.dateAffectation | date: 'dd-MM-yyyy'}}
                                 </div>
                             </div>
                             <div class="card-body" *ngIf="toJour(affectationAArreterACauseDuPoste.dateAffectation) >= toJour(affectation.dateAffectation)">

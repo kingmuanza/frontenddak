@@ -216,7 +216,7 @@ export class AffectationEditComponent implements OnInit {
 
         console.log('affectationSansRemplacant');
         console.log(affectationSansRemplacant);
-        
+
         await this.affectationService.ajouter('affectation', affectationSansRemplacant);
 
       } else {
@@ -284,8 +284,10 @@ export class AffectationEditComponent implements OnInit {
     let affectationsDuPoste = new Array<Affectation>();
     this.affectations.forEach((affectation) => {
       if (!affectation.arret) {
-        if (affectation.idposte.idposte === poste.idposte) {
-          affectationsDuPoste.push(affectation);
+        if (affectation.idposte && poste) {
+          if (affectation.idposte.idposte === poste.idposte) {
+            affectationsDuPoste.push(affectation);
+          }
         }
       }
     });

@@ -70,10 +70,12 @@ export class DisplayPosteComponent implements OnInit, OnChanges {
       if (this.affectations.length > 0) {
         this.affectations.forEach((affectation) => {
           if (!affectation.arret && affectation.idvigile.fonction === exigence.typeVigile) {
-            if (affectation.idposte.idposte === this.poste.idposte) {
-              if (affectation.horaire === exigence.horaire) {
-                // console.log(affectation.idvigile.noms);
-                nombre++;
+            if (affectation.idposte && this.poste) {
+              if (affectation.idposte.idposte === this.poste.idposte) {
+                if (affectation.horaire === exigence.horaire) {
+                  // console.log(affectation.idvigile.noms);
+                  nombre++;
+                }
               }
             }
           }
