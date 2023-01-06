@@ -52,6 +52,7 @@ import { VilleEditComponent } from './pages/ville/ville-edit/ville-edit.componen
 import { VilleListComponent } from './pages/ville/ville-list/ville-list.component';
 import { ZoneEditComponent } from './pages/zone/zone-edit/zone-edit.component';
 import { ZoneListComponent } from './pages/zone/zone-list/zone-list.component';
+import { AffectationViewComponent } from './pages/affectation/affectation-view/affectation-view.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -70,6 +71,7 @@ const routes: Routes = [
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationEditComponent },
   { path: 'affectation/edit/:id', component: AffectationEditComponent },
+  { path: 'affectation/view/:id', component: AffectationViewComponent },
 
   { path: 'conge', component: CongeListComponent },
   { path: 'conge/edit', component: CongeEditComponent },

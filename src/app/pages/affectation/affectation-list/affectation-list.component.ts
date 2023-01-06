@@ -44,7 +44,7 @@ export class AffectationListComponent implements OnInit, OnDestroy {
   }
 
   edit(id: string | number) {
-    this.router.navigate(['affectation', 'edit', id]);
+    this.router.navigate(['affectation', 'view', id]);
   }
 
   jourSemaine(jour: number) {

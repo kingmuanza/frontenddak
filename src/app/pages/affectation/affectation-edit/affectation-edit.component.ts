@@ -35,8 +35,8 @@ export class AffectationEditComponent implements OnInit {
   affectationAArreterACauseDuRemplacant = new Affectation();
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
+    private router: Router,
     private notifierService: NotifierService,
     private affectationService: JarvisService<Affectation>,
   ) { }
