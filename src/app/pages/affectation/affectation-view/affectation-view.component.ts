@@ -37,6 +37,7 @@ export class AffectationViewComponent implements OnInit {
 
   arreter() {
     console.log(this.affectation);
+    this.affectation.arret = new Date(this.affectation.arret);
     this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
       this.notifierService.notify('success', "Affectation mise en arrêt avec succès");
         this.router.navigate(['affectation']);
