@@ -12,7 +12,8 @@ import { initializeApp } from 'firebase/app';
 export class SynchroniserComponent implements OnInit {
 
   app: any;
-  tables = ['zone', 'vigile', 'affectation', 'poste'];
+  tables = ['zone', 'vigile', 'affectation', 'poste', 'contratSite'];
+  resultats = [""];
 
   constructor(
     private jarvisService: JarvisService<any>
@@ -35,8 +36,11 @@ export class SynchroniserComponent implements OnInit {
 
   synchroniserTout() {
     this.tables.forEach((table) => {
+      this.resultats.push(new Date().toISOString() + ' : Début de la synchronisation de ' + table);
       this.synchroniser(table).then(() => {
-        console.log('Synchronisation 2 ' + table + ' terminée');
+        const message = new Date().toISOString() + ' : Synchronisation de ' + table + ' terminée';
+        this.resultats.push(message);
+        this.resultats.push(message);
       });
     });
   }
@@ -46,18 +50,18 @@ export class SynchroniserComponent implements OnInit {
       let index = 0;
       console.log('synchroniser ' + libelle);
       const db = getFirestore(this.app);
-      this.jarvisService.getAll(libelle).then((resultats) => {
-        console.log('resultats ' + libelle);
+      this.jarvisService.getAll(libelle.toLowerCase()).then((resultats) => {
+        this.resultats.push('resultats ' + libelle);
         console.log(resultats);
 
         resultats.forEach(resultat => {
           console.log('synchroniser ' + libelle + ' id : ' + resultat['id' + libelle]);
           const ref = doc(db, libelle, resultat['id' + libelle] + '');
           setDoc(ref, JSON.parse(JSON.stringify(resultat)), { merge: true }).then(() => {
-            console.log(libelle + ' id : ' + resultat['id' + libelle] + ' a été synchronisé');
+            this.resultats.push(libelle + ' id : ' + resultat['id' + libelle] + ' a été synchronisé');
             index++;
             if (index === resultats.length) {
-              console.log('Synchronisation ' + libelle + ' terminée');
+              this.resultats.push('Synchronisation ' + libelle + ' terminée');
               resolve('Synchronisation ' + libelle + ' terminée');
             }
           }).catch((e) => {

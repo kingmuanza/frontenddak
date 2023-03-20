@@ -328,13 +328,13 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     });
 
     if (this.postes.length === (this.postesJourDansLesExigences + this.postesNuitDansLesExigences)) {
-      console.log('1');
+      // console.log('1');
       if (this.vigilesJourDansLesExigences === this.contrat.nbVigileJour) {
-        console.log('2');
+        // console.log('2');
         if (this.vigilesNuitDansLesExigences === this.contrat.nbVigileNuit) {
-          console.log('3');
+          // console.log('3');
           if (this.sites.length === this.contrat.nbPostes) {
-            console.log('4');
+            // console.log('4');
             let resultat = this.resulatPostesVacants();
             if (resultat) {
               console.log('5');

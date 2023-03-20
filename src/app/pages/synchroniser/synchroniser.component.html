@@ -17,16 +17,8 @@
     </div>
     <div class="page-contenu">
         <div class="fonctionnalites">
-            <div class="row">
-                <div class="col-lg-3">
-                    Zones
-                </div>
-                <div class="col-lg-6">
-                    dernière synchro : 2022-02-01
-                </div>
-                <div class="col-lg-3">
-                    <button (click)="synchroniser('zone')" class="btn primaire">Synchroniser</button>
-                </div>
+            <div class="message" *ngFor="let resultat of resultats">
+                {{resultat}}
             </div>
         </div>
     </div>

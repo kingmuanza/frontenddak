@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Client } from 'src/app/models/client.model';
 import { Contrat } from 'src/app/models/contrat.model';
+import { ContratSite } from 'src/app/models/contrat.site.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -11,6 +12,8 @@ import { JarvisService } from 'src/app/services/jarvis.service';
   styleUrls: ['./contrat-edit.component.scss']
 })
 export class ContratEditComponent implements OnInit {
+
+  enCoursSuppression = true;
 
   contrat = new Contrat();
   avenants = new Array<any>();
@@ -39,6 +42,7 @@ export class ContratEditComponent implements OnInit {
     nbNuitNegatif: false,
     nbVigiles: false,
   }
+  contratsites= new Array<ContratSite>();
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +50,7 @@ export class ContratEditComponent implements OnInit {
     private notifierService: NotifierService,
     private contratService: JarvisService<Contrat>,
     private clientService: JarvisService<Client>,
+    private siteService: JarvisService<ContratSite>,
     private avenantService: JarvisService<any>
   ) { }
 
@@ -242,9 +247,15 @@ export class ContratEditComponent implements OnInit {
     this.ajouter(fils);
   }
 
-  supprimer() {
-    const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
-    if (reponse) {
+  async supprimer() {
+    this.enCoursSuppression = true;
+    let message = "Etes-vous sûr de vouloir supprimer cet élément ?";
+    message += " Tous les sites seront supprimés";
+    const reponse = confirm(message);
+    if (reponse) {      
+      this.contratsites = await this.getSites();
+      console.log("contratsites.length");
+      console.log(this.contratsites.length);
       this.processing = true;
       this.contratService.supprimer('contrat', this.contrat.idcontrat).then((data) => {
         console.log('data');
@@ -252,6 +263,34 @@ export class ContratEditComponent implements OnInit {
         this.processing = false;
         this.notifierService.notify('success', "Suppression effectuée avec succès");
         this.router.navigate(['contrat']);
+      }).catch((e) => {
+        this.processing = false;
+        this.notifierService.notify('error', "Impossible de supprimer cet élément car il est lié à d'autres éléments dans le système");
+      });
+    }
+  }
+
+  getSites(): Promise<Array<any>> {
+    return new Promise((resolve, reject) => {
+      this.siteService.getAll('contratsite').then((contratsites) => {
+        console.log('contratsites');
+        console.log(contratsites);
+        contratsites = contratsites.filter((contratsite) => {
+          return (contratsite.idcontrat.idcontrat === this.contrat.idcontrat)
+        });
+        resolve(contratsites);
+      });
+    });
+  }
+
+  supprimerSite(site: ContratSite) {
+    const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+    if (reponse) {
+      this.siteService.supprimer('contratsite', site.idcontratSite).then((data) => {
+        console.log('data');
+        console.log(data);
+        this.notifierService.notify('success', "Suppression du site effectuée avec succès");
+        // window.location.reload();
       }).catch((e) => {
         this.notifierService.notify('error', "Impossible de supprimer cet élément car il est lié à d'autres éléments dans le système");
       });

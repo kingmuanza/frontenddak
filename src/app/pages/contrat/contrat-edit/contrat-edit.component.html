@@ -1,4 +1,4 @@
-<div class="page">
+<div *ngIf="!enCoursSuppression" class="page">
     <div class="page-entete">
         <div *ngIf="contrat.idcontrat===0" class="page-entete-titre">
             Ajouter un nouveau contrat
@@ -294,7 +294,34 @@
             </div>
         </div>
     </div>
-</div>
-<div style="height: 10vmin;">
+    <div style="height: 25vmin;">
 
+    </div>
+</div>
+
+<div *ngIf="enCoursSuppression" class="page">
+    <div class="page-entete">
+        <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
+            Contrat : {{contrat.libelle}}
+        </div>
+        <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut | date: 'yyyy-MM-dd'}}</div>
+        <div style="margin-top: 0px;">
+            <i>
+                {{contrat.description}}
+            </i>
+        </div>
+        <div class="">
+            <a (click)="enCoursSuppression = !enCoursSuppression" class="btn btn-link" style="padding: 0; margin: 0;">
+                Annuler et revenir
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div>
+            Les sites suivants seront supprimés
+        </div>
+        <div *ngFor="let contratsite of contratsites">
+            {{contratsite.nom}}
+        </div>
+    </div>
 </div>

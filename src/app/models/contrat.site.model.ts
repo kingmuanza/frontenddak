@@ -9,5 +9,7 @@ export class ContratSite {
     personne = '';
     tel = '';
     idquartier: Quartier | undefined;
+    longitude = 0;
+    latitude = 0;
     idcontrat = new Contrat();
 }
