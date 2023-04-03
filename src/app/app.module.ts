@@ -78,6 +78,7 @@ import { ContratEditComponent } from './pages/contrat/contrat-edit/contrat-edit.
 import { ContratViewComponent } from './pages/contrat/contrat-view/contrat-view.component';
 import { DisplaySiteComponent } from './_display/display-site/display-site.component';
 import { AffectationViewComponent } from './pages/affectation/affectation-view/affectation-view.component';
+import { ImporterComponent } from './pages/importer/importer.component';
 
 @NgModule({
   declarations: [
@@ -151,6 +152,7 @@ import { AffectationViewComponent } from './pages/affectation/affectation-view/a
     ContratViewComponent,
     DisplaySiteComponent,
     AffectationViewComponent,
+    ImporterComponent,
   ],
   imports: [
     BrowserModule,

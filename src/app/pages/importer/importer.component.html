@@ -1,0 +1,33 @@
+<div>
+    <h1>
+        Importer les données depuis le cloud
+    </h1>
+    <div>
+        <p>
+            Mettre à jour les coordonnées géographiques prises en ligne dans la BD Locale
+        </p>
+        <div>
+            <button class="btn btn-primary" (click)="mettreAJourLesCoordonneesGeographiques('contratSite')">
+                Mettre à jour les coordonnées géographiques 
+            </button>
+        </div>
+        <div class="mt-4">
+            <button class="btn btn-primary" (click)="importerContrats()">
+                Importer les données des contrats en ligne dans la base de données locale
+            </button>
+        </div>
+        <div class="mt-4">
+            <button class="btn btn-primary" (click)="importerSites()">
+                Importer les données des sites en ligne dans la base de données locale
+            </button>
+        </div>
+    </div>
+
+    <div class="page-contenu">
+        <div class="fonctionnalites">
+            <div class="message" *ngFor="let resultat of resultats">
+                {{resultat}}
+            </div>
+        </div>
+    </div>
+</div>

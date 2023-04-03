@@ -11,5 +11,9 @@ export class ContratSite {
     idquartier: Quartier | undefined;
     longitude = 0;
     latitude = 0;
+    longitude1 = 0;
+    latitude1 = 0;
+    longitude2 = 0;
+    latitude2 = 0;
     idcontrat = new Contrat();
 }

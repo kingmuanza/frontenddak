@@ -13,33 +13,38 @@
         <div>
             <div class="menu-gauche-item">
                 <a routerLinkActive="active" routerLink="dashboard">
-                Tableau de bord
-            </a>
+                    Tableau de bord
+                </a>
             </div>
             <div class="menu-gauche-item" *ngIf="pointage">
                 <a routerLinkActive="active" routerLink="pointage">
-                Pointages
-            </a>
+                    Pointages
+                </a>
             </div>
             <div class="menu-gauche-item" *ngIf="repos">
                 <a routerLinkActive="active" routerLink="repos">
-                Jours de repos
-            </a>
+                    Jours de repos
+                </a>
             </div>
             <div class="menu-gauche-item">
                 <a routerLinkActive="active" routerLink="synchroniser">
-                Synchroniser
-            </a>
+                    Synchroniser
+                </a>
+            </div>
+            <div class="menu-gauche-item">
+                <a routerLinkActive="active" routerLink="importer">
+                    Importer
+                </a>
             </div>
             <div class="menu-gauche-item" style="display: none;">
                 <a routerLinkActive="active" routerLink="controle">
-                Contrôle des vigiles
-            </a>
+                    Contrôle des vigiles
+                </a>
             </div>
             <div class="menu-gauche-item" *ngIf="conge">
                 <a routerLinkActive="active" routerLink="conge">
-                Congés
-            </a>
+                    Congés
+                </a>
             </div>
         </div>
     </div>

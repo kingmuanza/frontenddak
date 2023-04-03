@@ -50,10 +50,10 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
     private posteService: JarvisService<Poste> 
   ) {
 
-    this.intervalContrat = setInterval(() => {
+    /* this.intervalContrat = setInterval(() => {
       this.getMauvaisContrat();
       this.getMauvaisPoste();
-    }, 10000);
+    }, 10000); */
   }
 
   private getMauvaisContrat() {

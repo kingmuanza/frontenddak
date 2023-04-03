@@ -53,10 +53,12 @@ import { VilleListComponent } from './pages/ville/ville-list/ville-list.componen
 import { ZoneEditComponent } from './pages/zone/zone-edit/zone-edit.component';
 import { ZoneListComponent } from './pages/zone/zone-list/zone-list.component';
 import { AffectationViewComponent } from './pages/affectation/affectation-view/affectation-view.component';
+import { ImporterComponent } from './pages/importer/importer.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'importer', component: ImporterComponent },
 
   { path: 'repos', component: ReposGrapheComponent },
 
