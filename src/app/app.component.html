@@ -1,6 +1,6 @@
 <div class="application" style="">
-    <div class="row row-no-padding">
-        <div *ngIf="user && afficherMenu" class="col-2" style="overflow-x: hidden;">
+    <div class="row gx-0">
+        <div *ngIf="user && afficherMenu" class="col-2" style="overflow-x: hidden; background-color: red;">
             <app-menu-gauche [user]="user"></app-menu-gauche>
         </div>
         <div [ngClass]="{'col-10': user && afficherMenu, 'col-12': !(user && afficherMenu)}">
