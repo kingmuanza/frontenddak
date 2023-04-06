@@ -107,40 +107,13 @@
     <div class="page-contenu">
         <div class="row">
             <div class="col-lg-12">
-                <div>
-                    <div style="margin-top: 20px; margin-bottom: 20px;">
-                        Historique du contrat
-                    </div>
-                    <div class="card">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Historique du contrat
+                        </h5>
                         <div class="page-contenu-corps ">
-                            <table class="table row-border hover ">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Description</th>
-                                        <th>Postes</th>
-                                        <th>Vig. Jr</th>
-                                        <th>Vig. Nt</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{contrat.date | date: 'yyyy-MM-dd'}}</td>
-                                        <td>{{contrat.description}}</td>
-                                        <td>{{contrat.nbPostes}}</td>
-                                        <td>{{contrat.nbVigileJour}}</td>
-                                        <td>{{contrat.nbVigileNuit}}</td>
-                                    </tr>
-                                    <tr *ngFor="let c of contrats ">
-                                        <td>{{c.date | date: 'yyyy-MM-dd'}}</td>
-                                        <td>{{c.description}}</td>
-                                        <td>{{c.nbPostes}}</td>
-                                        <td>{{c.nbVigileJour}}</td>
-                                        <td>{{c.nbVigileNuit}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
+                            <app-display-historique-contrat [contrat]="contrat"></app-display-historique-contrat>
                         </div>
                     </div>
                 </div>

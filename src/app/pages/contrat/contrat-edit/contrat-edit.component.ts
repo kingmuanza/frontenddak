@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
+import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 import { Client } from 'src/app/models/client.model';
 import { Contrat } from 'src/app/models/contrat.model';
 import { ContratSite } from 'src/app/models/contrat.site.model';
@@ -13,7 +14,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 })
 export class ContratEditComponent implements OnInit {
 
-  enCoursSuppression = true;
+  enCoursSuppression = false;
 
   contrat = new Contrat();
   avenants = new Array<any>();
@@ -24,7 +25,7 @@ export class ContratEditComponent implements OnInit {
   nbPostes = 0;
   description = '';
 
-  contrats = new Array<Contrat>();
+  contratsHistoriques = new Array<Contrat>();
 
   montrerErreurs = false;
 
@@ -42,14 +43,13 @@ export class ContratEditComponent implements OnInit {
     nbNuitNegatif: false,
     nbVigiles: false,
   }
-  contratsites= new Array<ContratSite>();
+  contratsites = new Array<ContratSite>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private notifierService: NotifierService,
     private contratService: JarvisService<Contrat>,
-    private clientService: JarvisService<Client>,
     private siteService: JarvisService<ContratSite>,
     private avenantService: JarvisService<any>
   ) { }
@@ -68,13 +68,6 @@ export class ContratEditComponent implements OnInit {
           this.nbPostes = contrat.nbPostes + 0;
           this.description = contrat.description + '';
 
-          this.contratService.getAll('contrat').then((data) => {
-            console.log('data');
-            console.log(data);
-            this.contrats = data.filter((contrat) => {
-              return contrat.idparent && contrat.idparent.idcontrat === this.contrat.idcontrat;
-            });
-          });
         });
       }
     });
@@ -200,7 +193,7 @@ export class ContratEditComponent implements OnInit {
   }
 
   modifier() {
-    // Si les terme du contrat n'o nt pas chzangé
+    // Si les terme du contrat n'ont pas chzangé
     if (
       this.contrat.nbPostes === this.nbPostes &&
       this.contrat.nbVigileJour === this.nbVigileJour &&
@@ -242,9 +235,16 @@ export class ContratEditComponent implements OnInit {
     fils.description = this.description;
     fils.nbVigileNuit = this.nbVigileNuit;
     fils.date = date;
+    fils.idcontrat = 0;
     console.log('fils');
     console.log(fils);
-    this.ajouter(fils);
+    this.contratService.ajouter('contrat', fils).then((data) => {
+      console.log('Le fils a bien été enregistré');
+      console.log(data);
+      // this.notifierService.notify('success', "Ajout effectué avec succès");
+
+    }).catch((e) => {
+    });
   }
 
   async supprimer() {
@@ -252,7 +252,7 @@ export class ContratEditComponent implements OnInit {
     let message = "Etes-vous sûr de vouloir supprimer cet élément ?";
     message += " Tous les sites seront supprimés";
     const reponse = confirm(message);
-    if (reponse) {      
+    if (reponse) {
       this.contratsites = await this.getSites();
       console.log("contratsites.length");
       console.log(this.contratsites.length);

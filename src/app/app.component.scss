@@ -17,3 +17,8 @@
     overflow-y: hidden;
     z-index: 100;
 }
+
+.cadre-page {
+    height: calc(100vh - 56px);
+    overflow-y: scroll;
+}

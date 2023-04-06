@@ -9,6 +9,7 @@ import * as bootstrap from 'bootstrap';
 import { NotifierService } from 'angular-notifier';
 import { Quartier } from 'src/app/models/quartier.model';
 import { Affectation } from 'src/app/models/affectation.model';
+import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 
 @Component({
   selector: 'app-contrat-view',
@@ -25,7 +26,7 @@ export class ContratViewComponent implements OnInit, OnDestroy {
 
   quartier = '';
 
-  contrats = new Array<Contrat>();
+  contratsHistoriques = new Array<Contrat>();
   quartiers = new Array<Quartier>();
   myModal?: bootstrap.Modal;
 
@@ -80,14 +81,6 @@ export class ContratViewComponent implements OnInit, OnDestroy {
       if (id) {
         this.getContrat(id).then((contrat) => {
           this.contrat = contrat;
-
-          this.contratService.getAll('contrat').then((data) => {
-            console.log('contrat');
-            console.log(data);
-            this.contrats = data.filter((contrat) => {
-              return contrat.idparent && contrat.idparent.idcontrat === this.contrat.idcontrat;
-            });
-          });
 
           this.quartierService.getAll('quartier').then((data) => {
             console.log('quartier');

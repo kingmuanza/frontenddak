@@ -1,12 +1,15 @@
-<div class="application" style="">
+<div class="application">
     <div class="row gx-0">
-        <div *ngIf="user && afficherMenu" class="col-2" style="overflow-x: hidden; background-color: red;">
+        <div *ngIf="user && afficherMenu" class="col-2" style="overflow-x: hidden;">
             <app-menu-gauche [user]="user"></app-menu-gauche>
         </div>
         <div [ngClass]="{'col-10': user && afficherMenu, 'col-12': !(user && afficherMenu)}">
             <app-menu-haut [user]="user"></app-menu-haut>
-            <div style="height: 100vh; overflow-y: scroll;">
+            <div class="cadre-page">
                 <router-outlet></router-outlet>
+                <div style="height: 58px;">
+
+                </div>
             </div>
         </div>
     </div>
