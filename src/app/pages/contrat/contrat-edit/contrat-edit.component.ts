@@ -195,10 +195,7 @@ export class ContratEditComponent implements OnInit {
   modifier() {
     // Si les terme du contrat n'ont pas chzangé
     if (
-      this.contrat.nbPostes === this.nbPostes &&
-      this.contrat.nbVigileJour === this.nbVigileJour &&
-      this.contrat.description === this.description &&
-      this.contrat.nbVigileNuit === this.nbVigileNuit
+      this.isMemesTermesDuContrat()
     ) {
       this.contratService.modifier('contrat', this.contrat.idcontrat, this.contrat).then((data) => {
         console.log('data');
@@ -225,6 +222,13 @@ export class ContratEditComponent implements OnInit {
         this.processing = false;
       });
     }
+  }
+
+  private isMemesTermesDuContrat() {
+    return this.contrat.nbPostes === this.nbPostes &&
+      this.contrat.nbVigileJour === this.nbVigileJour &&
+      this.contrat.description === this.description &&
+      this.contrat.nbVigileNuit === this.nbVigileNuit;
   }
 
   createFils(date: Date) {

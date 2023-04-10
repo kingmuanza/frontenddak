@@ -4,20 +4,28 @@
 <table *ngIf="(isReady && contrat.idcontrat!=0)" class="table row-border hover table-bordered">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Date</th>
             <th>Description</th>
             <th>Sites</th>
             <th>Vig. Jr</th>
             <th>Vig. Nt</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let c of contratsHistoriques" [ngClass]="{'contrat-encours': c.idcontrat == contrat.idcontrat}">
+            <td>{{c.idcontrat}}</td>
             <td>{{c.date | date: 'yyyy-MM-dd HH:mm'}}</td>
             <td>{{c.description}}</td>
             <td>{{c.nbPostes}}</td>
             <td>{{c.nbVigileJour}}</td>
             <td>{{c.nbVigileNuit}}</td>
+            <td>
+                <button *ngIf="c.idcontrat !== contrat.idcontrat" class="btn btn-danger btn-sm" (click)="supprimer(c)">
+                    Supprimer
+                </button>
+            </td>
         </tr>
     </tbody>
 </table>
