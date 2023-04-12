@@ -298,12 +298,33 @@
             </a>
         </div>
     </div>
-    <div class="page-contenu">
+    <div class="page-contenu" *ngIf="contratsites.length > 0">
         <div>
             Les sites suivants seront supprimés
         </div>
-        <div *ngFor="let contratsite of contratsites">
-            {{contratsite.nom}}
+        <ul class="historique">
+            <ng-container *ngFor="let contratsite of contratsites">
+                <li [ngClass]="{'supprimee': isSiteSupprimee(contratsite.idcontratSite)}" *ngFor="let contratsite of contratsites">
+                    {{contratsite.nom}}
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <div class="page-contenu" *ngIf="contratsHistoriques.length > 1">
+        <div>
+            Les différents historiques seront supprimés du contrat seront supprimés
+        </div>
+        <ul class="historique">
+            <ng-container *ngFor="let c of contratsHistoriques">
+                <li *ngIf="c.idcontrat != contrat.idcontrat" [ngClass]="{'supprimee': isContratSupprimee(c.idcontrat)}">
+                    Date :{{c.date | date: "yyyy-MM-dd HH:mm"}}, Sites : {{c.nbPostes}}, Vigiles Jour : {{c.nbVigileJour}}, Vigiles Nuit : {{c.nbVigileNuit}}
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <div class="page-contenu">
+        <div>
+            <button class="btn btn-danger" (click)="supprimerDefinitivement()">Supprimer définitivement</button>
         </div>
     </div>
 </div>

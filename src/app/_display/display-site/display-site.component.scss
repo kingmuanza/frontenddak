@@ -10,6 +10,7 @@
 li {
     .supprimer {
         display: none;
+        margin-left: 5px;
     }
     &:hover {
         .supprimer {
@@ -19,5 +20,20 @@ li {
                 opacity: 0.5;
             }
         }
+    }
+}
+
+.bouton-supprimer {
+    cursor: pointer;
+    &:hover {
+        color: red;
+        opacity: 0.9;
+    }
+}
+
+.bouton-expand {
+    cursor: pointer;
+    &:hover {
+        opacity: 0.9;
     }
 }

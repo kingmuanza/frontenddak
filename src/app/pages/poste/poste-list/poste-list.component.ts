@@ -59,7 +59,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
           this.resultats = data;
           this.dtTrigger.next('');
         });
-        
+
       });
     });
   }
@@ -78,8 +78,8 @@ export class PosteListComponent implements OnInit, OnDestroy {
       this.resultatsPrimaires = this.resultatsPrimaires.concat(postesHoraire);
     }
 
-    
-    if (zone && zone.idzone !==0) {
+
+    if (zone && zone.idzone !== 0) {
       const postesEnCours = this.resultatsPrimaires.filter((poste) => {
         return poste.zone.idzone === zone.idzone;
       });
@@ -92,7 +92,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
     }
     this.afficherPostes(this.afficher);
   }
-  
+
   afficherPostes(afficher?: string) {
     setTimeout(() => {
       this.resultats = new Array<Poste>();
@@ -137,11 +137,9 @@ export class PosteListComponent implements OnInit, OnDestroy {
   }
 
   isNotVacant(poste: Poste, is: boolean) {
-    console.log('poste.libelle');
-    console.log(poste.libelle);
-    console.log('vacant : ' + !is);
+
     this.vacanteur[poste.idposte] = is
-    
+
   }
 
   ngOnDestroy(): void {

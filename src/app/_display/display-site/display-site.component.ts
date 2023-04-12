@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NotifierService } from 'angular-notifier';
 import { ContratSite } from 'src/app/models/contrat.site.model';
 import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
-import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import * as bootstrap from 'bootstrap';
+import { Poste } from 'src/app/models/poste.model';
 
 @Component({
   selector: 'app-display-site',
@@ -21,18 +23,22 @@ export class DisplaySiteComponent implements OnInit {
     nuit: number,
   }>();
 
+  myModal?: bootstrap.Modal;
   calcul = {
     jour: 0,
     nuit: 0,
   };
-  
+
+  postes = new Array<Poste>();
   exigences = new Array<ContratSiteVigile>();
   showFormulairePersonnel = false;
 
   exigence = new ContratSiteVigile();
 
   constructor(
+    private siteService: JarvisService<ContratSite>,
     private contratSiteVigileService: JarvisService<ContratSiteVigile>,
+    private notifierService: NotifierService,
   ) { }
 
   ngOnInit(): void {
@@ -96,6 +102,31 @@ export class DisplaySiteComponent implements OnInit {
       this.contratSiteVigileService.supprimer('contratsitevigile', item.idcontratSiteVigile).then(() => {
         window.location.reload();
       });
+    }
+  }
+
+  supprimerSite(site: ContratSite) {
+    const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+    if (reponse) {
+      this.siteService.supprimer('contratsite', site.idcontratSite).then((data) => {
+        console.log('data');
+        console.log(data);
+        this.notifierService.notify('success', "Suppression effectuée avec succès");
+        window.location.reload();
+      }).catch((e) => {
+        this.notifierService.notify('error', "Impossible de supprimer cet élément car il est lié à d'autres éléments dans le système");
+      });
+    }
+  }
+
+  openModal() {
+    console.log('open modal creation site');
+    console.log(this.site.nom);
+    const modale = document.getElementById('siteModal' + this.site.idcontratSite);
+    console.log(modale);
+    if (modale != null) {
+      this.myModal = new bootstrap.Modal(modale);
+      this.myModal.show();
     }
   }
 

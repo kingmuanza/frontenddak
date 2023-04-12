@@ -68,6 +68,7 @@ export class ContratViewComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+
     this.getDemandesVigiles().then((postesVigiles) => {
       this.postesVigiles = postesVigiles;
     });
@@ -84,6 +85,7 @@ export class ContratViewComponent implements OnInit, OnDestroy {
         this.getContrat(id).then((contrat) => {
           this.contrat = contrat;
 
+          this.initSite();
           this.quartierService.getAll('quartier').then((data) => {
             console.log('quartier');
             console.log(data);
@@ -104,6 +106,12 @@ export class ContratViewComponent implements OnInit, OnDestroy {
       }
 
     });
+  }
+
+  private initSite() {
+    this.site.nom = this.contrat.libelle;
+    this.site.personne = this.contrat.noms;
+    this.site.tel = this.contrat.tel;
   }
 
   getContrat(id: string): Promise<Contrat> {
@@ -249,20 +257,6 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  supprimerSite(site: ContratSite) {
-    const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
-    if (reponse) {
-      this.siteService.supprimer('contratsite', site.idcontratSite).then((data) => {
-        console.log('data');
-        console.log(data);
-        this.notifierService.notify('success', "Suppression effectuée avec succès");
-        window.location.reload();
-      }).catch((e) => {
-        this.notifierService.notify('error', "Impossible de supprimer cet élément car il est lié à d'autres éléments dans le système");
-      });
-    }
-  }
-
   getData(site: ContratSite, ev: {
     jour: number,
     nuit: number,
@@ -363,7 +357,15 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  renommerSite(ev: string) {
+    console.log("quartier");
+    console.log(ev);
+    if (this.site.nom.toLowerCase().indexOf(ev.toLowerCase()) !== -1) {
+    } else {
+      this.site.nom += " " + ev;
 
+    }
+  }
   ngOnDestroy(): void {
     clearInterval(this.interval);
   }

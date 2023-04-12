@@ -16,3 +16,14 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+ul.historique {
+    list-style: none;
+    li:before {
+        content: '- ';
+    }
+    li.supprimee:before {
+        content: '✓ ';
+        color: green;
+    }
+}

@@ -27,6 +27,8 @@ export class ContratEditComponent implements OnInit {
   description = '';
 
   contratsHistoriques = new Array<Contrat>();
+  historiquesSuprrimees = new Array<number>();
+  sitesSuprrimees = new Array<number>();
 
   montrerErreurs = false;
 
@@ -69,6 +71,7 @@ export class ContratEditComponent implements OnInit {
           this.nbVigileJour = contrat.nbVigileJour + 0;
           this.nbPostes = contrat.nbPostes + 0;
           this.description = contrat.description + '';
+          this.getHistoriqueDesContrats();
 
         });
       }
@@ -240,14 +243,55 @@ export class ContratEditComponent implements OnInit {
 
   async supprimer() {
     this.enCoursSuppression = true;
+    console.log("Récupération des sites");
+    this.contratsites = await this.getSites();
+    console.log("contratsites.length");
+    console.log(this.contratsites.length);
+  }
+
+  isContratSupprimee(id: number): boolean {
+    let resultat = false;
+    this.historiquesSuprrimees.forEach((idcontrat) => {
+      if (id === idcontrat) {
+        resultat = true;
+      }
+    });
+    return resultat;
+  }
+
+  isSiteSupprimee(id: number): boolean {
+    let resultat = false;
+    this.sitesSuprrimees.forEach((idcontrat) => {
+      if (id === idcontrat) {
+        resultat = true;
+      }
+    });
+    return resultat;
+  }
+
+  async supprimerDefinitivement() {
+    this.enCoursSuppression = true;
     let message = "Etes-vous sûr de vouloir supprimer cet élément ?";
     message += " Tous les sites seront supprimés";
     const reponse = confirm(message);
     if (reponse) {
-      this.contratsites = await this.getSites();
-      console.log("contratsites.length");
-      console.log(this.contratsites.length);
       this.processing = true;
+      for (let index = 0; index < this.contratsites.length; index++) {
+        const site = this.contratsites[index];
+        try {
+          await this.siteService.supprimer('contratsite', site.idcontratSite);
+          this.sitesSuprrimees.push(site.idcontratSite);
+        } catch (error) {
+          this.notifierService.notify('error', "Impossible de supprimer le site " + site.nom + " car il est lié à d'autres éléments dans le système");
+        }
+      }
+      for (let index = 0; index < this.contratsHistoriques.length; index++) {
+        const historique = this.contratsHistoriques[index];
+        if (historique.idcontrat !== this.contrat.idcontrat) {
+          await this.contratService.supprimer('contrat', historique.idcontrat);
+          this.historiquesSuprrimees.push(historique.idcontrat);
+        }
+      }
       this.contratService.supprimer('contrat', this.contrat.idcontrat).then((data) => {
         console.log('data');
         console.log(data);
@@ -274,6 +318,15 @@ export class ContratEditComponent implements OnInit {
     });
   }
 
+  private getHistoriqueDesContrats() {
+    if (this.contrat.idcontrat !== 0) {
+      console.log("getHistoriqueDesContrats".toLocaleUpperCase());
+      this.contratsHistoriques = [];
+      this.contratCtrlService.getHistoriqueDesContrats(this.contrat).then((contrats) => {
+        this.contratsHistoriques = contrats;
+      });
+    }
+  }
   supprimerSite(site: ContratSite) {
     const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
     if (reponse) {
