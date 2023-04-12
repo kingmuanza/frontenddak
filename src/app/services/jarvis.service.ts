@@ -9,6 +9,7 @@ import { LoadingService } from './loading.service';
 })
 export class JarvisService<T> {
   URL = 'http://localhost:8080/dakBack/webresources/';
+  package = "";
   urlSubject = new Subject<string>();
 
   constructor(
@@ -17,7 +18,9 @@ export class JarvisService<T> {
   ) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
-      this.URL = url;
+      this.URL = url + this.package;
+    } else {
+      this.URL += this.package;
     }
   }
 

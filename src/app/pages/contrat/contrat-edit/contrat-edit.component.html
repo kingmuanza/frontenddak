@@ -215,8 +215,9 @@
                     </div>
                 </div>
                 <div>
-                    <div class="categorie">
+                    <div [ngClass]="{'categorie': true}">
                         Description de la prestation : Les informations ci-dessous créent un avenant lorsqu'elles sont modifiées
+                        <span *ngIf="!isMemesTermesDuContrat()" style="color: red;">*</span>
                     </div>
                     <div class="row">
                         <div class="col-lg-4">

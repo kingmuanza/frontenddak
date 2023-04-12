@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
+import { SiteCtrlService } from 'src/app/_services/site-ctrl.service';
 import { Client } from 'src/app/models/client.model';
 import { Contrat } from 'src/app/models/contrat.model';
 import { ContratSite } from 'src/app/models/contrat.site.model';
@@ -51,7 +52,8 @@ export class ContratEditComponent implements OnInit {
     private notifierService: NotifierService,
     private contratService: JarvisService<Contrat>,
     private siteService: JarvisService<ContratSite>,
-    private avenantService: JarvisService<any>
+    private siteCtrlService: SiteCtrlService,
+    private contratCtrlService: ContratCtrlService,
   ) { }
 
   ngOnInit(): void {
@@ -76,19 +78,7 @@ export class ContratEditComponent implements OnInit {
   getContrat(id: string): Promise<Contrat> {
     return new Promise((resolve, reject) => {
       this.contratService.get('contrat', Number(id)).then((contrat) => {
-        console.log('contrat');
-        console.log(contrat);
         resolve(contrat);
-      });
-    });
-  }
-
-  getAvenants(): Promise<Array<any>> {
-    return new Promise((resolve, reject) => {
-      this.avenantService.getAll('contratavenant').then((avenants) => {
-        console.log('avenants');
-        console.log(avenants);
-        resolve(avenants);
       });
     });
   }
@@ -124,6 +114,7 @@ export class ContratEditComponent implements OnInit {
   }
 
   save() {
+    console.log(this.contrat);
     if (!this.isFormulaireValide()) {
       return
     }
@@ -183,10 +174,7 @@ export class ContratEditComponent implements OnInit {
   }
 
   ajouter(contrat: Contrat) {
-    this.contratService.ajouter('contrat', contrat).then((data) => {
-      console.log('data');
-      console.log(data);
-      // this.notifierService.notify('success', "Ajout effectué avec succès");
+    this.contratService.ajouter('contrat', contrat).then(() => {
       this.router.navigate(['contrat', 'view', this.contrat.idcontrat]);
     }).catch((e) => {
     });
@@ -194,37 +182,37 @@ export class ContratEditComponent implements OnInit {
 
   modifier() {
     // Si les terme du contrat n'ont pas chzangé
-    if (
-      this.isMemesTermesDuContrat()
-    ) {
-      this.contratService.modifier('contrat', this.contrat.idcontrat, this.contrat).then((data) => {
-        console.log('data');
-        console.log(data);
+    if (this.isMemesTermesDuContrat()) {
+      this.contrat.date = new Date();
+      this.contratService.modifier('contrat', this.contrat.idcontrat, this.contrat).then(() => {
         this.processing = false;
         this.notifierService.notify('success', "Modification effectuée avec succès");
         this.router.navigate(['contrat', 'view', this.contrat.idcontrat]);
       }).catch((e) => {
-        this.processing = false;
       });
-    } else
-    // Si les termes du contrat ont changé
-    {
+    } else {
+      // Si les termes du contrat ont changé
       // Date de modifcation du contrat
       const date = new Date(this.contrat.date);
-      this.contrat.date = new Date();
 
-      this.contratService.modifier('contrat', this.contrat.idcontrat, this.contrat).then((data) => {
-        console.log('data');
-        console.log(data);
-        this.notifierService.notify('success', "Modification effectuée avec succès");
-        this.createFils(date);
+      this.contrat.date = new Date();
+      console.log('Le contrat avant d^tre enregistré');
+      console.log(this.contrat.date);
+      console.log(this.contrat.nbPostes);
+      this.contratService.modifier('contrat', this.contrat.idcontrat, this.contrat).then(() => {
+        console.log('Le contrat a bien été enregistré');
+        console.log(this.contrat.date);
+        console.log(this.contrat.nbPostes);
+        this.createFils(date).then(() => {
+          this.notifierService.notify('success', "Modification effectuée avec succès");
+          this.router.navigate(['contrat', 'view', this.contrat.idcontrat]);
+        });
       }).catch((e) => {
-        this.processing = false;
       });
     }
   }
 
-  private isMemesTermesDuContrat() {
+  isMemesTermesDuContrat() {
     return this.contrat.nbPostes === this.nbPostes &&
       this.contrat.nbVigileJour === this.nbVigileJour &&
       this.contrat.description === this.description &&
@@ -232,22 +220,21 @@ export class ContratEditComponent implements OnInit {
   }
 
   createFils(date: Date) {
-    const fils = JSON.parse(JSON.stringify(this.contrat));
-    fils.idparent = this.contrat;
-    fils.nbPostes = this.nbPostes;
-    fils.nbVigileJour = this.nbVigileJour;
-    fils.description = this.description;
-    fils.nbVigileNuit = this.nbVigileNuit;
-    fils.date = date;
-    fils.idcontrat = 0;
-    console.log('fils');
-    console.log(fils);
-    this.contratService.ajouter('contrat', fils).then((data) => {
-      console.log('Le fils a bien été enregistré');
-      console.log(data);
-      // this.notifierService.notify('success', "Ajout effectué avec succès");
-
-    }).catch((e) => {
+    console.log('Le contrat avant de créer le fils');
+    console.log(this.contrat.date);
+    console.log(this.contrat.nbPostes);
+    console.log(date);
+    return new Promise((resolve, reject) => {
+      const fils = JSON.parse(JSON.stringify(this.contrat));
+      fils.idparent = null;
+      fils.nbPostes = this.nbPostes;
+      fils.nbVigileJour = this.nbVigileJour;
+      fils.description = this.description;
+      fils.nbVigileNuit = this.nbVigileNuit;
+      fils.date = date;
+      this.contratCtrlService.saveContratEtFils(this.contrat.idcontrat, fils).then(() => {
+        resolve(fils);
+      });
     });
   }
 
@@ -276,7 +263,7 @@ export class ContratEditComponent implements OnInit {
 
   getSites(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.siteService.getAll('contratsite').then((contratsites) => {
+      this.siteCtrlService.getSitesOfContrat(this.contrat).then((contratsites) => {
         console.log('contratsites');
         console.log(contratsites);
         contratsites = contratsites.filter((contratsite) => {

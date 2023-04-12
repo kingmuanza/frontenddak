@@ -10,6 +10,7 @@ import { NotifierService } from 'angular-notifier';
 import { Quartier } from 'src/app/models/quartier.model';
 import { Affectation } from 'src/app/models/affectation.model';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
+import { SiteCtrlService } from 'src/app/_services/site-ctrl.service';
 
 @Component({
   selector: 'app-contrat-view',
@@ -63,6 +64,7 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     private siteService: JarvisService<ContratSite>,
     private notifierService: NotifierService,
     private postevigileService: JarvisService<PosteVigile>,
+    private siteCtrlService: SiteCtrlService,
   ) { }
 
   ngOnInit(): void {
@@ -107,8 +109,6 @@ export class ContratViewComponent implements OnInit, OnDestroy {
   getContrat(id: string): Promise<Contrat> {
     return new Promise((resolve, reject) => {
       this.contratService.get('contrat', Number(id)).then((contrat) => {
-        console.log('contrat');
-        console.log(contrat);
         resolve(contrat);
       });
     });
@@ -116,9 +116,12 @@ export class ContratViewComponent implements OnInit, OnDestroy {
 
   getSites(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.siteService.getAll('contratsite').then((contratsites) => {
+      this.siteCtrlService.getSitesOfContrat(this.contrat).then((contratsites) => {
         console.log('contratsites');
         console.log(contratsites);
+        contratsites = contratsites.filter((contratsite) => {
+          return (contratsite.idcontrat.idcontrat === this.contrat.idcontrat)
+        });
         resolve(contratsites);
       });
     });
@@ -209,13 +212,13 @@ export class ContratViewComponent implements OnInit, OnDestroy {
   }
 
   async saveSite() {
-     
+
     console.log('saveSite');
     console.log(this.isFormulaireValide());
     if (!this.isFormulaireValide()) {
-      return 
+      return
     }
-    
+
     console.log('open modal creation poste');
     const modale = document.getElementById('posteModal');
 

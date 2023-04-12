@@ -35,6 +35,21 @@ export class ContratCtrlService {
   }
 
 
+  async saveContratEtFils(idcontrat: number, fils: Contrat): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.put(this.URL + "saveHistory" + '/' + idcontrat, fils).subscribe({
+        next: (data) => {
+          console.log(data);
+          resolve();
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
+
   private sortByDate(): ((a: Contrat, b: Contrat) => number) | undefined {
     return (premier, deuxieme) => {
       return new Date(premier.date).getTime() - new Date(deuxieme.date).getTime() > 0 ? -1 : 1;
