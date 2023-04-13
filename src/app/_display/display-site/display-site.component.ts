@@ -5,6 +5,8 @@ import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import * as bootstrap from 'bootstrap';
 import { Poste } from 'src/app/models/poste.model';
+import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
+import { SiteCtrlService } from 'src/app/_services/site-ctrl.service';
 
 @Component({
   selector: 'app-display-site',
@@ -37,12 +39,17 @@ export class DisplaySiteComponent implements OnInit {
 
   constructor(
     private siteService: JarvisService<ContratSite>,
+    private siteCtrlService: SiteCtrlService,
     private contratSiteVigileService: JarvisService<ContratSiteVigile>,
     private notifierService: NotifierService,
+    private posteCtrlService: PosteCtrlService,
   ) { }
 
   ngOnInit(): void {
-    this.contratSiteVigileService.getAll('contratsitevigile').then((data) => {
+    this.posteCtrlService.getPostesOfSite(this.site).then((postes) => {
+      this.postes = postes;
+    });
+    this.siteCtrlService.getExigencesDuSite(this.site).then((data) => {
       // console.log('contratsitevigile');
       // console.log(data);
       this.exigences = data.filter((d) => {

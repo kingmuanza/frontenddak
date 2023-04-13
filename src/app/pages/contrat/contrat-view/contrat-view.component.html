@@ -37,6 +37,7 @@
                         {{sites.length}}/{{contrat.nbPostes}}
                     </div>
                 </div>
+                <app-display-ligne-pourcentage [fraction]="sites.length/contrat.nbPostes"></app-display-ligne-pourcentage>
             </div>
             <div class="col-3">
                 <div class="stat" [ngClass]="{'red': postes.length === 0 || (postes.length!==(postesJourDansLesExigences + postesNuitDansLesExigences))}">
@@ -47,6 +48,7 @@
                         {{postes.length}}/{{postesJourDansLesExigences + postesNuitDansLesExigences}}
                     </div>
                 </div>
+                <app-display-ligne-pourcentage [fraction]="postes.length/(postesJourDansLesExigences + postesNuitDansLesExigences)"></app-display-ligne-pourcentage>
             </div>
             <div class="col-3">
                 <div class="stat" [ngClass]="{'red': vigilesJourDansLesExigences!==contrat.nbVigileJour}">
@@ -57,6 +59,7 @@
                         {{vigilesJourDansLesExigences}}/{{contrat.nbVigileJour}}
                     </div>
                 </div>
+                <app-display-ligne-pourcentage [fraction]="vigilesJourDansLesExigences/contrat.nbVigileJour"></app-display-ligne-pourcentage>
             </div>
             <div class="col-3">
                 <div class="stat" [ngClass]="{'red': vigilesNuitDansLesExigences!==contrat.nbVigileNuit}">
@@ -67,35 +70,48 @@
                         {{vigilesNuitDansLesExigences}}/{{contrat.nbVigileNuit}}
                     </div>
                 </div>
+                <app-display-ligne-pourcentage [fraction]="vigilesNuitDansLesExigences/contrat.nbVigileNuit"></app-display-ligne-pourcentage>
             </div>
         </div>
     </div>
     <div class="page-contenu">
         <div style="margin-bottom: 16px;">
             Liste des sites
-
             <button *ngIf="sites.length < contrat.nbPostes" (click)="openModal()" style="margin-left: 10px;" class="btn btn-link">
                 Créer un site
             </button>
         </div>
         <div class="row">
             <div class="col-lg-4" *ngFor="let site of sites">
-
                 <div class="site">
-                    <app-display-site [site]="site" [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences" [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences" (onVigileCalcul)="getData(site, $event)">
+                    <app-display-site [site]="site" [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences" [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences">
 
                     </app-display-site>
                 </div>
-
-                <div style="margin-top: 20px; margin-bottom:5px;">
-                    Liste des postes
-                </div>
-
-                <div class="" *ngFor="let poste of postes">
-                    <div *ngIf="poste.idcontratsite?.idcontratSite === site.idcontratSite">
-                        <app-display-poste (isNotVacant)="getDataVacant(poste, $event)" [affectations]="affectations" [poste]="poste" [postesVigiles]="postesVigiles"></app-display-poste>
+            </div>
+            <div class="col-lg-4" *ngIf="sites.length < contrat.nbPostes">
+                <div class="card" style="padding: 0; height: 255px;">
+                    <div class="card-body" style="text-align: center;">
+                        <div class="hover" (click)="openModal()">
+                            <i class="bi bi-plus-lg" style="font-size: 100px; line-height: 1.05;"></i>
+                            <div>
+                                Créer un site
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+
+        <div style="margin-top: 20px; margin-bottom:16px;">
+            Liste des postes liés à ce contrat
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4" *ngFor="let poste of postes">
+                <app-display-poste [affectations]="affectations" [poste]="poste" [postesVigiles]="postesVigiles"></app-display-poste>
             </div>
         </div>
     </div>
@@ -122,7 +138,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" #posteModal id="posteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" #posteModal id="posteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

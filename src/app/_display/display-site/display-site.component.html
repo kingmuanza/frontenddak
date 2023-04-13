@@ -1,4 +1,4 @@
-<div class="card" style="padding: 0;">
+<div class="card" style="height: 255px; overflow-y: auto; padding: 0;">
     <div class="card-header">
         <div class="row" style="line-height: 1.1; padding-top: 12px;">
             <div class="col-10">
@@ -181,11 +181,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div style="margin-bottom:5px;">
-                            Liste des postes
-                        </div>
                         <div class="" *ngFor="let poste of postes">
-                            <div *ngIf="poste.idcontratsite?.idcontratSite === site.idcontratSite">
+                            <div>
                                 <app-display-poste [poste]="poste"></app-display-poste>
                             </div>
                         </div>
@@ -193,6 +190,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button (click)="supprimerSite(site)" style="width: auto;" type="button" class="btn btn-danger">Supprimer</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>

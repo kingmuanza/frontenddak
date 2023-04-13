@@ -80,6 +80,7 @@ import { DisplaySiteComponent } from './_display/display-site/display-site.compo
 import { AffectationViewComponent } from './pages/affectation/affectation-view/affectation-view.component';
 import { ImporterComponent } from './pages/importer/importer.component';
 import { DisplayHistoriqueContratComponent } from './_display/display-historique-contrat/display-historique-contrat.component';
+import { DisplayLignePourcentageComponent } from './_display/display-ligne-pourcentage/display-ligne-pourcentage.component';
 
 @NgModule({
   declarations: [
@@ -155,6 +156,7 @@ import { DisplayHistoriqueContratComponent } from './_display/display-historique
     AffectationViewComponent,
     ImporterComponent,
     DisplayHistoriqueContratComponent,
+    DisplayLignePourcentageComponent,
   ],
   imports: [
     BrowserModule,
