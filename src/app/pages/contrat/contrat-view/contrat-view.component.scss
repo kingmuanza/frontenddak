@@ -41,8 +41,12 @@
 
 .hover {
     cursor: pointer;
-    margin-top: 30px;
+    margin-top: 70px;
     &:hover {
         opacity: 0.8;
     }
+}
+
+.nouveau-site {
+    border: 4px dashed #ddd;
 }

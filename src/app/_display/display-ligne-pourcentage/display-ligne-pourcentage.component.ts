@@ -14,11 +14,11 @@ export class DisplayLignePourcentageComponent implements OnInit, OnChanges {
 
   constructor() { }
   ngOnChanges(changes: SimpleChanges): void {
-    this.pourcentage = this.fraction * 100;
+    this.pourcentage = Math.min(this.fraction * 100, 100);
   }
 
   ngOnInit(): void {
-    this.pourcentage = this.fraction * 100;
+    this.pourcentage = Math.min(this.fraction * 100, 100);
   }
 
 

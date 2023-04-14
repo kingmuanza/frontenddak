@@ -1,4 +1,4 @@
-<div class="card" style="height: 255px; overflow-y: auto; padding: 0;">
+<div class="card" style="height: 355px; overflow-y: auto; padding: 0;">
     <div class="card-header">
         <div class="row" style="line-height: 1.1; padding-top: 12px;">
             <div class="col-10">
@@ -12,8 +12,8 @@
             </div>
         </div>
     </div>
-    <div class="card-body">
-        <div style="margin-bottom: 20px;">
+    <div class="card-body" style="line-height: 1.1; font-size: 16px;">
+        <div style="margin-bottom: 10px;" *ngIf="showFormulairePersonnel === false">
             <div>
                 Quartier : {{site.idquartier? site.idquartier.nom: 'Indéfini'}}
             </div>
@@ -23,13 +23,16 @@
             <div>
                 Tel : {{site.tel? site.tel: 'Indéfini'}}
             </div>
+            <div>
+                Longitude : {{site.longitude? site.longitude: 'Indéfini'}}, Latitude : {{site.latitude? site.latitude: 'Indéfini'}}
+            </div>
         </div>
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 10px;">
             <div *ngIf="showFormulairePersonnel">
-                <div>
+                <div style="margin-bottom: 10px;">
                     Nouvelle exigence du contrat
                 </div>
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
                             Fonction
@@ -45,7 +48,7 @@
                         <option value="SUPERVISEUR">Superviseur</option>
                     </select>
                 </div>
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
                             Horaire
@@ -56,7 +59,7 @@
                         <option value="nuit">Nuit</option>
                     </select>
                 </div>
-                <div class="input-group">
+                <div class="input-group input-group-sm">
                     <div class="input-group-prepend">
                         <span class="input-group-text">
                             Nombre
@@ -64,29 +67,51 @@
                     </div>
                     <input type="number" [(ngModel)]="exigence.quantite" class="form-control">
                 </div>
-                <div class="input-group" style="margin-top: 20px; margin-bottom: 20px">
-                    <button (click)="ajouterExigencePersonnel()" class="btn primaire">Enregistrer</button>
+                <div style="margin-top: 20px; margin-bottom: 20px">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <button (click)="ajouterExigencePersonnel()" class="btn primaire">Enregistrer</button>
+                        </div>
+                        <div class="col-lg-6">
+                            <button (click)="showFormulairePersonnel = false" style="width: 100%;" class="btn">Annuler</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <li *ngFor="let item of exigences">
-                <span>
+            <div *ngIf="!showFormulairePersonnel">
+                <li *ngFor="let item of exigences">
+                    <span>
                     {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
                 </span>
-                <span class="supprimer" (click)="supprimerPosteVigile(item)" style="color: red;">
+                    <span class="supprimer" (click)="supprimerPosteVigile(item)" style="color: red;">
                     Supprimer
                 </span>
-            </li>
+                </li>
+            </div>
 
         </div>
         <div *ngIf="nbAutorisationNuit || nbAutorisationJour">
             <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
                 Ajouter une exigence
             </button>
-            <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
+            <!--  <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
                 Annuler
-            </button>
+            </button> -->
         </div>
+
+
+        <div *ngIf="showFormulairePersonnel === false && postes.length>0">
+            <div style="margin-top: 10px; margin-bottom: 5px;">
+                Liste des postes
+            </div>
+            <li *ngFor="let poste of postes">
+                <span>
+                    {{poste.libelle}}
+                </span>
+            </li>
+        </div>
+
     </div>
 </div>
 
