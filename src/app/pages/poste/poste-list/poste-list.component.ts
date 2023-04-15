@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Poste } from 'src/app/models/poste.model';
@@ -33,11 +34,14 @@ export class PosteListComponent implements OnInit, OnDestroy {
 
   vacanteur: any = {};
 
+  libelle = "Liste des postes récemment créés";
+
   constructor(
     private router: Router,
     private posteService: JarvisService<Poste>,
     private zoneService: JarvisService<ZoneDak>,
     private affectationService: JarvisService<Affectation>,
+    private posteCtrlService: PosteCtrlService,
   ) { }
 
   ngOnInit(): void {
@@ -51,7 +55,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
         console.log(affectations);
         this.affectations = affectations;
 
-        this.posteService.getAll('poste').then((data) => {
+        this.posteCtrlService.getLasts().then((data) => {
           console.log('data');
           console.log(data);
           this.postes = data;
@@ -65,32 +69,14 @@ export class PosteListComponent implements OnInit, OnDestroy {
   }
 
   rechercher(horaire: string, zone?: ZoneDak) {
+    this.libelle = "Résultats de la recherche";
     this.resultatsPrimaires = new Array<Poste>();
-    if (horaire === 'tous') {
-      const postesHoraire = this.postes.filter((poste) => {
-        return true;
+    if (zone) {
+      this.posteCtrlService.getPostesByZone(zone).then((postes) => {
+        this.resultatsPrimaires = postes;
+        this.afficherPostes(this.afficher);
       });
-      this.resultatsPrimaires = this.resultatsPrimaires.concat(postesHoraire);
-    } else {
-      const postesHoraire = this.postes.filter((poste) => {
-        return poste.horaire === horaire;
-      });
-      this.resultatsPrimaires = this.resultatsPrimaires.concat(postesHoraire);
     }
-
-
-    if (zone && zone.idzone !== 0) {
-      const postesEnCours = this.resultatsPrimaires.filter((poste) => {
-        return poste.zone.idzone === zone.idzone;
-      });
-      this.resultatsPrimaires = postesEnCours;
-    } else {
-      const postesEnCours = this.resultatsPrimaires.filter((poste) => {
-        return true;
-      });
-      this.resultatsPrimaires = postesEnCours;
-    }
-    this.afficherPostes(this.afficher);
   }
 
   afficherPostes(afficher?: string) {

@@ -6,14 +6,13 @@ import { Poste } from 'src/app/models/poste.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { PointageService } from 'src/app/services/pointage.service';
 import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
-import { collection, getDocs } from "firebase/firestore";
-import { doc, setDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+
 import { initializeApp } from 'firebase/app';
 import { Contrat } from 'src/app/models/contrat.model';
 import { ContratSite } from 'src/app/models/contrat.site.model';
 import { Quartier } from 'src/app/models/quartier.model';
 import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
+import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 
 @Component({
   selector: 'app-poste-edit',
@@ -33,7 +32,7 @@ export class PosteEditComponent implements OnInit {
   affectations = new Array<any>();
   affVigilesJour = 0;
   affVigilesNuit = 0;
-
+  loadingContrat = true;
   contrats = new Array<Contrat>();
   contratsites = new Array<ContratSite>();
 
@@ -66,7 +65,8 @@ export class PosteEditComponent implements OnInit {
     private contratSiteVigileService: JarvisService<ContratSiteVigile>,
     private quartierService: JarvisService<Quartier>,
     private siteService: JarvisService<ContratSite>,
-    private contratService: JarvisService<Contrat>
+    private contratService: JarvisService<Contrat>,
+    private contratCtrlService: ContratCtrlService,
   ) {
 
     this.app = initializeApp(FIREBASECONFIG);
@@ -209,7 +209,7 @@ export class PosteEditComponent implements OnInit {
     this.erreurs.libelle = !this.poste.libelle;
     this.erreurs.abrege = !this.poste.abrege;
     this.erreurs.idquartier = !this.poste.idquartier;
-    
+
     return !this.erreurs.zone && !this.erreurs.horaire && !this.erreurs.libelle && !this.erreurs.abrege && !this.erreurs.idquartier;
   }
 
@@ -227,7 +227,7 @@ export class PosteEditComponent implements OnInit {
 
     if (this.poste.idposte == 0) {
       if (this.poste.libelle) {
-        
+
         this.posteService.ajouter('poste', this.poste).then((data) => {
           console.log('data');
           console.log(data);
@@ -302,10 +302,14 @@ export class PosteEditComponent implements OnInit {
   }
 
   getContrats(): Promise<Array<Contrat>> {
+    this.loadingContrat = true;
     return new Promise((resolve, reject) => {
-      this.contratService.getAll('contrat').then((contrats) => {
-        console.log('contrats');
-        console.log(contrats);
+      this.contratCtrlService.getContratsEnCoursDeCreation().then((contrats) => {
+        contrats.sort((a, b) => {
+          return a.idcontrat - b.idcontrat > 0 ? -1 : 1;
+        });
+
+        this.loadingContrat = false;
         resolve(contrats);
       });
     });
@@ -380,7 +384,7 @@ export class PosteEditComponent implements OnInit {
   }
 
   checkExigenceNuit() {
-    
+
   }
 
   private checkPosteDejaCree() {

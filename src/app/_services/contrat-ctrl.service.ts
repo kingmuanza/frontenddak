@@ -35,6 +35,34 @@ export class ContratCtrlService {
     });
   }
 
+  async getContratsEnCoursDeCreation(): Promise<Contrat[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "isEncours").subscribe({
+        next: (data) => {
+          const resulats = data as Contrat[];
+          resolve(resulats.sort(this.sortByDate()));
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
+  async getLasts(): Promise<Contrat[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "getLasts").subscribe({
+        next: (data) => {
+          const resulats = data as Contrat[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
 
   async saveContratEtFils(idcontrat: number, fils: Contrat): Promise<void> {
     return new Promise((resolve, reject) => {

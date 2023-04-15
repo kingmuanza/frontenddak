@@ -4,6 +4,7 @@ import { Contrat } from '../models/contrat.model';
 import { JarvisService } from '../services/jarvis.service';
 import { ContratSite } from '../models/contrat.site.model';
 import { Poste } from '../models/poste.model';
+import { ZoneDak } from '../models/zone.model';
 
 
 @Injectable({
@@ -35,9 +36,37 @@ export class PosteCtrlService {
       });
     });
   }
+
+  async getLasts(): Promise<Poste[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "getLasts").subscribe({
+        next: (data) => {
+          const resulats = data as Poste[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
   async getPostesOfContrat(contrat: Contrat): Promise<Poste[]> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "contrat" + '/' + contrat.idcontrat).subscribe({
+        next: (data) => {
+          const resulats = data as Poste[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+  async getPostesByZone(zone: ZoneDak): Promise<Poste[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "zone" + '/' + zone.idzone).subscribe({
         next: (data) => {
           const resulats = data as Poste[];
           resolve(resulats);
