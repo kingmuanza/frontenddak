@@ -21,10 +21,21 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="type">
-                        <input (ngModelChange)="afficherContrat($event)" [(ngModel)]="afficher" value="CREATION" type="radio" name="afficher"> &nbsp;En cours de création&nbsp;&nbsp;
-                        <input (ngModelChange)="afficherContrat($event)" [(ngModel)]="afficher" value="CREE" type="radio" name="afficher"> &nbsp;Créé &nbsp;&nbsp;
-                        <input (ngModelChange)="afficherContrat($event)" [(ngModel)]="afficher" value="PARFAIT" type="radio" name="afficher"> &nbsp;Parfait &nbsp;&nbsp;
-                        <input (ngModelChange)="afficherContrat($event)" [(ngModel)]="afficher" value="tous" type="radio" name="afficher"> &nbsp;Tous &nbsp;&nbsp;
+                        <input [title]="explication.encours" (ngModelChange)="afficherContrat($event)" [(ngModel)]="afficher" value="CREATION" type="radio" name="afficher">
+                        <span class="libelle-radio" [title]="explication.encours">
+                            {{nombres.encours ?  nombres.encours: ""}}
+                            En cours de création
+                        </span>
+                        <input [title]="explication.cree" (ngModelChange)="afficherContrat($event)" [(ngModel)]="afficher" value="CREE" type="radio" name="afficher">
+                        <span [title]="explication.cree" class="libelle-radio">
+                            {{nombres.cree ?  nombres.cree: ""}}
+                            Créés
+                        </span>
+                        <input [title]="explication.parfait" (ngModelChange)="afficherContrat($event)" [(ngModel)]="afficher" value="PARFAIT" type="radio" name="afficher">
+                        <span [title]="explication.parfait" class="libelle-radio">
+                            {{nombres.parfait ?  nombres.parfait: ""}}
+                            Parfaits
+                        </span>
                     </div>
                 </div>
             </div>
@@ -41,7 +52,6 @@
                             <th>Date Signature</th>
                             <th>Début</th>
                             <th>Fin</th>
-                            <th>Statut</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,7 +70,6 @@
                                     {{contrat.dateFin}}
                                 </ng-container>
                             </td>
-                            <td>{{libelleStatut(contrat.statut)}}</td>
                         </tr>
                     </tbody>
                 </table>

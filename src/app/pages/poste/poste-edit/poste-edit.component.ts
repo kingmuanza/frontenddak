@@ -304,7 +304,7 @@ export class PosteEditComponent implements OnInit {
   getContrats(): Promise<Array<Contrat>> {
     this.loadingContrat = true;
     return new Promise((resolve, reject) => {
-      this.contratCtrlService.getContratsEnCoursDeCreation().then((contrats) => {
+      this.contratCtrlService.getContratsCrees().then((contrats) => {
         contrats.sort((a, b) => {
           return a.idcontrat - b.idcontrat > 0 ? -1 : 1;
         });

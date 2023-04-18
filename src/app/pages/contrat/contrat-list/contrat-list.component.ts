@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { Contrat } from 'src/app/models/contrat.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
@@ -22,21 +23,32 @@ export class ContratListComponent implements OnInit, OnDestroy {
   contrats = new Array<Contrat>();
   resultatsPrimaires = new Array<Contrat>();
   resultats = new Array<Contrat>();
-  afficher = 'encours';
+  afficher = 'CREATION';
+
+  explication = {
+    encours: "Contrats dont tous les sites et les exigences n'ont pas encore été crées",
+    cree: "Contrats dont tous les sites et les exigences ont été crées mais pas les postes",
+    parfait: "Contrats dont tous les sites, les exigences et les postes ont été crées",
+  }
+
+  nombres = {
+    encours: 0,
+    cree: 0,
+    parfait: 0,
+  }
 
   constructor(
     private router: Router,
-    private jarvisService: JarvisService<Contrat> 
+    private jarvisService: JarvisService<Contrat>,
+    private contratCtrlService: ContratCtrlService,
   ) { }
 
   ngOnInit(): void {
-    this.jarvisService.getAll('contrat').then((data) => {
+    this.contratCtrlService.getContratsEnCoursDeCreation().then((data) => {
       console.log('data');
       console.log(data);
+      this.nombres.encours = data.length
       this.contrats = data.filter((contrat) => {
-        return !contrat.idparent;
-      });
-      this.resultatsPrimaires = data.filter((contrat) => {
         return !contrat.idparent;
       });
       this.resultats = data.filter((contrat) => {
@@ -52,34 +64,54 @@ export class ContratListComponent implements OnInit, OnDestroy {
       console.log(ev);
       this.resultats = new Array<Contrat>();
       if (this.afficher === 'CREATION') {
-        const contratsEnCours = this.resultatsPrimaires.filter((contrat) => {
-          return contrat.statut === 'CREATION';
+        this.contratCtrlService.getContratsEnCoursDeCreation().then((all) => {
+          this.resultats = new Array<Contrat>();
+          this.resultats = all;
+          console.log(this.resultats.length);
+          this.refreshDatatable();
+          this.nombres.encours = all.length;
         });
-        this.resultats = this.resultats.concat(contratsEnCours);
       }
       if (this.afficher === 'CREE') {
-        const contratsEnCours = this.resultatsPrimaires.filter((contrat) => {
-          return contrat.statut === 'CREE';
+        this.contratCtrlService.getContratsCrees().then((all) => {
+          this.resultats = new Array<Contrat>();
+          this.resultats = all;
+          console.log(this.resultats.length);
+          this.refreshDatatable();
+          this.nombres.cree = all.length;
         });
-        this.resultats = this.resultats.concat(contratsEnCours);
       }
       if (this.afficher === 'PARFAIT') {
-        const contratsEnCours = this.resultatsPrimaires.filter((contrat) => {
-          return  contrat.statut === 'PARFAIT';
+        this.contratCtrlService.getContratsParfaits().then((all) => {
+          this.resultats = new Array<Contrat>();
+          this.resultats = all;
+          console.log(this.resultats.length);
+          this.refreshDatatable();
+          this.nombres.parfait = all.length;
         });
-        this.resultats = this.resultats.concat(contratsEnCours);
       }
       if (this.afficher === 'tous') {
-        const contratsEnCours = this.resultatsPrimaires.filter((contrat) => {
-          return true;
-        });
-        this.resultats = this.resultats.concat(contratsEnCours);
+        this.resultats = new Array<Contrat>();
+        this.refreshDatatable();
       }
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.destroy();
-        this.dtTrigger.next('');
-      });
     }, 500);
+  }
+
+  public refreshDatatable() {
+    try {
+      console.log('début du rafraichissement');
+      // this.dtTrigger = new Subject<any>();
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        // dtInstance.destroy();
+        console.log('dtTrigger');
+        console.log(this.resultats.length);
+        // this.dtTrigger.next('');
+        console.log('fin du rafraichissement');
+      });
+    } catch (error) {
+      console.log("error");
+      console.log(error);
+    }
   }
 
   edit(id: string | number) {
@@ -88,7 +120,7 @@ export class ContratListComponent implements OnInit, OnDestroy {
 
   libellePrime(libelle: string) {
     if (libelle)
-    return "OUI";
+      return "OUI";
 
     return "NON";
   }
@@ -106,5 +138,5 @@ export class ContratListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-  
+
 }

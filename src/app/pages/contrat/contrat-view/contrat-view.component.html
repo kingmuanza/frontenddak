@@ -81,7 +81,7 @@
                 Créer un site
             </button>
         </div>
-        <div class="row">
+        <div class="row gx-3">
             <div class="col-lg-4" *ngFor="let site of sites">
                 <div class="site">
                     <app-display-site [site]="site" [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences" [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences">

@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button class="btn primaire" (click)="rechercher(horaire, zone)">Rechercher</button>
+                    <button [disabled]="zone.idzone===0" class="btn primaire" (click)="rechercher(horaire, zone)">Rechercher</button>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
                             <td>{{poste.zone?.libelle}}</td>
                             <td>
                                 <b *ngIf="poste.idcontratsite">
-                                    {{poste.idcontratsite.idcontrat?.libelle}}
+                                    {{poste.idcontratsite.idcontrat.libelle}}
                                 </b>
                                 <span *ngIf="!poste.idcontratsite" style="color: red;">
                                     Aucun contrat

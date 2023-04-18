@@ -243,6 +243,7 @@ export class ContratEditComponent implements OnInit {
 
   async supprimer() {
     this.enCoursSuppression = true;
+    this.contratsites = [];
     console.log("Récupération des sites");
     this.contratsites = await this.getSites();
     console.log("contratsites.length");
@@ -279,7 +280,7 @@ export class ContratEditComponent implements OnInit {
       for (let index = 0; index < this.contratsites.length; index++) {
         const site = this.contratsites[index];
         try {
-          await this.siteService.supprimer('contratsite', site.idcontratSite);
+          await this.siteCtrlService.supprimerSiteEtExigences(site);
           this.sitesSuprrimees.push(site.idcontratSite);
         } catch (error) {
           this.notifierService.notify('error', "Impossible de supprimer le site " + site.nom + " car il est lié à d'autres éléments dans le système");
@@ -292,7 +293,7 @@ export class ContratEditComponent implements OnInit {
           this.historiquesSuprrimees.push(historique.idcontrat);
         }
       }
-      this.contratService.supprimer('contrat', this.contrat.idcontrat).then((data) => {
+      /* this.contratService.supprimer('contrat', this.contrat.idcontrat).then((data) => {
         console.log('data');
         console.log(data);
         this.processing = false;
@@ -301,7 +302,7 @@ export class ContratEditComponent implements OnInit {
       }).catch((e) => {
         this.processing = false;
         this.notifierService.notify('error', "Impossible de supprimer cet élément car il est lié à d'autres éléments dans le système");
-      });
+      }); */
     }
   }
 

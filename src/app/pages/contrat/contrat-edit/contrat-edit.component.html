@@ -304,7 +304,7 @@
         </div>
         <ul class="historique">
             <ng-container *ngFor="let contratsite of contratsites">
-                <li [ngClass]="{'supprimee': isSiteSupprimee(contratsite.idcontratSite)}" *ngFor="let contratsite of contratsites">
+                <li [ngClass]="{'supprimee': isSiteSupprimee(contratsite.idcontratSite)}">
                     {{contratsite.nom}}
                 </li>
             </ng-container>
