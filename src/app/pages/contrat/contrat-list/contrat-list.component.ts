@@ -20,6 +20,9 @@ export class ContratListComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   dtInstance!: Promise<DataTables.Api>;
 
+  contratsEnCours = new Array<Contrat>();
+  contratsCrees = new Array<Contrat>();
+  contratsParfaits = new Array<Contrat>();
   contrats = new Array<Contrat>();
   resultatsPrimaires = new Array<Contrat>();
   resultats = new Array<Contrat>();
@@ -47,14 +50,19 @@ export class ContratListComponent implements OnInit, OnDestroy {
     this.contratCtrlService.getContratsEnCoursDeCreation().then((data) => {
       console.log('data');
       console.log(data);
-      this.nombres.encours = data.length
-      this.contrats = data.filter((contrat) => {
-        return !contrat.idparent;
-      });
-      this.resultats = data.filter((contrat) => {
-        return !contrat.idparent;
-      });
+      this.nombres.encours = data.length;
+      this.resultats = data;
+      this.contratsEnCours = data;
       this.dtTrigger.next('');
+
+      this.contratCtrlService.getContratsCrees().then((all) => {
+        this.contratsCrees = all;
+        this.nombres.cree = all.length;
+      });
+      this.contratCtrlService.getContratsParfaits().then((all) => {
+        this.contratsParfaits = all;
+        this.nombres.parfait = all.length;
+      });
     });
   }
 
@@ -64,31 +72,16 @@ export class ContratListComponent implements OnInit, OnDestroy {
       console.log(ev);
       this.resultats = new Array<Contrat>();
       if (this.afficher === 'CREATION') {
-        this.contratCtrlService.getContratsEnCoursDeCreation().then((all) => {
-          this.resultats = new Array<Contrat>();
-          this.resultats = all;
-          console.log(this.resultats.length);
-          this.refreshDatatable();
-          this.nombres.encours = all.length;
-        });
+        this.resultats = this.contratsEnCours;
+        this.refreshDatatable();
       }
       if (this.afficher === 'CREE') {
-        this.contratCtrlService.getContratsCrees().then((all) => {
-          this.resultats = new Array<Contrat>();
-          this.resultats = all;
-          console.log(this.resultats.length);
-          this.refreshDatatable();
-          this.nombres.cree = all.length;
-        });
+        this.resultats = this.contratsCrees;
+        this.refreshDatatable();
       }
       if (this.afficher === 'PARFAIT') {
-        this.contratCtrlService.getContratsParfaits().then((all) => {
-          this.resultats = new Array<Contrat>();
-          this.resultats = all;
-          console.log(this.resultats.length);
-          this.refreshDatatable();
-          this.nombres.parfait = all.length;
-        });
+        this.resultats = this.contratsParfaits;
+        this.refreshDatatable();
       }
       if (this.afficher === 'tous') {
         this.resultats = new Array<Contrat>();
@@ -102,10 +95,10 @@ export class ContratListComponent implements OnInit, OnDestroy {
       console.log('début du rafraichissement');
       // this.dtTrigger = new Subject<any>();
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        // dtInstance.destroy();
+        dtInstance.destroy();
         console.log('dtTrigger');
         console.log(this.resultats.length);
-        // this.dtTrigger.next('');
+        this.dtTrigger.next('');
         console.log('fin du rafraichissement');
       });
     } catch (error) {
