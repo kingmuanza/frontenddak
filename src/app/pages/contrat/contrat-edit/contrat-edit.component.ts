@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
+import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
 import { SiteCtrlService } from 'src/app/_services/site-ctrl.service';
 import { Client } from 'src/app/models/client.model';
 import { Contrat } from 'src/app/models/contrat.model';
 import { ContratSite } from 'src/app/models/contrat.site.model';
+import { Poste } from 'src/app/models/poste.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -17,6 +19,8 @@ export class ContratEditComponent implements OnInit {
 
   enCoursSuppression = false;
 
+  code = "";
+
   contrat = new Contrat();
   avenants = new Array<any>();
   processing = true;
@@ -25,6 +29,7 @@ export class ContratEditComponent implements OnInit {
   nbVigileJour = 0;
   nbPostes = 0;
   description = '';
+  postes = new Array<Poste>();
 
   contratsHistoriques = new Array<Contrat>();
   historiquesSuprrimees = new Array<number>();
@@ -56,6 +61,7 @@ export class ContratEditComponent implements OnInit {
     private siteService: JarvisService<ContratSite>,
     private siteCtrlService: SiteCtrlService,
     private contratCtrlService: ContratCtrlService,
+    private posteCtrlService: PosteCtrlService,
   ) { }
 
   ngOnInit(): void {
@@ -246,8 +252,17 @@ export class ContratEditComponent implements OnInit {
     this.contratsites = [];
     console.log("Récupération des sites");
     this.contratsites = await this.getSites();
+    this.postes = await this.getPostes();
     console.log("contratsites.length");
     console.log(this.contratsites.length);
+  }
+
+  getPostes(): Promise<Array<any>> {
+    return new Promise((resolve, reject) => {
+      this.posteCtrlService.getPostesOfContrat(this.contrat).then((postes) => {
+        resolve(postes);
+      });
+    });
   }
 
   isContratSupprimee(id: number): boolean {
@@ -271,21 +286,14 @@ export class ContratEditComponent implements OnInit {
   }
 
   async supprimerDefinitivement() {
+    if (this.code != "1234") {
+      return;
+    }
     this.enCoursSuppression = true;
     let message = "Etes-vous sûr de vouloir supprimer cet élément ?";
     message += " Tous les sites seront supprimés";
     const reponse = confirm(message);
     if (reponse) {
-      this.processing = true;
-      for (let index = 0; index < this.contratsites.length; index++) {
-        const site = this.contratsites[index];
-        try {
-          await this.siteCtrlService.supprimerSiteEtExigences(site);
-          this.sitesSuprrimees.push(site.idcontratSite);
-        } catch (error) {
-          this.notifierService.notify('error', "Impossible de supprimer le site " + site.nom + " car il est lié à d'autres éléments dans le système");
-        }
-      }
       for (let index = 0; index < this.contratsHistoriques.length; index++) {
         const historique = this.contratsHistoriques[index];
         if (historique.idcontrat !== this.contrat.idcontrat) {
@@ -293,7 +301,7 @@ export class ContratEditComponent implements OnInit {
           this.historiquesSuprrimees.push(historique.idcontrat);
         }
       }
-      /* this.contratService.supprimer('contrat', this.contrat.idcontrat).then((data) => {
+      this.contratService.supprimer('contrat', this.contrat.idcontrat).then((data) => {
         console.log('data');
         console.log(data);
         this.processing = false;
@@ -302,7 +310,8 @@ export class ContratEditComponent implements OnInit {
       }).catch((e) => {
         this.processing = false;
         this.notifierService.notify('error', "Impossible de supprimer cet élément car il est lié à d'autres éléments dans le système");
-      }); */
+      });
+
     }
   }
 

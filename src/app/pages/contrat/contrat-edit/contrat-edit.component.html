@@ -298,33 +298,54 @@
             </a>
         </div>
     </div>
-    <div class="page-contenu" *ngIf="contratsites.length > 0">
-        <div>
-            Les sites suivants seront supprimés
+    <div *ngIf="postes.length == 0">
+        <div class="page-contenu" *ngIf="contratsites.length > 0">
+            <div>
+                Les sites suivants seront aussi supprimés
+            </div>
+            <ul class="historique">
+                <ng-container *ngFor="let contratsite of contratsites">
+                    <li [ngClass]="{'supprimee': isSiteSupprimee(contratsite.idcontratSite)}">
+                        {{contratsite.nom}}
+                    </li>
+                </ng-container>
+            </ul>
         </div>
-        <ul class="historique">
-            <ng-container *ngFor="let contratsite of contratsites">
-                <li [ngClass]="{'supprimee': isSiteSupprimee(contratsite.idcontratSite)}">
-                    {{contratsite.nom}}
-                </li>
-            </ng-container>
-        </ul>
-    </div>
-    <div class="page-contenu" *ngIf="contratsHistoriques.length > 1">
-        <div>
-            Les différents historiques seront supprimés du contrat seront supprimés
+        <div class="page-contenu" *ngIf="contratsHistoriques.length > 1">
+            <div>
+                Les différents historiques du contrat seront aussi supprimés
+            </div>
+            <ul class="historique">
+                <ng-container *ngFor="let c of contratsHistoriques">
+                    <li *ngIf="c.idcontrat != contrat.idcontrat" [ngClass]="{'supprimee': isContratSupprimee(c.idcontrat)}">
+                        Date :{{c.date | date: "yyyy-MM-dd HH:mm"}}, Sites : {{c.nbPostes}}, Vigiles Jour : {{c.nbVigileJour}}, Vigiles Nuit : {{c.nbVigileNuit}}
+                    </li>
+                </ng-container>
+            </ul>
         </div>
-        <ul class="historique">
-            <ng-container *ngFor="let c of contratsHistoriques">
-                <li *ngIf="c.idcontrat != contrat.idcontrat" [ngClass]="{'supprimee': isContratSupprimee(c.idcontrat)}">
-                    Date :{{c.date | date: "yyyy-MM-dd HH:mm"}}, Sites : {{c.nbPostes}}, Vigiles Jour : {{c.nbVigileJour}}, Vigiles Nuit : {{c.nbVigileNuit}}
-                </li>
-            </ng-container>
-        </ul>
+        <div class="page-contenu">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                        Code de suppression 
+                        <app-required></app-required>
+                    </span>
+                        </div>
+                        <input [(ngModel)]="code" type="password" class="form-control" [ngClass]="{'is-invalid': code!='1234'}">
+                        <button [disabled]="code!='1234'" class="btn btn-danger" (click)="supprimerDefinitivement()">Supprimer définitivement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="page-contenu">
-        <div>
-            <button class="btn btn-danger" (click)="supprimerDefinitivement()">Supprimer définitivement</button>
+    <div *ngIf="postes.length != 0">
+        <div class="page-contenu">
+            <div style="width: 50%;">
+
+                Vous ne pouvez pas supprimer ce contrat car il est lié à des postes. Veuillez supprimer manuellement les postes avant de continuer
+            </div>
         </div>
     </div>
 </div>
