@@ -7,6 +7,9 @@ import { Changement } from 'src/app/models/changement.model';
 import { Poste } from 'src/app/models/poste.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import { doc, setDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
 
 @Component({
   selector: 'app-switch-edit',
@@ -25,6 +28,8 @@ export class SwitchEditComponent implements OnInit {
   poste = new Poste();
   processing = false;
 
+  app: any;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -33,7 +38,18 @@ export class SwitchEditComponent implements OnInit {
     private affectationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
     private vigileService: JarvisService<Vigile>,
-  ) { }
+  ) {
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
+      authDomain: "dak-security.firebaseapp.com",
+      projectId: "dak-security",
+      storageBucket: "dak-security.appspot.com",
+      messagingSenderId: "448692904510",
+      appId: "1:448692904510:web:216883edce596209e6276f",
+      measurementId: "G-L0FKMS4EQH"
+    };
+    this.app = initializeApp(firebaseConfig);
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((paramMap) => {
@@ -55,8 +71,8 @@ export class SwitchEditComponent implements OnInit {
             this.posteService.getAll('poste').then((postes) => {
               console.log('postes');
               console.log(postes);
-              this.postes = postes;
-              postes.forEach((p) => {
+              this.postes = postes.sort((a, b) => a.libelle.localeCompare(b.libelle));
+              this.postes.forEach((p) => {
                 if (p.idposte === this.changement.idaffectation.idposte.idposte) {
                   this.poste = p;
                 }
@@ -80,15 +96,14 @@ export class SwitchEditComponent implements OnInit {
           });
         });
       } else {
-
         this.vigileService.getAll('vigile').then((vigiles) => {
           this.vigiles = vigiles;
-          
+
           this.posteService.getAll('poste').then((postes) => {
             console.log('postes');
             console.log(postes);
-            this.postes = postes;
-            
+            this.postes = postes.sort((a, b) => a.libelle.localeCompare(b.libelle));
+
             this.affectationService.getAll('affectation').then((affectations) => {
               console.log('affectations');
               console.log(affectations);
@@ -125,8 +140,12 @@ export class SwitchEditComponent implements OnInit {
         console.log('data');
         console.log(data);
         this.processing = false;
-        this.notifierService.notify('success', "Ajout effectué avec succès");
-        this.router.navigate(['switch']);
+        this.envoyerEnLigne().then(() => {
+          this.notifierService.notify('success', "Ajout effectué avec succès");
+          this.router.navigate(['switch']);
+        }).catch(() => {
+          this.notifierService.notify('error', "Impossible de mettre en ligne");
+        });
       });
     } else {
       this.processing = true;
@@ -138,6 +157,20 @@ export class SwitchEditComponent implements OnInit {
         this.router.navigate(['switch']);
       });
     }
+  }
+
+  async envoyerEnLigne() {
+    const db = getFirestore(this.app);
+    return new Promise((resolve, reject) => {
+      const ref = doc(db, 'switch', this.changement.idswitch + '');
+      setDoc(ref, JSON.parse(JSON.stringify(this.changement)), { merge: true }).then(() => {
+        resolve(this.changement);
+      }).catch((e) => {
+        console.log('erreur');
+        console.log(e);
+        reject(e)
+      });
+    });
   }
 
   supprimer() {

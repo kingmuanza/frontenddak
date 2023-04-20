@@ -47,7 +47,7 @@ export class SwitchListComponent implements OnInit, OnDestroy {
   }
 
   edit(id: number) {
-    this.router.navigate(['switch', 'edit', id]);
+    this.router.navigate(['switch', 'view', id]);
   }
 
   filtrer(ville: Ville | null) {
@@ -70,5 +70,5 @@ export class SwitchListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-  
+
 }

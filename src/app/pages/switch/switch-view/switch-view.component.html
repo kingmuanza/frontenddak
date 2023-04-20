@@ -1,0 +1,54 @@
+<div class="page">
+    <div class="page-entete">
+        <div *ngIf="changement.idswitch !== 0" class="page-entete-titre">
+            Switch
+        </div>
+        <div class="">
+            <a routerLink="/switch" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des changements
+            </a>
+        </div>
+    </div>
+    <div class="mt-4">
+        Date : {{changement.date | date: 'yyyy-MM-dd'}}
+    </div>
+    <div class="row" style="text-align: center; margin-top: 20px;">
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h5>{{changement.idvigileBase.noms}}</h5>
+                    </div>
+                    <div *ngIf="posteBase">
+                        Affectation permanente : {{posteBase.idposte ? posteBase.idposte.libelle : "Aucune affectation"}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="mt-4">
+                <i style="font-size: 50px;" class="bi bi-arrow-left-right"></i>
+
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h5>{{changement.idvigileSwitch.noms}}</h5>
+                    </div>
+                    <div *ngIf="posteSwitch">
+                        Affectation permanente : {{posteSwitch.idposte ? posteSwitch.idposte.libelle : "Aucune affectation"}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:40px">
+        <div class="row mt-4">
+            <div class="col-lg-4">
+                <button class="btn primaire">Transformer en affectation</button>
+            </div>
+        </div>
+    </div>
+</div>

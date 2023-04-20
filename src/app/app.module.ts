@@ -81,6 +81,7 @@ import { AffectationViewComponent } from './pages/affectation/affectation-view/a
 import { ImporterComponent } from './pages/importer/importer.component';
 import { DisplayHistoriqueContratComponent } from './_display/display-historique-contrat/display-historique-contrat.component';
 import { DisplayLignePourcentageComponent } from './_display/display-ligne-pourcentage/display-ligne-pourcentage.component';
+import { SwitchViewComponent } from './pages/switch/switch-view/switch-view.component';
 
 @NgModule({
   declarations: [
@@ -157,6 +158,7 @@ import { DisplayLignePourcentageComponent } from './_display/display-ligne-pourc
     ImporterComponent,
     DisplayHistoriqueContratComponent,
     DisplayLignePourcentageComponent,
+    SwitchViewComponent,
   ],
   imports: [
     BrowserModule,

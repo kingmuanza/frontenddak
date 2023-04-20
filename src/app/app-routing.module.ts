@@ -54,6 +54,7 @@ import { ZoneEditComponent } from './pages/zone/zone-edit/zone-edit.component';
 import { ZoneListComponent } from './pages/zone/zone-list/zone-list.component';
 import { AffectationViewComponent } from './pages/affectation/affectation-view/affectation-view.component';
 import { ImporterComponent } from './pages/importer/importer.component';
+import { SwitchViewComponent } from './pages/switch/switch-view/switch-view.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -97,7 +98,7 @@ const routes: Routes = [
   { path: 'pointage/edit/:id', component: PointageEditComponent },
 
   { path: 'pointagesuivi', component: PointageSuiviComponent },
-  
+
   { path: 'controle', component: ControleListComponent },
   { path: 'controle/view/:id', component: ControleViewComponent },
 
@@ -129,6 +130,7 @@ const routes: Routes = [
   { path: 'switch', component: SwitchListComponent },
   { path: 'switch/edit', component: SwitchEditComponent },
   { path: 'switch/edit/:id', component: SwitchEditComponent },
+  { path: 'switch/view/:id', component: SwitchViewComponent },
 
   { path: 'synchroniser', component: SynchroniserComponent },
 
