@@ -53,6 +53,7 @@
                             <th>ID</th>
                             <th>Date</th>
                             <th>Poste</th>
+                            <th>Zone</th>
                             <th>Horaire</th>
                             <th>Vigile</th>
                             <th>Repos</th>
@@ -63,8 +64,9 @@
                     <tbody>
                         <tr *ngFor="let affectation of resultats" (click)="edit(affectation.idaffectation)">
                             <td>{{affectation.idaffectation}}</td>
-                            <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
+                            <td noWrap>{{affectation.dateAffectation?.split('T')[0]}}</td>
                             <td>{{affectation.idposte?.libelle}}</td>
+                            <td>{{affectation.idposte?.zone.libelle}}</td>
                             <td>{{affectation.horaire}}</td>
                             <td>{{affectation.idvigile?.noms}}</td>
                             <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>

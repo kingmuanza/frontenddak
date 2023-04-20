@@ -36,7 +36,11 @@ export class PointageService {
           // doc.data() is never undefined for query doc snapshots
           /* console.log(resultat.id);
           console.log(resultat.data()); */
-          pointages.push(resultat.data());
+          let x = {
+            id: resultat.id,
+            ...resultat.data()
+          }
+          pointages.push(x);
         });
         resolve(pointages);
       });

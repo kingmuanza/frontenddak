@@ -184,7 +184,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Tel <app-required></app-required></span>
                                 </div>
-                                <input [(ngModel)]="contrat.tel" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.tel && !contrat.particulier)}">
+                                <input [(ngModel)]="contrat.tel" type="tel" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.tel && !contrat.particulier)}">
                             </div>
                         </div>
                         <div class="col-lg-6">

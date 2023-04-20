@@ -8,6 +8,7 @@ import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { Affectation } from 'src/app/models/affectation.model';
 import { EquipementVigile } from 'src/app/models/equipement.vigile.model';
 import { Nationalite } from 'src/app/models/nationalite.model';
+import { Permission } from 'src/app/models/permission.model';
 import { Quartier } from 'src/app/models/quartier.model';
 import { Suivi } from 'src/app/models/suivi.model';
 import { Vigile } from 'src/app/models/vigile.model';
@@ -24,10 +25,13 @@ import { ParrainService } from 'src/app/services/parrain.service';
 export class VigileViewComponent implements OnInit {
 
   // Datatables
-  dtOptions: any = DatatablesOptions;
-  dtTrigger = new Subject<any>();
-  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
-  dtInstance!: Promise<DataTables.Api>;
+  // @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtOptionsPermissions: any = DatatablesOptions;
+  dtTriggerPermissions = new Subject<any>();
+  dtInstancePermissions!: Promise<DataTables.Api>;
+
+  dtOptionsSanctions: any = DatatablesOptions;
+  dtTriggerSanctions = new Subject<any>();
 
   affectations = new Array<Affectation>();
   affectationsActuelles = new Array<Affectation>();
@@ -48,6 +52,7 @@ export class VigileViewComponent implements OnInit {
 
   parrains = new Array<Vigile>();
   sanctions = new Array<Suivi>();
+  permissions = new Array<Permission>();
   equipements = new Array<EquipementVigile>();
 
   statut = 'Titulaire';
@@ -64,6 +69,7 @@ export class VigileViewComponent implements OnInit {
     private villeService: JarvisService<Ville>,
     private nationaliteService: JarvisService<Nationalite>,
     private sanctionService: JarvisService<Suivi>,
+    private permissionService: JarvisService<Permission>,
     private equipementVigileService: JarvisService<EquipementVigile>,
   ) { }
 
@@ -84,6 +90,10 @@ export class VigileViewComponent implements OnInit {
               const id = paramMap.get('id');
               if (id) {
                 this.initialiserVigile(id, villes, zones, nationalites);
+                this.getPermissions().then((permissions) => {
+                  this.permissions = permissions;
+                  this.dtTriggerPermissions.next('');
+                })
               }
             });
           });
@@ -117,6 +127,22 @@ export class VigileViewComponent implements OnInit {
     });
   }
 
+  getPermissions(): Promise<Array<Permission>> {
+    const resultats = new Array<Permission>();
+    return new Promise((resolve, reject) => {
+      this.permissionService.getAll('permission').then((permissions) => {
+        console.log('permissions');
+        console.log(permissions);
+        permissions.forEach((permission) => {
+          if (permission.idvigile?.idvigile === this.vigile.idvigile) {
+            resultats.push(permission)
+          }
+        });
+        resolve(resultats);
+      });
+    });
+  }
+
   initialiserVigile(id: string, villes: any[], zones: any[], nationalites: any[]) {
     this.vigileService.get('vigile', Number(id)).then((vigile) => {
       console.log('le vigile recupéré');
@@ -132,6 +158,7 @@ export class VigileViewComponent implements OnInit {
       console.log(this.vigile);
       this.getSanctions().then((sanctions) => {
         this.sanctions = sanctions;
+        this.dtTriggerSanctions.next("");
       });
       this.getAffectionOfVigile(vigile).then(() => {
         if (vigile.estRemplacant) {

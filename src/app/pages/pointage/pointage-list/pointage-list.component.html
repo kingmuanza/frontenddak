@@ -14,6 +14,19 @@
                         </a>
                     </div>
                 </div>
+                <div class="col-lg-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Horaire
+                            </span>
+                        </div>
+                        <select type="date" name="date" class="form-control" [(ngModel)]="horaire">
+                            <option value="jour">Jour</option>
+                            <option value="nuit">Nuit</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-lg-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -21,12 +34,13 @@
                                 Zone
                             </span>
                         </div>
-
                         <select type="text" [(ngModel)]="zone" class="form-control">
                             <option [ngValue]="''"></option>
-                            <option [ngValue]="zone" *ngFor="let zone of zones">
-                                {{zone.libelle}}
-                            </option>
+                            <ng-container *ngFor="let zone of zones">
+                                <option [ngValue]="zone" *ngIf="zone.horaire === horaire">
+                                    {{zone.libelle}}
+                                </option>
+                            </ng-container>
                         </select>
                     </div>
                 </div>
@@ -48,19 +62,6 @@
                             </span>
                         </div>
                         <input type="date" class="form-control" [ngModel]="au |date:'yyyy-MM-dd'" (ngModelChange)="au = $event">
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Horaire
-                            </span>
-                        </div>
-                        <select type="date" name="date" class="form-control" [(ngModel)]="horaire">
-                            <option value="jour">Jour</option>
-                            <option value="nuit">Nuit</option>
-                        </select>
                     </div>
                 </div>
                 <div class="col-lg-1">

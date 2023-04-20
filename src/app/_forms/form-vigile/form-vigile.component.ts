@@ -6,6 +6,7 @@ import { Nationalite } from 'src/app/models/nationalite.model';
 import { Quartier } from 'src/app/models/quartier.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { Ville } from 'src/app/models/ville.model';
+import { CalculService } from 'src/app/services/calcul.service';
 import { CongeService } from 'src/app/services/conge.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { ParrainService } from 'src/app/services/parrain.service';
@@ -56,6 +57,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     private parrainService: ParrainService,
     private congeService: CongeService,
     private vigileService: JarvisService<Vigile>,
+    private calculService: CalculService,
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -74,7 +76,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
   }
 
   initialiserVigile(villes: Array<Ville>, quartiers: Array<Quartier>, nationalites: Array<Nationalite>) {
-    
+
     if (!this.vigile.nom) {
       this.vigile.nom = this.vigile.noms;
     }
@@ -111,7 +113,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
       }
     });
     quartiers.forEach((q) => {
-      if (this.vigile.quartier && q.idquartier === this.vigile.quartier.idquartier) {        
+      if (this.vigile.quartier && q.idquartier === this.vigile.quartier.idquartier) {
         this.vigile.quartier = q;
       }
     });
@@ -148,7 +150,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     } else {
       this.erreurs.cni = false;
     }
-    const isTel = this.vigile.tel ? true : false;
+    const isTel = this.isTel(this.vigile.tel);
     if (!isTel) {
       this.erreurs.tel = true;
     } else {
@@ -166,10 +168,14 @@ export class FormVigileComponent implements OnInit, OnChanges {
     } else {
       this.erreurs.matricule = false;
     }
-    
+
     const isDateEntree = !!this.vigile.dateEntree;
     this.erreurs.dateEntree = !this.vigile.dateEntree;
     return isDateNaiss && isMajeur && isNom && isCNI && isTel && isFonction && isMatricule && isDateEntree;
+  }
+
+  isTel(numero: string): boolean {
+    return this.calculService.isTel(numero);
   }
 
   save() {

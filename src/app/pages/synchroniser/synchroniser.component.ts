@@ -12,7 +12,8 @@ import { initializeApp } from 'firebase/app';
 export class SynchroniserComponent implements OnInit {
 
   app: any;
-  tables = ['zone', 'vigile', 'affectation', 'poste', 'contratSite'];
+  tables = ['zone', 'vigile'];
+  // tables = ['zone', 'vigile', 'affectation', 'poste', 'contratSite'];
   resultats = [""];
 
   constructor(

@@ -8,9 +8,12 @@
                 <div class="col-lg-3">
                     <div class="nouveau">
                         <a routerLink="/sanction/edit" class="btn nouveau">
-                        Ajouter une appréciation
+                        Ajouter une sanction
                     </a>
                     </div>
+                </div>
+                <div class="col-lg-2">
+                    <button (click)="importer()" class="btn primaire">Importer</button>
                 </div>
                 <div class="col-lg-3">
                     <div class="input-group">
@@ -22,7 +25,7 @@
                         <input type="date" name="date" class="form-control">
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
@@ -54,17 +57,19 @@
                             <th>Vigile</th>
                             <th>Horaire</th>
                             <th>Commentaire</th>
+                            <th>Pointage</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let affectation of affectations" (click)="edit(affectation.idsuiviPoste)">
-                            <td>{{affectation.idsuiviPoste}}</td>
-                            <td>{{affectation.dateSuivi | date: 'yyyy-MM-dd'}}</td>
-                            <td>{{affectation.dateEffet | date: 'yyyy-MM-dd'}}</td>
-                            <td>{{affectation.nombreAbsence}}</td>
-                            <td>{{affectation.idvigile?.noms}}</td>
-                            <td style="text-transform: capitalize;">{{affectation.horaire}}</td>
-                            <td>{{affectation.commentaire}}</td>
+                        <tr *ngFor="let sanction of sanctions" (click)="edit(sanction.idsuiviPoste)">
+                            <td>{{sanction.idsuiviPoste}}</td>
+                            <td>{{sanction.dateSuivi | date: 'yyyy-MM-dd'}}</td>
+                            <td>{{sanction.dateEffet | date: 'yyyy-MM-dd'}}</td>
+                            <td>{{sanction.nombreAbsence}}</td>
+                            <td>{{sanction.idvigile?.noms}}</td>
+                            <td style="text-transform: capitalize;">{{sanction.horaire}}</td>
+                            <td>{{sanction.commentaire}}</td>
+                            <td>{{sanction.numero}}</td>
                         </tr>
                     </tbody>
                 </table>

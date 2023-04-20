@@ -141,7 +141,7 @@ export class SanctionEditComponent implements OnInit {
         console.log(data);
         this.processing = false;
         this.notifierService.notify('success', "Suppression effectuée avec succès");
-        this.router.navigate(['suivi']);
+        this.router.navigate(['sanction']);
       });
     }
   }

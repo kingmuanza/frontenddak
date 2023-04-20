@@ -74,7 +74,7 @@
                         Permissions
                     </div>
                     <div class="stat-valeur">
-                        {{sanctions.length}}
+                        {{permissions.length}}
                     </div>
                 </div>
             </div>
@@ -128,6 +128,56 @@
                 Historique des affectations
             </div>
             <app-tableau-affectations [vigile]="vigile"></app-tableau-affectations>
+        </div>
+        <div style="margin-top: 20px;" *ngIf="vigile">
+            <div style="margin-top: 20px; margin-bottom: 20px;">
+                Permissions accordées
+            </div>
+            <table datatable [dtOptions]="dtOptionsPermissions" [dtTrigger]="dtTriggerPermissions" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th>Vigile</th>
+                        <th>Du</th>
+                        <th>Au</th>
+                        <th>Commentaire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let permission of permissions" (click)="edit(permission.idpermission)">
+                        <td>{{permission.idvigile?.noms}}</td>
+                        <td>{{permission.dateDebut | date:'yyyy-MM-dd'}}</td>
+                        <td>{{permission.dateFin | date:'yyyy-MM-dd'}}</td>
+                        <td>{{permission.commentaire}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top: 20px;" *ngIf="vigile">
+            <div style="margin-top: 20px; margin-bottom: 20px;">
+                Sanctions
+            </div>
+            <table datatable [dtOptions]="dtOptionsSanctions" [dtTrigger]="dtTriggerSanctions" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th>Vigile</th>
+                        <th>Date</th>
+                        <th>Date Effet</th>
+                        <th>Jours pris</th>
+                        <th>Motif</th>
+                        <th>Commentaire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sanction of sanctions" (click)="edit(sanction.idsuiviPoste)">
+                        <td>{{sanction.idvigile?.noms}}</td>
+                        <td>{{sanction.dateSuivi | date:'yyyy-MM-dd'}}</td>
+                        <td>{{sanction.dateEffet | date:'yyyy-MM-dd'}}</td>
+                        <td>{{sanction.nombreAbsence}}</td>
+                        <td>{{sanction.motifSanction}}</td>
+                        <td>{{sanction.commentaire}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

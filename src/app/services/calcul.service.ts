@@ -70,87 +70,106 @@ export class CalculService {
     });
   }
 
-  lineFromPoints(P:number[], Q:number[])
-  {
-      let a = Q[1] - P[1];
-      let b = P[0] - Q[0];
-      let c = a*(P[0])+ b*(P[1]);
-      return [a, b, c];
+  lineFromPoints(P: number[], Q: number[]) {
+    let a = Q[1] - P[1];
+    let b = P[0] - Q[0];
+    let c = a * (P[0]) + b * (P[1]);
+    return [a, b, c];
   }
-   
+
   // Function which converts the input line to its
   // perpendicular bisector. It also inputs the points
   // whose mid-point lies on the bisector
-  perpendicularBisectorFromLine(P:number[], Q:number[], a:number, b:number, c:number)
-  {
-      let mid_point = [(P[0] + Q[0])/2, (P[1] + Q[1])/2];
-   
-      // c = -bx + ay
-      c = -b*(mid_point[0]) + a*(mid_point[1]);
-   
-      let temp = a;
-      a = -b;
-      b = temp;
-      return [a, b, c];
+  perpendicularBisectorFromLine(P: number[], Q: number[], a: number, b: number, c: number) {
+    let mid_point = [(P[0] + Q[0]) / 2, (P[1] + Q[1]) / 2];
+
+    // c = -bx + ay
+    c = -b * (mid_point[0]) + a * (mid_point[1]);
+
+    let temp = a;
+    a = -b;
+    b = temp;
+    return [a, b, c];
   }
-   
+
   // Returns the intersection point of two lines
-  lineLineIntersection(a1:number, b1:number, c1:number, a2:number, b2:number, c2:number)
-  {
-      let determinant = a1*b2 - a2*b1;
-      if (determinant == 0)
-      {
-          // The lines are parallel. This is simplified
-          // by returning a pair of FLT_MAX
-          return  [(10.0)**19, (10.0)**19];
-      }
-   
-      else
-      {
-          let x = (b2*c1 - b1*c2)/determinant;
-          let y = (a1*c2 - a2*c1)/determinant;
-          return [x, y];
-      }
+  lineLineIntersection(a1: number, b1: number, c1: number, a2: number, b2: number, c2: number) {
+    let determinant = a1 * b2 - a2 * b1;
+    if (determinant == 0) {
+      // The lines are parallel. This is simplified
+      // by returning a pair of FLT_MAX
+      return [(10.0) ** 19, (10.0) ** 19];
+    }
+
+    else {
+      let x = (b2 * c1 - b1 * c2) / determinant;
+      let y = (a1 * c2 - a2 * c1) / determinant;
+      return [x, y];
+    }
   }
-   
-  findCircumCenter(P:number[], Q:number[], R:number[])
-  {
-      // Line PQ is represented as ax + by = c
-      let PQ_line = this.lineFromPoints(P, Q);
-      let a = PQ_line[0];
-      let b = PQ_line[1];
-      let c = PQ_line[2];
-      
-      // Line QR is represented as ex + fy = g
-      let QR_line = this.lineFromPoints(Q, R);
-      let e = QR_line[0];
-      let f = QR_line[1];
-      let g = QR_line[2];
-       
-      // Converting lines PQ and QR to perpendicular
-      // vbisectors. After this, L = ax + by = c
-      // M = ex + fy = g
-      let PQ_perpendicular = this.perpendicularBisectorFromLine(P, Q, a, b, c);
-      a = PQ_perpendicular[0];
-      b = PQ_perpendicular[1];
-      c = PQ_perpendicular[2];
-       
-      let QR_perpendicular = this.perpendicularBisectorFromLine(Q, R, e, f, g);
-      e = QR_perpendicular[0];
-      f = QR_perpendicular[1];
-      g = QR_perpendicular[2];
-       
-      // The point of intersection of L and M gives
-      // the circumcenter
-      let circumcenter = this.lineLineIntersection(a, b, c, e, f, g);
-   
-      if (circumcenter[0] == (10.0)**19 && circumcenter[1] == (10.0)**19){
-          console.log("The two perpendicular bisectors found come parallel" )
-          console.log("Thus, the given points do not form a triangle and are collinear");
+
+  isTel(numero: string): boolean {
+
+    console.log("LisTel : " + numero);
+    if (numero) {
+      let tel = numero.split(' ').join('');
+      tel = tel.split('-').join('');
+      if (tel.length === 9) {
+        try {
+          let x = Number(tel);
+          console.log("Le nombre : " + x);
+          if (x) {
+            return true;
+          } else {
+            return false;
+          }
+        } catch (error) {
+          return false;
+        }
+      } else {
+        return false;
       }
-      else{
-          console.log("The circumcenter of the triangle PQR is: (", circumcenter[0], ",", circumcenter[1], ")");
-      }
+    } else {
+      return false;
+    }
+  }
+  findCircumCenter(P: number[], Q: number[], R: number[]) {
+    // Line PQ is represented as ax + by = c
+    let PQ_line = this.lineFromPoints(P, Q);
+    let a = PQ_line[0];
+    let b = PQ_line[1];
+    let c = PQ_line[2];
+
+    // Line QR is represented as ex + fy = g
+    let QR_line = this.lineFromPoints(Q, R);
+    let e = QR_line[0];
+    let f = QR_line[1];
+    let g = QR_line[2];
+
+    // Converting lines PQ and QR to perpendicular
+    // vbisectors. After this, L = ax + by = c
+    // M = ex + fy = g
+    let PQ_perpendicular = this.perpendicularBisectorFromLine(P, Q, a, b, c);
+    a = PQ_perpendicular[0];
+    b = PQ_perpendicular[1];
+    c = PQ_perpendicular[2];
+
+    let QR_perpendicular = this.perpendicularBisectorFromLine(Q, R, e, f, g);
+    e = QR_perpendicular[0];
+    f = QR_perpendicular[1];
+    g = QR_perpendicular[2];
+
+    // The point of intersection of L and M gives
+    // the circumcenter
+    let circumcenter = this.lineLineIntersection(a, b, c, e, f, g);
+
+    if (circumcenter[0] == (10.0) ** 19 && circumcenter[1] == (10.0) ** 19) {
+      console.log("The two perpendicular bisectors found come parallel")
+      console.log("Thus, the given points do not form a triangle and are collinear");
+    }
+    else {
+      console.log("The circumcenter of the triangle PQR is: (", circumcenter[0], ",", circumcenter[1], ")");
+    }
   }
 
 

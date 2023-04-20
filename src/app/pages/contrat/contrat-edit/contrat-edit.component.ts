@@ -8,6 +8,7 @@ import { Client } from 'src/app/models/client.model';
 import { Contrat } from 'src/app/models/contrat.model';
 import { ContratSite } from 'src/app/models/contrat.site.model';
 import { Poste } from 'src/app/models/poste.model';
+import { CalculService } from 'src/app/services/calcul.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -62,6 +63,7 @@ export class ContratEditComponent implements OnInit {
     private siteCtrlService: SiteCtrlService,
     private contratCtrlService: ContratCtrlService,
     private posteCtrlService: PosteCtrlService,
+    private calculService: CalculService,
   ) { }
 
   ngOnInit(): void {
@@ -109,7 +111,7 @@ export class ContratEditComponent implements OnInit {
     this.erreurs.libelle = !this.contrat.libelle;
     this.erreurs.dateDebut = !this.contrat.dateDebut;
     this.erreurs.nom = !this.contrat.nom;
-    this.erreurs.tel = !this.contrat.tel;
+    this.erreurs.tel = !this.isTel(this.contrat.tel);
     this.erreurs.adresse = !this.contrat.adresse;
     this.erreurs.representant = !this.contrat.particulier && !this.contrat.representant;
     this.erreurs.nbPostes = !this.contrat.nbPostes || (!!this.contrat.nbPostes && this.contrat.nbPostes < 0);
@@ -283,6 +285,10 @@ export class ContratEditComponent implements OnInit {
       }
     });
     return resultat;
+  }
+
+  isTel(numero: string): boolean {
+    return this.calculService.isTel(numero);
   }
 
   async supprimerDefinitivement() {

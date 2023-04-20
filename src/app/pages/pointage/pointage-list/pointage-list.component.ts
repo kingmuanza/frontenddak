@@ -60,7 +60,7 @@ export class PointageListComponent implements OnInit {
         const d = this.toDate(pointage.date);
         const noms = pointage.nomsVigile;
         const affectation = this.getAffectation(pointage.idvigile);
-        const poste = affectation ? affectation.idposte: new Poste();
+        const poste = affectation ? affectation.idposte : new Poste();
         const horaire = affectation ? affectation.horaire : '';
         const raison = pointage.raison;
         const commentaire = pointage.commentaire;
@@ -82,8 +82,8 @@ export class PointageListComponent implements OnInit {
           absence: absence,
           isBonHoraire: isBonHoraire,
         };
-        console.log('item');
-        console.log(item);
+        /* console.log('item');
+        console.log(item); */
         dataLogiques.push(item);
       }
       this.dataLogiques = dataLogiques;
@@ -118,7 +118,7 @@ export class PointageListComponent implements OnInit {
     this.pointageService.getPointages().then((pointages) => {
       console.log('pointages');
       console.log(pointages);
-      this.pointages = pointages; 
+      this.pointages = pointages;
     });
   }
 
