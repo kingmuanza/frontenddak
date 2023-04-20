@@ -49,6 +49,10 @@
             <div class="col-lg-4">
                 <button class="btn primaire">Transformer en affectation</button>
             </div>
+            <div class="col-lg-4">
+
+                <button *ngIf="changement.idswitch != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+            </div>
         </div>
     </div>
 </div>

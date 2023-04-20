@@ -34,7 +34,7 @@ export class SwitchEditComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
-    private changementService: JarvisService<any>,
+    private changementService: JarvisService<Changement>,
     private affectationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
     private vigileService: JarvisService<Vigile>,
@@ -160,9 +160,15 @@ export class SwitchEditComponent implements OnInit {
   }
 
   async envoyerEnLigne() {
+    let switches = await this.changementService.getAll('switch');
+    const dernier = switches.sort((a, b) => {
+      return a.idswitch - b.idswitch > 0 ? -1 : 1;
+    })[0];
+    console.log("Derrnier index");
+    console.log(dernier);
     const db = getFirestore(this.app);
     return new Promise((resolve, reject) => {
-      const ref = doc(db, 'switch', this.changement.idswitch + '');
+      const ref = doc(db, 'switch', dernier.idswitch + '');
       setDoc(ref, JSON.parse(JSON.stringify(this.changement)), { merge: true }).then(() => {
         resolve(this.changement);
       }).catch((e) => {

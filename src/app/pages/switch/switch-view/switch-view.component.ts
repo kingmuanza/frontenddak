@@ -23,11 +23,14 @@ export class SwitchViewComponent implements OnInit {
   changement = new Changement();
   posteBase?: any;
   posteSwitch?: any;
+  processing = false;
 
   app: any;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
+    private notifierService: NotifierService,
     private changementService: JarvisService<any>,
     private affectationCtrlService: AffectationCtrlService,
   ) {
@@ -64,6 +67,20 @@ export class SwitchViewComponent implements OnInit {
         });
       }
     });
+  }
+
+  supprimer() {
+    const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
+    if (reponse) {
+      this.processing = true;
+      this.changementService.supprimer('switch', this.changement.idswitch).then((data) => {
+        console.log('data');
+        console.log(data);
+        this.processing = false;
+        this.notifierService.notify('success', "Suppression effectuée avec succès");
+        this.router.navigate(['switch']);
+      });
+    }
   }
 
 }
