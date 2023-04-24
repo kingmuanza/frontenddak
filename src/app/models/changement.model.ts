@@ -4,7 +4,7 @@ export class Changement {
     idswitch = 0;
     idvigileBase: any;
     idvigileSwitch: any;
-    responsable?: {
+    idresponsable?: {
         idresponsable: string,
         noms: string,
         poste: string,

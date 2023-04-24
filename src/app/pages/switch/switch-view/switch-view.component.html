@@ -46,8 +46,8 @@
     </div>
     <div style="margin-top:40px">
         <div class="row mt-4">
-            <div class="col-lg-4">
-                <button class="btn primaire">Transformer en affectation</button>
+            <div *ngIf=" changement.statut!=='TRANSFORMEE' " class="col-lg-4">
+                <button (click)="transformer()" class="btn primaire">Transformer en affectation</button>
             </div>
             <div class="col-lg-4">
 

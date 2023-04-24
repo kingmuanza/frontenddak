@@ -32,6 +32,7 @@ export class SwitchViewComponent implements OnInit {
     private route: ActivatedRoute,
     private notifierService: NotifierService,
     private changementService: JarvisService<any>,
+    private affectationService: JarvisService<Affectation>,
     private affectationCtrlService: AffectationCtrlService,
   ) {
     const firebaseConfig = {
@@ -81,6 +82,46 @@ export class SwitchViewComponent implements OnInit {
         this.router.navigate(['switch']);
       });
     }
+  }
+  transformer() {
+    this.transformerEnAffectation().then((i) => {
+      this.notifierService.notify('success', i + " affectations créés avec succès");
+    });
+  }
+
+  async transformerEnAffectation() {
+    let i = 0;
+    let affectation1 = await this.affectationCtrlService.getAffectationOfVigile(this.changement.idvigileBase);
+    let affectation2 = await this.affectationCtrlService.getAffectationOfVigile(this.changement.idvigileSwitch);
+    if (affectation1) {
+      affectation1.arret = new Date();
+      let nouvelleAffectation = new Affectation();
+      nouvelleAffectation.idvigile = this.changement.idvigileSwitch;
+      nouvelleAffectation.idposte = affectation1.idposte;
+      nouvelleAffectation.dateAffectation = new Date();
+      nouvelleAffectation.remplacant = affectation1.remplacant;
+      await this.affectationService.modifier("affectation", affectation1.idaffectation, affectation1);
+      await this.affectationService.ajouter("affectation", nouvelleAffectation);
+      i++;
+    }
+    if (affectation2) {
+      if (affectation2.idaffectation) {
+        if (affectation2.idaffectation != 0) {
+          affectation2.arret = new Date();
+          let nouvelleAffectation = new Affectation();
+          nouvelleAffectation.idvigile = this.changement.idvigileBase;
+          nouvelleAffectation.idposte = affectation2.idposte;
+          nouvelleAffectation.dateAffectation = new Date();
+          nouvelleAffectation.remplacant = affectation2.remplacant;
+          await this.affectationService.modifier("affectation", affectation2.idaffectation, affectation2);
+          await this.affectationService.ajouter("affectation", nouvelleAffectation);
+          i++;
+        }
+      }
+    }
+    this.changement.statut = "TRANSFORMEE";
+    await this.changementService.modifier("switch", this.changement.idswitch, this.changement);
+    return i;
   }
 
 }

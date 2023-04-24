@@ -176,8 +176,8 @@ export class SwitchEditComponent implements OnInit {
     const db = getFirestore(this.app);
     return new Promise((resolve, reject) => {
       const ref = doc(db, 'switch', dernier.idswitch + '');
-      setDoc(ref, JSON.parse(JSON.stringify(this.changement)), { merge: true }).then(() => {
-        resolve(this.changement);
+      setDoc(ref, JSON.parse(JSON.stringify(dernier)), { merge: true }).then(() => {
+        resolve(dernier);
       }).catch((e) => {
         console.log('erreur');
         console.log(e);

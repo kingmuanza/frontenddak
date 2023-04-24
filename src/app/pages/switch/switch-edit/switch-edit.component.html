@@ -78,7 +78,7 @@
                                     Responsable
                                 </span>
                             </div>
-                            <select [(ngModel)]="changement.responsable" class="form-control">
+                            <select [(ngModel)]="changement.idresponsable" class="form-control">
                                 <ng-container *ngFor="let v of responsables">
                                     <option [ngValue]="v">
                                         {{v?.noms}}
