@@ -1,0 +1,41 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Liste des responsables
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="nouveau">
+                        <a routerLink="/responsable/edit" class="btn nouveau">
+                            Ajouter un responsable
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+            <div class="page-contenu-corps">
+                <div class="card shadow-1">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Noms</th>
+                                <th>Poste</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let responsable of responsables" (click)="edit(responsable)">
+                                <td>{{responsable.idresponsable}}</td>
+                                <td>{{responsable.noms}}</td>
+                                <td>{{responsable.poste}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

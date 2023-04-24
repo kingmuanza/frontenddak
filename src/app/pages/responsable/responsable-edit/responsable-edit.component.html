@@ -1,0 +1,42 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Ajouter un nouveau responsable
+        </div>
+        <div class="">
+            <a routerLink="/responsable" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des responsables
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+
+            <div class="page-contenu-corps">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Noms
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="responsable.noms" name="date" class="form-control">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    Poste
+                                </span>
+                            </div>
+                            <input type="text" [(ngModel)]="responsable.poste" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
+                            <button *ngIf="responsable.idresponsable != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

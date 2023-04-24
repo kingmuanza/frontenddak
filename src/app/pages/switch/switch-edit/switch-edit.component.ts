@@ -10,6 +10,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
+import { Responsable } from 'src/app/models/responsable.model';
 
 @Component({
   selector: 'app-switch-edit',
@@ -25,6 +26,7 @@ export class SwitchEditComponent implements OnInit {
   affectationsResultats = new Array<Affectation>();
   postes = new Array<Poste>();
   vigiles = new Array<Vigile>();
+  responsables = new Array<Responsable>();
   poste = new Poste();
   processing = false;
 
@@ -38,6 +40,7 @@ export class SwitchEditComponent implements OnInit {
     private affectationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
     private vigileService: JarvisService<Vigile>,
+    private responsableService: JarvisService<Responsable>,
   ) {
     const firebaseConfig = {
       apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
@@ -52,6 +55,10 @@ export class SwitchEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.responsableService.getAll("responsable").then((responsables) => {
+      this.responsables = responsables;
+    });
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
       if (id) {

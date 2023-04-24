@@ -27,6 +27,7 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
   fichepointage = false;
   planningremplacantconge = false;
 
+  responsable = true;
   pointage = false;
   affectation = false;
   switch = false;
@@ -47,7 +48,7 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private router: Router,
     private contratService: JarvisService<Contrat>,
-    private posteService: JarvisService<Poste> 
+    private posteService: JarvisService<Poste>
   ) {
 
     /* this.intervalContrat = setInterval(() => {
@@ -82,7 +83,7 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
+
     if (this.user.role === 'Administrateur') {
       this.zone = true;
       this.ville = true;
@@ -109,7 +110,7 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
       this.contrat = true;
       this.poste = true;
       this.repos = true;
-    
+
     }
     if (this.user.role === 'Contrat') {
       this.postevacant = true;
@@ -117,7 +118,7 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
       this.poste = true;
     }
     if (this.user.role === 'RH') {
-      
+
       this.pointage = true;
       this.affectation = true;
       this.switch = true;
@@ -128,11 +129,11 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
       this.conge = true;
       this.poste = true;
       this.repos = true;
-    
+
     }
     if (this.user.role === 'suivi') {
-     
-    
+
+
     }
   }
 

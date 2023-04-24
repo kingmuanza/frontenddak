@@ -3,6 +3,9 @@
         <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
             Contrat : {{contrat.libelle}}
         </div>
+        <div *ngIf="isContratsEnCoursDeCreation">
+            EN COURS DE CREATION
+        </div>
         <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut | date: 'yyyy-MM-dd'}}</div>
         <div style="margin-top: 0px;">
             <i>

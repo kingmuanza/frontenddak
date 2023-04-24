@@ -67,7 +67,7 @@
                             <td noWrap>{{affectation.dateAffectation?.split('T')[0]}}</td>
                             <td>{{affectation.idposte?.libelle}}</td>
                             <td>{{affectation.idposte?.zone.libelle}}</td>
-                            <td>{{affectation.horaire}}</td>
+                            <td>{{affectation.idposte?.zone?.horaire}}</td>
                             <td>{{affectation.idvigile?.noms}}</td>
                             <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
                             <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>

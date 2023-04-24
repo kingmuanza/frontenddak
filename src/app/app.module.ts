@@ -82,6 +82,9 @@ import { ImporterComponent } from './pages/importer/importer.component';
 import { DisplayHistoriqueContratComponent } from './_display/display-historique-contrat/display-historique-contrat.component';
 import { DisplayLignePourcentageComponent } from './_display/display-ligne-pourcentage/display-ligne-pourcentage.component';
 import { SwitchViewComponent } from './pages/switch/switch-view/switch-view.component';
+import { ResponsableListComponent } from './pages/responsable/responsable-list/responsable-list.component';
+import { ResponsableViewComponent } from './pages/responsable/responsable-view/responsable-view.component';
+import { ResponsableEditComponent } from './pages/responsable/responsable-edit/responsable-edit.component';
 
 @NgModule({
   declarations: [
@@ -159,6 +162,9 @@ import { SwitchViewComponent } from './pages/switch/switch-view/switch-view.comp
     DisplayHistoriqueContratComponent,
     DisplayLignePourcentageComponent,
     SwitchViewComponent,
+    ResponsableListComponent,
+    ResponsableViewComponent,
+    ResponsableEditComponent,
   ],
   imports: [
     BrowserModule,

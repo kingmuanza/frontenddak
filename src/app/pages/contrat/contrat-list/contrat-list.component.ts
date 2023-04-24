@@ -66,6 +66,26 @@ export class ContratListComponent implements OnInit, OnDestroy {
     });
   }
 
+  init() {
+    this.contratCtrlService.getContratsEnCoursDeCreation().then((data) => {
+      console.log('data');
+      console.log(data);
+      this.nombres.encours = data.length;
+      this.resultats = data;
+      this.contratsEnCours = data;
+      this.refreshDatatable();
+
+      this.contratCtrlService.getContratsCrees().then((all) => {
+        this.contratsCrees = all;
+        this.nombres.cree = all.length;
+      });
+      this.contratCtrlService.getContratsParfaits().then((all) => {
+        this.contratsParfaits = all;
+        this.nombres.parfait = all.length;
+      });
+    });
+  }
+
   afficherContrat(ev: any) {
     setTimeout(() => {
       console.log('afficherAffectationsEnCours');

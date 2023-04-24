@@ -55,6 +55,8 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     description: false,
   }
 
+  isContratsEnCoursDeCreation = false;
+
   constructor(
     private route: ActivatedRoute,
     private contratService: JarvisService<Contrat>,
@@ -80,6 +82,10 @@ export class ContratViewComponent implements OnInit, OnDestroy {
       if (id) {
         this.getContrat(id).then((contrat) => {
           this.contrat = contrat;
+
+          this.contratCtrlService.isContratsEnCoursDeCreation(contrat).then((isContratsEnCoursDeCreation) => {
+            this.isContratsEnCoursDeCreation = isContratsEnCoursDeCreation;
+          });
 
           this.initSite();
           this.quartierService.getAll('quartier').then((data) => {

@@ -35,6 +35,20 @@ export class ContratCtrlService {
     });
   }
 
+  async isContratsEnCoursDeCreation(contrat: Contrat): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + contrat.idcontrat + "/isEncours?time=" + new Date().getTime()).subscribe({
+        next: (data) => {
+          const resulat = data as boolean;
+          resolve(resulat);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
   async getContratsEnCoursDeCreation(): Promise<Contrat[]> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "isEncours").subscribe({

@@ -55,6 +55,9 @@ import { ZoneListComponent } from './pages/zone/zone-list/zone-list.component';
 import { AffectationViewComponent } from './pages/affectation/affectation-view/affectation-view.component';
 import { ImporterComponent } from './pages/importer/importer.component';
 import { SwitchViewComponent } from './pages/switch/switch-view/switch-view.component';
+import { ResponsableEditComponent } from './pages/responsable/responsable-edit/responsable-edit.component';
+import { ResponsableListComponent } from './pages/responsable/responsable-list/responsable-list.component';
+import { ResponsableViewComponent } from './pages/responsable/responsable-view/responsable-view.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -152,6 +155,11 @@ const routes: Routes = [
   { path: 'quartier', component: QuartierListComponent },
   { path: 'quartier/edit', component: QuartierEditComponent },
   { path: 'quartier/edit/:id', component: QuartierEditComponent },
+
+  { path: 'responsable', component: ResponsableListComponent },
+  { path: 'responsable/edit', component: ResponsableEditComponent },
+  { path: 'responsable/edit/:id', component: ResponsableEditComponent },
+  { path: 'responsable/view/:id', component: ResponsableViewComponent },
 
   { path: 'fiche/planning-incomplet', component: PlanningIncompletFicheComponent },
   { path: 'fiche/planning-incomplet/:idzone', component: PlanningIncompletFicheComponent },
