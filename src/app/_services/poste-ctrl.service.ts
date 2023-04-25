@@ -17,6 +17,12 @@ export class PosteCtrlService {
     private contratSiteService: JarvisService<ContratSite>,
     private http: HttpClient,
   ) {
+    const url = sessionStorage.getItem('serveur-dak');
+    if (url) {
+      this.URL = url + "services/poste/";
+    } else {
+
+    }
     this.init();
   }
 

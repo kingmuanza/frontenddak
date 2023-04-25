@@ -35,7 +35,8 @@
         <div class="page-contenu-titre">
             <div class="page-contenu-corps">
                 <div class="card shadow-1">
-                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table-border row-border hover">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                        class="table-border row-border hover">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -52,9 +53,9 @@
                                 <td>{{switch.idswitch}}</td>
                                 <td>{{switch.date | date: 'yyyy-MM-dd'}}</td>
                                 <td>{{switch.idaffectation?.idposte?.libelle}}</td>
-                                <td>{{switch.idvigileBase.noms}}</td>
-                                <td>{{switch.idvigileSwitch.noms}}</td>
-                                <td>{{switch.idresponsable.noms}}</td>
+                                <td>{{switch.idvigileBase?.noms}}</td>
+                                <td>{{switch.idvigileSwitch?.noms}}</td>
+                                <td>{{switch.idresponsable?.noms}}</td>
                                 <td>{{switch.statut}}</td>
                             </tr>
                         </tbody>
