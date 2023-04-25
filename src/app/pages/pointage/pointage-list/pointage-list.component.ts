@@ -62,6 +62,7 @@ export class PointageListComponent implements OnInit {
         const affectation = this.getAffectation(pointage.idvigile);
         const poste = affectation ? affectation.idposte : new Poste();
         const horaire = affectation ? affectation.horaire : '';
+        const repos = affectation ? affectation.jourRepos : '';
         const raison = pointage.raison;
         const commentaire = pointage.commentaire;
         const latitude = pointage.latitude;
@@ -73,6 +74,7 @@ export class PointageListComponent implements OnInit {
           date: d,
           noms: noms,
           affectation: affectation,
+          repos: repos,
           poste: poste,
           horaire: horaire,
           raison: raison,
@@ -166,7 +168,7 @@ export class PointageListComponent implements OnInit {
     return poste;
   }
 
-  getAffectation(idvigile: number): any {
+  getAffectation(idvigile: number): any | Affectation {
     let affectation: any;
     this.affectations.forEach((aff) => {
       if (aff.idvigile.idvigile === idvigile && !aff.arret) {

@@ -89,6 +89,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Vigile</th>
+                                    <th>Repos</th>
                                     <th>Zone</th>
                                     <th>Poste</th>
                                     <th>Horaire</th>
@@ -102,6 +103,7 @@
                                     <tr *ngIf="(pointage.horaire && horaire && pointage.horaire === horaire) && (pointage.poste && pointage.poste.zone && zone && pointage.poste.zone.idzone === zone.idzone)">
                                         <td>{{pointage.date | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
                                         <td>{{pointage.noms}}</td>
+                                        <td>{{pointage.repos}}</td>
                                         <td>
                                             <ng-container *ngIf="pointage.poste">
                                                 {{pointage.poste.libelle }}

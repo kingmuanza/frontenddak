@@ -58,6 +58,11 @@ import { SwitchViewComponent } from './pages/switch/switch-view/switch-view.comp
 import { ResponsableEditComponent } from './pages/responsable/responsable-edit/responsable-edit.component';
 import { ResponsableListComponent } from './pages/responsable/responsable-list/responsable-list.component';
 import { ResponsableViewComponent } from './pages/responsable/responsable-view/responsable-view.component';
+import { RecouvrementEditionComponent } from './pages/recouvrement/recouvrement-edition/recouvrement-edition.component';
+import { RecouvrementCreanceComponent } from './pages/recouvrement/recouvrement-creance/recouvrement-creance.component';
+import { RecouvrementEtatComponent } from './pages/recouvrement/recouvrement-etat/recouvrement-etat.component';
+import { RecouvrementPerformanceComponent } from './pages/recouvrement/recouvrement-performance/recouvrement-performance.component';
+import { RecouvrementEvaluationComponent } from './pages/recouvrement/recouvrement-evaluation/recouvrement-evaluation.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -136,6 +141,12 @@ const routes: Routes = [
   { path: 'switch/view/:id', component: SwitchViewComponent },
 
   { path: 'synchroniser', component: SynchroniserComponent },
+
+  { path: 'recouvrement/edition', component: RecouvrementEditionComponent },
+  { path: 'recouvrement/etat', component: RecouvrementEtatComponent },
+  { path: 'recouvrement/performance', component: RecouvrementPerformanceComponent },
+  { path: 'recouvrement/evaluation', component: RecouvrementEvaluationComponent },
+  { path: 'recouvrement/creance', component: RecouvrementCreanceComponent },
 
   { path: 'vigile', component: VigileListComponent },
   { path: 'vigile/edit', component: VigileEditComponent },

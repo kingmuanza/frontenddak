@@ -85,6 +85,11 @@ import { SwitchViewComponent } from './pages/switch/switch-view/switch-view.comp
 import { ResponsableListComponent } from './pages/responsable/responsable-list/responsable-list.component';
 import { ResponsableViewComponent } from './pages/responsable/responsable-view/responsable-view.component';
 import { ResponsableEditComponent } from './pages/responsable/responsable-edit/responsable-edit.component';
+import { RecouvrementEditionComponent } from './pages/recouvrement/recouvrement-edition/recouvrement-edition.component';
+import { RecouvrementEtatComponent } from './pages/recouvrement/recouvrement-etat/recouvrement-etat.component';
+import { RecouvrementPerformanceComponent } from './pages/recouvrement/recouvrement-performance/recouvrement-performance.component';
+import { RecouvrementEvaluationComponent } from './pages/recouvrement/recouvrement-evaluation/recouvrement-evaluation.component';
+import { RecouvrementCreanceComponent } from './pages/recouvrement/recouvrement-creance/recouvrement-creance.component';
 
 @NgModule({
   declarations: [
@@ -165,6 +170,11 @@ import { ResponsableEditComponent } from './pages/responsable/responsable-edit/r
     ResponsableListComponent,
     ResponsableViewComponent,
     ResponsableEditComponent,
+    RecouvrementEditionComponent,
+    RecouvrementEtatComponent,
+    RecouvrementPerformanceComponent,
+    RecouvrementEvaluationComponent,
+    RecouvrementCreanceComponent,
   ],
   imports: [
     BrowserModule,

@@ -154,6 +154,11 @@ export class PointageSuiviComponent implements OnInit {
     return true
   }
 
+  jourSemaine(jour: number) {
+    return this.affectationService.jourSemaine(jour);
+  }
+
+
   getRemotePoste(poste: Poste) {
     let remotePoste: any = new Poste();
     this.remotePostes.forEach((p) => {
@@ -177,11 +182,11 @@ export class PointageSuiviComponent implements OnInit {
     const latitudeDuPointage = this.getPointageVigileDate(affectation, date);
     if (latitudeDuPointage) {
       if (this.getRemotePoste(affectation.idposte).latitude)
-      triangle.diff = this.getRemotePoste(affectation.idposte).latitude - latitudeDuPointage.latitude;
+        triangle.diff = this.getRemotePoste(affectation.idposte).latitude - latitudeDuPointage.latitude;
       if (this.getRemotePoste(affectation.idposte).latitude1)
-      triangle.diff1 = this.getRemotePoste(affectation.idposte).latitude1 - latitudeDuPointage.latitude;
+        triangle.diff1 = this.getRemotePoste(affectation.idposte).latitude1 - latitudeDuPointage.latitude;
       if (this.getRemotePoste(affectation.idposte).latitude2)
-      triangle.diff2 = this.getRemotePoste(affectation.idposte).latitude2 - latitudeDuPointage.latitude;
+        triangle.diff2 = this.getRemotePoste(affectation.idposte).latitude2 - latitudeDuPointage.latitude;
     }
     return triangle;
   }
@@ -199,11 +204,11 @@ export class PointageSuiviComponent implements OnInit {
     const longitudeDuPointage = this.getPointageVigileDate(affectation, date);
     if (longitudeDuPointage) {
       if (this.getRemotePoste(affectation.idposte).longitude)
-      triangle.diff = this.getRemotePoste(affectation.idposte).longitude - longitudeDuPointage.longitude;
+        triangle.diff = this.getRemotePoste(affectation.idposte).longitude - longitudeDuPointage.longitude;
       if (this.getRemotePoste(affectation.idposte).longitude1)
-      triangle.diff1 = this.getRemotePoste(affectation.idposte).longitude1 - longitudeDuPointage.longitude;
+        triangle.diff1 = this.getRemotePoste(affectation.idposte).longitude1 - longitudeDuPointage.longitude;
       if (this.getRemotePoste(affectation.idposte).longitude2)
-      triangle.diff2 = this.getRemotePoste(affectation.idposte).longitude2 - longitudeDuPointage.longitude;
+        triangle.diff2 = this.getRemotePoste(affectation.idposte).longitude2 - longitudeDuPointage.longitude;
     }
     return triangle;
   }
@@ -219,24 +224,22 @@ export class PointageSuiviComponent implements OnInit {
     return Math.min(Math.abs(differences.diff), Math.abs(differences.diff1), Math.abs(differences.diff2));
   }
 
-  calcCrow(lat1: number, lon1: number, lat2: number, lon2: number) 
-  {
+  calcCrow(lat1: number, lon1: number, lat2: number, lon2: number) {
     var R = 6371; // km
-    var dLat = this.toRad(lat2-lat1);
-    var dLon = this.toRad(lon2-lon1);
+    var dLat = this.toRad(lat2 - lat1);
+    var dLon = this.toRad(lon2 - lon1);
     lat1 = this.toRad(lat1);
     lat2 = this.toRad(lat2);
 
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
     return d;
   }
 
   // Converts numeric degrees to radians
-  toRad(value: number) 
-  {
-      return value * Math.PI / 180;
+  toRad(value: number) {
+    return value * Math.PI / 180;
   }
 }

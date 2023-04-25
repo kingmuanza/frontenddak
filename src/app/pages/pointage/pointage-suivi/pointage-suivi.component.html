@@ -58,6 +58,7 @@
                         <th></th>
                         <th>Date</th>
                         <th>Vigile</th>
+                        <th>Repos</th>
                         <th>Zone</th>
                         <th>Poste</th>
                         <th>Horaire</th>
@@ -82,6 +83,7 @@
                                 </div>
                             </td>
                             <td>{{showVigile(affectation, date)?.noms}}</td>
+                            <td>{{jourSemaine(showVigile(affectation, date).jourRepos)}}</td>
                             <td>{{affectation.idposte.zone.libelle}}</td>
                             <td>
                                 {{affectation.idposte.libelle}}
