@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="terminee" class="page-contenu-corps">
+            <div style="display: none;" *ngIf="terminee" class="page-contenu-corps">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="petit-titre">
@@ -159,8 +159,126 @@
             </div>
             <div class="page-contenu-corps">
                 <div class="row">
-                    <div class="col-lg-6">
+
+                    <div class="col-lg-12">
                         <div class="card shadow-1">
+                            <div class="petit-titre">
+                                Recouvrement
+                            </div>
+
+                            <div class="page-contenu">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="stat">
+                                            <div class="stat-titre">
+                                                Montant des créances
+                                            </div>
+                                            <div class="stat-valeur">
+                                                50 000 000
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="stat">
+                                            <div class="stat-titre">
+                                                Montants des recouvrements
+                                            </div>
+                                            <div class="stat-valeur">
+                                                35 000 000
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="stat">
+                                            <div class="stat-titre">
+                                                Reste à recouvrer
+                                            </div>
+                                            <div class="stat-valeur">
+                                                15 000 000
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <table datatable [dtOptions]="dtOptions" class="row-border hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Contrat</th>
+
+                                            <th>Montant</th>
+                                            <th>Agent</th>
+                                            <th>Percepteur</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>2023-02-05</td>
+                                            <td>Contrat Minrex</td>
+
+                                            <td>8 500 000</td>
+                                            <td>Eric Salaka</td>
+                                            <td>Diane Audrey</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card shadow-1 mt-4">
+                            <div class="petit-titre">
+                                Contrôle des postes
+                            </div>
+                            <div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                Postes contrôlés une fois
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                               Postes non contrôlés
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <table class="table table-bordered row-border hover">
+                                    <thead>
+                                        <tr>
+
+                                            <th>Libellé</th>
+                                            <th>Zone</th>
+                                            <th>Contrôleur</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let poste of postes; let i = index">
+                                            <tr *ngIf="i < 7">
+
+                                                <td>{{poste.libelle}}</td>
+                                                <td>{{poste.zone?.libelle}}</td>
+                                                <td>
+                                                    Louis Bittol
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="card shadow-1 mt-4">
                             <div class="petit-titre">
                                 Liste des zones
                             </div>
@@ -184,18 +302,40 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div *ngIf="afficher" class="card shadow-1">
-                            <div style="display: block;">
+                        <div *ngIf="afficher" class="card shadow-1 mt-4">
+                            <div class="" style="display: block;">
                                 <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend">
                                 </canvas>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-lg-6">
                         <div class="page-contenu-corps" style="margin-top: 25px;">
+                            <div class="card shadow-1">
+                                <div class="petit-titre" style="margin-bottom: 20px;">
+                                    Liste des vigiles en stand by
+                                </div>
+                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Noms</th>
+                                            <th>Horaire</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let vigile of vigiles" style="cursor: pointer;">
+                                            <td>{{vigile.idvigile}}</td>
+                                            <td>{{vigile.noms}}</td>
+                                            <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                        <div class="page-contenu-corps">
                             <div class="card shadow-1">
                                 <div class="petit-titre" style="margin-bottom: 20px;">
                                     Liste des vigiles sanctionnés
@@ -220,11 +360,8 @@
                                         </tr>
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
                         <div class="page-contenu-corps" style="margin-top: 25px;">
                             <div class="card shadow-1">
                                 <div class="petit-titre" style="margin-bottom: 20px;">
@@ -254,49 +391,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="page-contenu-corps" style="margin-top: 25px;">
-                            <div class="card shadow-1">
-                                <div class="petit-titre" style="margin-bottom: 20px;">
-                                    Liste des vigiles en stand by
-                                </div>
-                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Noms</th>
-                                            <th>Horaire</th>
-                                            <th>Fonction</th>
-                                            <th>Repos</th>
-                                            <th>Zone</th>
-                                            <th>Quartier</th>
-                                            <th>Ville</th>
-                                            <th style="text-align: center;">Remplacant</th>
-                                            <th style="text-align: center;">Rempl. Congés</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let vigile of vigiles" style="cursor: pointer;">
-                                            <td>{{vigile.idvigile}}</td>
-                                            <td>{{vigile.noms}}</td>
-                                            <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
-                                            <td>{{libelleFonction(vigile.fonction)}}</td>
-                                            <td>{{jourSemaine(vigile.jourRepos)}}</td>
-                                            <td>{{vigile.zone?.libelle}}</td>
-                                            <td>{{vigile.quartier?.nom}}</td>
-                                            <td>{{vigile.ville?.libelle}}</td>
-                                            <td style="text-align: center;">
-                                                <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
-                                            </td>
-                                            <td style="text-align: center;">
-                                                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
 
-                            </div>
-                        </div>
+                    <div class="col-lg-12">
+
                     </div>
                 </div>
             </div>

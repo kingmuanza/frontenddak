@@ -1,1 +1,75 @@
-<p>recouvrement-evaluation works!</p>
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Performances des recouvrements
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Agent
+                            </span>
+                        </div>
+                        <select type="text" class="form-control">
+                            <option>
+                                
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="input-group">
+                        <button (click)="afficher = true" class="btn primaire">Rechercher</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-contenu">
+        <div class="row">
+            <div class="col-2">
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                          Cette semaine
+                        </label>
+                </div>
+
+            </div>
+            <div class="col-2">
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      Ce mois
+                    </label>
+                </div>
+
+            </div>
+            <div class="col-2">
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      Ce trimestre
+                    </label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div *ngIf="afficher">
+            <div style="display: block; height: 400px;">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+</div>

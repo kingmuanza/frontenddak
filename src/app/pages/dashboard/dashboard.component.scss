@@ -40,3 +40,22 @@
     min-height: 360px;
     overflow-y: auto;
 }
+
+.input-group {}
+
+.stat {
+    height: 70px;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    &.red {
+        color: red;
+    }
+    line-height: 1.15;
+    background-color: #231709;
+    &-titre {}
+    &-valeur {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+}

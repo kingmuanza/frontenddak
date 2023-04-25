@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 
 @Component({
   selector: 'app-recouvrement-creance',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recouvrement-creance.component.scss']
 })
 export class RecouvrementCreanceComponent implements OnInit {
-
+  dtOptions: any = DatatablesOptions;
   constructor() { }
 
   ngOnInit(): void {
