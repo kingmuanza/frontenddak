@@ -199,6 +199,16 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="mb-4">
+                                            <div>SECURITE</div>
+                                            <div class="sous-fonctions">
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.utilisateur" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Utilisateurs </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -235,7 +245,7 @@
                                     <input type="text" [(ngModel)]="utilisateur.noms" name="date" class="form-control"
                                         [ngClass]="{'is-invalid': showErrors && !utilisateur.noms}">
                                 </div>
-                                <div class="input-group">
+                                <div class="input-group" style="display:none">
                                     <button [disabled]="processing" (click)="save()"
                                         class="btn btn-primary">Modifier</button>
                                 </div>
@@ -271,7 +281,7 @@
                                 <div *ngIf="showErrors && confirmation!==passe">
                                     <small>Les mots de passe ne sont pas identiques</small>
                                 </div>
-                                <div class="input-group">
+                                <div class="input-group" style="display:none">
                                     <button [disabled]="processing" (click)="save()"
                                         class="btn btn-primary">Enregistrer</button> &nbsp;
                                     <button *ngIf="utilisateur.idutilisateur != 0" [disabled]="processing"

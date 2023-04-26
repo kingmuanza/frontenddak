@@ -31,4 +31,5 @@ export let droits = {
     planningremplacantconge: true,
     fichepointage: true,
 
+    utilisateur: true,
 }
