@@ -15,6 +15,12 @@ export class ContratCtrlService {
     private contratService: JarvisService<Contrat>,
     private http: HttpClient,
   ) {
+    const url = sessionStorage.getItem('serveur-dak');
+    if (url) {
+      this.URL = url + "services/contrat/";
+    } else {
+
+    }
     this.init();
   }
 

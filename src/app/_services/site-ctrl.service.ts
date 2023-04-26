@@ -15,6 +15,12 @@ export class SiteCtrlService {
     private contratSiteVigileService: JarvisService<ContratSiteVigile>,
     private http: HttpClient,
   ) {
+    const url = sessionStorage.getItem('serveur-dak');
+    if (url) {
+      this.URL = url + "services/site/";
+    } else {
+
+    }
     this.init();
   }
 

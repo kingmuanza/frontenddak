@@ -10,7 +10,14 @@ export class AffectationCtrlService {
   URL = 'http://localhost:8080/dakBack/webresources/services/affectation/';
 
   constructor(
-    private http: HttpClient,) { }
+    private http: HttpClient,) {
+    const url = sessionStorage.getItem('serveur-dak');
+    if (url) {
+      this.URL = url + "services/affectation/";
+    } else {
+
+    }
+  }
 
   async getAffectationOfVigile(vigile: Vigile): Promise<Affectation> {
     return new Promise((resolve, reject) => {
