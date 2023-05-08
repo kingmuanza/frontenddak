@@ -1,0 +1,78 @@
+<div class="page" *ngIf="utilisateur">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            {{utilisateur.noms}}
+        </div>
+        <div class="">
+            <a routerLink="/utilisateur" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des utilisateurs
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+
+            <div class="page-contenu-corps">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    Informations de base
+                                </div>
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Noms <app-required></app-required>
+                                        </span>
+                                    </div>
+                                    <input type="text" [(ngModel)]="utilisateur.noms" name="date" class="form-control"
+                                        [ngClass]="{'is-invalid': showErrors && !utilisateur.noms}">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Login <app-required></app-required>
+                                        </span>
+                                    </div>
+                                    <input type="text" [(ngModel)]="utilisateur.login" class="form-control"
+                                        [ngClass]="{'is-invalid': showErrors && !utilisateur.login}">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Mot de passe <app-required></app-required>
+                                        </span>
+                                    </div>
+                                    <input type="password" [(ngModel)]="passe" class="form-control"
+                                        [ngClass]="{'is-invalid': showErrors && passe.length <=3}">
+                                </div>
+                                <div *ngIf="showErrors && passe.length <=3">
+                                    <small>Le mot de passe doit comporter au moins 3 caractères</small>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Confirmer le mot de passe <app-required></app-required>
+                                        </span>
+                                    </div>
+                                    <input type="password" [(ngModel)]="confirmation" class="form-control"
+                                        [ngClass]="{'is-invalid': showErrors && confirmation!==passe}">
+                                </div>
+                                <div *ngIf="showErrors && confirmation!==passe">
+                                    <small>Les mots de passe ne sont pas identiques</small>
+                                </div>
+                                <div class="input-group">
+                                    <button [disabled]="processing" (click)="save()"
+                                        class="btn btn-primary">Enregistrer</button> &nbsp;
+                                    <button *ngIf="utilisateur.idutilisateur != 0" [disabled]="processing"
+                                        (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

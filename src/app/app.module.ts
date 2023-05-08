@@ -90,6 +90,9 @@ import { RecouvrementEtatComponent } from './pages/recouvrement/recouvrement-eta
 import { RecouvrementPerformanceComponent } from './pages/recouvrement/recouvrement-performance/recouvrement-performance.component';
 import { RecouvrementEvaluationComponent } from './pages/recouvrement/recouvrement-evaluation/recouvrement-evaluation.component';
 import { RecouvrementCreanceComponent } from './pages/recouvrement/recouvrement-creance/recouvrement-creance.component';
+import { UtilisateurListComponent } from './pages/utilisateur/utilisateur-list/utilisateur-list.component';
+import { UtilisateurEditComponent } from './pages/utilisateur/utilisateur-edit/utilisateur-edit.component';
+import { UtilisateurViewComponent } from './pages/utilisateur/utilisateur-view/utilisateur-view.component';
 
 @NgModule({
   declarations: [
@@ -175,6 +178,9 @@ import { RecouvrementCreanceComponent } from './pages/recouvrement/recouvrement-
     RecouvrementPerformanceComponent,
     RecouvrementEvaluationComponent,
     RecouvrementCreanceComponent,
+    UtilisateurListComponent,
+    UtilisateurEditComponent,
+    UtilisateurViewComponent,
   ],
   imports: [
     BrowserModule,

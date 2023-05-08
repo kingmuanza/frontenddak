@@ -1,0 +1,41 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Liste des utilisateurs
+        </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="nouveau">
+                        <a routerLink="/utilisateur/edit" class="btn nouveau">
+                            Ajouter un utilisateur
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="page-contenu-titre">
+            <div class="page-contenu-corps">
+                <div class="card shadow-1">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Noms</th>
+                                <th>Login</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let utilisateur of utilisateurs" (click)="edit(utilisateur)">
+                                <td>{{utilisateur.idutilisateur}}</td>
+                                <td>{{utilisateur.noms}}</td>
+                                <td>{{utilisateur.login}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

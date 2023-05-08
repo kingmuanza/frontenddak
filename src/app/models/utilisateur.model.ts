@@ -1,5 +1,6 @@
 export class Utilisateur {
-    id = 0;
+    idutilisateur = 0;
     login = ''
-    role = '';
+    noms = '';
+    passe = '';
 }

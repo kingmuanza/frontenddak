@@ -63,6 +63,9 @@ import { RecouvrementCreanceComponent } from './pages/recouvrement/recouvrement-
 import { RecouvrementEtatComponent } from './pages/recouvrement/recouvrement-etat/recouvrement-etat.component';
 import { RecouvrementPerformanceComponent } from './pages/recouvrement/recouvrement-performance/recouvrement-performance.component';
 import { RecouvrementEvaluationComponent } from './pages/recouvrement/recouvrement-evaluation/recouvrement-evaluation.component';
+import { UtilisateurEditComponent } from './pages/utilisateur/utilisateur-edit/utilisateur-edit.component';
+import { UtilisateurListComponent } from './pages/utilisateur/utilisateur-list/utilisateur-list.component';
+import { UtilisateurViewComponent } from './pages/utilisateur/utilisateur-view/utilisateur-view.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -147,6 +150,11 @@ const routes: Routes = [
   { path: 'recouvrement/performance', component: RecouvrementPerformanceComponent },
   { path: 'recouvrement/evaluation', component: RecouvrementEvaluationComponent },
   { path: 'recouvrement/creance', component: RecouvrementCreanceComponent },
+
+  { path: 'utilisateur', component: UtilisateurListComponent },
+  { path: 'utilisateur/edit', component: UtilisateurEditComponent },
+  { path: 'utilisateur/edit/:id', component: UtilisateurEditComponent },
+  { path: 'utilisateur/view/:id', component: UtilisateurViewComponent },
 
   { path: 'vigile', component: VigileListComponent },
   { path: 'vigile/edit', component: VigileEditComponent },
