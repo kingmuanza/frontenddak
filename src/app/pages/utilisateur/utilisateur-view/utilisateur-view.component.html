@@ -8,6 +8,17 @@
                 Revenir à la liste des utilisateurs
             </a>
         </div>
+        <div class="boutons">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="nouveau">
+                        <a [routerLink]="'/utilisateur/edit/' + utilisateur.idutilisateur " class="btn nouveau">
+                            Modifier
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="page-contenu">
         <div class="page-contenu-titre">

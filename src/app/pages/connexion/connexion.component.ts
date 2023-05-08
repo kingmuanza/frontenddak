@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { TestConnexionComponent } from 'src/app/composants/test-connexion/test-connexion.component';
+import { Utilisateur } from 'src/app/models/utilisateur.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { LoadingService } from 'src/app/services/loading.service';
@@ -47,6 +48,8 @@ export class ConnexionComponent implements OnInit {
 
     this.authService.connexion(this.urlServeur, this.login, this.passe).then(() => {
       this.router.navigate(['dashboard']);
+    }).catch((e) => {
+      this.notifierService.notify('error', e);
     });
   }
 

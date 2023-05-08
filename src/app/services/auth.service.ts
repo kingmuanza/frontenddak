@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Utilisateur } from '../models/utilisateur.model';
+import { JarvisService } from './jarvis.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,16 @@ export class AuthService {
   currentUserSubject = new Subject<Utilisateur | null>();
   stockage: any;
 
-  constructor() {
+  constructor(
+
+    private utilisateurService: JarvisService<Utilisateur>
+  ) {
     this.stockage = localStorage;
   }
 
   actualiser() {
     // console.log('actualiser');
-    this.getUser().then((user)=> {
+    this.getUser().then((user) => {
       this.currentUser = user;
       this.notifier();
     });
@@ -43,8 +47,7 @@ export class AuthService {
         this.saveUser(this.currentUser);
         this.notifier();
         resolve();
-      }
-      if (login === 'contrat' && passe === 'contrat') {
+      } else if (login === 'contrat' && passe === 'contrat') {
         this.currentUser = {
           login: 'contrat',
           role: 'Contrat',
@@ -54,7 +57,7 @@ export class AuthService {
         this.notifier();
         resolve();
       }
-      if (login === 'rh' && passe === 'rh') {
+      else if (login === 'rh' && passe === 'rh') {
         this.currentUser = {
           login: 'rh',
           role: 'RH',
@@ -63,8 +66,7 @@ export class AuthService {
         this.saveUser(this.currentUser);
         this.notifier();
         resolve();
-      }
-      if (login === 'suivi' && passe === 'suivi') {
+      } else if (login === 'suivi' && passe === 'suivi') {
         this.currentUser = {
           login: 'suivi',
           role: 'suivi',
@@ -73,8 +75,44 @@ export class AuthService {
         this.saveUser(this.currentUser);
         this.notifier();
         resolve();
+      } else {
+        this.connexionViaServeur(login, passe).then((u) => {
+          this.saveUser(u);
+          this.notifier();
+          resolve();
+        }).catch((e) => {
+          reject(e);
+        });
       }
-      reject();
+
+    });
+  }
+
+  connexionViaServeur(login: string, passe: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      var bcrypt = require('bcryptjs');
+      this.utilisateurService.getAll('utilisateur').then((resultats) => {
+        const utilisateurs = resultats.filter((u) => {
+          return u.login === login;
+        });
+        if (utilisateurs.length > 0) {
+          const u = utilisateurs[0];
+          bcrypt.compare(passe, u.passe).then((res: boolean) => {
+            if (res) {
+              this.currentUser = u;
+              this.currentUser['role'] = 'admin';
+              this.saveUser(this.currentUser);
+              this.notifier();
+              resolve(u);
+            } else {
+              reject("Mot de passe incorrect");
+            }
+          });
+
+        } else {
+          reject("Acun utilisateur");
+        }
+      });
     });
   }
 
@@ -92,7 +130,7 @@ export class AuthService {
       this.stockage.removeItem('dak-user');
       this.currentUserSubject.next(null);
       setTimeout(() => {
-        resolve();        
+        resolve();
       }, 500);
     });
   }

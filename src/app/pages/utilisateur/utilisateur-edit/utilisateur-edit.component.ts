@@ -4,6 +4,7 @@ import { NotifierService } from 'angular-notifier';
 import { Utilisateur } from 'src/app/models/utilisateur.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
+
 @Component({
   selector: 'app-utilisateur-edit',
   templateUrl: './utilisateur-edit.component.html',
@@ -46,17 +47,33 @@ export class UtilisateurEditComponent implements OnInit {
         if (this.passe.length > 3) {
           if (this.utilisateur.idutilisateur == 0) {
             this.processing = true;
-            this.utilisateurService.ajouter('utilisateur', this.utilisateur).then((data) => {
-              console.log('data');
-              console.log(data);
-              this.processing = false;
-              this.notifierService.notify('success', "Ajout effectué avec succès");
-              this.router.navigate(['utilisateur']);
+            this.hashPassword(this.passe).then((hash) => {
+              this.utilisateur.passe = hash;
+              this.utilisateurService.ajouter('utilisateur', this.utilisateur).then((data) => {
+                console.log('data');
+                console.log(data);
+                this.processing = false;
+                this.notifierService.notify('success', "Ajout effectué avec succès");
+                this.router.navigate(['utilisateur']);
+              });
             });
           }
         }
       }
     }
+  }
+
+  hashPassword(passe: string): Promise<string> {
+    console.log('hashPassword');
+    const bcrypt = require('bcryptjs');
+    return new Promise((resolve, reject) => {
+      bcrypt.genSalt(5, function (err: any, salt: any) {
+        bcrypt.hash(passe, salt, function (e: any, hash: string) {
+          console.log(hash);
+          resolve(hash);
+        });
+      });
+    });
   }
 
   supprimer() {
