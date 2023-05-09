@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
+import { droits } from 'src/app/data/droits';
 import { Utilisateur } from 'src/app/models/utilisateur.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
@@ -17,6 +18,8 @@ export class UtilisateurViewComponent implements OnInit {
   passe = "";
   confirmation = "";
   showErrors = false;
+
+  lesDroits: any = droits;
 
   constructor(
     private router: Router,
@@ -71,6 +74,13 @@ export class UtilisateurViewComponent implements OnInit {
         this.router.navigate(['utilisateur']);
       });
     }
+  }
+
+  setDroit(key: string, event: any) {
+    this.lesDroits[key] = event;
+    console.log("key : " + key);
+    console.log("event ");
+    console.log(event.returnValue);
   }
 
 }

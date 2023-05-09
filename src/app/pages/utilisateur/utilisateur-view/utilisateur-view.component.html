@@ -26,12 +26,63 @@
             <div class="page-contenu-corps">
                 <div class="row">
                     <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    Fonctionnalités
+                                </div>
+                                <div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="">
+                                        <label class="form-check-label">
+                                            SUIVI
+                                        </label>
+                                    </div>
+                                    <div class="sous-fonctions">
+                                        <div class="form-check">
+                                            <input class="form-check-input" (change)="setDroit('dashboard', $event)"
+                                                type="checkbox" value="">
+                                            <label class="form-check-label">
+                                                Tableau de bord
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="">
+                                            <label class="form-check-label">
+                                                Pointage
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="">
+                                            <label class="form-check-label">
+                                                Jours de repos
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="">
+                                            <label class="form-check-label">
+                                                Congés
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">
                                     Informations de base
                                 </div>
 
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Login <app-required></app-required>
+                                        </span>
+                                    </div>
+                                    <input disabled type="text" [(ngModel)]="utilisateur.login" class="form-control"
+                                        [ngClass]="{'is-invalid': showErrors && !utilisateur.login}">
+                                </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -42,14 +93,19 @@
                                         [ngClass]="{'is-invalid': showErrors && !utilisateur.noms}">
                                 </div>
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            Login <app-required></app-required>
-                                        </span>
-                                    </div>
-                                    <input type="text" [(ngModel)]="utilisateur.login" class="form-control"
-                                        [ngClass]="{'is-invalid': showErrors && !utilisateur.login}">
+                                    <button [disabled]="processing" (click)="save()"
+                                        class="btn btn-primary">Modifier</button>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    Modifier le mot de passe
+                                </div>
+
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
