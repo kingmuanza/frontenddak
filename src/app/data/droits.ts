@@ -1,6 +1,22 @@
 
 export let droits = {
     dashboard: true,
+    pointage: true,
+    repos: true,
+    conge: true,
+
+    contrat: true,
+    poste: true,
+    vigile: true,
+    responsable: true,
+    affectation: true,
+    switchs: true,
+    sanction: true,
+    permission: true,
+    vigileBadge: true,
+
+    recouvrement: true,
+
     zone: true,
     ville: true,
     quartier: true,
@@ -9,22 +25,10 @@ export let droits = {
     statut: true,
     motif: true,
 
-    planningremplacant: true,
-    titulairevacant: true,
     postevacant: true,
-    fichepointage: true,
+    titulairevacant: true,
+    planningremplacant: true,
     planningremplacantconge: true,
+    fichepointage: true,
 
-    responsable: true,
-    pointage: true,
-    affectation: true,
-    switchs: true,
-    sanction: true,
-    permission: true,
-    vigile: true,
-    vigileBadge: true,
-    conge: true,
-    contrat: true,
-    poste: true,
-    repos: true,
 }

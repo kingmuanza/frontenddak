@@ -100,7 +100,7 @@ export class AuthService {
           bcrypt.compare(passe, u.passe).then((res: boolean) => {
             if (res) {
               this.currentUser = u;
-              this.currentUser['role'] = 'admin';
+              this.currentUser["role"] = "Utilisateur";
               this.saveUser(this.currentUser);
               this.notifier();
               resolve(u);
@@ -139,7 +139,7 @@ export class AuthService {
     this.stockage.setItem('dak-user', JSON.stringify(user));
   }
 
-  private notifier() {
+  notifier() {
     this.currentUserSubject.next(this.currentUser);
   }
 

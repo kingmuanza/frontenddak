@@ -110,32 +110,32 @@
             </div>
         </div>
 
-        <div>
+        <div *ngIf="mesDroits.recouvrement">
             <div class="menu-gauche-sous-titre">
                 Recouvrement
             </div>
             <div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.contrat">
+                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
                     <a routerLinkActive="active" routerLink="recouvrement/edition">
                         Edition
                     </a>
                 </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.poste">
+                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
                     <a routerLinkActive="active" routerLink="recouvrement/etat">
                         Etat des recouvrements
                     </a>
                 </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.vigile">
+                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
                     <a routerLinkActive="active" routerLink="recouvrement/performance">
                         Performances
                     </a>
                 </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.responsable">
+                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
                     <a routerLinkActive="active" routerLink="recouvrement/evaluation">
                         Evaluation
                     </a>
                 </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.affectation">
+                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
                     <a routerLinkActive="active" routerLink="recouvrement/creance">
                         Etat des créances
                     </a>
@@ -143,7 +143,8 @@
             </div>
         </div>
 
-        <div>
+        <div
+            *ngIf="mesDroits.postevacant || mesDroits.titulairevacant || mesDroits.planningremplacant || mesDroits.planningremplacantconge || mesDroits.fichepointage">
             <div class="menu-gauche-sous-titre">
                 Etats
             </div>
@@ -175,7 +176,8 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div
+            *ngIf="mesDroits.zone || mesDroits.ville || mesDroits.quartier || mesDroits.nationalite || mesDroits.equipement || mesDroits.statut || mesDroits.motif">
             <div class="menu-gauche-sous-titre">
                 Paramètres
             </div>

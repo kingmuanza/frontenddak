@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { droits } from 'src/app/data/droits';
 import { Contrat } from 'src/app/models/contrat.model';
 import { Poste } from 'src/app/models/poste.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -22,11 +23,27 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
   intervalPoste: any;
 
   constructor(
-    private router: Router,
+    private authService: AuthService,
     private contratService: JarvisService<Contrat>,
     private posteService: JarvisService<Poste>
   ) {
 
+  }
+
+  ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
   }
 
   private getMauvaisContrat() {
@@ -47,11 +64,6 @@ export class MenuGaucheComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.intervalContrat);
-  }
-
-  ngOnInit(): void {
-    this.getMauvaisContrat();
-    this.getMauvaisPoste();
   }
 
   ngOnChanges(changes: SimpleChanges): void {

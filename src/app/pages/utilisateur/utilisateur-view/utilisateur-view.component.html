@@ -8,17 +8,6 @@
                 Revenir à la liste des utilisateurs
             </a>
         </div>
-        <div class="boutons">
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="nouveau">
-                        <a [routerLink]="'/utilisateur/edit/' + utilisateur.idutilisateur " class="btn nouveau">
-                            Modifier
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="page-contenu">
         <div class="page-contenu-titre">
@@ -31,44 +20,198 @@
                                 <div class="card-title">
                                     Fonctionnalités
                                 </div>
-                                <div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                        <label class="form-check-label">
-                                            SUIVI
-                                        </label>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <div>SUIVI</div>
+                                            <div class="sous-fonctions">
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.dashboard" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Tableau de bord </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.pointage" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Pointage</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.repos" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Jours de repos
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.conge" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Congés
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div>EDITION</div>
+                                            <div class="sous-fonctions">
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.contrat" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Contrats </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.poste" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Postes</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.vigile" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Vigiles
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.responsable" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Responsables
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.affectation" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Affectations
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.switchs" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Switchs
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.sanction" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Sanctions
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.permission" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Permissions
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.vigileBadge" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Vigiles Badges
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div>RECOUVREMENTS</div>
+                                            <div class="sous-fonctions">
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.recouvrement" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Voir tout (Bêta) </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="sous-fonctions">
-                                        <div class="form-check">
-                                            <input class="form-check-input" (change)="setDroit('dashboard', $event)"
-                                                type="checkbox" value="">
-                                            <label class="form-check-label">
-                                                Tableau de bord
-                                            </label>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <div>ETATS</div>
+                                            <div class="sous-fonctions">
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.postevacant" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Postes vacants </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.titulairevacant"
+                                                        class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">Titulaires vacants </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.planningremplacant"
+                                                        class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">Plannig des remplacants </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.planningremplacantconge"
+                                                        class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">Plannig des remplacants congés
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.fichepointage"
+                                                        class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">Fiches de pointages
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="">
-                                            <label class="form-check-label">
-                                                Pointage
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="">
-                                            <label class="form-check-label">
-                                                Jours de repos
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="">
-                                            <label class="form-check-label">
-                                                Congés
-                                            </label>
+                                        <div class="mb-4">
+                                            <div>PARAMETRES</div>
+                                            <div class="sous-fonctions">
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.zone" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Zones </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.ville" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Villes </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.quartier" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Quartiers </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.nationalite" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Nationalités </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.equipement" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Equipements </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.statut" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Statuts </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.motif" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Motifs </label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="input-group">
+                                    <button [disabled]="processing" (click)="saveDroits()"
+                                        class="btn btn-primary">Enregistrer
+                                        les droits</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="card">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
                             <div class="card-body">
                                 <div class="card-title">
                                     Informations de base
@@ -98,8 +241,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">

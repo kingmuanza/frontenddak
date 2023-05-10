@@ -3,4 +3,5 @@ export class Utilisateur {
     login = ''
     noms = '';
     passe = '';
+    droits: string = "{}";
 }

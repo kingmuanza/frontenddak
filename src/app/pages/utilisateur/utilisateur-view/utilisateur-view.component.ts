@@ -36,6 +36,11 @@ export class UtilisateurViewComponent implements OnInit {
           console.log('utilisateur');
           console.log(utilisateur);
           this.utilisateur = utilisateur;
+          try {
+            this.lesDroits = JSON.parse(utilisateur.droits);
+          } catch (error) {
+            this.lesDroits = droits;
+          }
         });
       }
     });
@@ -77,10 +82,21 @@ export class UtilisateurViewComponent implements OnInit {
   }
 
   setDroit(key: string, event: any) {
-    this.lesDroits[key] = event;
     console.log("key : " + key);
     console.log("event ");
-    console.log(event.returnValue);
+    this.lesDroits[key] = event.target.checked;
+    console.log(event.target.checked);
+    console.log(this.lesDroits);
+  }
+
+  saveDroits() {
+    this.utilisateur.droits = JSON.stringify(this.lesDroits);
+    console.log(this.utilisateur);
+    this.utilisateurService.modifier('utilisateur', this.utilisateur.idutilisateur, this.utilisateur).then((data) => {
+      console.log('data');
+      console.log(data);
+      window.location.reload();
+    });
   }
 
 }
