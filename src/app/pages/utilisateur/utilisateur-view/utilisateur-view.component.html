@@ -245,8 +245,8 @@
                                     <input type="text" [(ngModel)]="utilisateur.noms" name="date" class="form-control"
                                         [ngClass]="{'is-invalid': showErrors && !utilisateur.noms}">
                                 </div>
-                                <div class="input-group" style="display:none">
-                                    <button [disabled]="processing" (click)="save()"
+                                <div class="input-group">
+                                    <button [disabled]="processing" (click)="modifier()"
                                         class="btn btn-primary">Modifier</button>
                                 </div>
                             </div>
@@ -264,7 +264,7 @@
                                         </span>
                                     </div>
                                     <input type="password" [(ngModel)]="passe" class="form-control"
-                                        [ngClass]="{'is-invalid': showErrors && passe.length <=3}">
+                                        [ngClass]="{'is-invalid': showPasseErrors && passe.length <=3}">
                                 </div>
                                 <div *ngIf="showErrors && passe.length <=3">
                                     <small>Le mot de passe doit comporter au moins 3 caractères</small>
@@ -276,16 +276,14 @@
                                         </span>
                                     </div>
                                     <input type="password" [(ngModel)]="confirmation" class="form-control"
-                                        [ngClass]="{'is-invalid': showErrors && confirmation!==passe}">
+                                        [ngClass]="{'is-invalid': showPasseErrors && confirmation!==passe}">
                                 </div>
                                 <div *ngIf="showErrors && confirmation!==passe">
                                     <small>Les mots de passe ne sont pas identiques</small>
                                 </div>
-                                <div class="input-group" style="display:none">
-                                    <button [disabled]="processing" (click)="save()"
-                                        class="btn btn-primary">Enregistrer</button> &nbsp;
-                                    <button *ngIf="utilisateur.idutilisateur != 0" [disabled]="processing"
-                                        (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                                <div class="input-group">
+                                    <button (click)="changerPasse()" [disabled]="processing"
+                                        class="btn btn-primary">Enregistrer</button>
                                 </div>
                             </div>
                         </div>

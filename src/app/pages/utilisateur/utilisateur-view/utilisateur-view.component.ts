@@ -18,6 +18,7 @@ export class UtilisateurViewComponent implements OnInit {
   passe = "";
   confirmation = "";
   showErrors = false;
+  showPasseErrors = false;
 
   lesDroits: any = droits;
 
@@ -46,23 +47,60 @@ export class UtilisateurViewComponent implements OnInit {
     });
   }
 
-  save() {
+  modifier() {
     this.showErrors = true;
+    console.log("this.utilisateur");
     console.log(this.utilisateur);
+    console.log(this.utilisateur.login);
+    console.log(this.utilisateur.noms);
     if (this.utilisateur.login && this.utilisateur.noms) {
+      this.utilisateurService.modifier('utilisateur', this.utilisateur.idutilisateur, this.utilisateur).then((data) => {
+        console.log('data');
+        console.log(data);
+        this.processing = false;
+        this.notifierService.notify('success', "Modification effectuée avec succès");
+        window.location.reload();
+      }).catch((error) => {
+        console.log('error');
+        console.log(error);
+      });
+    }
+  }
+
+  hashPassword(passe: string): Promise<string> {
+    console.log('hashPassword');
+    const bcrypt = require('bcryptjs');
+    return new Promise((resolve, reject) => {
+      bcrypt.genSalt(5, function (err: any, salt: any) {
+        bcrypt.hash(passe, salt, function (e: any, hash: string) {
+          console.log(hash);
+          resolve(hash);
+        });
+      });
+    });
+  }
+
+  changerPasse() {
+    this.showPasseErrors = true;
+    console.log("this.utilisateur");
+    console.log(this.utilisateur);
+    console.log(this.utilisateur.login);
+    console.log(this.utilisateur.noms);
+    if (this.passe && this.confirmation) {
       if (this.passe == this.confirmation) {
-        if (this.passe.length > 3) {
-          if (this.utilisateur.idutilisateur == 0) {
-            this.processing = true;
-            this.utilisateurService.ajouter('utilisateur', this.utilisateur).then((data) => {
-              console.log('data');
-              console.log(data);
-              this.processing = false;
-              this.notifierService.notify('success', "Ajout effectué avec succès");
-              this.router.navigate(['utilisateur']);
-            });
-          }
-        }
+        this.hashPassword(this.passe).then((hash) => {
+          this.utilisateur.passe = hash;
+          this.utilisateurService.modifier('utilisateur', this.utilisateur.idutilisateur, this.utilisateur).then((data) => {
+            console.log('data');
+            console.log(data);
+            this.processing = false;
+            this.notifierService.notify('success', "Modification effectuée avec succès");
+            window.location.reload();
+          }).catch((error) => {
+            console.log('error');
+            console.log(error);
+          });
+        });
       }
     }
   }
