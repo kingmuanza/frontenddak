@@ -81,7 +81,7 @@ export class PosteEditComponent implements OnInit {
 
     this.getContrats().then((contrats) => {
       this.contrats = contrats.filter((contrat) => {
-        return !contrat.idparent && contrat.statut === 'CREATION';
+        return true;
       });
       this.getVilles().then((zones) => {
         this.zones = zones;
