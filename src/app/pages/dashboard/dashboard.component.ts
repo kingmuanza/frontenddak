@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { droits } from 'src/app/data/droits';
 import { Permission } from 'src/app/models/permission.model';
 import { Poste } from 'src/app/models/poste.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { ZoneDak } from 'src/app/models/zone.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { CalculService } from 'src/app/services/calcul.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { BesoinVigile } from 'src/app/structures/besoin.vigile';
@@ -46,7 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   afficherResultats = false;
   afficherResultatsPostes = false;
 
-  
+
   public barChartOptions = {
     scaleShowVerticalLines: false,
     responsive: true
@@ -61,7 +63,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public barChartData = [
     { data: this.semaines, label: 'Jours de repos', backgroundColor: '#E3B505' },
   ];
-
+  user: any;
+  mesDroits = droits;
 
   constructor(
     private router: Router,
@@ -70,11 +73,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private posteService: JarvisService<Poste>,
     private vigileService: JarvisService<Vigile>,
     private sanctionService: JarvisService<any>,
-    private permissionService: JarvisService<Permission> ,
+    private permissionService: JarvisService<Permission>,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
-    this.posteService.getAll('poste').then((data)=> {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
+    this.posteService.getAll('poste').then((data) => {
       this.postes = data;
     });
     this.vigileService.getAll('vigile').then((data) => {
@@ -117,7 +134,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   groupByVille() {
-    
+
   }
 
 
@@ -129,7 +146,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['fiche', 'planning-incomplet', zone.idzone]);
   }
 
-  
+
   libelleFonction(fonction: string) {
     if (fonction == "AGENT")
       return "Agent de sécurité";

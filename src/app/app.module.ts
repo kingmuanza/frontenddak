@@ -93,6 +93,9 @@ import { RecouvrementCreanceComponent } from './pages/recouvrement/recouvrement-
 import { UtilisateurListComponent } from './pages/utilisateur/utilisateur-list/utilisateur-list.component';
 import { UtilisateurEditComponent } from './pages/utilisateur/utilisateur-edit/utilisateur-edit.component';
 import { UtilisateurViewComponent } from './pages/utilisateur/utilisateur-view/utilisateur-view.component';
+import { VigileCongeEditComponent } from './pages/vigile/vigile-conge-edit/vigile-conge-edit.component';
+import { CongeDashboardComponent } from './pages/conge/conge-dashboard/conge-dashboard.component';
+import { CongeViewComponent } from './pages/conge/conge-view/conge-view.component';
 
 @NgModule({
   declarations: [
@@ -181,6 +184,9 @@ import { UtilisateurViewComponent } from './pages/utilisateur/utilisateur-view/u
     UtilisateurListComponent,
     UtilisateurEditComponent,
     UtilisateurViewComponent,
+    VigileCongeEditComponent,
+    CongeDashboardComponent,
+    CongeViewComponent,
   ],
   imports: [
     BrowserModule,

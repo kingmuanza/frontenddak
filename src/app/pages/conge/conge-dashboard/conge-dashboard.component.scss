@@ -1,0 +1,33 @@
+.dash {
+    margin-top: 20px;
+    background-color: rgba(#231709, 1);
+    color: white;
+    padding: 20px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    text-align: center;
+    cursor: pointer;
+
+    &-titre {
+        font-size: 12px
+    }
+
+    &-valeur {
+        font-size: 36px
+    }
+
+    &.actu {
+        background-color: #E3B505;
+        color: rgba(#231709, 1);
+    }
+}
+
+.vigile {
+    margin-left: 20px;
+}
+
+.mois {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}

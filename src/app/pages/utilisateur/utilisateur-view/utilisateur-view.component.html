@@ -43,10 +43,24 @@
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.congeDashboard"
+                                                        class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Congés : Tableau de bord
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
                                                     <input [(ngModel)]="lesDroits.conge" class="form-check-input"
                                                         type="checkbox">
                                                     <label class="form-check-label">
-                                                        Congés
+                                                        Congés : Vigiles
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.congeEdit" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Congés Modification
                                                     </label>
                                                 </div>
                                             </div>
@@ -68,7 +82,14 @@
                                                     <input [(ngModel)]="lesDroits.vigile" class="form-check-input"
                                                         type="checkbox">
                                                     <label class="form-check-label">
-                                                        Vigiles
+                                                        Vigiles Consultation
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.vigileEdit" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Vigiles Modification
                                                     </label>
                                                 </div>
                                                 <div class="form-check">

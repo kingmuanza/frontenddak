@@ -12,7 +12,7 @@
                 Suivi
             </div>
             <div>
-                <div class="menu-gauche-item">
+                <div class="menu-gauche-item" *ngIf="mesDroits.dashboard">
                     <a routerLinkActive="active" routerLink="dashboard">
                         Tableau de bord
                     </a>
@@ -43,8 +43,13 @@
                     </a>
                 </div>
                 <div class="menu-gauche-item" *ngIf="mesDroits.conge">
+                    <a routerLinkActive="active" routerLink="conge-dashboard">
+                        Congés : Tableau de bord
+                    </a>
+                </div>
+                <div class="menu-gauche-item" *ngIf="mesDroits.conge">
                     <a routerLinkActive="active" routerLink="conge">
-                        Congés
+                        Congés : Vigiles
                     </a>
                 </div>
             </div>

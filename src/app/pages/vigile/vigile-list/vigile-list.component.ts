@@ -70,24 +70,11 @@ export class VigileListComponent implements OnInit, OnDestroy {
     return "" + jour ? jour : "";
   }
 
-  jourSemaine(jour: number) {
-    if (jour == 1)
-      return "Lundi";
-    if (jour == 2)
-      return "Mardi";
-    if (jour == 3)
-      return "Mercredi";
-    if (jour == 4)
-      return "Jeudi";
-    if (jour == 5)
-      return "Vendredi";
-    if (jour == 6)
-      return "Samedi";
-    if (jour == 7)
-      return "Dimanche";
 
-    return "" + jour ? jour : "";
+  jourSemaine(jour: number) {
+    return this.jarvisService.jourSemaine(jour);
   }
+
 
   afficherTitulaires(ev: any) {
     this.sontTitulaires = ev;

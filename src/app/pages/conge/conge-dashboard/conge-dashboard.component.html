@@ -1,0 +1,117 @@
+<div class="page">
+    <div class="page-entete">
+        <div class="page-entete-titre">
+            Départ en congés
+        </div>
+        <div>
+            Chronologie des départs en congés
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div (click)="enConges()" class="dash actu">
+                        <div class="dash-valeur">
+                            {{vigilesEnConges.length}}
+                        </div>
+                        <div class="dash-titre">
+                            Actuellement en congés
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="dash">
+                        <div class="dash-valeur">
+                            {{vigilesCetteSemaine.length}}
+                        </div>
+                        <div class="dash-titre">
+                            Iront en congés cette semaine
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="dash">
+                        <div class="dash-valeur">
+                            {{vigilesCetteSemaine.length + vigilesEnCongesCeMois}}
+                        </div>
+                        <div class="dash-titre">
+                            Iront en congés ce mois
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div>
+            <div class="card shadow-1" style="margin-bottom: 20px;">
+                <div class="mois">
+                    Cette semaine
+                </div>
+
+                <table class="row-border hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Début</th>
+                            <th style="width: 100px;">Fin</th>
+                            <th style="width: 200px;">Matricule</th>
+                            <th>Noms</th>
+                            <th style="width: 100px; text-align: center;">Remplacant</th>
+                            <th style="width: 150px; text-align: center;">Rempl. Congés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let vigile of vigilesCetteSemaine" (click)="edit(vigile.idvigile)"
+                            style="cursor: pointer; padding-top: 5px; padding-bottom: 5px;">
+                            <td>{{dateCetteAnnee(vigile.dateEntree) | date: 'dd-MM'}}</td>
+                            <td>{{dateCetteAnnee(vigile.finConge) | date: 'dd-MM'}}</td>
+                            <td>{{vigile.matricule}}</td>
+                            <td>{{vigile.noms}}</td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div *ngFor="let item of vigilesParDate">
+            <div class="card shadow-1" style="margin-bottom: 20px;">
+                <div class="mois">
+                    {{libelleDuMois(item.valeur)}}
+                </div>
+
+                <table class="row-border hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Début</th>
+                            <th style="width: 100px;">Fin</th>
+                            <th style="width: 200px;">Matricule</th>
+                            <th>Noms</th>
+                            <th style="width: 100px; text-align: center;">Remplacant</th>
+                            <th style="width: 150px; text-align: center;">Rempl. Congés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let vigile of item.vigiles" (click)="edit(vigile.idvigile)"
+                            style="cursor: pointer;">
+                            <td>{{dateCetteAnnee(vigile.dateEntree) | date: 'dd-MM'}}</td>
+                            <td>{{dateCetteAnnee(vigile.finConge) | date: 'dd-MM'}}</td>
+                            <td>{{vigile.matricule}}</td>
+                            <td>{{vigile.noms}}</td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="height: 25vh;"></div>

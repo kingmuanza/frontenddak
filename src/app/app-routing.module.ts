@@ -66,6 +66,8 @@ import { RecouvrementEvaluationComponent } from './pages/recouvrement/recouvreme
 import { UtilisateurEditComponent } from './pages/utilisateur/utilisateur-edit/utilisateur-edit.component';
 import { UtilisateurListComponent } from './pages/utilisateur/utilisateur-list/utilisateur-list.component';
 import { UtilisateurViewComponent } from './pages/utilisateur/utilisateur-view/utilisateur-view.component';
+import { CongeDashboardComponent } from './pages/conge/conge-dashboard/conge-dashboard.component';
+import { CongeViewComponent } from './pages/conge/conge-view/conge-view.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -87,9 +89,11 @@ const routes: Routes = [
   { path: 'affectation/edit/:id', component: AffectationEditComponent },
   { path: 'affectation/view/:id', component: AffectationViewComponent },
 
+  { path: 'conge-dashboard', component: CongeDashboardComponent },
   { path: 'conge', component: CongeListComponent },
   { path: 'conge/edit', component: CongeEditComponent },
   { path: 'conge/edit/:id', component: CongeEditComponent },
+  { path: 'conge/view/:id', component: CongeViewComponent },
 
   { path: 'contrat', component: ContratListComponent },
   { path: 'contrat/edit', component: ContratEditComponent },

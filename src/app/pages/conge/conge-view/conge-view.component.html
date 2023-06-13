@@ -1,0 +1,36 @@
+<div class="page">
+    <div class="page-entete">
+        <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
+            {{vigile.noms}}
+        </div>
+        <div *ngIf="vigile.idvigile==0" class="page-entete-titre">
+            Ajouter un vigile
+        </div>
+        <div>
+            <div>
+                {{libelleFonction(vigile.fonction)}}
+            </div>
+            <div>
+                {{affectation?.idposte.libelle}}
+            </div>
+        </div>
+        <div class="">
+            <a routerLink="/conge" class="btn btn-link" style="padding: 0; margin: 0;">
+                Revenir à la liste des vigiles
+            </a>
+        </div>
+    </div>
+    <div class="page-contenu">
+
+        <div>
+            <div class="card shadow-1">
+                <app-form-conge [idvigile]="vigile.idvigile" [vigiles]="vigiles" (onSaveEvent)="save()">
+                </app-form-conge>
+            </div>
+        </div>
+        <div style="height: 25vh;">
+
+        </div>
+
+    </div>
+</div>
