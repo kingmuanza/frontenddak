@@ -13,7 +13,8 @@
                         Fonction : {{libelleFonction(vigile.fonction)}}, Tel : {{vigile.tel}}
                         <br>
                         <ng-container *ngIf="affectation">
-                            Poste : <a [routerLink]="'/poste/view/' + affectation.idposte?.idposte">{{affectation.idposte?.libelle}}</a>
+                            Poste : <a
+                                [routerLink]="'/poste/view/' + affectation.idposte?.idposte">{{affectation.idposte?.libelle}}</a>
                         </ng-container>
                         <ng-container *ngIf="!affectation && !vigile.estRemplacant">
                             Poste : <b style="color: red;">VACANT</b>
@@ -35,7 +36,7 @@
             </a>
         </div>
     </div>
-    <div class="boutons">
+    <div class="boutons" *ngIf="mesDroits.vigileEdit">
         <div class="row">
             <div class="col-lg-2">
                 <div class="nouveau">
@@ -133,7 +134,8 @@
             <div style="margin-top: 20px; margin-bottom: 20px;">
                 Permissions accordées
             </div>
-            <table datatable [dtOptions]="dtOptionsPermissions" [dtTrigger]="dtTriggerPermissions" class="row-border hover">
+            <table datatable [dtOptions]="dtOptionsPermissions" [dtTrigger]="dtTriggerPermissions"
+                class="row-border hover">
                 <thead>
                     <tr>
                         <th>Vigile</th>
@@ -183,7 +185,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" #parrainModal id="parrainModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" #parrainModal id="parrainModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">

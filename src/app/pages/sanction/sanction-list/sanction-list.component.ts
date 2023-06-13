@@ -3,8 +3,10 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { droits } from 'src/app/data/droits';
 import { Suivi } from 'src/app/models/suivi.model';
 import { Vigile } from 'src/app/models/vigile.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { PointageService } from 'src/app/services/pointage.service';
 
@@ -28,14 +30,30 @@ export class SanctionListComponent implements OnInit, OnDestroy {
 
   numeroLePlusHaut = 0;
 
+  mesDroits = droits;
+
   constructor(
     private router: Router,
     private suiviService: JarvisService<Suivi>,
     private vigileService: JarvisService<Vigile>,
     private pointageService: PointageService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
     this.suiviService.getAll('suiviposte').then((data) => {
       console.log('data');
       console.log(data);

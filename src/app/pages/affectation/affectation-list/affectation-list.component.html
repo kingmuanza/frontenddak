@@ -6,7 +6,7 @@
         <div class="boutons">
 
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-3" *ngIf="mesDroits.affectationEdit">
                     <div class="nouveau">
                         <a routerLink="/affectation/edit" class="btn nouveau">
                             Ajouter une affectation
@@ -36,9 +36,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="type">
-                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="encours" type="radio" name="afficher"> &nbsp;En cours &nbsp;&nbsp;
-                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="arret" type="radio" name="afficher"> &nbsp;Arrêtées &nbsp;&nbsp;
-                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="tous" type="radio" name="afficher"> &nbsp;Toutes &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher"
+                            value="encours" type="radio" name="afficher"> &nbsp;En cours &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher"
+                            value="arret" type="radio" name="afficher"> &nbsp;Arrêtées &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="tous"
+                            type="radio" name="afficher"> &nbsp;Toutes &nbsp;&nbsp;
                     </div>
                 </div>
             </div>

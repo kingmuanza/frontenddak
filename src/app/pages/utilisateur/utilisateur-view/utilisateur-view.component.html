@@ -79,6 +79,11 @@
                                                     <label class="form-check-label">Postes</label>
                                                 </div>
                                                 <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.posteEdit" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">Postes</label>
+                                                </div>
+                                                <div class="form-check">
                                                     <input [(ngModel)]="lesDroits.vigile" class="form-check-input"
                                                         type="checkbox">
                                                     <label class="form-check-label">
@@ -103,7 +108,14 @@
                                                     <input [(ngModel)]="lesDroits.affectation" class="form-check-input"
                                                         type="checkbox">
                                                     <label class="form-check-label">
-                                                        Affectations
+                                                        Affectations Consultation
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.affectationEdit"
+                                                        class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Affectations Modification
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
@@ -117,7 +129,14 @@
                                                     <input [(ngModel)]="lesDroits.sanction" class="form-check-input"
                                                         type="checkbox">
                                                     <label class="form-check-label">
-                                                        Sanctions
+                                                        Sanctions Consultation
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input [(ngModel)]="lesDroits.sanctionEdit" class="form-check-input"
+                                                        type="checkbox">
+                                                    <label class="form-check-label">
+                                                        Sanctions Modification
                                                     </label>
                                                 </div>
                                                 <div class="form-check">

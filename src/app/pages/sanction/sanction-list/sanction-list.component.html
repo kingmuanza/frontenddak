@@ -5,11 +5,11 @@
         </div>
         <div class="boutons">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-3" *ngIf="mesDroits.vigileEdit">
                     <div class="nouveau">
                         <a routerLink="/sanction/edit" class="btn nouveau">
-                        Ajouter une sanction
-                    </a>
+                            Ajouter une sanction
+                        </a>
                     </div>
                 </div>
                 <div class="col-lg-2">
@@ -19,8 +19,8 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                            Date
-                        </span>
+                                Date
+                            </span>
                         </div>
                         <input type="date" name="date" class="form-control">
                     </div>
@@ -29,13 +29,13 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                            Horaire
-                        </span>
+                                Horaire
+                            </span>
                         </div>
                         <select type="date" name="date" class="form-control">
-                        <option value="jour">Jour</option>
-                        <option value="nuit">Nuit</option>
-                    </select>
+                            <option value="jour">Jour</option>
+                            <option value="nuit">Nuit</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-lg-2">

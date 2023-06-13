@@ -5,6 +5,7 @@ import { NotifierService } from 'angular-notifier';
 import * as bootstrap from 'bootstrap';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { droits } from 'src/app/data/droits';
 import { Affectation } from 'src/app/models/affectation.model';
 import { EquipementVigile } from 'src/app/models/equipement.vigile.model';
 import { Nationalite } from 'src/app/models/nationalite.model';
@@ -14,6 +15,7 @@ import { Suivi } from 'src/app/models/suivi.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { Ville } from 'src/app/models/ville.model';
 import { ZoneDak } from 'src/app/models/zone.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { ParrainService } from 'src/app/services/parrain.service';
 
@@ -57,6 +59,8 @@ export class VigileViewComponent implements OnInit {
 
   statut = 'Titulaire';
 
+  mesDroits = droits;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -71,10 +75,25 @@ export class VigileViewComponent implements OnInit {
     private sanctionService: JarvisService<Suivi>,
     private permissionService: JarvisService<Permission>,
     private equipementVigileService: JarvisService<EquipementVigile>,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
     this.init();
+
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
   }
 
   private init() {

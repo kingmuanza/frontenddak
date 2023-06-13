@@ -55,7 +55,8 @@
                                     Date effet
                                 </span>
                             </div>
-                            <input [ngModel]="suivi.dateEffet | date:'yyyy-MM-dd'" (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
+                            <input [ngModel]="suivi.dateEffet | date:'yyyy-MM-dd'"
+                                (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-5">
@@ -85,14 +86,18 @@
                             </span>
                         </div>
                         <div class="input-group">
-                            <textarea [(ngModel)]="suivi.commentaire" class="form-control" aria-label="With textarea"></textarea>
+                            <textarea [(ngModel)]="suivi.commentaire" class="form-control"
+                                aria-label="With textarea"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="input-group">
-                    <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
-                    <button [disabled]="processing" (click)="calculerDatesFutures(suivi)" class="btn nouveau">Calculer</button> &nbsp;
-                    <button *ngIf="suivi.idsuiviPoste != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                    <button *ngIf="mesDroits.vigileEdit" [disabled]="processing" (click)="save()"
+                        class="btn nouveau">Enregistrer</button> &nbsp;
+                    <button [disabled]="processing" (click)="calculerDatesFutures(suivi)"
+                        class="btn nouveau">Calculer</button> &nbsp;
+                    <button *ngIf="suivi.idsuiviPoste != 0 && mesDroits.vigileEdit" [disabled]="processing"
+                        (click)="supprimer()" class="btn btn-danger">Supprimer</button>
                 </div>
             </div>
         </div>

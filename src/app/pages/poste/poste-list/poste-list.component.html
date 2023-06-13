@@ -5,7 +5,7 @@
         </div>
         <div class="boutons">
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
                     <div class="nouveau">
                         <a routerLink="/poste/edit" class="btn nouveau">
                             Ajouter un poste
@@ -45,7 +45,8 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <button [disabled]="zone.idzone===0" class="btn primaire" (click)="rechercher(horaire, zone)">Rechercher</button>
+                    <button [disabled]="zone.idzone===0" class="btn primaire"
+                        (click)="rechercher(horaire, zone)">Rechercher</button>
                 </div>
             </div>
         </div>
@@ -53,9 +54,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="type">
-                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="parfait" type="radio" name="afficher"> &nbsp;Parfaits &nbsp;&nbsp;
-                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="vacant" type="radio" name="afficher"> &nbsp;Vacants &nbsp;&nbsp;
-                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="tous" type="radio" name="afficher"> &nbsp;Tous &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="parfait"
+                            type="radio" name="afficher"> &nbsp;Parfaits &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="vacant"
+                            type="radio" name="afficher"> &nbsp;Vacants &nbsp;&nbsp;
+                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="tous" type="radio"
+                            name="afficher"> &nbsp;Tous &nbsp;&nbsp;
                     </div>
                 </div>
             </div>

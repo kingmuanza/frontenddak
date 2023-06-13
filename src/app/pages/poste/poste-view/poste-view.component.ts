@@ -15,6 +15,8 @@ import { PointageService } from 'src/app/services/pointage.service';
 import * as bootstrap from 'bootstrap';
 import { Vigile } from 'src/app/models/vigile.model';
 import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
+import { droits } from 'src/app/data/droits';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-poste-view',
@@ -54,6 +56,8 @@ export class PosteViewComponent implements OnInit {
 
   exigences = new Array<ContratSiteVigile>();
 
+  mesDroits = droits;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -67,12 +71,27 @@ export class PosteViewComponent implements OnInit {
     private postevigileService: JarvisService<any>,
     private contratSiteVigileService: JarvisService<ContratSiteVigile>,
     private posteEquipementService: JarvisService<PosteEquipement>,
+    private authService: AuthService,
   ) {
 
     this.app = initializeApp(FIREBASECONFIG);
   }
 
   ngOnInit(): void {
+
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
 
     this.getEquipements().then((equipements) => {
       this.equipements = equipements.filter((e) => {

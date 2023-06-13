@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { droits } from 'src/app/data/droits';
 import { Vigile } from 'src/app/models/vigile.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -28,12 +30,28 @@ export class VigileListComponent implements OnInit, OnDestroy {
 
   horaire = '';
 
+  mesDroits = droits;
+
   constructor(
     private router: Router,
-    private jarvisService: JarvisService<any>
+    private jarvisService: JarvisService<any>,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
     this.jarvisService.getAll('vigile').then((data) => {
       console.log('data');
       console.log(data);

@@ -9,12 +9,15 @@ export let droits = {
 
     contrat: true,
     poste: true,
+    posteEdit: true,
     vigile: true,
     vigileEdit: true,
     responsable: true,
     affectation: true,
+    affectationEdit: true,
     switchs: true,
     sanction: true,
+    sanctionEdit: true,
     permission: true,
     vigileBadge: true,
 

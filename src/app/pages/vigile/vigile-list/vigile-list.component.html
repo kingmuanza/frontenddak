@@ -5,7 +5,7 @@
         </div>
         <div class="boutons">
             <div class="row">
-                <div class="col-lg-2">
+                <div *ngIf="mesDroits.vigileEdit" class="col-lg-2">
                     <div class="nouveau">
                         <a routerLink="/vigile/edit" class="btn nouveau">
                             Ajouter un vigile

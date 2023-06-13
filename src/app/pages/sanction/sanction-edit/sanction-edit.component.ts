@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
+import { droits } from 'src/app/data/droits';
 import { Suivi } from 'src/app/models/suivi.model';
 import { Vigile } from 'src/app/models/vigile.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -25,14 +27,32 @@ export class SanctionEditComponent implements OnInit {
   ojrdhui = new Date();
   datesPrises = new Array<Date>();
 
+  mesDroits = droits;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
-    private jarvisService: JarvisService<any>
+    private jarvisService: JarvisService<any>,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
+
     this.ojrdhui.setDate(this.ojrdhui.getDate() - 1)
     this.getPostes().then((postes) => {
       this.postes = postes;

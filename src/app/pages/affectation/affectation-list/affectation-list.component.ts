@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { droits } from 'src/app/data/droits';
 import { Affectation } from 'src/app/models/affectation.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -26,12 +28,28 @@ export class AffectationListComponent implements OnInit, OnDestroy {
   afficher = 'encours';
   horaire = 'jour';
 
+  mesDroits = droits;
+
   constructor(
     private router: Router,
-    private affectationService: JarvisService<any> 
+    private affectationService: JarvisService<any>,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
     this.affectationService.getAll('affectation').then((data) => {
       console.log('data');
       console.log(data);
@@ -53,11 +71,11 @@ export class AffectationListComponent implements OnInit, OnDestroy {
 
   rechercher(horaire: string) {
     this.resultatsPrimaires = new Array<Affectation>();
-    if (horaire==='tous') {
+    if (horaire === 'tous') {
       const affectationsHoraire = this.affectations.filter((affectation) => {
-      return true;
-    });
-    this.resultatsPrimaires = this.resultatsPrimaires.concat(affectationsHoraire);
+        return true;
+      });
+      this.resultatsPrimaires = this.resultatsPrimaires.concat(affectationsHoraire);
     } else {
       const affectationsHoraire = this.affectations.filter((affectation) => {
         return affectation.horaire === horaire;
@@ -96,9 +114,9 @@ export class AffectationListComponent implements OnInit, OnDestroy {
       });
     }, 500);
   }
-  
+
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-  
+
 }

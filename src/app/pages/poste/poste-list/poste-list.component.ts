@@ -4,9 +4,11 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { droits } from 'src/app/data/droits';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Poste } from 'src/app/models/poste.model';
 import { ZoneDak } from 'src/app/models/zone.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -36,15 +38,31 @@ export class PosteListComponent implements OnInit, OnDestroy {
 
   libelle = "Liste des postes récemment créés";
 
+  mesDroits = droits;
+
   constructor(
     private router: Router,
     private posteService: JarvisService<Poste>,
     private zoneService: JarvisService<ZoneDak>,
     private affectationService: JarvisService<Affectation>,
     private posteCtrlService: PosteCtrlService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
     this.zoneService.getAll('zone').then((zones) => {
       console.log('data');
       console.log(zones);

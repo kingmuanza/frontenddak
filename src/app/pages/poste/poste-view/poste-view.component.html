@@ -5,7 +5,9 @@
 
         </div>
         <div *ngIf="poste.idcontratsite">
-            Contrat : <a [routerLink]="'/contrat/view/' + poste.idcontratsite.idcontrat.idcontrat">{{poste.idcontratsite.idcontrat.libelle}}</a>, Site : {{poste.idcontratsite.nom}},
+            Contrat : <a
+                [routerLink]="'/contrat/view/' + poste.idcontratsite.idcontrat.idcontrat">{{poste.idcontratsite.idcontrat.libelle}}</a>,
+            Site : {{poste.idcontratsite.nom}},
         </div>
         <div class="">
             <a routerLink="/poste" class="btn btn-link" style="padding: 0; margin: 0;">
@@ -15,7 +17,7 @@
     </div>
     <div class="boutons">
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
                 <div class="nouveau">
                     <a [routerLink]="'/poste/edit/' + poste.idposte " class="btn nouveau">
                         Modifier
@@ -34,7 +36,9 @@
                         </div>
                         <div>
                             <div>
-                                Ville : <a href="#">{{poste.zone?.idville?.libelle}}</a>, Zone : <a href="#">{{poste.zone?.libelle}}</a>, Quartier : <a href="#">{{poste.idquartier?.nom}}</a>
+                                Ville : <a href="#">{{poste.zone?.idville?.libelle}}</a>, Zone : <a
+                                    href="#">{{poste.zone?.libelle}}</a>, Quartier : <a
+                                    href="#">{{poste.idquartier?.nom}}</a>
                             </div>
                             <div>
                                 Personne à contacter : <a href="#">{{poste.contact}}</a>, Téléphone : {{poste.tel}}
@@ -49,7 +53,8 @@
                         </div>
                         <div>
                             <div>
-                                Laltitude : <a href="#">{{poste.latitude}}</a>, Longitude : <a href="#">{{poste.longitude}}</a>
+                                Laltitude : <a href="#">{{poste.latitude}}</a>, Longitude : <a
+                                    href="#">{{poste.longitude}}</a>
                             </div>
                         </div>
                     </div>
@@ -66,7 +71,8 @@
                             <div>
                                 <ul>
                                     <ng-container *ngFor="let item of exigences">
-                                        <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(item)}" *ngIf="item.horaire === poste.horaire">
+                                        <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(item)}"
+                                            *ngIf="item.horaire === poste.horaire">
                                             <span>
                                                 {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
                                             </span>
@@ -81,10 +87,12 @@
                     <div>
                         <div class="petit-titre">
                             <div style="float: right; display: none;">
-                                <button *ngIf="!showFormulaireEquipement" class="btn btn-link" (click)="showFormulaireEquipement = true">
+                                <button *ngIf="!showFormulaireEquipement" class="btn btn-link"
+                                    (click)="showFormulaireEquipement = true">
                                     Ajouter une exigence
                                 </button>
-                                <button *ngIf="showFormulaireEquipement" class="btn btn-link" (click)="showFormulaireEquipement = false">
+                                <button *ngIf="showFormulaireEquipement" class="btn btn-link"
+                                    (click)="showFormulaireEquipement = false">
                                     Annuler
                                 </button>
                             </div>
@@ -119,12 +127,15 @@
                                     <input type="number" [(ngModel)]="posteequipement.quantite" class="form-control">
                                 </div>
                                 <div class="input-group" style="margin-top: 20px; margin-bottom: 20px">
-                                    <button (click)="ajouterExigenceEquipement()" class="btn primaire">Enregistrer</button>
+                                    <button (click)="ajouterExigenceEquipement()"
+                                        class="btn primaire">Enregistrer</button>
                                 </div>
                             </div>
                             <div>
                                 <ul>
-                                    <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigenceMateriel(item)}" *ngFor="let item of posteequipements">
+                                    <li class="element-supprimable"
+                                        [ngClass]="{'erreur': !verifierExigenceMateriel(item)}"
+                                        *ngFor="let item of posteequipements">
                                         <span>
                                             {{item.quantite}} {{item.idequipement.libelle}}
                                         </span>
@@ -194,7 +205,8 @@
 
 
 <!-- Modal -->
-<div class="modal fade" #vigilesPropositionsModal id="vigilesPropositionsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" #vigilesPropositionsModal id="vigilesPropositionsModal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -234,7 +246,8 @@
                                                 </td>
                                                 <td>
                                                     <div class="input-group input-group-sm" style="margin-top: 0;">
-                                                        <select [name]="'remplacant'+i" type="text" class="form-control">
+                                                        <select [name]="'remplacant'+i" type="text"
+                                                            class="form-control">
                                                             <option value="0">Aucun remplacant</option>
                                                             <ng-container *ngFor="let r of remplacants">
                                                                 <option [value]="r.idvigile"
@@ -252,7 +265,8 @@
                                                     {{getSanctions(v)}}
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    <button (click)="affecter(v, i)" type="button" class="btn btn-primary btn-sm">Appliquer</button>
+                                                    <button (click)="affecter(v, i)" type="button"
+                                                        class="btn btn-primary btn-sm">Appliquer</button>
                                                 </td>
                                             </tr>
                                         </ng-container>
