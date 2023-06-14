@@ -5,6 +5,15 @@
         </div>
         <div class="boutons">
             <div class="row">
+                <div class="col-lg-4">
+                    <button (click)="actualiserDepuisLeServeur()" class="btn primaire">
+                        Actualiser depuis le serveur
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="boutons">
+            <div class="row">
                 <div class="col-lg-12">
                     <div class="type">
                         <input (ngModelChange)="afficherTitulaires($event)" type="checkbox"
@@ -35,7 +44,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let vigile of resultats" (click)="view(vigile.idvigile)" style="cursor: pointer;">
+                        <tr *ngFor="let vigile of dtTrigger | async" (click)="view(vigile.idvigile)"
+                            style="cursor: pointer;">
                             <td>{{vigile.idvigile}}</td>
                             <td>{{vigile.noms}}</td>
                             <td style="text-transform: capitalize;">{{vigile.horaire}}</td>

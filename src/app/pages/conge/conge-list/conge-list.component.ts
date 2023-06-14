@@ -4,7 +4,10 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { Vigile } from 'src/app/models/vigile.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import { LoadingService } from 'src/app/services/loading.service';
+import { VigileService } from 'src/app/services/vigile.service';
 
 @Component({
   selector: 'app-conge-list',
@@ -30,16 +33,32 @@ export class CongeListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private jarvisService: JarvisService<any>
+    private jarvisService: JarvisService<any>,
+    private vigileService: VigileService,
+    private authService: AuthService,
+    private loadingService: LoadingService,
   ) { }
 
   ngOnInit(): void {
-    this.jarvisService.getAll('vigile').then((data) => {
-      console.log('data');
-      console.log(data);
-      this.vigiles = data;
-      this.resultats = data;
-      this.dtTrigger.next('');
+
+    this.dtTrigger = this.vigileService.vigilesSubject;
+    this.actualiser();
+  }
+
+  actualiser() {
+    this.loadingService.afficher();
+    this.vigileService.getAll().then((data) => {
+      this.loadingService.cacher();
+    });
+  }
+
+  actualiserDepuisLeServeur() {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.loadingService.afficher();
+      this.vigileService.getAllDepuisLeServeur().then((data) => {
+        this.loadingService.cacher();
+      });
     });
   }
 

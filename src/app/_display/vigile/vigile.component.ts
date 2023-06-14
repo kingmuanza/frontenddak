@@ -15,12 +15,12 @@ export class VigileComponent implements OnInit, OnChanges {
   @Input() cliquable = true;
   @Input() long = false;
   @Output() isVigileVacant = new EventEmitter<boolean>();
-  
+
   affectation: any;
   affectations = new Array<Affectation>();
   affectationsActuelles = new Array<Affectation>();
 
-  joursSemaine = [1,2,3,4,5,6,7];
+  joursSemaine = [1, 2, 3, 4, 5, 6, 7];
 
   vacant = true;
 
@@ -31,8 +31,8 @@ export class VigileComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('Le vigile a changé');
-    console.log(this.vigile.noms);
+    /* console.log('Le vigile a changé');
+    console.log(this.vigile.noms); */
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
     this.init();
@@ -41,15 +41,15 @@ export class VigileComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.init();
   }
-  
+
   private init() {
     this.getAffectionsOfVigile(this.vigile).then(() => {
       if (this.vigile.estRemplacant) {
         // this.affectationsActuelles = this.affectations.concat([]);
       } else {
         this.affectation = this.getAffectationActuelle();
-        console.log('this.affectation');
-        console.log(this.affectation);
+        /* console.log('this.affectation');
+        console.log(this.affectation); */
         if (this.affectation) {
           this.vacant = false;
         } else {
@@ -103,7 +103,7 @@ export class VigileComponent implements OnInit, OnChanges {
     const affectations = this.affectations.filter((aff) => {
       return !aff.arret
     });
-    return affectations.sort((a,b) => {
+    return affectations.sort((a, b) => {
       return a.idvigile.jourRepos - b.idvigile.jourRepos > 0 ? -1 : 1;
     });
   }

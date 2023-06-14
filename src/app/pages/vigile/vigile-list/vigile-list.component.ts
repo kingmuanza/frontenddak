@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
+import { ADTSettings } from 'angular-datatables/src/models/settings';
+import { Subject, map } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { droits } from 'src/app/data/droits';
 import { Vigile } from 'src/app/models/vigile.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import { LoadingService } from 'src/app/services/loading.service';
+import { VigileService } from 'src/app/services/vigile.service';
 
 @Component({
   selector: 'app-vigile-list',
@@ -35,7 +38,9 @@ export class VigileListComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private jarvisService: JarvisService<any>,
+    private vigileService: VigileService,
     private authService: AuthService,
+    private loadingService: LoadingService,
   ) { }
 
   ngOnInit(): void {
@@ -52,12 +57,26 @@ export class VigileListComponent implements OnInit, OnDestroy {
 
     });
     this.authService.notifier();
-    this.jarvisService.getAll('vigile').then((data) => {
-      console.log('data');
-      console.log(data);
-      this.vigiles = data;
-      this.resultats = data;
-      this.dtTrigger.next('');
+
+    let i = 0;
+    this.dtTrigger = this.vigileService.vigilesSubject;
+    this.actualiser();
+  }
+
+  actualiser() {
+    this.loadingService.afficher();
+    this.vigileService.getAll().then((data) => {
+      this.loadingService.cacher();
+    });
+  }
+
+  actualiserDepuisLeServeur() {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.loadingService.afficher();
+      this.vigileService.getAllDepuisLeServeur().then((data) => {
+        this.loadingService.cacher();
+      });
     });
   }
 
@@ -110,29 +129,12 @@ export class VigileListComponent implements OnInit, OnDestroy {
   }
 
   afficherResultats() {
-    this.resultats = new Array<Vigile>();
-    if (this.sontTitulaires) {
-      const titulaires = this.vigiles.filter((vigile) => {
-        return !vigile.estRemplacant && !vigile.estRemplacantConge;
-      });
-      this.resultats = this.resultats.concat(titulaires);
-
-    }
-    if (this.sontRemplacants) {
-      const remplacants = this.vigiles.filter((vigile) => {
-        return vigile.estRemplacant;
-      });
-      this.resultats = this.resultats.concat(remplacants);
-    }
-    if (this.sontRemplacantsConges) {
-      const remplacantsConges = this.vigiles.filter((vigile) => {
-        return vigile.estRemplacantConge;
-      });
-      this.resultats = this.resultats.concat(remplacantsConges);
-    }
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
-      this.dtTrigger.next('');
+      this.loadingService.afficher();
+      this.vigileService.trier(this.sontTitulaires, this.sontRemplacants, this.sontRemplacantsConges).then((data) => {
+        this.loadingService.cacher();
+      });
     });
   }
 
