@@ -4,7 +4,9 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { droits } from 'src/app/data/droits';
 import { Contrat } from 'src/app/models/contrat.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -40,13 +42,29 @@ export class ContratListComponent implements OnInit, OnDestroy {
     parfait: 0,
   }
 
+  mesDroits = droits;
+
   constructor(
     private router: Router,
     private jarvisService: JarvisService<Contrat>,
     private contratCtrlService: ContratCtrlService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
     this.contratCtrlService.getContratsEnCoursDeCreation().then((data) => {
       console.log('data');
       console.log(data);

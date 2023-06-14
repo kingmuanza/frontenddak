@@ -7,6 +7,8 @@ import * as bootstrap from 'bootstrap';
 import { Poste } from 'src/app/models/poste.model';
 import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
 import { SiteCtrlService } from 'src/app/_services/site-ctrl.service';
+import { droits } from 'src/app/data/droits';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-display-site',
@@ -37,15 +39,31 @@ export class DisplaySiteComponent implements OnInit {
 
   exigence = new ContratSiteVigile();
 
+  mesDroits = droits;
+
   constructor(
     private siteService: JarvisService<ContratSite>,
     private siteCtrlService: SiteCtrlService,
     private contratSiteVigileService: JarvisService<ContratSiteVigile>,
     private notifierService: NotifierService,
     private posteCtrlService: PosteCtrlService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
     this.posteCtrlService.getPostesOfSite(this.site).then((postes) => {
       this.postes = postes;
     });

@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { droits } from 'src/app/data/droits';
 import { Affectation } from 'src/app/models/affectation.model';
 import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
 import { Poste } from 'src/app/models/poste.model';
 import { PosteVigile } from 'src/app/models/poste.vigile.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -27,7 +29,7 @@ export class DisplayPosteComponent implements OnInit, OnChanges {
 
   constructor(
     private contratSiteVigileService: JarvisService<ContratSiteVigile>,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit(): void {

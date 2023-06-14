@@ -24,7 +24,8 @@
                 Tel : {{site.tel? site.tel: 'Indéfini'}}
             </div>
             <div>
-                Longitude : {{site.longitude? site.longitude: 'Indéfini'}}, Latitude : {{site.latitude? site.latitude: 'Indéfini'}}
+                Longitude : {{site.longitude? site.longitude: 'Indéfini'}}, Latitude : {{site.latitude? site.latitude:
+                'Indéfini'}}
             </div>
         </div>
         <div style="margin-bottom: 10px;">
@@ -73,7 +74,8 @@
                             <button (click)="ajouterExigencePersonnel()" class="btn primaire">Enregistrer</button>
                         </div>
                         <div class="col-lg-6">
-                            <button (click)="showFormulairePersonnel = false" style="width: 100%;" class="btn">Annuler</button>
+                            <button (click)="showFormulairePersonnel = false" style="width: 100%;"
+                                class="btn">Annuler</button>
                         </div>
                     </div>
                 </div>
@@ -82,22 +84,24 @@
             <div *ngIf="!showFormulairePersonnel">
                 <li *ngFor="let item of exigences">
                     <span>
-                    {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
-                </span>
+                        {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
+                    </span>
                     <span class="supprimer" (click)="supprimerPosteVigile(item)" style="color: red;">
-                    Supprimer
-                </span>
+                        Supprimer
+                    </span>
                 </li>
             </div>
 
         </div>
-        <div *ngIf="nbAutorisationNuit || nbAutorisationJour">
-            <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
-                Ajouter une exigence
-            </button>
-            <!--  <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
+        <div *ngIf="mesDroits.contratEdit">
+            <div *ngIf="nbAutorisationNuit || nbAutorisationJour">
+                <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
+                    Ajouter une exigence
+                </button>
+                <!--  <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
                 Annuler
             </button> -->
+            </div>
         </div>
 
 
@@ -116,7 +120,8 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" #siteModal [id]="'siteModal'+site.idcontratSite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" #siteModal [id]="'siteModal'+site.idcontratSite" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -148,60 +153,65 @@
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
-                                    Fonction
-                                </span>
+                                                Fonction
+                                            </span>
                                         </div>
                                         <select [(ngModel)]="exigence.typeVigile" class="form-control">
-                                <option value="AGENT">Agent de sécurité</option>
-                                <option value="ESCORTEUR">Escorteur</option>
-                                <option value="CONTROLEUR">Contrôleur</option>
-                                <option value="CHAUFFEUR">Chauffeur</option>
-                                <option value="MAITRECHIEN">Maitre Chien</option>
-                                <option value="ENTRETIEN">Agent d'entretien</option>
-                                <option value="SUPERVISEUR">Superviseur</option>
-                            </select>
+                                            <option value="AGENT">Agent de sécurité</option>
+                                            <option value="ESCORTEUR">Escorteur</option>
+                                            <option value="CONTROLEUR">Contrôleur</option>
+                                            <option value="CHAUFFEUR">Chauffeur</option>
+                                            <option value="MAITRECHIEN">Maitre Chien</option>
+                                            <option value="ENTRETIEN">Agent d'entretien</option>
+                                            <option value="SUPERVISEUR">Superviseur</option>
+                                        </select>
                                     </div>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
-                                    Horaire
-                                </span>
+                                                Horaire
+                                            </span>
                                         </div>
                                         <select [(ngModel)]="exigence.horaire" class="form-control">
-                                <option value="jour">Jour</option>
-                                <option value="nuit">Nuit</option>
-                            </select>
+                                            <option value="jour">Jour</option>
+                                            <option value="nuit">Nuit</option>
+                                        </select>
                                     </div>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
-                                    Nombre
-                                </span>
+                                                Nombre
+                                            </span>
                                         </div>
                                         <input type="number" [(ngModel)]="exigence.quantite" class="form-control">
                                     </div>
                                     <div class="input-group" style="margin-top: 20px; margin-bottom: 20px">
-                                        <button (click)="ajouterExigencePersonnel()" class="btn primaire">Enregistrer</button>
+                                        <button (click)="ajouterExigencePersonnel()"
+                                            class="btn primaire">Enregistrer</button>
                                     </div>
                                 </div>
 
                                 <li *ngFor="let item of exigences">
                                     <span>
-                            {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
-                        </span>
+                                        {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
+                                    </span>
                                     <span class="supprimer" (click)="supprimerPosteVigile(item)" style="color: red;">
-                            Supprimer
-                        </span>
+                                        Supprimer
+                                    </span>
                                 </li>
 
                             </div>
-                            <div *ngIf="nbAutorisationNuit || nbAutorisationJour">
-                                <button *ngIf="!showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = true">
-                        Ajouter une exigence
-                    </button>
-                                <button *ngIf="showFormulairePersonnel" class="btn btn-link" (click)="showFormulairePersonnel = false">
-                        Annuler
-                    </button>
+                            <div *ngIf="mesDroits.contratEdit">
+                                <div *ngIf="nbAutorisationNuit || nbAutorisationJour">
+                                    <button *ngIf="!showFormulairePersonnel" class="btn btn-link"
+                                        (click)="showFormulairePersonnel = true">
+                                        Ajouter une exigence
+                                    </button>
+                                    <button *ngIf="showFormulairePersonnel" class="btn btn-link"
+                                        (click)="showFormulairePersonnel = false">
+                                        Annuler
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -215,7 +225,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button (click)="supprimerSite(site)" style="width: auto;" type="button" class="btn btn-danger">Supprimer</button>
+                <button *ngIf="mesDroits.contratEdit" (click)="supprimerSite(site)" style="width: auto;" type="button"
+                    class="btn btn-danger">Supprimer</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>

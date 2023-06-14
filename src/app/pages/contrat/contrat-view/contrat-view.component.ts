@@ -12,6 +12,8 @@ import { Affectation } from 'src/app/models/affectation.model';
 import { SiteCtrlService } from 'src/app/_services/site-ctrl.service';
 import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
+import { droits } from 'src/app/data/droits';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-contrat-view',
@@ -57,6 +59,8 @@ export class ContratViewComponent implements OnInit, OnDestroy {
 
   isContratsEnCoursDeCreation = false;
 
+  mesDroits = droits;
+
   constructor(
     private route: ActivatedRoute,
     private contratService: JarvisService<Contrat>,
@@ -67,9 +71,23 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     private siteCtrlService: SiteCtrlService,
     private contratCtrlService: ContratCtrlService,
     private posteCtrlService: PosteCtrlService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
+
+    });
+    this.authService.notifier();
     this.affecationService.getAll('affectation').then((data) => {
       console.log('affectations');
       console.log(data);

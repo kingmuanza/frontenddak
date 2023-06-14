@@ -6,7 +6,8 @@
         <div *ngIf="isContratsEnCoursDeCreation">
             EN COURS DE CREATION
         </div>
-        <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut | date: 'yyyy-MM-dd'}}</div>
+        <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut |
+            date: 'yyyy-MM-dd'}}</div>
         <div style="margin-top: 0px;">
             <i>
                 {{contrat.description}}
@@ -20,7 +21,7 @@
     </div>
     <div class="boutons">
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-2" *ngIf="mesDroits.contratEdit">
                 <div class="nouveau">
                     <a [routerLink]="'/contrat/edit/' + contrat.idcontrat " class="btn nouveau">
                         Modifier
@@ -40,10 +41,12 @@
                         {{sites.length}}/{{contrat.nbPostes}}
                     </div>
                 </div>
-                <app-display-ligne-pourcentage [fraction]="sites.length/contrat.nbPostes"></app-display-ligne-pourcentage>
+                <app-display-ligne-pourcentage
+                    [fraction]="sites.length/contrat.nbPostes"></app-display-ligne-pourcentage>
             </div>
             <div class="col-3">
-                <div class="stat" [ngClass]="{'red': postes.length === 0 || (postes.length!==(postesJourDansLesExigences + postesNuitDansLesExigences))}">
+                <div class="stat"
+                    [ngClass]="{'red': postes.length === 0 || (postes.length!==(postesJourDansLesExigences + postesNuitDansLesExigences))}">
                     <div class="stat-titre">
                         Postes
                     </div>
@@ -51,7 +54,8 @@
                         {{postes.length}}/{{postesJourDansLesExigences + postesNuitDansLesExigences}}
                     </div>
                 </div>
-                <app-display-ligne-pourcentage [fraction]="postes.length/(postesJourDansLesExigences + postesNuitDansLesExigences)"></app-display-ligne-pourcentage>
+                <app-display-ligne-pourcentage
+                    [fraction]="postes.length/(postesJourDansLesExigences + postesNuitDansLesExigences)"></app-display-ligne-pourcentage>
             </div>
             <div class="col-3">
                 <div class="stat" [ngClass]="{'red': vigilesJourDansLesExigences!==contrat.nbVigileJour}">
@@ -62,7 +66,8 @@
                         {{vigilesJourDansLesExigences}}/{{contrat.nbVigileJour}}
                     </div>
                 </div>
-                <app-display-ligne-pourcentage [fraction]="vigilesJourDansLesExigences/contrat.nbVigileJour"></app-display-ligne-pourcentage>
+                <app-display-ligne-pourcentage
+                    [fraction]="vigilesJourDansLesExigences/contrat.nbVigileJour"></app-display-ligne-pourcentage>
             </div>
             <div class="col-3">
                 <div class="stat" [ngClass]="{'red': vigilesNuitDansLesExigences!==contrat.nbVigileNuit}">
@@ -73,21 +78,25 @@
                         {{vigilesNuitDansLesExigences}}/{{contrat.nbVigileNuit}}
                     </div>
                 </div>
-                <app-display-ligne-pourcentage [fraction]="vigilesNuitDansLesExigences/contrat.nbVigileNuit"></app-display-ligne-pourcentage>
+                <app-display-ligne-pourcentage
+                    [fraction]="vigilesNuitDansLesExigences/contrat.nbVigileNuit"></app-display-ligne-pourcentage>
             </div>
         </div>
     </div>
     <div class="page-contenu">
         <div style="margin-bottom: 16px;">
             Liste des sites
-            <button *ngIf="sites.length < contrat.nbPostes" (click)="openModal()" style="margin-left: 10px;" class="btn btn-link">
+            <button *ngIf="sites.length < contrat.nbPostes" (click)="openModal()" style="margin-left: 10px;"
+                class="btn btn-link">
                 Créer un site
             </button>
         </div>
         <div class="row gx-3">
             <div class="col-lg-4" *ngFor="let site of sites">
                 <div class="site">
-                    <app-display-site [site]="site" [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences" [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences">
+                    <app-display-site [site]="site"
+                        [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences"
+                        [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences">
 
                     </app-display-site>
                 </div>
@@ -114,7 +123,8 @@
 
         <div class="row">
             <div class="col-lg-4" *ngFor="let poste of postes">
-                <app-display-poste [affectations]="affectations" [poste]="poste" [postesVigiles]="postesVigiles"></app-display-poste>
+                <app-display-poste [affectations]="affectations" [poste]="poste"
+                    [postesVigiles]="postesVigiles"></app-display-poste>
             </div>
         </div>
     </div>
@@ -141,7 +151,8 @@
 
 
 <!-- Modal -->
-<div class="modal fade" #posteModal id="posteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" #posteModal id="posteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -167,7 +178,9 @@
                                     Quartier
                                 </span>
                             </div>
-                            <input list="quartiers" type="text" (ngModelChange)="renommerSite($event)" [(ngModel)]="quartier" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.quartier}">
+                            <input list="quartiers" type="text" (ngModelChange)="renommerSite($event)"
+                                [(ngModel)]="quartier" class="form-control"
+                                [ngClass]="{'is-invalid': montrerErreurs && erreurs.quartier}">
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -177,7 +190,8 @@
                                     Nom du site
                                 </span>
                             </div>
-                            <input type="text" [(ngModel)]="site.nom" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
+                            <input type="text" [(ngModel)]="site.nom" class="form-control"
+                                [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -204,7 +218,8 @@
                                     Personne à contacter
                                 </span>
                             </div>
-                            <input type="text" [(ngModel)]="site.personne" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.personne}">
+                            <input type="text" [(ngModel)]="site.personne" class="form-control"
+                                [ngClass]="{'is-invalid': montrerErreurs && erreurs.personne}">
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -214,14 +229,16 @@
                                     Tel
                                 </span>
                             </div>
-                            <input type="text" [(ngModel)]="site.tel" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
+                            <input type="text" [(ngModel)]="site.tel" class="form-control"
+                                [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button (click)="saveSite()" style="width: auto;" type="button" class="btn primaire">Enregistrer</button>
+                <button (click)="saveSite()" style="width: auto;" type="button"
+                    class="btn primaire">Enregistrer</button>
             </div>
         </div>
     </div>
