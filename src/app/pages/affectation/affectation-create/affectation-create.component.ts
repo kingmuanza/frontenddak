@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
 import { Affectation } from 'src/app/models/affectation.model';
@@ -7,13 +7,14 @@ import { Poste } from 'src/app/models/poste.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { ZoneDak } from 'src/app/models/zone.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import { VigileService } from 'src/app/services/vigile.service';
 
 @Component({
-  selector: 'app-affectation-edit',
-  templateUrl: './affectation-edit.component.html',
-  styleUrls: ['./affectation-edit.component.scss']
+  selector: 'app-affectation-create',
+  templateUrl: './affectation-create.component.html',
+  styleUrls: ['./affectation-create.component.scss']
 })
-export class AffectationEditComponent implements OnInit {
+export class AffectationCreateComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
@@ -21,6 +22,7 @@ export class AffectationEditComponent implements OnInit {
   processing = false;
   postes = new Array<any>();
   vigiles = new Array<any>();
+  remplacants = new Array<any>();
   affectationAffectee = new Affectation();
   affectationsAffectees = new Array<any>();
   affectations = new Array<Affectation>();
@@ -38,15 +40,23 @@ export class AffectationEditComponent implements OnInit {
   zone = new ZoneDak();
   zones = new Array<ZoneDak>();
 
+  rechercheVigile = "";
+  rechercheRemplacant = "";
+
+  vigilesSubject = new Subject<Array<Vigile>>();
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private notifierService: NotifierService,
     private affectationService: JarvisService<Affectation>,
+    private posteService: JarvisService<Poste>,
     private zoneService: JarvisService<ZoneDak>,
+    private vigileService: VigileService,
   ) { }
 
   ngOnInit(): void {
+    this.vigilesSubject = this.vigileService.vigilesSubject;
     this.affectationService.getAll('affectation').then((data) => {
       console.log('data');
       console.log(data);
@@ -59,50 +69,23 @@ export class AffectationEditComponent implements OnInit {
     });
     this.getPostes(this.zone).then((postes) => {
       this.postes = postes;
-      this.getVigiles().then((vigiles) => {
-        this.vigiles = vigiles;
-        this.route.paramMap.subscribe((paramMap) => {
-          const id = paramMap.get('id');
-          if (id) {
-            this.affectationService.get('affectation', Number(id)).then((affectation) => {
-              console.log('le affectation recupéré');
-              console.log(affectation);
-              this.affectation = affectation;
+    });
+  }
 
-              this.affectation.dateAffectation = affectation.dateAffectation?.split('T')[0];
-              this.affectation.arret = affectation.arret?.split('T')[0];
-              postes.forEach((poste) => {
-                if (this.affectation.idposte && poste.idposte == this.affectation.idposte.idposte) {
-                  this.affectation.idposte = poste;
-                }
-              });
-              vigiles.forEach((vigile) => {
-                if (this.affectation.idvigile && vigile.idvigile == this.affectation.idvigile.idvigile) {
-                  this.affectation.idvigile = vigile;
-                }
-              });
-              vigiles.forEach((vigile) => {
-                if (this.affectation.remplacant && vigile.idvigile == this.affectation.remplacant.idvigile) {
-                  this.affectation.remplacant = vigile;
-                }
-              });
-            });
-          } else {
-            this.affectation.dateAffectation = new Date().toISOString().split('T')[0];
-          }
-        });
-      });
+  setListePostes(zone: ZoneDak) {
+    this.getPostes(zone).then((postes) => {
+      this.postes = postes;
     });
   }
 
   getPostes(zone: ZoneDak): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.affectationService.getAll('poste').then((data) => {
-        const postes = new Array<any>();
+      this.posteService.getAll('poste').then((data) => {
+        const postes = new Array<Poste>();
         console.log('postes');
         console.log(postes);
         data.forEach((poste) => {
-          if (true/* poste.contrat == 'ENCOURS' */) {
+          if (poste.zone.idzone == zone.idzone) {
             postes.push(poste);
           }
         });
@@ -111,13 +94,17 @@ export class AffectationEditComponent implements OnInit {
     });
   }
 
-  getVigiles(): Promise<Array<any>> {
-    return new Promise((resolve, reject) => {
-      this.affectationService.getAll('vigile').then((vigiles) => {
-        console.log('vigiles');
-        console.log(vigiles);
-        resolve(vigiles);
-      });
+  getVigiles(texte: string) {
+    console.log(texte);
+    this.vigileService.rechercheCalme(texte).then((vigiles) => {
+      this.vigiles = vigiles;
+    });
+  }
+
+  getRemplacants(texte: string) {
+    console.log(texte);
+    this.vigileService.rechercheCalme(texte).then((vigiles) => {
+      this.remplacants = vigiles;
     });
   }
 

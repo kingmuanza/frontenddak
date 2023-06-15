@@ -1,10 +1,7 @@
 <div class="page">
     <div class="page-entete">
         <div *ngIf="affectation.idaffectation==0" class="page-entete-titre">
-            Ajouter une nouvelle affectation
-        </div>
-        <div *ngIf="affectation.idaffectation!=0" class="page-entete-titre">
-            Modifier l'affectation
+            Créer une nouvelle affectation
         </div>
         <div class="">
             <a routerLink="/affectation" class="btn btn-link" style="padding: 0; margin: 0;">
@@ -25,7 +22,8 @@
                                         Date affectation
                                     </span>
                                 </div>
-                                <input [(ngModel)]="affectation.dateAffectation" type="date" class="form-control">
+                                <input [ngModel]="affectation.dateAffectation | date:'yyyy-MM-dd' " type="date"
+                                    class="form-control">
                             </div>
                         </div>
                         <div class="input-group">
@@ -34,7 +32,7 @@
                                     Zone
                                 </span>
                             </div>
-                            <select (ngModelChange)="setAffectationACauseDuPoste()" type="text" [(ngModel)]="zone"
+                            <select (ngModelChange)="setListePostes($event)" type="text" [(ngModel)]="zone"
                                 class="form-control">
                                 <option [ngValue]="z" *ngFor="let z of zones">
                                     {{z.libelle}}
@@ -82,10 +80,12 @@
                                         Vigile
                                     </span>
                                 </div>
-                                <select type="text" [(ngModel)]="affectation.idvigile" class="form-control">
+                                <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
+                                    class="form-control" style="max-width: 150px;" placeholder="Rechercher ici...">
+                                <select [(ngModel)]="affectation.idvigile" class="form-control">
                                     <ng-container *ngFor="let vigile of vigiles">
                                         <option [ngValue]="vigile"
-                                            *ngIf="!vigile.estRemplacant && !estDejaAffecteAuPoste(vigile) && (affectation.idposte && affectation.idposte.horaire === vigile.horaire)">
+                                            *ngIf="!vigile.estRemplacant && !estDejaAffecteAuPoste(vigile) && (affectation.idposte)">
                                             {{vigile.noms}}
                                         </option>
                                     </ng-container>
@@ -114,10 +114,13 @@
                                         Remplacant
                                     </span>
                                 </div>
+                                <input [(ngModel)]="rechercheRemplacant" (ngModelChange)="getRemplacants($event)"
+                                    type="text" class="form-control" style="max-width: 150px;"
+                                    placeholder="Rechercher ici...">
                                 <select type="text" [(ngModel)]="affectation.remplacant" class="form-control">
                                     <option *ngIf="!affectation.idvigile">Veuillez choisir premièrement un vigile
                                     </option>
-                                    <ng-container *ngFor="let vigile of vigiles">
+                                    <ng-container *ngFor="let vigile of remplacants">
                                         <option [ngValue]="vigile"
                                             *ngIf="affectation.idvigile && affectation.idvigile.idvigile != vigile.idvigile && vigile.estRemplacant">
                                             {{vigile.noms}}

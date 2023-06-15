@@ -60,6 +60,24 @@ export class JarvisService<T> {
     });
   }
 
+  getAllRange(table: string): Promise<Array<T>> {
+    this.infos();
+    this.showLoader();
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + table + "/0/10").subscribe({
+        next: (data) => {
+          const donnees = data as Array<T>;
+          this.hideLoader();
+          resolve(donnees);
+        },
+        error: (e) => {
+          this.hideLoader();
+          reject(e);
+        }
+      });
+    });
+  }
+
   getAllSilent(table: string): Promise<Array<T>> {
     this.infos();
     return new Promise((resolve, reject) => {

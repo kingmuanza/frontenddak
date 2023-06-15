@@ -96,6 +96,7 @@ import { UtilisateurViewComponent } from './pages/utilisateur/utilisateur-view/u
 import { VigileCongeEditComponent } from './pages/vigile/vigile-conge-edit/vigile-conge-edit.component';
 import { CongeDashboardComponent } from './pages/conge/conge-dashboard/conge-dashboard.component';
 import { CongeViewComponent } from './pages/conge/conge-view/conge-view.component';
+import { AffectationCreateComponent } from './pages/affectation/affectation-create/affectation-create.component';
 
 @NgModule({
   declarations: [
@@ -187,6 +188,7 @@ import { CongeViewComponent } from './pages/conge/conge-view/conge-view.componen
     VigileCongeEditComponent,
     CongeDashboardComponent,
     CongeViewComponent,
+    AffectationCreateComponent,
   ],
   imports: [
     BrowserModule,

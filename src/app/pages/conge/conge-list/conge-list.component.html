@@ -3,12 +3,22 @@
         <div class="page-entete-titre">
             Liste des vigiles et congés
         </div>
+
         <div class="boutons">
             <div class="row">
                 <div class="col-lg-4">
-                    <button (click)="actualiserDepuisLeServeur()" class="btn primaire">
-                        Actualiser depuis le serveur
-                    </button>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Rechercher
+                            </span>
+                        </div>
+                        <input [(ngModel)]="recherche" class="form-control">
+                    </div>
+                    <small *ngIf="this.error" style="color: red;">Veuillez entrer au moins 3 caractères</small>
+                </div>
+                <div class="col-lg-2">
+                    <button (click)="rechercher()" class="btn primaire">Recherche</button>
                 </div>
             </div>
         </div>
@@ -29,12 +39,13 @@
     </div>
     <div class="page-contenu">
         <div class="card shadow-1">
+
             <div class="page-contenu-corps">
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Noms</th>
+                            <th style="width: 25%;">Noms</th>
                             <th>Horaire</th>
                             <th>Fonction</th>
                             <th>Repos</th>
@@ -63,13 +74,6 @@
                 </table>
 
             </div>
-        </div>
-    </div>
-    <div [hidden]="true">
-        <div *ngFor="let vigile of vigiles">
-            <app-vigile [vigile]="vigile">
-
-            </app-vigile>
         </div>
     </div>
 </div>

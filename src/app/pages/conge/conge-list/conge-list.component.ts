@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { droits } from 'src/app/data/droits';
 import { Vigile } from 'src/app/models/vigile.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
@@ -31,35 +32,53 @@ export class CongeListComponent implements OnInit {
 
   horaire = '';
 
+  mesDroits = droits;
+
+  recherche = "";
+  error = false;
+
   constructor(
     private router: Router,
     private jarvisService: JarvisService<any>,
     private vigileService: VigileService,
     private authService: AuthService,
-    private loadingService: LoadingService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.currentUserSubject.subscribe((utilisateur) => {
+      console.log('utilisateur');
+      console.log(utilisateur);
+      if (utilisateur) {
+        try {
+          this.mesDroits = JSON.parse(utilisateur.droits);
+        } catch (error) {
+          this.mesDroits = droits;
+        }
+      }
 
-    this.dtTrigger = this.vigileService.vigilesSubject;
+    });
+    this.authService.notifier();
     this.actualiser();
   }
 
   actualiser() {
-    this.loadingService.afficher();
     this.vigileService.getAll().then((data) => {
-      this.loadingService.cacher();
+      this.dtTrigger.next(data);
     });
   }
 
-  actualiserDepuisLeServeur() {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.loadingService.afficher();
-      this.vigileService.getAllDepuisLeServeur().then((data) => {
-        this.loadingService.cacher();
+  rechercher() {
+    if (this.recherche.length > 2) {
+      this.error = false;
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.vigileService.rechercheCalme(this.recherche).then((data) => {
+          this.dtTrigger.next(data);
+        });
       });
-    });
+    } else {
+      this.error = true;
+    }
   }
 
   view(id: string | number) {
@@ -89,9 +108,11 @@ export class CongeListComponent implements OnInit {
     return "" + jour ? jour : "";
   }
 
+
   jourSemaine(jour: number) {
     return this.jarvisService.jourSemaine(jour);
   }
+
 
   afficherTitulaires(ev: any) {
     this.sontTitulaires = ev;
@@ -109,29 +130,11 @@ export class CongeListComponent implements OnInit {
   }
 
   afficherResultats() {
-    this.resultats = new Array<Vigile>();
-    if (this.sontTitulaires) {
-      const titulaires = this.vigiles.filter((vigile) => {
-        return !vigile.estRemplacant && !vigile.estRemplacantConge;
-      });
-      this.resultats = this.resultats.concat(titulaires);
-
-    }
-    if (this.sontRemplacants) {
-      const remplacants = this.vigiles.filter((vigile) => {
-        return vigile.estRemplacant;
-      });
-      this.resultats = this.resultats.concat(remplacants);
-    }
-    if (this.sontRemplacantsConges) {
-      const remplacantsConges = this.vigiles.filter((vigile) => {
-        return vigile.estRemplacantConge;
-      });
-      this.resultats = this.resultats.concat(remplacantsConges);
-    }
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
-      this.dtTrigger.next('');
+      this.vigileService.trier(this.sontTitulaires, this.sontRemplacants, this.sontRemplacantsConges).then((data) => {
+        this.dtTrigger.next(data);
+      });
     });
   }
 

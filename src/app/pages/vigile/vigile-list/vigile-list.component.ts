@@ -35,12 +35,14 @@ export class VigileListComponent implements OnInit, OnDestroy {
 
   mesDroits = droits;
 
+  recherche = "";
+  error = false;
+
   constructor(
     private router: Router,
     private jarvisService: JarvisService<any>,
     private vigileService: VigileService,
     private authService: AuthService,
-    private loadingService: LoadingService,
   ) { }
 
   ngOnInit(): void {
@@ -64,20 +66,28 @@ export class VigileListComponent implements OnInit, OnDestroy {
   }
 
   actualiser() {
-    this.loadingService.afficher();
     this.vigileService.getAll().then((data) => {
-      this.loadingService.cacher();
     });
   }
 
   actualiserDepuisLeServeur() {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
-      this.loadingService.afficher();
       this.vigileService.getAllDepuisLeServeur().then((data) => {
-        this.loadingService.cacher();
       });
     });
+  }
+
+  rechercher() {
+    if (this.recherche.length > 2) {
+      this.error = false;
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.vigileService.rechercher(this.recherche);
+      });
+    } else {
+      this.error = true;
+    }
   }
 
   view(id: string | number) {
@@ -131,9 +141,7 @@ export class VigileListComponent implements OnInit, OnDestroy {
   afficherResultats() {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
-      this.loadingService.afficher();
       this.vigileService.trier(this.sontTitulaires, this.sontRemplacants, this.sontRemplacantsConges).then((data) => {
-        this.loadingService.cacher();
       });
     });
   }

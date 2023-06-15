@@ -17,6 +17,7 @@ import { getFirestore, doc, getDoc, collection, query, where, getDocs, setDoc } 
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { initializeApp } from 'firebase/app';
 import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
+import { VigileService } from 'src/app/services/vigile.service';
 
 @Component({
   selector: 'app-vigile-edit',
@@ -57,6 +58,7 @@ export class VigileEditComponent implements OnInit {
     private notifierService: NotifierService,
     private parrainService: ParrainService,
     private vigileService: JarvisService<Vigile>,
+    private vigileServicePropre: VigileService,
     private affectationService: JarvisService<Affectation>,
     private zoneService: JarvisService<ZoneDak>,
     private quartierService: JarvisService<Quartier>,
@@ -157,11 +159,7 @@ export class VigileEditComponent implements OnInit {
 
   getVigiles(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.vigileService.getAll('vigile').then((vigiles) => {
-        console.log('vigiles');
-        console.log(vigiles);
-        resolve(vigiles);
-      });
+      resolve([]);
     });
   }
 

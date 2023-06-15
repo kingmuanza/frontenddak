@@ -68,6 +68,7 @@ import { UtilisateurListComponent } from './pages/utilisateur/utilisateur-list/u
 import { UtilisateurViewComponent } from './pages/utilisateur/utilisateur-view/utilisateur-view.component';
 import { CongeDashboardComponent } from './pages/conge/conge-dashboard/conge-dashboard.component';
 import { CongeViewComponent } from './pages/conge/conge-view/conge-view.component';
+import { AffectationCreateComponent } from './pages/affectation/affectation-create/affectation-create.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -85,7 +86,7 @@ const routes: Routes = [
   { path: 'vacant/remplacant-conges/edit/:id', component: VacantRemplacantCongeEditComponent },
 
   { path: 'affectation', component: AffectationListComponent },
-  { path: 'affectation/edit', component: AffectationEditComponent },
+  { path: 'affectation/edit', component: AffectationCreateComponent },
   { path: 'affectation/edit/:id', component: AffectationEditComponent },
   { path: 'affectation/view/:id', component: AffectationViewComponent },
 
