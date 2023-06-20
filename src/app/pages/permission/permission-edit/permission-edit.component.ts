@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { Permission } from 'src/app/models/permission.model';
 import { Poste } from 'src/app/models/poste.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import { VigileService } from 'src/app/services/vigile.service';
 
 
 @Component({
@@ -26,12 +27,15 @@ export class PermissionEditComponent implements OnInit {
 
   etape = 1;
 
+  rechercheVigile = "";
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
     private permissionService: JarvisService<Permission>,
     private jarvisService: JarvisService<any>,
+    private vigileService: VigileService,
   ) { }
 
   ngOnInit(): void {
@@ -40,38 +44,33 @@ export class PermissionEditComponent implements OnInit {
       console.log(data);
       this.permissions = data;
     });
-    this.getVigiles().then((vigiles) => {
-      this.vigiles = vigiles;
-      this.route.paramMap.subscribe((paramMap) => {
-        const id = paramMap.get('id');
-        if (id) {
-          this.permissionService.get('permission', Number(id)).then((permission) => {
-            console.log('le permission recupéré');
-            console.log(permission);
-            this.permission = permission;
+    this.route.paramMap.subscribe((paramMap) => {
+      const id = paramMap.get('id');
+      if (id) {
+        this.permissionService.get('permission', Number(id)).then((permission) => {
+          console.log('le permission recupéré');
+          console.log(permission);
+          this.permission = permission;
 
-            this.vigiles.forEach((v) => {
-              if (v.idvigile === permission.idvigile?.idvigile) {
-                permission.idvigile = v;
-              }
-            });
+          this.vigiles.forEach((v) => {
+            if (v.idvigile === permission.idvigile?.idvigile) {
+              permission.idvigile = v;
+            }
           });
-        } else {
-          this.permission.date = new Date();
-        }
-      });
+        });
+      } else {
+        this.permission.date = new Date();
+      }
     });
   }
 
-  getVigiles(): Promise<Array<any>> {
-    return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('vigile').then((vigiles) => {
-        console.log('vigiles');
-        console.log(vigiles);
-        resolve(vigiles);
-      });
+
+  getVigiles(texte: string) {
+    this.vigileService.rechercheCalme(texte).then((vigiles) => {
+      this.vigiles = vigiles;
     });
   }
+
 
   async save() {
     console.log('this.permission');

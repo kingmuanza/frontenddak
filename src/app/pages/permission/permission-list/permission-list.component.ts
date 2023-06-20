@@ -24,7 +24,7 @@ export class PermissionListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private permissionService: JarvisService<Permission> 
+    private permissionService: JarvisService<Permission>
   ) { }
 
   ngOnInit(): void {
@@ -36,31 +36,31 @@ export class PermissionListComponent implements OnInit {
     });
   }
 
-  edit(id: string | number) {
-    this.router.navigate(['permission', 'edit', id]);
+  edit(permission: Permission) {
+    this.router.navigate(['permission', 'view', permission.idpermission]);
   }
 
   jourSemaine(jour: any) {
     if (jour == 1)
-    return "Lundi";
+      return "Lundi";
     if (jour == 2)
-    return "Mardi";
+      return "Mardi";
     if (jour == 3)
-    return "Mercredi";
+      return "Mercredi";
     if (jour == 4)
-    return "Jeudi";
+      return "Jeudi";
     if (jour == 5)
-    return "Vendredi";
+      return "Vendredi";
     if (jour == 6)
-    return "Samedi";
+      return "Samedi";
     if (jour == 7)
-    return "Dimanche";
+      return "Dimanche";
 
-    return "" + jour ? jour: "";
+    return "" + jour ? jour : "";
   }
-  
+
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-  
+
 }

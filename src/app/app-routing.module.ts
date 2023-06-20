@@ -69,6 +69,9 @@ import { UtilisateurViewComponent } from './pages/utilisateur/utilisateur-view/u
 import { CongeDashboardComponent } from './pages/conge/conge-dashboard/conge-dashboard.component';
 import { CongeViewComponent } from './pages/conge/conge-view/conge-view.component';
 import { AffectationCreateComponent } from './pages/affectation/affectation-create/affectation-create.component';
+import { EnrolementEditComponent } from './enrolement/enrolement-edit/enrolement-edit.component';
+import { EnrolementListComponent } from './enrolement/enrolement-list/enrolement-list.component';
+import { EnrolementWaitComponent } from './enrolement/enrolement-wait/enrolement-wait.component';
 
 const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
@@ -104,6 +107,13 @@ const routes: Routes = [
   { path: 'equipement', component: EquipementListComponent },
   { path: 'equipement/edit', component: EquipementEditComponent },
   { path: 'equipement/edit/:id', component: EquipementEditComponent },
+
+  { path: 'enrolement', component: EnrolementListComponent },
+  { path: 'enrolement/edit', component: EnrolementEditComponent },
+  { path: 'enrolement/edit/:id', component: EnrolementEditComponent },
+  { path: 'enrolement/view/:id', component: EnrolementEditComponent },
+
+  { path: 'enrolement-wait', component: EnrolementWaitComponent },
 
   { path: 'incident', component: IncidentListComponent },
   { path: 'incident/edit', component: IncidentEditComponent },

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
@@ -15,6 +15,7 @@ import { VigileService } from 'src/app/services/vigile.service';
   styleUrls: ['./affectation-create.component.scss']
 })
 export class AffectationCreateComponent implements OnInit {
+  @ViewChild('vigileElement') vigileElement!: ElementRef<HTMLElement>;
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
@@ -95,14 +96,12 @@ export class AffectationCreateComponent implements OnInit {
   }
 
   getVigiles(texte: string) {
-    console.log(texte);
     this.vigileService.rechercheCalme(texte).then((vigiles) => {
       this.vigiles = vigiles;
     });
   }
 
   getRemplacants(texte: string) {
-    console.log(texte);
     this.vigileService.rechercheCalme(texte).then((vigiles) => {
       this.remplacants = vigiles;
     });

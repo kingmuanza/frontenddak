@@ -9,6 +9,24 @@
 
         <div>
             <div class="menu-gauche-sous-titre">
+                ENROLEMENT
+            </div>
+            <div>
+                <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
+                    <a routerLinkActive="active" routerLink="/enrolement-wait">
+                        Vigiles à enrôler
+                    </a>
+                </div>
+                <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
+                    <a routerLinkActive="active" routerLink="/enrolement">
+                        Vigiles enrôlés
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="menu-gauche-sous-titre">
                 Suivi
             </div>
             <div>

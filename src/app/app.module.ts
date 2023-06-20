@@ -97,6 +97,10 @@ import { VigileCongeEditComponent } from './pages/vigile/vigile-conge-edit/vigil
 import { CongeDashboardComponent } from './pages/conge/conge-dashboard/conge-dashboard.component';
 import { CongeViewComponent } from './pages/conge/conge-view/conge-view.component';
 import { AffectationCreateComponent } from './pages/affectation/affectation-create/affectation-create.component';
+import { EnrolementListComponent } from './enrolement/enrolement-list/enrolement-list.component';
+import { EnrolementEditComponent } from './enrolement/enrolement-edit/enrolement-edit.component';
+import { EnrolementViewComponent } from './enrolement/enrolement-view/enrolement-view.component';
+import { EnrolementWaitComponent } from './enrolement/enrolement-wait/enrolement-wait.component';
 
 @NgModule({
   declarations: [
@@ -189,6 +193,10 @@ import { AffectationCreateComponent } from './pages/affectation/affectation-crea
     CongeDashboardComponent,
     CongeViewComponent,
     AffectationCreateComponent,
+    EnrolementListComponent,
+    EnrolementEditComponent,
+    EnrolementViewComponent,
+    EnrolementWaitComponent,
   ],
   imports: [
     BrowserModule,

@@ -24,6 +24,8 @@
                                     Vigile
                                 </span>
                             </div>
+                            <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
+                                class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
                             <select type="text" [(ngModel)]="permission.idvigile" class="form-control">
                                 <option [ngValue]="vigile" *ngFor="let vigile of vigiles">
                                     {{vigile.noms}}
@@ -42,7 +44,8 @@
                                     Début permission
                                 </span>
                             </div>
-                            <input [ngModel]="permission.dateDebut | date:'yyyy-MM-dd'" (ngModelChange)="permission.dateDebut = $event" type="date" class="form-control">
+                            <input [ngModel]="permission.dateDebut | date:'yyyy-MM-dd'"
+                                (ngModelChange)="permission.dateDebut = $event" type="date" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -52,13 +55,15 @@
                                     Fin permission
                                 </span>
                             </div>
-                            <input [ngModel]="permission.dateFin | date:'yyyy-MM-dd'" (ngModelChange)="permission.dateFin = $event" type="date" class="form-control">
+                            <input [ngModel]="permission.dateFin | date:'yyyy-MM-dd'"
+                                (ngModelChange)="permission.dateFin = $event" type="date" class="form-control">
                         </div>
                     </div>
                 </div>
                 <div class="input-group">
                     <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
-                    <button *ngIf="permission.idpermission != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+                    <button *ngIf="permission.idpermission != 0" [disabled]="processing" (click)="supprimer()"
+                        class="btn btn-danger">Supprimer</button>
                 </div>
             </div>
 

@@ -34,7 +34,7 @@ export class VigileBadgeListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.jarvisService.getAll('vigile').then((data) => {
+    /* this.jarvisService.getAll('vigile').then((data) => {
       console.log('data');
       console.log(data);
       this.vigiles = data.filter((vigile) => {
@@ -44,7 +44,7 @@ export class VigileBadgeListComponent implements OnInit {
         return vigile.badge;
       });
       this.dtTrigger.next('');
-    });
+    }); */
   }
 
   view(id: string | number) {

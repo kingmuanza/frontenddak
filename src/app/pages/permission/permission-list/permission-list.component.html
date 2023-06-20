@@ -1,7 +1,7 @@
 <div class="page">
     <div class="page-entete">
         <div class="page-entete-titre">
-            Etats des recouvrements
+            Liste des permissions
         </div>
         <div class="boutons">
             <div class="row">
@@ -18,101 +18,26 @@
     <div class="page-contenu">
         <div class="page-contenu-titre">
             <div class="page-contenu-corps">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Contrat
-                                </span>
-                            </div>
-                            <select type="text" class="form-control">
-                                <option>
-                                    
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Date
-                                </span>
-                            </div>
-                            <input class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="input-group">
-                            <button class="btn primaire">Rechercher</button> &nbsp;
-                        </div>
-                    </div>
+                <div class="card shadow-1">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Noms</th>
+                                <th>Début</th>
+                                <th>Fin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let permission of permissions" (click)="edit(permission)">
+                                <td>{{permission.date | date: "yyyy-MM-dd"}}</td>
+                                <td>{{permission.idvigile?.noms}}</td>
+                                <td>{{permission.dateDebut | date: "yyyy-MM-dd"}}</td>
+                                <td>{{permission.dateFin | date: "yyyy-MM-dd"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="page-contenu">
-        <div class="row">
-            <div class="col-4">
-                <div class="stat">
-                    <div class="stat-titre">
-                        Montant des créances
-                    </div>
-                    <div class="stat-valeur">
-                        50 000 000
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="stat">
-                    <div class="stat-titre">
-                        Montants des recouvrements
-                    </div>
-                    <div class="stat-valeur">
-                        35 000 000
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="stat">
-                    <div class="stat-titre">
-                        Reste à recouvrer
-                    </div>
-                    <div class="stat-valeur">
-                        15 000 000
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="page-contenu-corps">
-        <div class="card shadow-1">
-            <table datatable [dtOptions]="dtOptions" class="row-border hover">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Contrat</th>
-
-                        <th>Montant</th>
-                        <th>Agent</th>
-                        <th>Percepteur</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>

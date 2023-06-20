@@ -126,25 +126,32 @@ export class PosteViewComponent implements OnInit {
           this.poste.debutContrat = poste.debutContrat?.split('T')[0];
           this.poste.finContrat = poste.finContrat?.split('T')[0];
 
-          this.jarvisService.getAll('affectation').then((data) => {
-            console.log('data');
-            console.log(data);
-            data.forEach((affectation) => {
-              if (affectation.idposte.idposte === poste.idposte && !affectation.arret) {
-                this.affectations.push(affectation);
-                /**  equipementVigileService */
-                this.equipementVigileService.getAll('equipementvigile').then((data) => {
-                  this.equipementsvigiles = data.filter((equipementVigile) => {
-                    return equipementVigile.idvigile.idvigile === affectation.idvigile.idvigile;
-                  }).concat(this.equipementsvigiles);
-                });
+          this.jarvisService.getAll('affectation').then((affectations) => {
+
+            console.log('affectations');
+            console.log(affectations);
+            affectations.forEach((affectation) => {
+              if (affectation.idposte && this.poste) {
+                if (affectation.idposte.idposte == this.poste.idposte) {
+                  console.log('affectation.idposte.idposte');
+                  console.log(affectation.idposte.idposte);
+                  /* console.log('poste.idposte');
+                  console.log(poste.idposte); */
+                  this.affectations.push(affectation);
+                  /**  equipementVigileService */
+                  /* this.equipementVigileService.getAll('equipementvigile').then((data) => {
+                    this.equipementsvigiles = data.filter((equipementVigile) => {
+                      return equipementVigile.idvigile.idvigile === affectation.idvigile.idvigile;
+                    }).concat(this.equipementsvigiles);
+                  }); */
+                }
               }
             });
 
             this.affectations.forEach((element) => {
               const vigile = element.remplacant;
               const remplacantEstDejaLa = this.remplacantsDuPoste.filter((remplacant) => {
-                return remplacant.idvigile === vigile.idvigile;
+                return remplacant && vigile && remplacant.idvigile === vigile.idvigile;
               });
               if (remplacantEstDejaLa.length > 0) {
 
@@ -250,11 +257,11 @@ export class PosteViewComponent implements OnInit {
 
   getVigiles(): Promise<Array<Vigile>> {
     return new Promise((resolve, reject) => {
-      this.vigileService.getAll('vigile').then((vigiles) => {
+      /* this.vigileService.getAll('vigile').then((vigiles) => {
         console.log('vigiles');
         console.log(vigiles);
         resolve(vigiles);
-      });
+      }); */
     });
   }
 
@@ -269,7 +276,7 @@ export class PosteViewComponent implements OnInit {
   }
 
   selectionnerVigile(vigile: Vigile) {
-    console.log(vigile.idvigile);
+    console.log(vigile?.idvigile);
     console.log(this.vigile?.idvigile);
     if (this.vigile) {
       this.vigile = null;
@@ -388,9 +395,11 @@ export class PosteViewComponent implements OnInit {
     let nombre = 0;
     if (exigence) {
       this.affectations.forEach((affectation) => {
-        if (affectation.idvigile.fonction === exigence.typeVigile) {
-          if (affectation.horaire === exigence.horaire) {
-            nombre++;
+        if (affectation) {
+          if (affectation.idvigile.fonction === exigence.typeVigile) {
+            if (affectation.horaire === exigence.horaire) {
+              nombre++;
+            }
           }
         }
       });
@@ -404,9 +413,11 @@ export class PosteViewComponent implements OnInit {
     let nombre = 0;
     if (postevigile) {
       this.affectations.forEach((affectation) => {
-        if (affectation.idvigile.fonction === postevigile.typeVigile) {
-          if (affectation.horaire === postevigile.horaire) {
-            nombre++;
+        if (affectation) {
+          if (affectation.idvigile.fonction === postevigile.typeVigile) {
+            if (affectation.horaire === postevigile.horaire) {
+              nombre++;
+            }
           }
         }
       });

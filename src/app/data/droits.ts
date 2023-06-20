@@ -10,6 +10,9 @@ export let droits = {
     contrat: true,
     contratEdit: true,
 
+    enrolement: true,
+    enrolementEdit: true,
+
     poste: true,
     posteEdit: true,
 
