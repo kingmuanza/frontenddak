@@ -211,73 +211,56 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    Propositions d'affectation
+                    Choisir le vigile à affecter
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div>
-                    <div *ngFor="let exigence of postevigiles">
-                        <div *ngIf="!verifierExigenceAgent(exigence)">
-                            <div class="exigence">
-                                <b>
-                                    Exigence :
-                                </b> {{exigence.quantite}} {{exigence.typeVigile}} {{exigence.horaire}}
-                            </div>
-
-                            <div>
-                                <table class="table table-bordered table-dark">
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align: center;">#</th>
-                                            <th style="width: 30%;">Vigile</th>
-                                            <th style="width: 30%;">Rempl.</th>
-                                            <th style="text-align: center;">Score</th>
-                                            <th style="text-align: center;">Sanctions</th>
-                                            <th style="text-align: center;">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <ng-container *ngFor="let v of vigiles; let i=index">
-                                            <tr *ngIf="isVigileVerifieExigence(v, exigence)">
-                                                <td style="text-align: center;"> {{i+1}} </td>
-                                                <td>
-                                                    {{v.noms}}
-                                                </td>
-                                                <td>
-                                                    <div class="input-group input-group-sm" style="margin-top: 0;">
-                                                        <select [name]="'remplacant'+i" type="text"
-                                                            class="form-control">
-                                                            <option value="0">Aucun remplacant</option>
-                                                            <ng-container *ngFor="let r of remplacants">
-                                                                <option [value]="r.idvigile"
-                                                                    *ngIf="r.jourRepos !== v.jourRepos && r.horaire === v.horaire">
-                                                                    {{r.noms}}
-                                                                </option>
-                                                            </ng-container>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                                <td style="text-align: right;">
-                                                    {{score(v, poste)}}
-                                                </td>
-                                                <td style="text-align: right;">
-                                                    {{getSanctions(v)}}
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <button (click)="affecter(v, i)" type="button"
-                                                        class="btn btn-primary btn-sm">Appliquer</button>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                    </tbody>
-                                </table>
-                            </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Vigile
+                            </span>
                         </div>
+                        <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
+                            class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
+                        <select #vigileElement [(ngModel)]="vigile" (ngModelChange)="getAffectation($event)"
+                            class="form-control">
+                            <ng-container *ngFor="let v of vigiles">
+                                <option [ngValue]="v" *ngIf="!v.estRemplacant && !v.estRemplacantConge">
+                                    {{v.noms}}
+                                </option>
+                            </ng-container>
+                        </select>
+                    </div>
+                    <div *ngIf="affectation">
+                        Affectation actuelle : {{affectation.idposte.libelle}}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Remplacant
+                            </span>
+                        </div>
+                        <input [(ngModel)]="rechercheRemplacant" (ngModelChange)="getRemplacants($event)" type="text"
+                            class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
+                        <select #vigileElement [(ngModel)]="remplacant" class="form-control">
+                            <ng-container *ngFor="let v of remplacants">
+                                <option [ngValue]="v" *ngIf="!v.estRemplacant">
+                                    {{v.noms}}
+                                </option>
+                            </ng-container>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn nouveau" (click)="affecter(vigile, remplacant)">
+                    Affecter ici
+                </button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>
