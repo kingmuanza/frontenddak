@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Affectation } from '../models/affectation.model';
 import { Vigile } from '../models/vigile.model';
+import { Poste } from '../models/poste.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,20 @@ export class AffectationCtrlService {
       this.http.get(this.URL + "vigile" + '/' + vigile.idvigile).subscribe({
         next: (data) => {
           const resulat = data as Affectation;
+          resolve(resulat);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
+  async getAffectationsOfPoste(poste: Poste): Promise<Array<Affectation>> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "poste" + '/' + poste.idposte).subscribe({
+        next: (data) => {
+          const resulat = data as Array<Affectation>;
           resolve(resulat);
         },
         error: (e) => {

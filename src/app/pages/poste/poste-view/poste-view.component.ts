@@ -19,6 +19,7 @@ import { droits } from 'src/app/data/droits';
 import { AuthService } from 'src/app/services/auth.service';
 import { VigileService } from 'src/app/services/vigile.service';
 import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
+import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 
 @Component({
   selector: 'app-poste-view',
@@ -39,6 +40,8 @@ export class PosteViewComponent implements OnInit {
   vigiles = new Array<Vigile>();
   remplacants = new Array<Vigile>();
   remplacantsDuPoste = new Array<Vigile>();
+
+  exigencesVerifiees = false;
 
   vigile: any;
   remplacant: any;
@@ -72,13 +75,9 @@ export class PosteViewComponent implements OnInit {
     private jarvisService: JarvisService<any>,
     private affectationService: JarvisService<Affectation>,
     private vigileService: VigileService,
-    private equipementService: JarvisService<Equipement>,
-    private equipementVigileService: JarvisService<EquipementVigile>,
-    private postevigileService: JarvisService<any>,
-    private contratSiteVigileService: JarvisService<ContratSiteVigile>,
-    private posteEquipementService: JarvisService<PosteEquipement>,
     private authService: AuthService,
     private affectationCtrlService: AffectationCtrlService,
+    private contratCtrlService: ContratCtrlService,
   ) {
 
     this.app = initializeApp(FIREBASECONFIG);
@@ -100,12 +99,6 @@ export class PosteViewComponent implements OnInit {
     });
     this.authService.notifier();
 
-    this.getEquipements().then((equipements) => {
-      this.equipements = equipements.filter((e) => {
-        return true;
-      });
-    });
-
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
       if (id) {
@@ -114,140 +107,39 @@ export class PosteViewComponent implements OnInit {
           console.log(poste);
           this.poste = poste;
 
-          this.getExigences();
-
-          this.pointageService.getRemotePoste(id).then((posteRemote) => {
-            console.log('posteRemote');
-            console.log(posteRemote);
-
-            if (posteRemote) {
-              if (posteRemote.latitude) {
-                this.poste.latitude = posteRemote.latitude
-              }
-              if (posteRemote.longitude) {
-                this.poste.longitude = posteRemote.longitude
-              }
-            }
+          this.affectationCtrlService.getAffectationsOfPoste(poste).then((affectations) => {
+            this.affectations = affectations;
           });
 
-          this.poste.debutContrat = poste.debutContrat?.split('T')[0];
-          this.poste.finContrat = poste.finContrat?.split('T')[0];
-
-          this.jarvisService.getAll('affectation').then((affectations) => {
-
-            console.log('affectations');
-            console.log(affectations);
-            affectations.forEach((affectation) => {
-              if (affectation.idposte && this.poste) {
-                if (affectation.idposte.idposte == this.poste.idposte) {
-                  console.log('affectation.idposte.idposte');
-                  console.log(affectation.idposte.idposte);
-                  /* console.log('poste.idposte');
-                  console.log(poste.idposte); */
-                  this.affectations.push(affectation);
-                  /**  equipementVigileService */
-                  /* this.equipementVigileService.getAll('equipementvigile').then((data) => {
-                    this.equipementsvigiles = data.filter((equipementVigile) => {
-                      return equipementVigile.idvigile.idvigile === affectation.idvigile.idvigile;
-                    }).concat(this.equipementsvigiles);
-                  }); */
+          this.contratCtrlService.getExigencesDuSite(poste.idcontratsite).then((exigences) => {
+            this.exigences = exigences.filter((exigence) => {
+              return exigence.horaire == this.poste.horaire;
+            });
+            this.exigencesVerifiees = this.verifierToutesLesExigences();
+          });
+          let idcontratSite = this.poste.idcontratsite?.idcontratSite + "";
+          if (idcontratSite) {
+            this.pointageService.getRemoteSite(idcontratSite).then((siteRemote) => {
+              console.log('siteRemote');
+              console.log(siteRemote);
+              if (siteRemote) {
+                if (siteRemote.latitude) {
+                  this.poste.latitude = siteRemote.latitude
+                }
+                if (siteRemote.longitude) {
+                  this.poste.longitude = siteRemote.longitude
                 }
               }
             });
-
-            this.affectations.forEach((element) => {
-              const vigile = element.remplacant;
-              const remplacantEstDejaLa = this.remplacantsDuPoste.filter((remplacant) => {
-                return remplacant && vigile && remplacant.idvigile === vigile.idvigile;
-              });
-              if (remplacantEstDejaLa.length > 0) {
-
-              } else {
-                this.remplacantsDuPoste.push(vigile);
-              }
-            });
-
-            this.getDemandesVigiles().then((postevigiles) => {
-              this.postevigiles = postevigiles.filter((pv) => {
-                return pv.idposte.idposte === this.poste.idposte;
-              });
-              this.updatePoste();
-            });
-            this.getDemandesEquipements().then((posteequipements) => {
-              this.posteequipements = posteequipements.filter((pv) => {
-                return pv.idposte.idposte === this.poste.idposte;
-              });
-            });
-
-            this.dtTrigger.next('');
-
-          });
-
+          }
         });
       }
     });
   }
 
-  getExigences(): void {
-    this.contratSiteVigileService.getAll('contratsitevigile').then((data) => {
-      console.log('contratsitevigile');
-      console.log(data);
-      this.exigences = data.filter((d) => {
-        return this.poste.idcontratsite && d.idcontratsite.idcontratSite === this.poste.idcontratsite.idcontratSite
-      });
-    });
-  }
-
-  private updatePoste() {
-    this.poste.bon = true;
-    let exigenceVigileJour = 0;
-    let exigenceVigileNuit = 0;
-    this.postevigiles.forEach((pv) => {
-      if (!this.verifierExigenceAgent(pv)) {
-        this.poste.bon = false;
-      }
-      if (pv.horaire === 'jour') {
-        exigenceVigileJour += pv.quantite;
-      }
-      if (pv.horaire === 'nuit') {
-        exigenceVigileNuit += pv.quantite;
-      }
-    });
-
-    this.poste.nombreVigileJour = exigenceVigileJour;
-    this.poste.nombreVigileNuit = exigenceVigileNuit;
-
-    this.jarvisService.modifier('poste', this.poste.idposte, this.poste).then((data) => { });
-  }
-
-  getDemandesVigiles(): Promise<Array<PosteVigile>> {
-    return new Promise((resolve, reject) => {
-      this.postevigileService.getAll('postevigile').then((postevigiles) => {
-        console.log('postevigiles');
-        console.log(postevigiles);
-        resolve(postevigiles);
-      });
-    });
-  }
-
-  getDemandesEquipements(): Promise<Array<PosteEquipement>> {
-    return new Promise((resolve, reject) => {
-      this.posteEquipementService.getAll('posteequipement').then((posteequipements) => {
-        console.log('posteequipements');
-        console.log(posteequipements);
-        resolve(posteequipements);
-      });
-    });
-  }
-
-  getEquipements(): Promise<Array<Equipement>> {
-    return new Promise((resolve, reject) => {
-      this.equipementService.getAll('equipement').then((equipements) => {
-        console.log('equipements');
-        console.log(equipements);
-        resolve(equipements);
-      });
-    });
+  openGoogleMap() {
+    let url = "https://maps.google.com/?q=" + this.poste.latitude + "," + this.poste.longitude;
+    window.open(url);
   }
 
   getVigiles(texte: string) {
@@ -272,15 +164,6 @@ export class PosteViewComponent implements OnInit {
     return resultat;
   }
 
-  selectionnerVigile(vigile: Vigile) {
-    console.log(vigile?.idvigile);
-    console.log(this.vigile?.idvigile);
-    if (this.vigile) {
-      this.vigile = null;
-    } else {
-      this.vigile = JSON.parse(JSON.stringify(vigile));
-    }
-  }
 
   affecter(vigile: Vigile, remplacant: Vigile) {
     if (vigile) {
@@ -293,7 +176,7 @@ export class PosteViewComponent implements OnInit {
         affectation.remplacant = remplacant;
       }
 
-      if (this.affectation) {
+      if (this.affectation && this.affectation.idposte) {
         this.affectation.arret = new Date();
         this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
           this.affectationService.ajouter('affectation', affectation).then(() => {
@@ -312,161 +195,25 @@ export class PosteViewComponent implements OnInit {
     this.affectation = undefined;
     this.affectationCtrlService.getAffectationOfVigile(vigile).then((affectation) => {
       this.affectation = affectation;
+      console.log("affectation");
+      console.log(affectation);
     });
-  }
-
-  save() {
-    console.log('poste à enregistrer');
-    console.log(this.poste);
-    this.poste.libelle = this.poste.code;
-    if (this.poste.debutContrat)
-      this.poste.debutContrat = new Date(this.poste.debutContrat);
-
-    if (this.poste.finContrat)
-      this.poste.finContrat = new Date(this.poste.finContrat);
-
-    if (this.poste.idposte == 0) {
-      if (this.poste.code && this.poste.libelle) {
-        this.processing = true;
-        this.jarvisService.ajouter('poste', this.poste).then((data) => {
-          console.log('data');
-          console.log(data);
-          this.processing = false;
-          this.notifierService.notify('success', "Ajout effectué avec succès");
-          this.router.navigate(['poste']);
-        }).catch((e) => {
-          this.processing = false;
-        });
-      } else {
-        this.notifierService.notify('error', "Veuillez renseigner un code et un libellé");
-      }
-    } else {
-      this.processing = true;
-      this.jarvisService.modifier('poste', this.poste.idposte, this.poste).then((data) => {
-        console.log('data');
-        console.log(data);
-        this.processing = false;
-        this.notifierService.notify('success', "Modification effectuée avec succès");
-        this.router.navigate(['poste']);
-      }).catch((e) => {
-        this.processing = false;
-      });
-    }
-  }
-
-  supprimer() {
-    const reponse = confirm("Etes-vous sûr de vouloir supprimer cet élément ?");
-    if (reponse) {
-      this.processing = true;
-      this.jarvisService.supprimer('poste', this.poste.idposte).then((data) => {
-        console.log('data');
-        console.log(data);
-        this.processing = false;
-        this.notifierService.notify('success', "Suppression effectuée avec succès");
-        this.router.navigate(['poste']);
-      });
-    }
-  }
-
-  edit(id: string) {
-    this.router.navigate(['affectation', 'edit', id]);
   }
 
   jourSemaine(jour: number) {
     return this.jarvisService.jourSemaine(jour);
   }
 
-  getPosteFirebase() {
-    this.pointageService.getRemotePoste(this.poste.idposte + '').then((data) => {
-      this.poste.latitude = data.latitude;
-      this.poste.longitude = data.longitude;
+  verifierExigence(exigence: ContratSiteVigile): boolean {
+    return exigence.quantite == this.affectations.length;
+  }
+
+  verifierToutesLesExigences(): boolean {
+    let resultat = 0;
+    this.exigences.forEach((exigence) => {
+      resultat += exigence.quantite;
     });
-  }
-
-  verifierExigence(exigence: ContratSiteVigile) {
-    let resultat = false;
-    let nombre = 0;
-    if (exigence) {
-      this.affectations.forEach((affectation) => {
-        if (affectation) {
-          if (affectation.idvigile.fonction === exigence.typeVigile) {
-            if (affectation.horaire === exigence.horaire) {
-              nombre++;
-            }
-          }
-        }
-      });
-      return nombre >= exigence.quantite;
-    }
-    return true;
-  }
-
-  verifierExigenceAgent(postevigile: PosteVigile) {
-    let resultat = false;
-    let nombre = 0;
-    if (postevigile) {
-      this.affectations.forEach((affectation) => {
-        if (affectation) {
-          if (affectation.idvigile.fonction === postevigile.typeVigile) {
-            if (affectation.horaire === postevigile.horaire) {
-              nombre++;
-            }
-          }
-        }
-      });
-      return nombre >= postevigile.quantite;
-    }
-    return true;
-  }
-
-  verifierExigenceMateriel(posteequipement: PosteEquipement) {
-    let nombre = 0;
-    this.equipementsvigiles.forEach((ev) => {
-      if (ev.idequipement.idequipement === posteequipement.idequipement.idequipement) {
-        nombre += ev.quantite;
-      }
-    });
-    return nombre >= posteequipement.quantite;
-  }
-
-  ajouterExigencePersonnel() {
-    if (this.postevigile.horaire && this.postevigile.quantite && this.postevigile.typeVigile) {
-      if (this.postevigile.quantite > 0) {
-        this.postevigile.idposte = this.poste;
-        this.postevigileService.ajouter('postevigile', this.postevigile).then(() => {
-          window.location.reload();
-        });
-      }
-    }
-  }
-
-  ajouterExigenceEquipement() {
-    if (this.posteequipement.idequipement && this.posteequipement.quantite) {
-      if (this.posteequipement.quantite > 0) {
-        this.posteequipement.idposte = this.poste;
-        this.posteEquipementService.ajouter('posteequipement', this.posteequipement).then(() => {
-          window.location.reload();
-        });
-      }
-    }
-  }
-
-  supprimerPosteVigile(item: PosteVigile) {
-    const oui = confirm('Etes vous sûr de vouloir supprimer cette exigence ?');
-    if (oui) {
-      this.postevigileService.supprimer('postevigile', item.idposteVigile).then(() => {
-        window.location.reload();
-      });
-    }
-  }
-
-  supprimerEquipement(item: PosteEquipement) {
-    const oui = confirm('Etes vous sûr de vouloir supprimer cette exigence ?');
-    if (oui) {
-      this.postevigileService.supprimer('posteequipement', item.idposteEquipement).then(() => {
-        window.location.reload();
-      });
-    }
+    return resultat === this.affectations.length;
   }
 
   openModal() {
@@ -480,11 +227,4 @@ export class PosteViewComponent implements OnInit {
     }
   }
 
-  score(vigile: Vigile, poste: Poste) {
-    return 0;
-  }
-
-  getSanctions(vigile: Vigile) {
-    return 0;
-  }
 }

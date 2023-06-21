@@ -70,6 +70,7 @@ export class PosteCtrlService {
       });
     });
   }
+
   async getPostesByZone(zone: ZoneDak): Promise<Poste[]> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "zone" + '/' + zone.idzone).subscribe({

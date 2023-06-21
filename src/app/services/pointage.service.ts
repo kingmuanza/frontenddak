@@ -9,6 +9,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { Poste } from 'src/app/models/poste.model';
+import { ContratSite } from '../models/contrat.site.model';
 
 
 @Injectable({
@@ -68,6 +69,15 @@ export class PointageService {
       const db = getFirestore(this.app);
       getDoc(doc(db, "poste", id)).then((resultat) => {
         resolve(resultat.data());
+      });
+    });
+  }
+
+  getRemoteSite(id: string): Promise<ContratSite> {
+    return new Promise((resolve, reject) => {
+      const db = getFirestore(this.app);
+      getDoc(doc(db, "contratSite", id)).then((resultat) => {
+        resolve(resultat.data() as ContratSite);
       });
     });
   }

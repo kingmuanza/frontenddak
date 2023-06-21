@@ -4,6 +4,7 @@ import { JarvisService } from '../services/jarvis.service';
 
 import { HttpClient } from '@angular/common/http';
 import { ContratSiteVigile } from '../models/contrat.site.vigile.model';
+import { ContratSite } from '../models/contrat.site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -129,6 +130,20 @@ export class ContratCtrlService {
   async getExigencesDuContrat(contrat: Contrat): Promise<ContratSiteVigile[]> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + contrat.idcontrat + "/exigences").subscribe({
+        next: (data) => {
+          const resulats = data as ContratSiteVigile[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
+  async getExigencesDuSite(site: ContratSite): Promise<ContratSiteVigile[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "site/" + site.idcontratSite + "/exigences").subscribe({
         next: (data) => {
           const resulats = data as ContratSiteVigile[];
           resolve(resulats);
