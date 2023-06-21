@@ -63,26 +63,12 @@ export class PosteListComponent implements OnInit, OnDestroy {
 
     });
     this.authService.notifier();
+
     this.zoneService.getAll('zone').then((zones) => {
       console.log('data');
       console.log(zones);
       this.zones = zones;
-
-      this.affectationService.getAll('affectation').then((affectations) => {
-        console.log('affectations');
-        console.log(affectations);
-        this.affectations = affectations;
-
-        this.posteCtrlService.getLasts().then((data) => {
-          console.log('data');
-          console.log(data);
-          this.postes = data;
-          this.resultatsPrimaires = data;
-          this.resultats = data;
-          this.dtTrigger.next('');
-        });
-
-      });
+      this.dtTrigger.next('');
     });
   }
 
