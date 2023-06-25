@@ -19,7 +19,7 @@
         Poste :
         <a class="cliquable" (click)="voirPoste()">
             {{affectation?.idposte?.libelle}}
-        </a>, Horaire : {{affectation.horaire}}
+        </a>, Horaire : {{affectation?.idposte?.horaire}}
     </div>
     <div *ngIf="vigile.estRemplacant && long">
         <div *ngIf="long">

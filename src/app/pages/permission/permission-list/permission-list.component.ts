@@ -37,7 +37,7 @@ export class PermissionListComponent implements OnInit {
   }
 
   edit(permission: Permission) {
-    this.router.navigate(['permission', 'view', permission.idpermission]);
+    this.router.navigate(['permission', 'edit', permission.idpermission]);
   }
 
   jourSemaine(jour: any) {

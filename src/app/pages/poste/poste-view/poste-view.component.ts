@@ -109,14 +109,14 @@ export class PosteViewComponent implements OnInit {
 
           this.affectationCtrlService.getAffectationsOfPoste(poste).then((affectations) => {
             this.affectations = affectations;
+            this.contratCtrlService.getExigencesDuSite(poste.idcontratsite).then((exigences) => {
+              this.exigences = exigences.filter((exigence) => {
+                return exigence.horaire == this.poste.horaire;
+              });
+              this.exigencesVerifiees = this.verifierToutesLesExigences();
+            });
           });
 
-          this.contratCtrlService.getExigencesDuSite(poste.idcontratsite).then((exigences) => {
-            this.exigences = exigences.filter((exigence) => {
-              return exigence.horaire == this.poste.horaire;
-            });
-            this.exigencesVerifiees = this.verifierToutesLesExigences();
-          });
           let idcontratSite = this.poste.idcontratsite?.idcontratSite + "";
           if (idcontratSite) {
             this.pointageService.getRemoteSite(idcontratSite).then((siteRemote) => {

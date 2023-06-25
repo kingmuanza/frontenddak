@@ -75,11 +75,13 @@ export class AffectationCreateComponent implements OnInit {
 
   setListePostes(zone: ZoneDak) {
     this.getPostes(zone).then((postes) => {
-      this.postes = postes;
+      this.postes = postes.sort((a, b) => {
+        return a.libelle > b.libelle ? 1 : -1;
+      });
     });
   }
 
-  getPostes(zone: ZoneDak): Promise<Array<any>> {
+  getPostes(zone: ZoneDak): Promise<Array<Poste>> {
     return new Promise((resolve, reject) => {
       this.posteService.getAll('poste').then((data) => {
         const postes = new Array<Poste>();

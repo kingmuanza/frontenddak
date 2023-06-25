@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
+import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 import { droits } from 'src/app/data/droits';
 import { Affectation } from 'src/app/models/affectation.model';
 import { ContratSiteVigile } from 'src/app/models/contrat.site.vigile.model';
@@ -27,9 +29,15 @@ export class DisplayPosteComponent implements OnInit, OnChanges {
   exigences = new Array<ContratSiteVigile>();
   notVacant = false;
 
+  exigencesVerifiees = false;
+  nombre = 0;
+  engages = 0;
+
   constructor(
     private contratSiteVigileService: JarvisService<ContratSiteVigile>,
     private router: Router,
+    private affectationCtrlService: AffectationCtrlService,
+    private contratCtrlService: ContratCtrlService,
   ) { }
 
   ngOnInit(): void {
@@ -44,52 +52,31 @@ export class DisplayPosteComponent implements OnInit, OnChanges {
   }
 
   getExigences(): void {
-    this.contratSiteVigileService.getAll('contratsitevigile').then((data) => {
-      // console.log('contratsitevigile');
-      // console.log(data);
-      this.exigences = data.filter((d) => {
-        return d.idcontratsite.idcontratSite === this.poste.idcontratsite?.idcontratSite && d.horaire === this.poste.horaire;
-      });
-      this.notVacant = this.isAllverifiee();
-      this.isNotVacant.emit(this.notVacant);
-    });
-  }
-
-  isAllverifiee() {
-    let resultat = true;
-    this.exigences.forEach((exigence) => {
-      resultat = resultat && this.isExigenceVerifiee(exigence);
-    });
-    return resultat;
-  }
-
-
-  isExigenceVerifiee(exigence: ContratSiteVigile) {
-    // console.log('isExigenceVerifiee');
-    // console.log(exigence.horaire + ' ' + exigence.quantite);
-    let nombre = 0;
-    if (exigence) {
-      if (this.affectations.length > 0) {
-        this.affectations.forEach((affectation) => {
-          if (!affectation.arret && affectation.idvigile.fonction === exigence.typeVigile) {
-            if (affectation.idposte && this.poste) {
-              if (affectation.idposte.idposte === this.poste.idposte) {
-                if (affectation.horaire === exigence.horaire) {
-                  // console.log(affectation.idvigile.noms);
-                  nombre++;
-                }
-              }
-            }
-          }
+    this.affectationCtrlService.getAffectationsOfPoste(this.poste).then((affectations) => {
+      this.affectations = affectations;
+      this.nombre = 0;
+      this.contratCtrlService.getExigencesDuSite(this.poste.idcontratsite!).then((exigences) => {
+        this.exigences = exigences.filter((exigence) => {
+          return exigence.horaire == this.poste.horaire;
         });
-        // console.log(nombre + ' ' + exigence.quantite);
-        return nombre >= exigence.quantite;
-      } else {
-        // console.log('affectations.length : ' + this.affectations.length);
-        return false;
-      }
-    }
-    return true;
+        exigences.forEach((exigence) => {
+          if (exigence.horaire == this.poste.horaire) this.nombre += exigence.quantite;
+        });
+        this.exigencesVerifiees = this.verifierToutesLesExigences();
+      });
+    });
+
   }
 
+  verifierExigence(exigence: ContratSiteVigile): boolean {
+    return exigence.quantite == this.affectations.length;
+  }
+
+  verifierToutesLesExigences(): boolean {
+    let resultat = 0;
+    this.exigences.forEach((exigence) => {
+      resultat += exigence.quantite;
+    });
+    return resultat === this.affectations.length;
+  }
 }

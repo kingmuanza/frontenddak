@@ -1,30 +1,43 @@
-<div class="app-poste" [ngClass]="{'vacant': !notVacant}" (click)="goTo()">
-    <span *ngIf="!notVacant" style="float: right; color:red">
-        VACANT
-    </span>
-    <div class="cliquable">
-        <b>
-            {{poste.libelle}}
-        </b>
-    </div>
-    <div>
-        <span *ngIf="poste.zone">
-            Zone : {{poste.zone?.libelle}},
-        </span>
-        <span *ngIf="poste.horaire">
-            Horaire : {{poste.horaire | uppercase}}
-        </span>
-    </div>
-    <div>
+<div class="app-poste" [ngClass]="{'vacant': !exigencesVerifiees}" (click)="goTo()">
+    <div class="row">
+        <div class="col-lg-9">
 
-        <div>
-            <ng-container *ngFor="let item of exigences">
-                <li class="element-supprimable" [ngClass]="{'erreur': !isExigenceVerifiee(item)}" *ngIf="item.horaire === poste.horaire">
-                    <span>
-                        {{item.quantite}} {{item.typeVigile}}
-                    </span>
-                </li>
-            </ng-container>
+            <div class="cliquable">
+                <b>
+                    {{poste.libelle}}
+                </b>
+            </div>
+            <div>
+                <span *ngIf="poste.zone">
+                    Zone : {{poste.zone?.libelle}},
+                </span>
+                <span *ngIf="poste.horaire">
+                    Horaire : {{poste.horaire | uppercase}}
+                </span>
+            </div>
+            <div>
+
+                <div>
+                    <ng-container *ngFor="let exigence of exigences">
+                        <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(exigence)}"
+                            *ngIf="exigence.horaire === poste.horaire">
+                            <span>
+                                {{exigence.quantite}} {{exigence.typeVigile}}
+                            </span>
+                        </li>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 text-center">
+            <span *ngIf="!exigencesVerifiees" style="color:red">
+                VACANT
+            </span>
+            <h1>
+                <b>
+                    {{affectations.length}}/{{nombre}}
+                </b>
+            </h1>
         </div>
     </div>
 </div>
