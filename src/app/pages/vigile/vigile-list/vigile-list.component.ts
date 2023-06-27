@@ -61,29 +61,21 @@ export class VigileListComponent implements OnInit, OnDestroy {
     this.authService.notifier();
 
     let i = 0;
-    this.dtTrigger = this.vigileService.vigilesSubject;
-    this.actualiser();
+    setTimeout(() => {
+      this.dtTrigger.next("");
+    }, 500);
   }
 
-  actualiser() {
-    this.vigileService.getAll().then((data) => {
-    });
-  }
-
-  actualiserDepuisLeServeur() {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.vigileService.getAllDepuisLeServeur().then((data) => {
-      });
-    });
-  }
 
   rechercher() {
     if (this.recherche.length > 2) {
       this.error = false;
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.destroy();
-        this.vigileService.rechercher(this.recherche);
+      this.vigileService.rechercheCalme(this.recherche).then((vigiles) => {
+        this.vigiles = vigiles;
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger.next("");
+        });
       });
     } else {
       this.error = true;

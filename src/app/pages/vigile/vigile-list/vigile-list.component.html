@@ -5,14 +5,14 @@
         </div>
         <div class="boutons">
             <div class="row">
-                <div *ngIf="mesDroits.vigileEdit" class="col-lg-2">
+                <div *ngIf="mesDroits.vigileEdit" class="col-lg-3">
                     <div class="nouveau">
                         <a routerLink="/vigile/edit" class="btn nouveau">
                             Ajouter un vigile
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
@@ -47,7 +47,7 @@
         <div class="card shadow-1">
             <div>
                 <b>
-                    Résultats de la dernière recherche {{(dtTrigger|async).length}}
+                    Résultats de la dernière recherche {{vigiles.length}}
                 </b>
             </div>
             <div class="page-contenu-corps">
@@ -67,8 +67,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let vigile of dtTrigger | async" (click)="view(vigile.idvigile)"
-                            style="cursor: pointer;">
+                        <tr *ngFor="let vigile of vigiles" (click)="view(vigile.idvigile)" style="cursor: pointer;">
                             <td>{{vigile.idvigile}}</td>
                             <td>{{vigile.noms}}</td>
                             <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
