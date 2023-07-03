@@ -92,11 +92,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
 
   getVigiles(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.vigileService.getAll('vigile').then((vigiles) => {
-        // console.log('vigiles');
-        // console.log(vigiles);
-        resolve(vigiles);
-      });
+      resolve([]);
     });
   }
 
