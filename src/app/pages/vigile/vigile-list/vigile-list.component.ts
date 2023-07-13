@@ -75,6 +75,7 @@ export class VigileListComponent implements OnInit, OnDestroy {
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
           dtInstance.destroy();
           this.dtTrigger.next("");
+          console.log(vigiles);
         });
       });
     } else {

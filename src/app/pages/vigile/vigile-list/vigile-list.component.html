@@ -54,12 +54,11 @@
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Matricule</th>
                             <th>Noms</th>
                             <th>Horaire</th>
                             <th>Fonction</th>
                             <th>Repos</th>
-                            <th>Zone</th>
                             <th>Quartier</th>
                             <th>Ville</th>
                             <th style="text-align: center;">Remplacant</th>
@@ -68,12 +67,11 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let vigile of vigiles" (click)="view(vigile.idvigile)" style="cursor: pointer;">
-                            <td>{{vigile.idvigile}}</td>
+                            <td>{{vigile.matricule}}</td>
                             <td>{{vigile.noms}}</td>
                             <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
                             <td>{{vigile.fonction}}</td>
                             <td>{{jourSemaine(vigile.jourRepos)}}</td>
-                            <td>{{vigile.zone?.libelle}}</td>
                             <td>{{vigile.quartier?.nom}}</td>
                             <td>{{vigile.ville?.libelle}}</td>
                             <td style="text-align: center;">

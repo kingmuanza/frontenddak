@@ -73,6 +73,16 @@ export class VigileEditComponent implements OnInit {
     this.init();
   }
 
+  getRemoteVigile(matricule: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const db = getFirestore(this.app);
+      getDoc(doc(db, "vigile", matricule)).then((resultat) => {
+        resolve(resultat.data());
+      });
+    });
+  }
+
+
   private init() {
     this.getZones().then((zones) => {
       this.zones = zones;
@@ -98,6 +108,17 @@ export class VigileEditComponent implements OnInit {
     this.vigileService.get('vigile', Number(id)).then((vigile) => {
       console.log('le vigile recupéré');
       this.vigile = vigile;
+
+      console.log("this.vigile.matricule");
+      console.log(this.vigile.matricule);
+      this.getRemoteVigile(this.vigile.matricule).then((vigileEnLigne) => {
+
+        console.log("vigileEnLigne");
+        console.log(vigileEnLigne);
+        if (vigileEnLigne.photoURL) {
+          this.url = vigileEnLigne.photoURL;
+        }
+      });
 
       if (!this.vigile.nom) {
         this.vigile.nom = this.vigile.noms;
@@ -306,12 +327,8 @@ export class VigileEditComponent implements OnInit {
           this.processing = false;
           this.notifierService.notify('success', "Ajout effectué avec succès");
           // this.router.navigate(['vigile']);
-          this.vigileService.getAll('vigile').then((vigiles) => {
-            const c = vigiles.sort((a, b) => {
-              return a.idvigile - b.idvigile > 0 ? -1 : 1;
-            })[0];
-            this.router.navigate(['vigile', 'view', c.idvigile]);
-          });
+
+          this.router.navigate(['vigile']);
         }).catch((e) => {
           this.processing = false;
         });

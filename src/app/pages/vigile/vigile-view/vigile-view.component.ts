@@ -3,8 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { NotifierService } from 'angular-notifier';
 import * as bootstrap from 'bootstrap';
+import { initializeApp } from 'firebase/app';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
 import { droits } from 'src/app/data/droits';
 import { Affectation } from 'src/app/models/affectation.model';
 import { EquipementVigile } from 'src/app/models/equipement.vigile.model';
@@ -25,6 +28,10 @@ import { ParrainService } from 'src/app/services/parrain.service';
   styleUrls: ['./vigile-view.component.scss']
 })
 export class VigileViewComponent implements OnInit {
+
+  app: any;
+
+  vigileEnLigne: any;
 
   // Datatables
   // @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
@@ -76,7 +83,9 @@ export class VigileViewComponent implements OnInit {
     private permissionService: JarvisService<Permission>,
     private equipementVigileService: JarvisService<EquipementVigile>,
     private authService: AuthService,
-  ) { }
+  ) {
+    this.app = initializeApp(FIREBASECONFIG);
+  }
 
   ngOnInit(): void {
     this.init();
@@ -96,6 +105,17 @@ export class VigileViewComponent implements OnInit {
     this.authService.notifier();
   }
 
+
+  getRemoteVigile(matricule: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const db = getFirestore(this.app);
+      getDoc(doc(db, "vigile", matricule)).then((resultat) => {
+        resolve(resultat.data());
+      });
+    });
+  }
+
+
   private init() {
     this.getZones().then((zones) => {
       this.zones = zones;
@@ -112,7 +132,8 @@ export class VigileViewComponent implements OnInit {
                 this.getPermissions().then((permissions) => {
                   this.permissions = permissions;
                   this.dtTriggerPermissions.next('');
-                })
+                });
+
               }
             });
           });
@@ -165,8 +186,20 @@ export class VigileViewComponent implements OnInit {
   initialiserVigile(id: string, villes: any[], zones: any[], nationalites: any[]) {
     this.vigileService.get('vigile', Number(id)).then((vigile) => {
       console.log('le vigile recupéré');
+      console.log(vigile);
       this.vigile = vigile;
       this.setStatut(this.vigile);
+
+      console.log("this.vigile.matricule");
+      console.log(this.vigile.matricule);
+      this.getRemoteVigile(this.vigile.matricule).then((vigileEnLigne) => {
+        this.vigileEnLigne = vigileEnLigne;
+        console.log("vigileEnLigne");
+        console.log(vigileEnLigne);
+        if (vigileEnLigne.photoURL) {
+          this.image = vigileEnLigne.photoURL;
+        }
+      });
 
       if (!this.vigile.nom) {
         this.vigile.nom = this.vigile.noms;
@@ -191,6 +224,7 @@ export class VigileViewComponent implements OnInit {
         this.vigiles = vigiles;
         this.initParrain(vigile, vigiles);
       });
+
       this.equipementVigileService.getAll('equipementvigile').then((data) => {
         this.equipements = data.filter((equipementVigile) => {
           return equipementVigile.idvigile.idvigile === this.vigile.idvigile;
@@ -201,11 +235,8 @@ export class VigileViewComponent implements OnInit {
 
   getVigiles(): Promise<Array<any>> {
     return new Promise((resolve, reject) => {
-      this.vigileService.getAll('vigile').then((vigiles) => {
-        console.log('vigiles');
-        console.log(vigiles);
-        resolve(vigiles);
-      });
+
+      resolve([]);
     });
   }
 

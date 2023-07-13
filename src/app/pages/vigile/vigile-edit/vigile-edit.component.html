@@ -61,27 +61,11 @@
                 aria-labelledby="photo-tab">
                 <div>
                     <div class="row">
-                        <div class="col-lg-4">
-                            <div style="margin-bottom: 20px; margin-top: 20px;">
-                                <input class="form-control" type='file' (change)="onSelectFile($event)">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div style="margin-bottom: 20px; margin-top: 20px;">
                                 <img [src]="url" style="width: 100%;">
                             </div>
-                            <div *ngIf="imagechange" style="margin-bottom: 20px; margin-top: 20px;">
-                                <button (click)="savePhotoAndVigile()" class="btn primaire">
-                                    Enregistrer
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div style="margin-bottom: 20px; margin-top: 20px;">
-                                <app-display-badge [vigile]="vigile"></app-display-badge>
-                            </div>
+
                         </div>
                     </div>
                 </div>

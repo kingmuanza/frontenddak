@@ -177,7 +177,7 @@ export class EnrolementWaitComponent implements OnInit {
   mettreEnLigne(vigile: Vigile) {
     this.matricule = vigile.matricule;
     vigile.enLigne = true;
-    vigile.dateEnLigne = new Date();
+    // vigile.dateEnLigne = new Date();
     this.synchroniser(vigile).then(() => {
 
       this.jarvisService.modifier('vigile', vigile.idvigile, vigile).then(() => {
