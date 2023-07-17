@@ -8,11 +8,11 @@
                 <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
                     <div class="nouveau">
                         <a routerLink="/poste/edit" class="btn nouveau">
-                            Ajouter un poste
+                            Nouveau
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
@@ -44,9 +44,19 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                Nom
+                            </span>
+                        </div>
+                        <input type="text" [(ngModel)]="nom" class="form-control">
+                    </div>
+                </div>
                 <div class="col-lg-2">
-                    <button [disabled]="zone.idzone===0" class="btn primaire"
-                        (click)="rechercher(horaire, zone)">Rechercher</button>
+                    <button [disabled]="zone.idzone===0 && !nom" class="btn primaire"
+                        (click)="rechercher(horaire, zone, nom)">Rechercher</button>
                 </div>
             </div>
         </div>

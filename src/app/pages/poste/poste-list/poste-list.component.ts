@@ -37,6 +37,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
   vacanteur: any = {};
 
   libelle = "Liste des postes récemment créés";
+  nom = "";
 
   mesDroits = droits;
 
@@ -72,14 +73,26 @@ export class PosteListComponent implements OnInit, OnDestroy {
     });
   }
 
-  rechercher(horaire: string, zone?: ZoneDak) {
+  rechercher(horaire: string, zone?: ZoneDak, nom?: string) {
     this.libelle = "Résultats de la recherche";
     this.resultatsPrimaires = new Array<Poste>();
-    if (zone) {
+    if (zone && zone.idzone !== 0) {
       this.posteCtrlService.getPostesByZone(zone).then((postes) => {
         this.resultatsPrimaires = postes;
+        if (nom) {
+          this.resultatsPrimaires = this.resultatsPrimaires.filter((p) => {
+            return p.libelle.toLowerCase().indexOf(nom.toLowerCase()) !== -1;
+          });
+        }
         this.afficherPostes(this.afficher);
       });
+    } else {
+      if (nom) {
+        this.posteCtrlService.getPostesByName(nom).then((postes) => {
+          this.resultatsPrimaires = postes;
+          this.afficherPostes(this.afficher);
+        });
+      }
     }
   }
 

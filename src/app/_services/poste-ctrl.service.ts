@@ -84,4 +84,18 @@ export class PosteCtrlService {
       });
     });
   }
+
+  async getPostesByName(nom: string): Promise<Poste[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "nom" + '/' + nom.toLowerCase()).subscribe({
+        next: (data) => {
+          const resulats = data as Poste[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
 }
