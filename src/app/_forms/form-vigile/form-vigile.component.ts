@@ -10,6 +10,7 @@ import { CalculService } from 'src/app/services/calcul.service';
 import { CongeService } from 'src/app/services/conge.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { ParrainService } from 'src/app/services/parrain.service';
+import { VigileService } from 'src/app/services/vigile.service';
 
 @Component({
   selector: 'app-form-vigile',
@@ -31,6 +32,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
   parrainSelectionnee = false;
 
   parrains = new Array<Vigile>();
+  rechercheVigile = "";
 
   erreursLibelles = {
     datenaiss: 'Veuillez entrer une date de naissance',
@@ -57,6 +59,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     private parrainService: ParrainService,
     private congeService: CongeService,
     private vigileService: JarvisService<Vigile>,
+    private vigileCtrlService: VigileService,
     private calculService: CalculService,
   ) { }
 
@@ -83,22 +86,26 @@ export class FormVigileComponent implements OnInit, OnChanges {
     console.log(this.vigile);
 
     this.initInputsSelect(villes, quartiers, nationalites);
-    this.getVigiles().then((vigiles) => {
-      this.vigiles = vigiles;
-      this.initParrain(this.vigile, vigiles);
-    });
+    this.initParrain(this.vigile, []);
 
   }
 
-  getVigiles(): Promise<Array<any>> {
-    return new Promise((resolve, reject) => {
-      resolve([]);
+  getVigiles(texte: string) {
+    this.vigileCtrlService.rechercheCalme(texte).then((vigiles) => {
+      this.vigiles = vigiles;
     });
   }
 
   async initParrain(vigile: Vigile, vigiles: Array<Vigile>) {
-    this.parrains = await this.parrainService.initParrain(vigile, vigiles);
-    this.parrainSelectionnee = true;
+    if (vigile.parrain) {
+      this.vigileService.get("vigile", vigile.parrain).then((v) => {
+        this.vigiles = [v];
+        this.parrainSelectionnee = true;
+      });
+    } else {
+      this.vigiles = [];
+      this.parrainSelectionnee = true;
+    }
   }
 
   initInputsSelect(villes: Array<Ville>, quartiers: Array<Quartier>, nationalites: Array<Nationalite>) {
@@ -219,6 +226,10 @@ export class FormVigileComponent implements OnInit, OnChanges {
 
   libelleFonction(fonction: string) {
     return this.vigileService.libelleFonction(fonction);
+  }
+
+  libelleStatut(fonction: string) {
+    return this.vigileService.libelleStatut(fonction);
   }
 
   jourSemaine(jour: number) {

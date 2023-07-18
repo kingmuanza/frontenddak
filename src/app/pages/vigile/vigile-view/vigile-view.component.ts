@@ -457,6 +457,10 @@ export class VigileViewComponent implements OnInit {
     return this.vigileService.libelleFonction(fonction);
   }
 
+  libelleStatut(fonction: string) {
+    return this.vigileService.libelleStatut(fonction);
+  }
+
   jourSemaine(jour: number) {
     return this.vigileService.jourSemaine(jour);
   }

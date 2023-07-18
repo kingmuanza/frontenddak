@@ -13,7 +13,8 @@
                                 Noms <app-required></app-required>
                             </span>
                         </div>
-                        <input type="text" [(ngModel)]="vigile.nom" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
+                        <input type="text" [(ngModel)]="vigile.nom" class="form-control"
+                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
                     </div>
                     <div *ngIf="montrerErreurs && erreurs.nom" class="indication">
                         {{erreursLibelles.required}}
@@ -36,7 +37,9 @@
                                 Date de naissance <app-required></app-required>
                             </span>
                         </div>
-                        <input [ngModel]="vigile.dteNce | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dteNce = $event" type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.datenaiss || erreurs.majeur)}">
+                        <input [ngModel]="vigile.dteNce | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dteNce = $event"
+                            type="date" class="form-control"
+                            [ngClass]="{'is-invalid': montrerErreurs && (erreurs.datenaiss || erreurs.majeur)}">
                     </div>
                     <div *ngIf="montrerErreurs && erreurs.datenaiss" class="indication">
                         {{erreursLibelles.datenaiss}}
@@ -52,7 +55,8 @@
                                 Numéro CNI <app-required></app-required>
                             </span>
                         </div>
-                        <input type="text" [(ngModel)]="vigile.mumCni" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.cni}">
+                        <input type="text" [(ngModel)]="vigile.mumCni" class="form-control"
+                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.cni}">
                     </div>
                     <div *ngIf="montrerErreurs && erreurs.cni" class="indication">
                         {{erreursLibelles.required}}
@@ -79,7 +83,8 @@
                                 Téléphone <app-required></app-required>
                             </span>
                         </div>
-                        <input type="text" [(ngModel)]="vigile.tel" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
+                        <input type="text" [(ngModel)]="vigile.tel" class="form-control"
+                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
                     </div>
                     <div *ngIf="montrerErreurs && erreurs.tel" class="indication">
                         {{erreursLibelles.required}}
@@ -100,7 +105,8 @@
                                 Fonction <app-required></app-required>
                             </span>
                         </div>
-                        <select [(ngModel)]="vigile.fonction" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.fonction}">
+                        <select [(ngModel)]="vigile.fonction" class="form-control"
+                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.fonction}">
                             <option value="AGENT">Agent de sécurité</option>
                             <option value="ESCORTEUR">Escorteur</option>
                             <option value="CONTROLEUR">Contrôleur</option>
@@ -124,8 +130,8 @@
                         <select [(ngModel)]="vigile.statut" class="form-control">
                             <option [value]="1">Absent[e]</option>
                             <option [value]="2">Actif[ve]</option>
-                            <option [value]="3">Licencié(e)</option>
-                            <option [value]="4">Standby</option>
+                            <option [value]="3">Standby</option>
+                            <option [value]="4">Licencié(e)</option>
                             <option [value]="5">Suspendu[e]</option>
                             <option [value]="6">Démissionné[e]</option>
                             <option [value]="7">Décédé[e]</option>
@@ -139,6 +145,8 @@
                                 Parrain
                             </span>
                         </div>
+                        <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
+                            class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
                         <select [(ngModel)]="vigile.parrain" type="text" class="form-control">
                             <ng-container *ngFor="let v of vigiles">
                                 <option *ngIf="v.idvigile !== vigile.idvigile" [value]="v.idvigile">
@@ -156,7 +164,8 @@
                                 Matricule <app-required></app-required>
                             </span>
                         </div>
-                        <input type="text" [(ngModel)]="vigile.matricule" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.matricule}">
+                        <input type="text" [(ngModel)]="vigile.matricule" class="form-control"
+                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.matricule}">
                     </div>
                     <div *ngIf="montrerErreurs && erreurs.matricule" class="indication">
                         {{erreursLibelles.required}}
@@ -262,7 +271,9 @@
                                 Date entrée <app-required></app-required>
                             </span>
                         </div>
-                        <input [ngModel]="vigile.dateEntree | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dateEntree = $event" type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateEntree}">
+                        <input [ngModel]="vigile.dateEntree | date:'yyyy-MM-dd'"
+                            (ngModelChange)="vigile.dateEntree = $event" type="date" class="form-control"
+                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateEntree}">
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -272,7 +283,8 @@
                                 Date sortie
                             </span>
                         </div>
-                        <input [ngModel]="vigile.dateSortie | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dateSortie = $event" type="date" class="form-control">
+                        <input [ngModel]="vigile.dateSortie | date:'yyyy-MM-dd'"
+                            (ngModelChange)="vigile.dateSortie = $event" type="date" class="form-control">
                     </div>
                 </div>
             </div>

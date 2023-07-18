@@ -7,23 +7,41 @@
             <div class="col-10">
                 <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
                     {{vigile.noms}}
+                    <b>
+                        {{statut}}
+                    </b>
                 </div>
                 <div>
                     <div>
                         Fonction : {{libelleFonction(vigile.fonction)}}, Tel : {{vigile.tel}}
                         <br>
                         <ng-container *ngIf="affectation">
-                            Poste : <a
-                                [routerLink]="'/poste/view/' + affectation.idposte?.idposte">{{affectation.idposte?.libelle}}</a>
+                            <div>
+                                Poste :
+                                <a [routerLink]="'/poste/view/' + affectation.idposte?.idposte">
+                                    {{affectation.idposte?.libelle}}
+                                </a>
+                            </div>
+                            <div *ngIf="affectation.remplacant">
+                                Remplacant :
+                                {{affectation.remplacant?.noms}}
+                                <!-- <a [routerLink]="'/vigile/view/' + affectation.remplacant?.idvigile">
+                                </a> -->
+                            </div>
                         </ng-container>
                         <ng-container *ngIf="!affectation && !vigile.estRemplacant">
                             Poste : <b style="color: red;">VACANT</b>
                         </ng-container>
-
                     </div>
                 </div>
                 <div>
-                    Statut : {{statut}}
+                    Statut : {{libelleStatut(vigile.statut)}}
+                </div>
+                <div>
+                    Jour de repos : {{jourSemaine(vigile.jourRepos)}}
+                </div>
+                <div *ngIf="vigile.dateEntree">
+                    Date d'entrée : {{vigile.dateEntree | date:"yyyy-MM-dd"}}
                 </div>
                 <div *ngIf="vigile.badge">
                     Badge reçu

@@ -28,6 +28,8 @@ export class PermissionEditComponent implements OnInit {
   etape = 1;
 
   rechercheVigile = "";
+  montrerErreurs = false;
+  datesInvalides = false;
 
   constructor(
     private router: Router,
@@ -75,33 +77,40 @@ export class PermissionEditComponent implements OnInit {
   async save() {
     console.log('this.permission');
     console.log(this.permission);
-    this.permission.dateDebut = new Date(this.permission.dateDebut!);
-    this.permission.dateFin = new Date(this.permission.dateFin!);
-    setTimeout(() => {
-      if (this.permission.idpermission === 0) {
-        this.processing = true;
-        this.jarvisService.ajouter('permission', this.permission).then((data) => {
-          console.log('data');
-          console.log(data);
-          this.processing = false;
-          this.notifierService.notify('success', "Ajout effectué avec succès");
-          this.router.navigate(['permission']);
-        }).catch((e) => {
-          this.processing = false;
-        });
+    this.montrerErreurs = true;
+    if (this.permission.idvigile && this.permission.dateDebut && this.permission.dateFin) {
+      this.permission.dateDebut = new Date(this.permission.dateDebut!);
+      this.permission.dateFin = new Date(this.permission.dateFin!);
+      if (this.permission.dateDebut < this.permission.dateFin) {
+        setTimeout(() => {
+          if (this.permission.idpermission === 0) {
+            this.processing = true;
+            this.jarvisService.ajouter('permission', this.permission).then((data) => {
+              console.log('data');
+              console.log(data);
+              this.processing = false;
+              this.notifierService.notify('success', "Ajout effectué avec succès");
+              this.router.navigate(['permission']);
+            }).catch((e) => {
+              this.processing = false;
+            });
+          } else {
+            this.processing = true;
+            this.jarvisService.modifier('permission', this.permission.idpermission, this.permission).then((data) => {
+              console.log('data');
+              console.log(data);
+              this.processing = false;
+              this.notifierService.notify('success', "Ajout effectué avec succès");
+              this.router.navigate(['permission']);
+            }).catch((e) => {
+              this.processing = false;
+            });
+          }
+        }, 500);
       } else {
-        this.processing = true;
-        this.jarvisService.modifier('permission', this.permission.idpermission, this.permission).then((data) => {
-          console.log('data');
-          console.log(data);
-          this.processing = false;
-          this.notifierService.notify('success', "Ajout effectué avec succès");
-          this.router.navigate(['permission']);
-        }).catch((e) => {
-          this.processing = false;
-        });
+        this.datesInvalides = true;
       }
-    }, 500);
+    }
   }
 
   supprimer() {

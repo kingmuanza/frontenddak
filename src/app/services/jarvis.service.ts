@@ -271,4 +271,22 @@ export class JarvisService<T> {
 
     return "";
   }
+  libelleStatut(fonction: string | number) {
+    if (fonction == "1")
+      return "Absent[e]";
+    if (fonction == "2")
+      return "Actif[ve]";
+    if (fonction == "4")
+      return "Licencié(e)";
+    if (fonction == "3")
+      return "Standby";
+    if (fonction == "5")
+      return "Suspendu[e]";
+    if (fonction == "6")
+      return "Démissionné[e]";
+    if (fonction == "7")
+      return "Décédé[e]";
+
+    return "";
+  }
 }

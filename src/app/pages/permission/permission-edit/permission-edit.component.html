@@ -26,7 +26,8 @@
                             </div>
                             <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
                                 class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
-                            <select type="text" [(ngModel)]="permission.idvigile" class="form-control">
+                            <select type="text" [(ngModel)]="permission.idvigile" class="form-control"
+                                [ngClass]="{'is-invalid': montrerErreurs && !permission.idvigile}">
                                 <option [ngValue]="vigile" *ngFor="let vigile of vigiles">
                                     {{vigile.noms}}
                                 </option>
@@ -45,7 +46,8 @@
                                 </span>
                             </div>
                             <input [ngModel]="permission.dateDebut | date:'yyyy-MM-dd'"
-                                (ngModelChange)="permission.dateDebut = $event" type="date" class="form-control">
+                                (ngModelChange)="permission.dateDebut = $event" type="date" class="form-control"
+                                [ngClass]="{'is-invalid': montrerErreurs && !permission.dateDebut}">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -56,8 +58,12 @@
                                 </span>
                             </div>
                             <input [ngModel]="permission.dateFin | date:'yyyy-MM-dd'"
-                                (ngModelChange)="permission.dateFin = $event" type="date" class="form-control">
+                                (ngModelChange)="permission.dateFin = $event" type="date" class="form-control"
+                                [ngClass]="{'is-invalid': montrerErreurs && (!permission.dateFin || datesInvalides)}">
                         </div>
+                    </div>
+                    <div *ngIf="montrerErreurs && datesInvalides" style="color: red; margin-top: 5px;">
+                        La date de fin doit être supérieure à la date de début
                     </div>
                 </div>
                 <div class="input-group">
