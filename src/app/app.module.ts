@@ -101,6 +101,7 @@ import { EnrolementListComponent } from './enrolement/enrolement-list/enrolement
 import { EnrolementEditComponent } from './enrolement/enrolement-edit/enrolement-edit.component';
 import { EnrolementViewComponent } from './enrolement/enrolement-view/enrolement-view.component';
 import { EnrolementWaitComponent } from './enrolement/enrolement-wait/enrolement-wait.component';
+import { ActifsPipe } from './pipes/actifs.pipe';
 
 @NgModule({
   declarations: [
@@ -197,6 +198,7 @@ import { EnrolementWaitComponent } from './enrolement/enrolement-wait/enrolement
     EnrolementEditComponent,
     EnrolementViewComponent,
     EnrolementWaitComponent,
+    ActifsPipe,
   ],
   imports: [
     BrowserModule,

@@ -83,7 +83,7 @@
                                 <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
                                     class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
                                 <select #vigileElement [(ngModel)]="affectation.idvigile" class="form-control">
-                                    <ng-container *ngFor="let vigile of vigiles">
+                                    <ng-container *ngFor="let vigile of vigiles | actifs">
                                         <option [ngValue]="vigile"
                                             *ngIf="!vigile.estRemplacant && !estDejaAffecteAuPoste(vigile) && (affectation.idposte)">
                                             {{vigile.noms}}
@@ -120,7 +120,7 @@
                                 <select type="text" [(ngModel)]="affectation.remplacant" class="form-control">
                                     <option *ngIf="!affectation.idvigile">Veuillez choisir premièrement un vigile
                                     </option>
-                                    <ng-container *ngFor="let vigile of remplacants">
+                                    <ng-container *ngFor="let vigile of remplacants | actifs">
                                         <option [ngValue]="vigile"
                                             *ngIf="affectation.idvigile && affectation.idvigile.idvigile != vigile.idvigile && vigile.estRemplacant">
                                             {{vigile.noms}}

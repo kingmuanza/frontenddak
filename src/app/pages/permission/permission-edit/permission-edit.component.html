@@ -28,7 +28,7 @@
                                 class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
                             <select type="text" [(ngModel)]="permission.idvigile" class="form-control"
                                 [ngClass]="{'is-invalid': montrerErreurs && !permission.idvigile}">
-                                <option [ngValue]="vigile" *ngFor="let vigile of vigiles">
+                                <option [ngValue]="vigile" *ngFor="let vigile of vigiles | actifs">
                                     {{vigile.noms}}
                                 </option>
                             </select>
