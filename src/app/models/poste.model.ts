@@ -33,4 +33,5 @@ export class Poste {
     bon = false;
     horaire = '';
     idcontratsite: ContratSite | undefined;
+    codeagiv = '';
 }

@@ -84,22 +84,36 @@
                 <table datatable [dtOptions]="dtOptions " [dtTrigger]="dtTrigger " class="row-border hover ">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Libellé</th>
-                            <th>Code</th>
+                            <!-- <th>Code</th> -->
+                            <th>Code AGIV</th>
                             <th>Zone</th>
+                            <th>Contrat</th>
                             <th>Contrat</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let poste of resultats" (click)="edit(poste.idposte) ">
-                            <td>
+                        <tr *ngFor="let poste of resultats">
+                            <!-- <td>
                                 <span [ngClass]="{'important': !vacanteur[poste.idposte]}">
                                     {{poste.idposte}}
                                 </span>
-                            </td>
-                            <td>{{poste.libelle}}</td>
+                            </td> -->
+                            <!-- <td>{{poste.libelle}}</td> -->
                             <td>{{poste.code}}</td>
+                            <td style="width: 300px;">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            AGIV
+                                        </span>
+                                    </div>
+                                    <input type="text" [(ngModel)]="poste.codeagiv" class="form-control">
+                                    <button (click)="save(poste)" class="btn btn-primary">
+                                        Save
+                                    </button>
+                                </div>
+                            </td>
                             <td>{{poste.zone?.libelle}}</td>
                             <td>
                                 <b *ngIf="poste.idcontratsite">
@@ -108,6 +122,12 @@
                                 <span *ngIf="!poste.idcontratsite" style="color: red;">
                                     Aucun contrat
                                 </span>
+                            </td>
+                            <td>
+                                <button class="btn" (click)="edit(poste.idposte)">
+                                    Voir
+                                </button>
+
                             </td>
                         </tr>
                     </tbody>

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
+import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
 import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
@@ -48,6 +49,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
     private affectationService: JarvisService<Affectation>,
     private posteCtrlService: PosteCtrlService,
     private authService: AuthService,
+    private notifierService: NotifierService,
   ) { }
 
   ngOnInit(): void {
@@ -143,6 +145,15 @@ export class PosteListComponent implements OnInit, OnDestroy {
 
     this.vacanteur[poste.idposte] = is
 
+  }
+
+  save(poste: Poste) {
+    this.posteService.modifier('poste', poste.idposte, poste).then((data) => {
+      console.log('data');
+      console.log(data);
+      this.notifierService.notify('success', "Modification effectuée avec succès");
+    }).catch((e) => {
+    });
   }
 
   ngOnDestroy(): void {
