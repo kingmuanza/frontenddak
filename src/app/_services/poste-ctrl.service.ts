@@ -19,7 +19,7 @@ export class PosteCtrlService {
   ) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
-      this.URL = url + "services/poste/";
+      this.URL = url + "webresources/services/poste/";
     } else {
 
     }

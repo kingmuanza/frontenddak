@@ -18,9 +18,7 @@ export class VigileService {
   ) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
-      this.URL = url + this.package;
-    } else {
-      this.URL += this.package;
+      this.URL = url + "webresources/";
     }
   }
 

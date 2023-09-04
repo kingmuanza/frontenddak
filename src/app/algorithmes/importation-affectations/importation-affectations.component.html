@@ -1,0 +1,26 @@
+<h1>
+  Affectations
+  {{affectations.length}}
+</h1>
+<h2>
+  Postes
+  {{postes.length}}
+</h2>
+<h3>
+  <button (click)="saveAllAffectations()">
+    Mettre en ligne
+  </button>
+</h3>
+<div style="padding: 50px;">
+  <div *ngFor="let affectation of affectations" style="margin-bottom: 20px;">
+    <div>
+      {{affectation | json}}
+    </div>
+    <div>
+      <button (click)="saveAffectation(affectation)">
+        Mettre en ligne
+      </button>
+    </div>
+  </div>
+
+</div>

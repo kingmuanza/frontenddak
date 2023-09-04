@@ -1,0 +1,36 @@
+<div style="padding-left: 50px;">
+  <h1>
+    Postes
+  </h1>
+  <h1>
+    <button (click)="saveAllPostes()" class="button">
+      Sauvegarder tout localement
+    </button>
+  </h1>
+
+  <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+    <div style="margin-top: 20px; width: 45%;">
+      <ol>
+        <ng-container *ngFor="let poste of postes">
+          <li *ngIf="existeEnLigne(poste) > -1">
+            {{poste.libelle}} : {{poste.idcontratsite!.nom | json}} : {{poste.idcontratsite!.longitude | json}} :
+            {{sites[existeEnLigne(poste)].nom | json}}
+
+            <button (click)="savePoste(poste)" class="button">
+              Sauvegarder localement
+            </button>
+          </li>
+        </ng-container>
+      </ol>
+    </div>
+    <div style="margin-top: 20px; width: 45%;">
+      <ol>
+        <ng-container *ngFor="let site of sites">
+          <li>
+            {{site.nom}}
+          </li>
+        </ng-container>
+      </ol>
+    </div>
+  </div>
+</div>

@@ -33,7 +33,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   postes = new Array<Poste>();
   resultatsPostes = new Array<Poste>();
 
-  vigiles = new Array<Vigile>();
   resultats = new Array<Vigile>();
 
   vigile: any;
@@ -94,22 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.posteService.getAll('poste').then((data) => {
       this.postes = data;
     });
-    this.vigileService.getAll('vigile').then((data) => {
-      console.log('data');
-      console.log(data);
-      data.forEach((vigile) => {
-        if (vigile.jourRepos) {
-          if (vigile.jourRepos > 1) {
-            this.semaines[vigile.jourRepos - 1] += 1;
-          }
-        }
-      });
-      console.log('this.semaines');
-      console.log(this.semaines);
-      this.afficher = true;
-      this.dtTrigger.next('');
-      this.vigiles = data;
-    });
+
     this.calculService.getBesoinVigiles().then((besoinVigile) => {
       this.besoinVigile = besoinVigile;
       this.terminee = true;
@@ -218,11 +202,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       mot = this.vigile as string;
     }
     console.log(mot);
-    this.resultats = this.vigiles.filter((v) => {
-      const isBonNom = v.noms.toLowerCase().indexOf(mot.toLowerCase()) !== -1;
-      const isBonPoste = this.poste;
-      return isBonNom;
-    });
+
   }
 
   rechercherPoste() {

@@ -18,7 +18,7 @@ export class ContratCtrlService {
   ) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
-      this.URL = url + "services/contrat/";
+      this.URL = url + "webresources/services/contrat/";
     } else {
 
     }

@@ -102,6 +102,8 @@ import { EnrolementEditComponent } from './enrolement/enrolement-edit/enrolement
 import { EnrolementViewComponent } from './enrolement/enrolement-view/enrolement-view.component';
 import { EnrolementWaitComponent } from './enrolement/enrolement-wait/enrolement-wait.component';
 import { ActifsPipe } from './pipes/actifs.pipe';
+import { ImportationLocalisationPostesComponent } from './algorithmes/importation-localisation-postes/importation-localisation-postes.component';
+import { ImportationAffectationsComponent } from './algorithmes/importation-affectations/importation-affectations.component';
 
 @NgModule({
   declarations: [
@@ -199,6 +201,8 @@ import { ActifsPipe } from './pipes/actifs.pipe';
     EnrolementViewComponent,
     EnrolementWaitComponent,
     ActifsPipe,
+    ImportationLocalisationPostesComponent,
+    ImportationAffectationsComponent,
   ],
   imports: [
     BrowserModule,

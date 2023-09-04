@@ -8,8 +8,8 @@ import { LoadingService } from './loading.service';
   providedIn: 'root'
 })
 export class JarvisService<T> {
-  URL = 'http://localhost:8080/dakBack/webresources/';
-  package = "";
+  URL = 'http://localhost:8080/dakBack/';
+  package = "webresources/";
   urlSubject = new Subject<string>();
 
   constructor(
@@ -18,9 +18,7 @@ export class JarvisService<T> {
   ) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
-      this.URL = url + this.package;
-    } else {
-      this.URL += this.package;
+      this.URL = url
     }
   }
 
@@ -46,7 +44,7 @@ export class JarvisService<T> {
     this.infos();
     this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.get(this.URL + table).subscribe({
+      this.http.get(this.URL + this.package + table).subscribe({
         next: (data) => {
           const donnees = data as Array<T>;
           this.hideLoader();
@@ -64,7 +62,7 @@ export class JarvisService<T> {
     this.infos();
     this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.get(this.URL + table + "/0/10").subscribe({
+      this.http.get(this.URL + this.package + table + "/0/10").subscribe({
         next: (data) => {
           const donnees = data as Array<T>;
           this.hideLoader();
@@ -81,7 +79,7 @@ export class JarvisService<T> {
   getAllSilent(table: string): Promise<Array<T>> {
     this.infos();
     return new Promise((resolve, reject) => {
-      this.http.get(this.URL + table).subscribe({
+      this.http.get(this.URL + this.package + table).subscribe({
         next: (data) => {
           const donnees = data as Array<T>;
           resolve(donnees);
@@ -98,7 +96,7 @@ export class JarvisService<T> {
     this.infos();
     this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.get(this.URL + table + '/' + id).subscribe({
+      this.http.get(this.URL + this.package + table + '/' + id).subscribe({
         next: (data) => {
           const resulat = data as T;
           this.hideLoader();
@@ -116,7 +114,7 @@ export class JarvisService<T> {
     this.infos();
     // this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.get(this.URL + table + '/' + id).subscribe({
+      this.http.get(this.URL + this.package + table + '/' + id).subscribe({
         next: (data) => {
           const resulat = data as T;
           // this.hideLoader();
@@ -134,7 +132,7 @@ export class JarvisService<T> {
     this.infos();
     this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.post(this.URL + table, objet).subscribe({
+      this.http.post(this.URL + this.package + table, objet).subscribe({
         next: (data) => {
           this.hideLoader();
           resolve(data);
@@ -151,7 +149,7 @@ export class JarvisService<T> {
     this.infos();
     // this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.post(this.URL + table, objet).subscribe({
+      this.http.post(this.URL + this.package + table, objet).subscribe({
         next: (data) => {
           // this.hideLoader();
           resolve(data);
@@ -168,7 +166,7 @@ export class JarvisService<T> {
     this.infos();
     this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.put(this.URL + table + '/' + id, objet).subscribe({
+      this.http.put(this.URL + this.package + table + '/' + id, objet).subscribe({
         next: (data) => {
           const resulat = data as T;
           this.hideLoader();
@@ -186,7 +184,7 @@ export class JarvisService<T> {
     this.infos();
     // this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.put(this.URL + table + '/' + id, objet).subscribe({
+      this.http.put(this.URL + this.package + table + '/' + id, objet).subscribe({
         next: (data) => {
           const resulat = data as T;
           // this.hideLoader();
@@ -204,7 +202,7 @@ export class JarvisService<T> {
     this.infos();
     this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.delete(this.URL + table + '/' + id).subscribe({
+      this.http.delete(this.URL + this.package + table + '/' + id).subscribe({
         next: (data) => {
           this.hideLoader();
           resolve(true);
@@ -221,7 +219,7 @@ export class JarvisService<T> {
     this.infos();
     // this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.delete(this.URL + table + '/' + id).subscribe({
+      this.http.delete(this.URL + this.package + table + '/' + id).subscribe({
         next: (data) => {
           // this.hideLoader();
           resolve(true);

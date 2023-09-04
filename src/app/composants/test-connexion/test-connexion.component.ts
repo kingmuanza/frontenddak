@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 import { LoadingService } from 'src/app/services/loading.service';
 
@@ -8,7 +8,7 @@ import { LoadingService } from 'src/app/services/loading.service';
   templateUrl: './test-connexion.component.html',
   styleUrls: ['./test-connexion.component.scss']
 })
-export class TestConnexionComponent implements OnInit {
+export class TestConnexionComponent implements OnInit, OnChanges {
 
   @Output() onConnexionEtablie = new EventEmitter<string>();
   @Output() onConnexionErreur = new EventEmitter<string>();
@@ -19,15 +19,7 @@ export class TestConnexionComponent implements OnInit {
 
   loaderVisible = false;
 
-  urls = [
-    "http://192.168.1.17:8080/dakBack",
-    "http://192.168.1.17:8081/dakBack",
-    "http://localhost:8081/dakBack",
-    "http://localhost:8080/dakBack",
-    "https://localhost:8181/dakBack",
-    "http://localhost:8080/dakBackred",
-    "http://localhost:8080/dakBackred2"
-  ];
+  urls = new Array<any>();
 
   constructor(
     private http: HttpClient,
@@ -35,19 +27,41 @@ export class TestConnexionComponent implements OnInit {
     private loadingService: LoadingService,
   ) { }
 
-  ngOnInit(): void {
-    console.log('TestConnexionComponent');
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("TestConnexionComponent ngOnChanges");
     this.getConfigurationFile().then((data) => {
       console.log('Liens vers le serveur');
       console.log(data);
       if (data) {
         this.urls = data;
+        let url = sessionStorage.getItem('serveur-dak')
+        if (url) {
+          this.urlServeur = url;
+        }
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    console.log("TestConnexionComponent ngOnInit");
+    this.getConfigurationFile().then((data) => {
+      console.log('Liens vers le serveur');
+      console.log(data);
+      if (data) {
+        this.urls = data;
+        let url = sessionStorage.getItem('serveur-dak');
+
+        console.log("serveur-dak");
+        console.log(url);
+        if (url) {
+          this.urlServeur = url;
+        }
       }
     });
   }
 
   getServeur() {
-    return this.urlServeur + '/webresources/';
+    return this.urlServeur;
   }
 
   showLoader() {
@@ -85,7 +99,6 @@ export class TestConnexionComponent implements OnInit {
             (error) => {
               reject(error);
             }
-
         }
         );
     });

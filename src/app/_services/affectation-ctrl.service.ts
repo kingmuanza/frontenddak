@@ -14,7 +14,7 @@ export class AffectationCtrlService {
     private http: HttpClient,) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
-      this.URL = url + "services/affectation/";
+      this.URL = url + "webresources/services/affectation/";
     } else {
 
     }

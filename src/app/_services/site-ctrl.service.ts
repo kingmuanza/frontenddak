@@ -17,7 +17,7 @@ export class SiteCtrlService {
   ) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
-      this.URL = url + "services/site/";
+      this.URL = url + "webresources/services/site/";
     } else {
 
     }

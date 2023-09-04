@@ -1,406 +1,380 @@
 <div *ngIf="mesDroits.dashboard " class="page">
-    <div class="page-entete">
-        <div class="page-entete-titre">
-            Tableau de bord
-        </div>
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      Tableau de bord
     </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Vigile
-                            </span>
-                        </div>
-                        <input [(ngModel)]="vigile" type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Poste
-                            </span>
-                        </div>
-
-                        <input [(ngModel)]="poste" type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Horaire
-                            </span>
-                        </div>
-
-                        <select class="form-control">
-                            <option value="jour">Jour</option>
-                            <option value="nuit">Nuit</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <button (click)="rechercher()" class="btn primaire">Rechercher</button>
-                </div>
+  </div>
+  <div class="page-contenu">
+    <div class="page-contenu-titre">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Vigile
+              </span>
             </div>
-            <div *ngIf="afficherResultats" class="page-contenu-corps">
-                <div class="petit-titre">
-                    Résultats de la recherche : Vigiles
-                </div>
-                <div class="row">
-                    <div *ngFor="let v of resultats" class="col-lg-3">
-                        <app-vigile [vigile]="v"></app-vigile>
-                    </div>
-                </div>
+            <input [(ngModel)]="vigile" type="text" class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Poste
+              </span>
             </div>
-            <div *ngIf="afficherResultatsPostes" class="page-contenu-corps">
-                <div class="petit-titre">
-                    Résultats de la recherche : Postes
-                </div>
-                <div class="row">
-                    <div *ngFor="let p of resultatsPostes" class="col-lg-3">
-                        <app-display-poste [poste]="p"></app-display-poste>
-                    </div>
-                </div>
+
+            <input [(ngModel)]="poste" type="text" class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Horaire
+              </span>
             </div>
-            <div style="display: none;" *ngIf="terminee" class="page-contenu-corps">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="petit-titre">
-                            Etats des lieux
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
-                            <div class="titre">
-                                Besoins en vigiles JOUR
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6" style="border-right: 1px solid #fff;">
 
-                                    <div class="valeur">
-                                        {{besoinVigile.nbVigilesJour}}
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="valeur">
-                                        {{besoinVigile.nbBesoinVigilesJour }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
-                            <div class="titre">
-                                Besoins en vigiles NUIT
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6" style="border-right: 1px solid #fff;">
-
-                                    <div class="valeur">
-                                        {{besoinVigile.nbVigilesNuit}}
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="valeur">
-                                        {{besoinVigile.nbBesoinVigilesNuit}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
-                            <div class="titre">
-                                Besoins en vigiles JOUR
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6" style="border-right: 1px solid #fff;">
-
-                                    <div class="valeur">
-                                        {{besoinVigile.nbVigilesJour}}
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="valeur">
-                                        {{besoinVigile.nbBesoinVigilesJour }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
-                            <div class="titre">
-                                Besoins en vigiles NUIT
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6" style="border-right: 1px solid #fff;">
-
-                                    <div class="valeur">
-                                        {{besoinVigile.nbVigilesNuit}}
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="valeur">
-                                        {{besoinVigile.nbBesoinVigilesNuit}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <select class="form-control">
+              <option value="jour">Jour</option>
+              <option value="nuit">Nuit</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <button (click)="rechercher()" class="btn primaire">Rechercher</button>
+        </div>
+      </div>
+      <div *ngIf="afficherResultats" class="page-contenu-corps">
+        <div class="petit-titre">
+          Résultats de la recherche : Vigiles
+        </div>
+        <div class="row">
+          <div *ngFor="let v of resultats" class="col-lg-3">
+            <app-vigile [vigile]="v"></app-vigile>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="afficherResultatsPostes" class="page-contenu-corps">
+        <div class="petit-titre">
+          Résultats de la recherche : Postes
+        </div>
+        <div class="row">
+          <div *ngFor="let p of resultatsPostes" class="col-lg-3">
+            <app-display-poste [poste]="p"></app-display-poste>
+          </div>
+        </div>
+      </div>
+      <div style="display: none;" *ngIf="terminee" class="page-contenu-corps">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="petit-titre">
+              Etats des lieux
             </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
+              <div class="titre">
+                Besoins en vigiles JOUR
+              </div>
+              <div class="row">
+                <div class="col-lg-6" style="border-right: 1px solid #fff;">
+
+                  <div class="valeur">
+                    {{besoinVigile.nbVigilesJour}}
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="valeur">
+                    {{besoinVigile.nbBesoinVigilesJour }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
+              <div class="titre">
+                Besoins en vigiles NUIT
+              </div>
+              <div class="row">
+                <div class="col-lg-6" style="border-right: 1px solid #fff;">
+
+                  <div class="valeur">
+                    {{besoinVigile.nbVigilesNuit}}
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="valeur">
+                    {{besoinVigile.nbBesoinVigilesNuit}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
+              <div class="titre">
+                Besoins en vigiles JOUR
+              </div>
+              <div class="row">
+                <div class="col-lg-6" style="border-right: 1px solid #fff;">
+
+                  <div class="valeur">
+                    {{besoinVigile.nbVigilesJour}}
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="valeur">
+                    {{besoinVigile.nbBesoinVigilesJour }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="vigiles-nuit shadow-2" (click)="goToPostesVacants()">
+              <div class="titre">
+                Besoins en vigiles NUIT
+              </div>
+              <div class="row">
+                <div class="col-lg-6" style="border-right: 1px solid #fff;">
+
+                  <div class="valeur">
+                    {{besoinVigile.nbVigilesNuit}}
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="valeur">
+                    {{besoinVigile.nbBesoinVigilesNuit}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="page-contenu-corps">
+        <div class="row">
+
+          <div class="col-lg-12">
+            <div class="card shadow-1">
+              <div class="petit-titre">
+                Recouvrement
+              </div>
+
+              <div class="page-contenu">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="stat">
+                      <div class="stat-titre">
+                        Montant des créances
+                      </div>
+                      <div class="stat-valeur">
+                        50 000 000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="stat">
+                      <div class="stat-titre">
+                        Montants des recouvrements
+                      </div>
+                      <div class="stat-valeur">
+                        35 000 000
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="stat">
+                      <div class="stat-titre">
+                        Reste à recouvrer
+                      </div>
+                      <div class="stat-valeur">
+                        15 000 000
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4">
+                <table datatable [dtOptions]="dtOptions" class="row-border hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Contrat</th>
+
+                      <th>Montant</th>
+                      <th>Agent</th>
+                      <th>Percepteur</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>2023-02-05</td>
+                      <td>Contrat Minrex</td>
+
+                      <td>8 500 000</td>
+                      <td>Eric Salaka</td>
+                      <td>Diane Audrey</td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card shadow-1 mt-4">
+              <div class="petit-titre">
+                Contrôle des postes
+              </div>
+              <div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Postes contrôlés une fois
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Postes non contrôlés
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4">
+                <table class="table table-bordered row-border hover">
+                  <thead>
+                    <tr>
+
+                      <th>Libellé</th>
+                      <th>Zone</th>
+                      <th>Contrôleur</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let poste of postes; let i = index">
+                      <tr *ngIf="i < 7">
+
+                        <td>{{poste.libelle}}</td>
+                        <td>{{poste.zone?.libelle}}</td>
+                        <td>
+                          Louis Bittol
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+            <div class="card shadow-1 mt-4">
+              <div class="petit-titre">
+                Liste des zones
+              </div>
+              <div class="row">
+                <div class="col-lg-4" *ngFor="let zone of zones">
+                  <div (click)="goToZone(zone)" class="dash">
+                    <div class="dash-titre">
+                      {{zone.libelle}}
+                    </div>
+                    <div class="">
+                      {{zone.idville?.nom}}
+                    </div>
+                    <div class="dash-postes">
+                      <span class="dash-postes-libelle" *ngFor="let poste of postes">
+                        <span class="dash-postes-libelle" *ngIf="poste.zone === zone.idzone">
+                          {{poste.libelle}}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="afficher" class="card shadow-1 mt-4">
+              <div class="" style="display: block;">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                  [legend]="barChartLegend">
+                </canvas>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-6">
+
             <div class="page-contenu-corps">
-                <div class="row">
-
-                    <div class="col-lg-12">
-                        <div class="card shadow-1">
-                            <div class="petit-titre">
-                                Recouvrement
-                            </div>
-
-                            <div class="page-contenu">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="stat">
-                                            <div class="stat-titre">
-                                                Montant des créances
-                                            </div>
-                                            <div class="stat-valeur">
-                                                50 000 000
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="stat">
-                                            <div class="stat-titre">
-                                                Montants des recouvrements
-                                            </div>
-                                            <div class="stat-valeur">
-                                                35 000 000
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="stat">
-                                            <div class="stat-titre">
-                                                Reste à recouvrer
-                                            </div>
-                                            <div class="stat-valeur">
-                                                15 000 000
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <table datatable [dtOptions]="dtOptions" class="row-border hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Contrat</th>
-
-                                            <th>Montant</th>
-                                            <th>Agent</th>
-                                            <th>Percepteur</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>2023-02-05</td>
-                                            <td>Contrat Minrex</td>
-
-                                            <td>8 500 000</td>
-                                            <td>Eric Salaka</td>
-                                            <td>Diane Audrey</td>
-
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card shadow-1 mt-4">
-                            <div class="petit-titre">
-                                Contrôle des postes
-                            </div>
-                            <div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                id="flexRadioDefault1">
-                                            <label class="form-check-label" for="flexRadioDefault1">
-                                                Postes contrôlés une fois
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                id="flexRadioDefault1">
-                                            <label class="form-check-label" for="flexRadioDefault1">
-                                                Postes non contrôlés
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <table class="table table-bordered row-border hover">
-                                    <thead>
-                                        <tr>
-
-                                            <th>Libellé</th>
-                                            <th>Zone</th>
-                                            <th>Contrôleur</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <ng-container *ngFor="let poste of postes; let i = index">
-                                            <tr *ngIf="i < 7">
-
-                                                <td>{{poste.libelle}}</td>
-                                                <td>{{poste.zone?.libelle}}</td>
-                                                <td>
-                                                    Louis Bittol
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                        <div class="card shadow-1 mt-4">
-                            <div class="petit-titre">
-                                Liste des zones
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4" *ngFor="let zone of zones">
-                                    <div (click)="goToZone(zone)" class="dash">
-                                        <div class="dash-titre">
-                                            {{zone.libelle}}
-                                        </div>
-                                        <div class="">
-                                            {{zone.idville?.nom}}
-                                        </div>
-                                        <div class="dash-postes">
-                                            <span class="dash-postes-libelle" *ngFor="let poste of postes">
-                                                <span class="dash-postes-libelle" *ngIf="poste.zone === zone.idzone">
-                                                    {{poste.libelle}}
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="afficher" class="card shadow-1 mt-4">
-                            <div class="" style="display: block;">
-                                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels"
-                                    [options]="barChartOptions" [legend]="barChartLegend">
-                                </canvas>
-                            </div>
-                        </div>
-                        <div class="page-contenu-corps" style="margin-top: 25px;">
-                            <div class="card shadow-1">
-                                <div class="petit-titre" style="margin-bottom: 20px;">
-                                    Liste des vigiles en stand by
-                                </div>
-                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                                    class="row-border hover">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Noms</th>
-                                            <th>Horaire</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let vigile of vigiles" style="cursor: pointer;">
-                                            <td>{{vigile.idvigile}}</td>
-                                            <td>{{vigile.noms}}</td>
-                                            <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-
-                        <div class="page-contenu-corps">
-                            <div class="card shadow-1">
-                                <div class="petit-titre" style="margin-bottom: 20px;">
-                                    Liste des vigiles sanctionnés
-                                </div>
-                                <table class="table table-bordered row-border hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Vigile</th>
-                                            <th>Horaire</th>
-                                            <th>Date</th>
-                                            <th>Date effet</th>
-                                            <th>Sanctions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let s of sanctions" style="cursor: pointer;">
-                                            <td>{{s.idvigile.noms}}</td>
-                                            <td>{{s.horaire}}</td>
-                                            <td>{{s.dateSuivi | date: 'yyyy-MM-dd'}}</td>
-                                            <td>{{s.dateEffet | date: 'yyyy-MM-dd'}}</td>
-                                            <td>{{s.commentaire}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="page-contenu-corps" style="margin-top: 25px;">
-                            <div class="card shadow-1">
-                                <div class="petit-titre" style="margin-bottom: 20px;">
-                                    Liste des permissions
-                                </div>
-                                <table class="table table-bordered row-border hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Vigile</th>
-                                            <th>Horaire</th>
-                                            <th>Date</th>
-                                            <th>Date effet</th>
-                                            <th>Sanctions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let s of permissions" style="cursor: pointer;">
-                                            <td>{{s.idvigile?.noms}}</td>
-                                            <td>{{s.idvigile?.horaire}}</td>
-                                            <td>{{s.dateDebut | date: 'yyyy-MM-dd'}}</td>
-                                            <td>{{s.dateFin | date: 'yyyy-MM-dd'}}</td>
-                                            <td>{{s.commentaire}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-12">
-
-                    </div>
+              <div class="card shadow-1">
+                <div class="petit-titre" style="margin-bottom: 20px;">
+                  Liste des vigiles sanctionnés
                 </div>
+                <table class="table table-bordered row-border hover">
+                  <thead>
+                    <tr>
+                      <th>Vigile</th>
+                      <th>Horaire</th>
+                      <th>Date</th>
+                      <th>Date effet</th>
+                      <th>Sanctions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let s of sanctions" style="cursor: pointer;">
+                      <td>{{s.idvigile.noms}}</td>
+                      <td>{{s.horaire}}</td>
+                      <td>{{s.dateSuivi | date: 'yyyy-MM-dd'}}</td>
+                      <td>{{s.dateEffet | date: 'yyyy-MM-dd'}}</td>
+                      <td>{{s.commentaire}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
+            <div class="page-contenu-corps" style="margin-top: 25px;">
+              <div class="card shadow-1">
+                <div class="petit-titre" style="margin-bottom: 20px;">
+                  Liste des permissions
+                </div>
+                <table class="table table-bordered row-border hover">
+                  <thead>
+                    <tr>
+                      <th>Vigile</th>
+                      <th>Horaire</th>
+                      <th>Date</th>
+                      <th>Date effet</th>
+                      <th>Sanctions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let s of permissions" style="cursor: pointer;">
+                      <td>{{s.idvigile?.noms}}</td>
+                      <td>{{s.idvigile?.horaire}}</td>
+                      <td>{{s.dateDebut | date: 'yyyy-MM-dd'}}</td>
+                      <td>{{s.dateFin | date: 'yyyy-MM-dd'}}</td>
+                      <td>{{s.commentaire}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-12">
+
+          </div>
         </div>
+      </div>
     </div>
-    <div style="height: 25vh;"></div>
+  </div>
+  <div style="height: 25vh;"></div>
