@@ -74,10 +74,14 @@ import { EnrolementListComponent } from './enrolement/enrolement-list/enrolement
 import { EnrolementWaitComponent } from './enrolement/enrolement-wait/enrolement-wait.component';
 import { ImportationLocalisationPostesComponent } from './algorithmes/importation-localisation-postes/importation-localisation-postes.component';
 import { ImportationAffectationsComponent } from './algorithmes/importation-affectations/importation-affectations.component';
+import { RecapJourneeComponent } from './pages/recap/recap-journee/recap-journee.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
   { path: 'importation-affectations', component: ImportationAffectationsComponent },
+
+  { path: 'recap', component: RecapJourneeComponent },
+
   { path: 'connexion', component: ConnexionComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'importer', component: ImporterComponent },

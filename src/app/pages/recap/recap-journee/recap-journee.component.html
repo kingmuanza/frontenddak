@@ -1,0 +1,68 @@
+<div class="page">
+  <div class="entete">
+    <div class="page-entete-titre">
+      Récapitulatif de la veille
+    </div>
+    <div>
+      Du <b>{{debut | date:"dd/MM/yyyy"}}</b> à <b>{{debut | date: "HH:mm:ss"}}</b>
+      Au <b>{{fin | date:"dd/MM/yyyy"}}</b> à <b>{{fin | date: "HH:mm:ss"}}</b>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="row">
+      <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Nombre de pointages
+          </div>
+          <div class="stat-valeur">
+            {{pointages.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Zones contrôlés
+          </div>
+          <div class="stat-valeur">
+            {{pointages.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Postes contrôlés
+          </div>
+          <div class="stat-valeur">
+            {{pointages.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Postes contrôlés une fois
+          </div>
+          <div class="stat-valeur">
+            {{pointages.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat red">
+          <div class="stat-titre">
+            Absences
+          </div>
+          <div class="stat-valeur">
+            {{pointages.length}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let pointage of pointages">
+      {{pointage | json}}
+    </div>
+  </div>
+</div>

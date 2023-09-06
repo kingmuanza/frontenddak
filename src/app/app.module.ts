@@ -104,6 +104,8 @@ import { EnrolementWaitComponent } from './enrolement/enrolement-wait/enrolement
 import { ActifsPipe } from './pipes/actifs.pipe';
 import { ImportationLocalisationPostesComponent } from './algorithmes/importation-localisation-postes/importation-localisation-postes.component';
 import { ImportationAffectationsComponent } from './algorithmes/importation-affectations/importation-affectations.component';
+import { RecapJourneeComponent } from './pages/recap/recap-journee/recap-journee.component';
+import { RecapZoneComponent } from './pages/recap/recap-zone/recap-zone.component';
 
 @NgModule({
   declarations: [
@@ -203,6 +205,8 @@ import { ImportationAffectationsComponent } from './algorithmes/importation-affe
     ActifsPipe,
     ImportationLocalisationPostesComponent,
     ImportationAffectationsComponent,
+    RecapJourneeComponent,
+    RecapZoneComponent,
   ],
   imports: [
     BrowserModule,
