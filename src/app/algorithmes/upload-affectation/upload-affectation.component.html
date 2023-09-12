@@ -1,0 +1,15 @@
+<div style="margin-bottom: 50px;">
+  <button (click)="mettreToutEnLigne()">
+    Mettre tout en ligne
+  </button>
+</div>
+<div>
+  <div *ngFor="let resultat of resultats" style="margin-bottom: 50px;">
+    {{resultat | json}}
+
+
+    <button (click)="mettreEnLigne(resultat)">
+      Mettre en ligne
+    </button>
+  </div>
+</div>

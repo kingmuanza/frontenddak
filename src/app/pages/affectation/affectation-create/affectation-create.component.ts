@@ -98,9 +98,10 @@ export class AffectationCreateComponent implements OnInit {
   }
 
   getVigiles(texte: string) {
-    this.vigileService.rechercheCalme(texte).then((vigiles) => {
-      this.vigiles = vigiles;
-    });
+    if (texte.length > 4)
+      this.vigileService.rechercheCalme(texte).then((vigiles) => {
+        this.vigiles = vigiles;
+      });
   }
 
   getRemplacants(texte: string) {

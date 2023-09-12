@@ -11,6 +11,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { Responsable } from 'src/app/models/responsable.model';
+import { VigileService } from 'src/app/services/vigile.service';
 
 @Component({
   selector: 'app-switch-edit',
@@ -25,12 +26,17 @@ export class SwitchEditComponent implements OnInit {
   affectations = new Array<Affectation>();
   affectationsResultats = new Array<Affectation>();
   postes = new Array<Poste>();
-  vigiles = new Array<Vigile>();
+  vigilesBases = new Array<Vigile>();
+  vigilesSwitchs = new Array<Vigile>();
   responsables = new Array<Responsable>();
   poste = new Poste();
   processing = false;
 
   app: any;
+
+
+  rechercheVigile = "";
+  rechercheVigileSwitch = "";
 
   constructor(
     private router: Router,
@@ -39,8 +45,8 @@ export class SwitchEditComponent implements OnInit {
     private changementService: JarvisService<Changement>,
     private affectationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
-    private vigileService: JarvisService<Vigile>,
     private responsableService: JarvisService<Responsable>,
+    private vigileService: VigileService,
   ) {
     const firebaseConfig = {
       apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
@@ -68,8 +74,8 @@ export class SwitchEditComponent implements OnInit {
           this.changement = changement;
 
 
-          this.vigileService.getAll('vigile').then((vigiles) => {
-            this.vigiles = vigiles;
+          this.vigileService.rechercheCalme(this.changement.idvigileSwitch.noms).then((vigiles) => {
+
             vigiles.forEach((v) => {
               if (v.idvigile === this.changement.idvigileSwitch.idvigile) {
                 this.changement.idvigileSwitch = v;
@@ -103,25 +109,21 @@ export class SwitchEditComponent implements OnInit {
           });
         });
       } else {
-        this.vigileService.getAll('vigile').then((vigiles) => {
-          this.vigiles = vigiles;
+        this.posteService.getAll('poste').then((postes) => {
+          console.log('postes');
+          console.log(postes);
+          this.postes = postes.sort((a, b) => a.libelle.localeCompare(b.libelle));
 
-          this.posteService.getAll('poste').then((postes) => {
-            console.log('postes');
-            console.log(postes);
-            this.postes = postes.sort((a, b) => a.libelle.localeCompare(b.libelle));
+          this.affectationService.getAll('affectation').then((affectations) => {
+            console.log('affectations');
+            console.log(affectations);
+            affectations.forEach((a) => {
+              if (!a.arret) {
+                this.affectations.push(a);
+              }
 
-            this.affectationService.getAll('affectation').then((affectations) => {
-              console.log('affectations');
-              console.log(affectations);
-              affectations.forEach((a) => {
-                if (!a.arret) {
-                  this.affectations.push(a);
-                }
-
-              });
-              this.affectationsResultats = new Array<Affectation>().concat(this.affectations);
             });
+            this.affectationsResultats = new Array<Affectation>().concat(this.affectations);
           });
         });
       }
@@ -198,6 +200,20 @@ export class SwitchEditComponent implements OnInit {
         this.router.navigate(['switch']);
       });
     }
+  }
+
+  getVigiles(texte: string) {
+    if (texte.length > 4)
+      this.vigileService.rechercheCalme(texte).then((vigiles) => {
+        this.vigilesBases = vigiles;
+      });
+  }
+
+  getVigilesSwitch(texte: string) {
+    if (texte.length > 4)
+      this.vigileService.rechercheCalme(texte).then((vigiles) => {
+        this.vigilesSwitchs = vigiles;
+      });
   }
 
 }

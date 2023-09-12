@@ -1,51 +1,69 @@
 <div class="menu-gauche shadow-1" style="width: 100%;">
-    <div class="menu-gauche-content">
-        <div class="menu-gauche-titre">
-            Menu
-            <div style="font-size: 14px; opacity: 0.5; font-weight: 100; margin-top: -5px;">
-                {{user?.role }}
-            </div>
-        </div>
+  <div class="menu-gauche-content">
+    <div class="menu-gauche-titre">
+      Menu
+      <div style="font-size: 14px; opacity: 0.5; font-weight: 100; margin-top: -5px;">
+        {{user?.role }}
+      </div>
+    </div>
 
-        <div>
-            <div class="menu-gauche-sous-titre">
-                ENROLEMENT
-            </div>
-            <div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
-                    <a routerLinkActive="active" routerLink="/enrolement-wait">
-                        Vigiles à enrôler
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
-                    <a routerLinkActive="active" routerLink="/enrolement">
-                        Vigiles enrôlés
-                    </a>
-                </div>
-            </div>
+    <div>
+      <div class="menu-gauche-sous-titre">
+        TABLEAUX DE BORD
+      </div>
+      <div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
+          <a routerLinkActive="active" routerLink="/recap-veille">
+            Récapitulatif de la veille
+          </a>
         </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
+          <a routerLinkActive="active" routerLink="/recap">
+            Récap du jour
+          </a>
+        </div>
+      </div>
+    </div>
 
-        <div>
-            <div class="menu-gauche-sous-titre">
-                Suivi
-            </div>
-            <div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.dashboard">
-                    <a routerLinkActive="active" routerLink="dashboard">
-                        Tableau de bord
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.pointage">
-                    <a routerLinkActive="active" routerLink="pointage">
-                        Pointages
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.repos">
-                    <a routerLinkActive="active" routerLink="repos">
-                        Jours de repos
-                    </a>
-                </div>
-                <!-- <div class="menu-gauche-item">
+    <div>
+      <div class="menu-gauche-sous-titre">
+        ENROLEMENT
+      </div>
+      <div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
+          <a routerLinkActive="active" routerLink="/enrolement-wait">
+            Vigiles à enrôler
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
+          <a routerLinkActive="active" routerLink="/enrolement">
+            Vigiles enrôlés
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="menu-gauche-sous-titre">
+        Suivi
+      </div>
+      <div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.dashboard">
+          <a routerLinkActive="active" routerLink="dashboard">
+            Tableau de bord
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.pointage">
+          <a routerLinkActive="active" routerLink="pointage">
+            Pointages
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.repos">
+          <a routerLinkActive="active" routerLink="repos">
+            Jours de repos
+          </a>
+        </div>
+        <!-- <div class="menu-gauche-item">
                     <a routerLinkActive="active" routerLink="synchroniser">
                         Synchroniser
                     </a>
@@ -55,205 +73,205 @@
                         Importer
                     </a>
                 </div> -->
-                <div class="menu-gauche-item" style="display: none;">
-                    <a routerLinkActive="active" routerLink="controle">
-                        Contrôle des vigiles
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.conge">
-                    <a routerLinkActive="active" routerLink="conge-dashboard">
-                        Congés : Tableau de bord
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.conge">
-                    <a routerLinkActive="active" routerLink="conge">
-                        Congés : Vigiles
-                    </a>
-                </div>
-            </div>
+        <div class="menu-gauche-item" style="display: none;">
+          <a routerLinkActive="active" routerLink="controle">
+            Contrôle des vigiles
+          </a>
         </div>
-
-        <div>
-            <div class="menu-gauche-sous-titre">
-                Edition
-            </div>
-            <div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.contrat">
-                    <a routerLinkActive="active" routerLink="contrat">
-                        Contrats
-
-                        <span class="important" style="float: right;">
-                            {{nbContratsMauvais}}
-                        </span>
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.poste">
-                    <a routerLinkActive="active" routerLink="poste">
-                        Postes
-                        <span *ngIf="false" class="important" style="float: right;">
-                            {{nbPostesMauvais}}
-                        </span>
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.vigile">
-                    <a routerLinkActive="active" routerLink="vigile">
-                        Vigiles
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.responsable">
-                    <a routerLinkActive="active" routerLink="responsable">
-                        Responsables
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.affectation">
-                    <a routerLinkActive="active" routerLink="affectation">
-                        Affectation
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.switchs">
-                    <a routerLinkActive="active" routerLink="switch">
-                        Switchs
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.sanction">
-                    <a routerLinkActive="active" routerLink="sanction">
-                        Sanctions
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.permission">
-                    <a routerLinkActive="active" routerLink="permission">
-                        Permissions
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.vigileBadge">
-                    <a routerLinkActive="active" routerLink="vigile-badge">
-                        Vigiles Badges
-                    </a>
-                </div>
-            </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.conge">
+          <a routerLinkActive="active" routerLink="conge-dashboard">
+            Congés : Tableau de bord
+          </a>
         </div>
-
-        <div *ngIf="mesDroits.recouvrement">
-            <div class="menu-gauche-sous-titre">
-                Recouvrement
-            </div>
-            <div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
-                    <a routerLinkActive="active" routerLink="recouvrement/edition">
-                        Edition
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
-                    <a routerLinkActive="active" routerLink="recouvrement/etat">
-                        Etat des recouvrements
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
-                    <a routerLinkActive="active" routerLink="recouvrement/performance">
-                        Performances
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
-                    <a routerLinkActive="active" routerLink="recouvrement/evaluation">
-                        Evaluation
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
-                    <a routerLinkActive="active" routerLink="recouvrement/creance">
-                        Etat des créances
-                    </a>
-                </div>
-            </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.conge">
+          <a routerLinkActive="active" routerLink="conge">
+            Congés : Vigiles
+          </a>
         </div>
-
-        <div
-            *ngIf="mesDroits.postevacant || mesDroits.titulairevacant || mesDroits.planningremplacant || mesDroits.planningremplacantconge || mesDroits.fichepointage">
-            <div class="menu-gauche-sous-titre">
-                Etats
-            </div>
-            <div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.postevacant">
-                    <a routerLinkActive="active" routerLink="vacant/poste">
-                        Postes vacants
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.titulairevacant">
-                    <a routerLinkActive="active" routerLink="vacant/vigile">
-                        Titulaires vacants
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.planningremplacant">
-                    <a routerLinkActive="active" routerLink="vacant/remplacant">
-                        Planning des remplacants
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.planningremplacantconge">
-                    <a routerLinkActive="active" routerLink="vacant/remplacant-conges">
-                        Planning des rempl. congés
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.fichepointage">
-                    <a routerLinkActive="active" routerLink="pointagesuivi">
-                        Fiche de pointage
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div
-            *ngIf="mesDroits.zone || mesDroits.ville || mesDroits.quartier || mesDroits.nationalite || mesDroits.equipement || mesDroits.statut || mesDroits.motif">
-            <div class="menu-gauche-sous-titre">
-                Paramètres
-            </div>
-            <div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.zone">
-                    <a routerLinkActive="active" routerLink="zone">
-                        Zones
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.ville">
-                    <a routerLinkActive="active" routerLink="ville">
-                        Villes
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.quartier">
-                    <a routerLinkActive="active" routerLink="quartier">
-                        Quartiers
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.nationalite">
-                    <a routerLinkActive="active" routerLink="nationalite">
-                        Nationalités
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.equipement">
-                    <a routerLinkActive="active" routerLink="equipement">
-                        Equipements
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.statut">
-                    <a routerLinkActive="active" routerLink="statut">
-                        Statuts
-                    </a>
-                </div>
-                <div class="menu-gauche-item" *ngIf="mesDroits.motif">
-                    <a routerLinkActive="active" routerLink="motif">
-                        Motifs
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="mesDroits.utilisateur">
-            <div class="menu-gauche-sous-titre">
-                Sécurité
-            </div>
-            <div>
-                <div class="menu-gauche-item">
-                    <a routerLinkActive="active" routerLink="utilisateur">
-                        Utilisateurs
-                    </a>
-                </div>
-            </div>
-        </div>
-
+      </div>
     </div>
+
+    <div>
+      <div class="menu-gauche-sous-titre">
+        Edition
+      </div>
+      <div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.contrat">
+          <a routerLinkActive="active" routerLink="contrat">
+            Contrats
+
+            <span class="important" style="float: right;">
+              {{nbContratsMauvais}}
+            </span>
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.poste">
+          <a routerLinkActive="active" routerLink="poste">
+            Postes
+            <span *ngIf="false" class="important" style="float: right;">
+              {{nbPostesMauvais}}
+            </span>
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.vigile">
+          <a routerLinkActive="active" routerLink="vigile">
+            Vigiles
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.responsable">
+          <a routerLinkActive="active" routerLink="responsable">
+            Responsables
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.affectation">
+          <a routerLinkActive="active" routerLink="affectation">
+            Affectation
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.switchs">
+          <a routerLinkActive="active" routerLink="switch">
+            Switchs
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.sanction">
+          <a routerLinkActive="active" routerLink="sanction">
+            Sanctions
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.permission">
+          <a routerLinkActive="active" routerLink="permission">
+            Permissions
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.vigileBadge">
+          <a routerLinkActive="active" routerLink="vigile-badge">
+            Vigiles Badges
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="mesDroits.recouvrement">
+      <div class="menu-gauche-sous-titre">
+        Recouvrement
+      </div>
+      <div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
+          <a routerLinkActive="active" routerLink="recouvrement/edition">
+            Edition
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
+          <a routerLinkActive="active" routerLink="recouvrement/etat">
+            Etat des recouvrements
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
+          <a routerLinkActive="active" routerLink="recouvrement/performance">
+            Performances
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
+          <a routerLinkActive="active" routerLink="recouvrement/evaluation">
+            Evaluation
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.recouvrement">
+          <a routerLinkActive="active" routerLink="recouvrement/creance">
+            Etat des créances
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="mesDroits.postevacant || mesDroits.titulairevacant || mesDroits.planningremplacant || mesDroits.planningremplacantconge || mesDroits.fichepointage">
+      <div class="menu-gauche-sous-titre">
+        Etats
+      </div>
+      <div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.postevacant">
+          <a routerLinkActive="active" routerLink="vacant/poste">
+            Postes vacants
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.titulairevacant">
+          <a routerLinkActive="active" routerLink="vacant/vigile">
+            Titulaires vacants
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.planningremplacant">
+          <a routerLinkActive="active" routerLink="vacant/remplacant">
+            Planning des remplacants
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.planningremplacantconge">
+          <a routerLinkActive="active" routerLink="vacant/remplacant-conges">
+            Planning des rempl. congés
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.fichepointage">
+          <a routerLinkActive="active" routerLink="pointagesuivi">
+            Fiche de pointage
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="mesDroits.zone || mesDroits.ville || mesDroits.quartier || mesDroits.nationalite || mesDroits.equipement || mesDroits.statut || mesDroits.motif">
+      <div class="menu-gauche-sous-titre">
+        Paramètres
+      </div>
+      <div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.zone">
+          <a routerLinkActive="active" routerLink="zone">
+            Zones
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.ville">
+          <a routerLinkActive="active" routerLink="ville">
+            Villes
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.quartier">
+          <a routerLinkActive="active" routerLink="quartier">
+            Quartiers
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.nationalite">
+          <a routerLinkActive="active" routerLink="nationalite">
+            Nationalités
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.equipement">
+          <a routerLinkActive="active" routerLink="equipement">
+            Equipements
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.statut">
+          <a routerLinkActive="active" routerLink="statut">
+            Statuts
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.motif">
+          <a routerLinkActive="active" routerLink="motif">
+            Motifs
+          </a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="mesDroits.utilisateur">
+      <div class="menu-gauche-sous-titre">
+        Sécurité
+      </div>
+      <div>
+        <div class="menu-gauche-item">
+          <a routerLinkActive="active" routerLink="utilisateur">
+            Utilisateurs
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>

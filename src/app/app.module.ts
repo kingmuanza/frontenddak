@@ -106,6 +106,7 @@ import { ImportationLocalisationPostesComponent } from './algorithmes/importatio
 import { ImportationAffectationsComponent } from './algorithmes/importation-affectations/importation-affectations.component';
 import { RecapJourneeComponent } from './pages/recap/recap-journee/recap-journee.component';
 import { RecapZoneComponent } from './pages/recap/recap-zone/recap-zone.component';
+import { UploadAffectationComponent } from './algorithmes/upload-affectation/upload-affectation.component';
 
 @NgModule({
   declarations: [
@@ -207,6 +208,7 @@ import { RecapZoneComponent } from './pages/recap/recap-zone/recap-zone.componen
     ImportationAffectationsComponent,
     RecapJourneeComponent,
     RecapZoneComponent,
+    UploadAffectationComponent,
   ],
   imports: [
     BrowserModule,

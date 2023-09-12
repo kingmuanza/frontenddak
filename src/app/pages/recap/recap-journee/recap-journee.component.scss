@@ -19,3 +19,34 @@
     font-weight: bold;
   }
 }
+
+.pointage {
+  padding-top: 10px;
+  border-bottom: 1px solid #303030;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+
+  &.red {
+    background-color: rgba(red, 0.1);
+  }
+}
+
+.zone {
+  text-align: center;
+  background-color: #231709;
+  color: white;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+
+  &.controlee {
+    background-color: #E3B505;
+    color: black;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}

@@ -7,6 +7,7 @@ import { Suivi } from 'src/app/models/suivi.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import { VigileService } from 'src/app/services/vigile.service';
 
 @Component({
   selector: 'app-sanction-edit',
@@ -29,12 +30,15 @@ export class SanctionEditComponent implements OnInit {
 
   mesDroits = droits;
 
+  rechercheVigile = "";
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
     private jarvisService: JarvisService<any>,
     private authService: AuthService,
+    private vigileService: VigileService,
   ) { }
 
   ngOnInit(): void {
@@ -56,15 +60,16 @@ export class SanctionEditComponent implements OnInit {
     this.ojrdhui.setDate(this.ojrdhui.getDate() - 1)
     this.getPostes().then((postes) => {
       this.postes = postes;
-      this.getVigiles().then((vigiles) => {
-        this.vigiles = vigiles;
-        this.route.paramMap.subscribe((paramMap) => {
-          const id = paramMap.get('id');
-          if (id) {
-            this.jarvisService.get('suiviposte', Number(id)).then((suivi) => {
+      this.route.paramMap.subscribe((paramMap) => {
+        const id = paramMap.get('id');
+
+        if (id) {
+          this.jarvisService.get('suiviposte', Number(id)).then((suivi) => {
+            this.suivi = suivi;
+            this.getVigiles(this.suivi.idvigile.nom).then((vigiles) => {
+              this.vigiles = vigiles;
               console.log('le suivi recupéré');
               console.log(suivi);
-              this.suivi = suivi;
               this.calculerDatesFutures(suivi)
 
               this.suivi.dateSuivi = suivi.dateSuivi?.split('T')[0];
@@ -87,10 +92,11 @@ export class SanctionEditComponent implements OnInit {
                 }
               });
             });
-          } else {
-            this.getJourSemaine();
-          }
-        });
+          });
+        } else {
+          this.getJourSemaine();
+        }
+
       });
     });
   }
@@ -105,13 +111,13 @@ export class SanctionEditComponent implements OnInit {
     });
   }
 
-  getVigiles(): Promise<Array<any>> {
+  getVigiles(texte: string): Promise<Array<Vigile>> {
     return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('vigile').then((vigiles) => {
-        console.log('vigiles');
-        console.log(vigiles);
-        resolve(vigiles);
-      });
+      if (texte.length > 4)
+        this.vigileService.rechercheCalme(texte).then((vigiles) => {
+          this.vigiles = vigiles;
+          resolve(this.vigiles);
+        });
     });
   }
 

@@ -1,97 +1,105 @@
 <div class="page">
-    <div class="page-entete">
-        <div *ngIf="changement.idswitch === 0" class="page-entete-titre">
-            Ajouter un nouveau switch
-        </div>
-        <div *ngIf="changement.idswitch !== 0" class="page-entete-titre">
-            Modifier le switch
-        </div>
-        <div class="">
-            <a routerLink="/switch" class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la liste des changements
-            </a>
-        </div>
+  <div class="page-entete">
+    <div *ngIf="changement.idswitch === 0" class="page-entete-titre">
+      Ajouter un nouveau switch
     </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
+    <div *ngIf="changement.idswitch !== 0" class="page-entete-titre">
+      Modifier le switch
+    </div>
+    <div class="">
+      <a routerLink="/switch" class="btn btn-link" style="padding: 0; margin: 0;">
+        Revenir à la liste des changements
+      </a>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="page-contenu-titre">
 
-            <div class="page-contenu-corps">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Date
-                                </span>
-                            </div>
-                            <input type="date" [ngModel]="changement.date | date:'yyyy-MM-dd'" (ngModelChange)="changement.date = $event" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Poste
-                                </span>
-                            </div>
-                            <select (ngModelChange)="getAffectations()" [(ngModel)]="poste" class="form-control">
-                                <option [ngValue]="p" *ngFor="let p of postes">
-                                    {{p.libelle}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Vigile
-                                </span>
-                            </div>
-                            <select [(ngModel)]="changement.idaffectation" class="form-control">
-                                <option [ngValue]="affectation" *ngFor="let affectation of affectationsResultats">
-                                    {{affectation.idvigile?.noms}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Vigile Switch
-                                </span>
-                            </div>
-                            <select [(ngModel)]="changement.idvigileSwitch" class="form-control">
-                                <ng-container *ngFor="let v of vigiles">
-                                    <option [ngValue]="v" *ngIf="changement.idvigileBase?.idvigile !== v.idvigile">
-                                        {{v?.noms}}
-                                    </option>
-                                </ng-container>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Responsable
-                                </span>
-                            </div>
-                            <select [(ngModel)]="changement.idresponsable" class="form-control">
-                                <ng-container *ngFor="let v of responsables">
-                                    <option [ngValue]="v">
-                                        {{v?.noms}}
-                                    </option>
-                                </ng-container>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
-                    <button *ngIf="changement.idswitch != 0" [disabled]="processing" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
-                </div>
+      <div class="page-contenu-corps">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Date
+                </span>
+              </div>
+              <input type="date" [ngModel]="changement.date | date:'yyyy-MM-dd'"
+                (ngModelChange)="changement.date = $event" class="form-control">
             </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Poste
+                </span>
+              </div>
+              <select (ngModelChange)="getAffectations()" [(ngModel)]="poste" class="form-control">
+                <option [ngValue]="p" *ngFor="let p of postes">
+                  {{p.libelle}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Vigile
+                </span>
+              </div>
+              <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text" class="form-control"
+                placeholder="Rechercher ici..." style="max-width: 150px;">
+              <select #vigileElement [(ngModel)]="changement.idvigileBase" class="form-control">
+                <ng-container *ngFor="let vigile of vigilesBases | actifs">
+                  <option [ngValue]="vigile">
+                    {{vigile.noms}}
+                  </option>
+                </ng-container>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Vigile Switch
+                </span>
+              </div>
+              <input [(ngModel)]="rechercheVigileSwitch" (ngModelChange)="getVigiles($event)" type="text"
+                class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
+              <select [(ngModel)]="changement.idvigileSwitch" class="form-control">
+                <ng-container *ngFor="let v of vigilesSwitchs | actifs">
+                  <option [ngValue]="v" *ngIf="changement.idvigileBase?.idvigile !== v.idvigile">
+                    {{v?.noms}}
+                  </option>
+                </ng-container>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Responsable
+                </span>
+              </div>
+              <select [(ngModel)]="changement.idresponsable" class="form-control">
+                <ng-container *ngFor="let v of responsables">
+                  <option [ngValue]="v">
+                    {{v?.noms}}
+                  </option>
+                </ng-container>
+              </select>
+            </div>
+          </div>
         </div>
+        <div class="input-group">
+          <button [disabled]="processing" (click)="save()" class="btn nouveau">Enregistrer</button> &nbsp;
+          <button *ngIf="changement.idswitch != 0" [disabled]="processing" (click)="supprimer()"
+            class="btn btn-danger">Supprimer</button>
+        </div>
+      </div>
     </div>
+  </div>

@@ -1,3 +1,4 @@
+import { UploadAffectationComponent } from './algorithmes/upload-affectation/upload-affectation.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PlanningIncompletFicheComponent } from './etats/planning/planning-incomplet-fiche/planning-incomplet-fiche.component';
@@ -75,12 +76,15 @@ import { EnrolementWaitComponent } from './enrolement/enrolement-wait/enrolement
 import { ImportationLocalisationPostesComponent } from './algorithmes/importation-localisation-postes/importation-localisation-postes.component';
 import { ImportationAffectationsComponent } from './algorithmes/importation-affectations/importation-affectations.component';
 import { RecapJourneeComponent } from './pages/recap/recap-journee/recap-journee.component';
+import { RecapZoneComponent } from './pages/recap/recap-zone/recap-zone.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
   { path: 'importation-affectations', component: ImportationAffectationsComponent },
 
-  { path: 'recap', component: RecapJourneeComponent },
+  { path: 'recap-veille', component: RecapJourneeComponent },
+  { path: 'recap-veille/:code', component: RecapZoneComponent },
+  { path: 'upload-affectation', component: UploadAffectationComponent },
 
   { path: 'connexion', component: ConnexionComponent },
   { path: 'dashboard', component: DashboardComponent },

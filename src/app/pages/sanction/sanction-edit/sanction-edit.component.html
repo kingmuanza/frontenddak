@@ -1,104 +1,104 @@
 <div class="page">
-    <div class="page-entete">
-        <div *ngIf="suivi.idsuiviPoste==0" class="page-entete-titre">
-            Ajouter une nouvelle sanction
-        </div>
-        <div *ngIf="suivi.idsuiviPoste!=0" class="page-entete-titre">
-            Modifier la sanction
-        </div>
-        <div class="">
-            <a routerLink="/sanction" class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la liste des sanctions
-            </a>
-        </div>
+  <div class="page-entete">
+    <div *ngIf="suivi.idsuiviPoste==0" class="page-entete-titre">
+      Ajouter une nouvelle sanction
     </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
-            <div class="page-contenu-corps">
-                <div class="row">
-                    <div class="col-lg-9">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Vigile
-                                </span>
-                            </div>
-                            <select type="text" [(ngModel)]="suivi.idvigile" class="form-control">
-                                <option [ngValue]="v" *ngFor="let v of vigiles">
-                                    {{v.noms}}
-                                </option>
-                            </select>
-                        </div>
-                        <div>
-                            <small *ngIf="suivi.idvigile">
-                                Jour de repos : {{jourSemaine(suivi.idvigile.jourRepos)}}
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col-lg-9">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Motif de la sanction
-                                </span>
-                            </div>
-                            <select type="text" [(ngModel)]="suivi.motifSanction" class="form-control">
-                                <option value="Absence">Absence</option>
-                                <option value="Sommeil">Sommeil</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Date effet
-                                </span>
-                            </div>
-                            <input [ngModel]="suivi.dateEffet | date:'yyyy-MM-dd'"
-                                (ngModelChange)="getJourSemaine($event)" type="date" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Nombre de jour de repos pris
-                                </span>
-                            </div>
-                            <input [(ngModel)]="suivi.nombreAbsence" type="number" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-lg-9">
-                        <div class="joursPris" style="">
-                            Les dates de repos prises seront les suivantes :
-                            <ul>
-                                <li *ngFor="let d of datesPrises">
-                                    {{d | date: 'EEEE dd-MM-yyyy'}}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-9">
-                        <div style="margin-top: 20px;">
-                            <span class="">
-                                Commentaires
-                            </span>
-                        </div>
-                        <div class="input-group">
-                            <textarea [(ngModel)]="suivi.commentaire" class="form-control"
-                                aria-label="With textarea"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <button *ngIf="mesDroits.vigileEdit" [disabled]="processing" (click)="save()"
-                        class="btn nouveau">Enregistrer</button> &nbsp;
-                    <button [disabled]="processing" (click)="calculerDatesFutures(suivi)"
-                        class="btn nouveau">Calculer</button> &nbsp;
-                    <button *ngIf="suivi.idsuiviPoste != 0 && mesDroits.vigileEdit" [disabled]="processing"
-                        (click)="supprimer()" class="btn btn-danger">Supprimer</button>
-                </div>
+    <div *ngIf="suivi.idsuiviPoste!=0" class="page-entete-titre">
+      Modifier la sanction
+    </div>
+    <div class="">
+      <a routerLink="/sanction" class="btn btn-link" style="padding: 0; margin: 0;">
+        Revenir à la liste des sanctions
+      </a>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="page-contenu-titre">
+      <div class="page-contenu-corps">
+        <div class="row">
+          <div class="col-lg-9">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Vigile
+                </span>
+              </div><input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
+                class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
+              <select type="text" [(ngModel)]="suivi.idvigile" class="form-control">
+                <option [ngValue]="v" *ngFor="let v of vigiles">
+                  {{v.noms}}
+                </option>
+              </select>
             </div>
+            <div>
+              <small *ngIf="suivi.idvigile">
+                Jour de repos : {{jourSemaine(suivi.idvigile.jourRepos)}}
+              </small>
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Motif de la sanction
+                </span>
+              </div>
+              <select type="text" [(ngModel)]="suivi.motifSanction" class="form-control">
+                <option value="Absence">Absence</option>
+                <option value="Sommeil">Sommeil</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Date effet
+                </span>
+              </div>
+              <input [ngModel]="suivi.dateEffet | date:'yyyy-MM-dd'" (ngModelChange)="getJourSemaine($event)"
+                type="date" class="form-control">
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Nombre de jour de repos pris
+                </span>
+              </div>
+              <input [(ngModel)]="suivi.nombreAbsence" type="number" class="form-control">
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <div class="joursPris" style="">
+              Les dates de repos prises seront les suivantes :
+              <ul>
+                <li *ngFor="let d of datesPrises">
+                  {{d | date: 'EEEE dd-MM-yyyy'}}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <div style="margin-top: 20px;">
+              <span class="">
+                Commentaires
+              </span>
+            </div>
+            <div class="input-group">
+              <textarea [(ngModel)]="suivi.commentaire" class="form-control" aria-label="With textarea"></textarea>
+            </div>
+          </div>
         </div>
+        <div class="input-group">
+          <button *ngIf="mesDroits.vigileEdit" [disabled]="processing" (click)="save()"
+            class="btn nouveau">Enregistrer</button> &nbsp;
+          <button [disabled]="processing" (click)="calculerDatesFutures(suivi)" class="btn nouveau">Calculer</button>
+          &nbsp;
+          <button *ngIf="suivi.idsuiviPoste != 0 && mesDroits.vigileEdit" [disabled]="processing" (click)="supprimer()"
+            class="btn btn-danger">Supprimer</button>
+        </div>
+      </div>
     </div>
+  </div>
