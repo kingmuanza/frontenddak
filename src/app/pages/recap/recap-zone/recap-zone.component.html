@@ -62,7 +62,6 @@
             {{postesControles.length}}
           </div>
         </div>
-        {{postesControles | json}}
       </div>
       <div class="col-3">
         <div class="stat">
@@ -87,14 +86,16 @@
     </div>
     <div class="row">
       <div class="col-6">
-        <div style="margin-top: 20px;">
-          <div>
-            Postes
-          </div>
-          <div class="row">
-            <div *ngFor="let poste of postes" class="col-lg-4">
-              <div class="poste" [ngClass]="{'controlee': isPosteControlee(poste)}">
-                {{poste.libelle.replace("NUIT", "")}}
+        <div class="card shadow-1">
+          <div style="margin-top: 0px;">
+            <div>
+              Postes
+            </div>
+            <div class="row">
+              <div *ngFor="let poste of postes" class="col-lg-4">
+                <div class="poste" [ngClass]="{'controlee': isPosteControlee(poste)}">
+                  {{poste.libelle.replace("NUIT", "")}}
+                </div>
               </div>
             </div>
           </div>
@@ -102,60 +103,22 @@
       </div>
 
       <div class="col-6">
-        <div style="margin-top: 20px;">
-          <div style="margin-bottom: 5px;">
-            Liste des absences
-          </div>
-          <div *ngFor="let pointage of absences" class="pointage" [ngClass]="{'red': pointage.absence}">
-            <b style="width: 200px; text-align: center;">
-              {{pointage.matricule}}
-            </b>
-            <span style="width: 500px; display: inline-block; flex: 1 1 auto">
-              {{pointage.nomsVigile}}
-            </span>
-            <b style="width: 400px; white-space: no-wrap;">
-              <ng-container *ngIf="getAffection(pointage.idvigile)">
-                {{getAffection(pointage.idvigile)?.idposte?.libelle}}
-              </ng-container>
-            </b>
-            <span style="width: 200px">
-              <b>
-                {{pointage.raison}}
-              </b>
-              <div>
-                {{pointage.commentaire}}
-              </div>
-            </span>
-            <span style="width: 300px; white-space: no-wrap; text-align: right;">
-              {{pointage.date.toDate() | date:"dd-MM-yyyy HH:mm:ss"}}
-            </span>
-            <span style="width: 20px;">
-
-            </span>
+        <div style="margin-bottom: 20px;">
+          <div class="card shadow-1">
+            <div style="margin-bottom: 5px;">
+              Liste des absences
+            </div>
+            <app-display-pointages [pointages]="absences" [affectations]="affectations">
+            </app-display-pointages>
           </div>
         </div>
-        <div style="margin-top: 20px;">
-          <div>
-            Liste des pointages bruts
-          </div>
-          <div *ngFor="let pointage of pointagesTotaux" class="pointage" [ngClass]="{'red': pointage.absence}">
-
-
-            <b style="width: 200px; text-align: center;">
-              {{pointage.matricule}}
-            </b>
-            <span style="width: 500px; display: inline-block; flex: 1 1 auto">
-              {{pointage.nomsVigile}}
-            </span>
-            <b style="width: 400px; white-space: no-wrap;">
-              <ng-container *ngIf="getAffection(pointage.idvigile)">
-                {{getAffection(pointage.idvigile)?.idposte?.libelle}}
-              </ng-container>
-            </b>
-            <span style="width: 300px; white-space: no-wrap; text-align: right;">
-              {{pointage.date.toDate() | date:"dd-MM-yyyy HH:mm:ss"}}
-            </span>
-
+        <div style="margin-bottom: 20px;">
+          <div class="card shadow-1">
+            <div>
+              Liste des pointages bruts
+            </div>
+            <app-display-pointages [pointages]="pointagesTotaux" [affectations]="affectations">
+            </app-display-pointages>
           </div>
         </div>
       </div>

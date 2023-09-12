@@ -8,6 +8,7 @@ import { Affectation } from 'src/app/models/affectation.model';
 import { position } from 'html2canvas/dist/types/css/property-descriptors/position';
 import { ZoneDak } from 'src/app/models/zone.model';
 import { Router } from '@angular/router';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-recap-journee',
@@ -133,4 +134,14 @@ export class RecapJourneeComponent implements OnInit {
       this.router.navigate(["recap-veille", zone.code]);
   }
 
+  voirPointages() {
+    console.log('open modal absenceModal');
+    const modale = document.getElementById('absenceModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
 }

@@ -11,7 +11,7 @@
   <div class="page-contenu">
     <div class="row">
       <div class="col-3">
-        <div class="stat">
+        <div class="stat" (click)="voirPointages()">
           <div class="stat-titre">
             Nombre de pointages
           </div>
@@ -93,14 +93,16 @@
     </div>
     <div class="row">
       <div class="col-3">
-        <div style="margin-top: 20px;">
-          <div>
-            Zones
-          </div>
-          <div class="row">
-            <div *ngFor="let zone of zones" class="col-lg-6">
-              <div (click)="goToZone(zone)" class="zone" [ngClass]="{'controlee': isZoneControlee(zone)}">
-                {{zone.code}}
+        <div class="card shadow-1">
+          <div style="margin-top: 0px;">
+            <div>
+              Zones
+            </div>
+            <div class="row">
+              <div *ngFor="let zone of zones" class="col-lg-6">
+                <div (click)="goToZone(zone)" class="zone" [ngClass]="{'controlee': isZoneControlee(zone)}">
+                  {{zone.code}}
+                </div>
               </div>
             </div>
           </div>
@@ -108,74 +110,71 @@
       </div>
 
       <div class="col-9">
-        <div style="margin-top: 20px;">
-          <div style="margin-bottom: 5px;">
-            Liste des absences
-          </div>
-          <div *ngFor="let pointage of absences" class="pointage" [ngClass]="{'red': pointage.absence}">
-            <b style="width: 200px; text-align: center;">
-              {{pointage.matricule}}
-            </b>
-            <span style="width: 500px; display: inline-block; flex: 1 1 auto">
-              {{pointage.nomsVigile}}
-            </span>
-            <b style="width: 400px; white-space: no-wrap;">
-              <ng-container *ngIf="getAffection(pointage.idvigile)">
-                {{getAffection(pointage.idvigile)?.idposte?.libelle}}
-              </ng-container>
-            </b>
-            <b style="width: 400px; white-space: no-wrap; text-align: center;">
-              <ng-container *ngIf="getAffection(pointage.idvigile)">
-                {{getAffection(pointage.idvigile)?.idposte?.zone?.code}}
-              </ng-container>
-            </b>
-            <span style="width: 200px">
-              <b>
-                {{pointage.raison}}
-              </b>
-              <div>
-                {{pointage.commentaire}}
-              </div>
-            </span>
-            <span style="width: 300px; white-space: no-wrap; text-align: right;">
-              {{pointage.date.toDate() | date:"dd-MM-yyyy HH:mm:ss"}}
-            </span>
-            <span style="width: 20px;">
-
-            </span>
+        <div style="margin-bottom: 20px;">
+          <div class="card shadow-1">
+            <div style="margin-bottom: 5px;">
+              Liste des absences
+            </div>
+            <app-display-pointages [pointages]="absences" [affectations]="affectations">
+            </app-display-pointages>
           </div>
         </div>
         <div style="margin-top: 20px;">
-          <div>
-            Liste des pointages bruts
-          </div>
-          <div *ngFor="let pointage of pointagesTotaux" class="pointage" [ngClass]="{'red': pointage.absence}">
-
-            <b style="width: 150px;">
-              {{pointage.idvigile}}
-            </b>
-            <b style="width: 200px;">
-              {{pointage.matricule}}
-            </b>
-            <span style="width: 500px; display: inline-block; flex: 1 1 auto">
-              {{pointage.nomsVigile}}
-            </span>
-            <b style="width: 400px; white-space: no-wrap;">
-              <ng-container *ngIf="getAffection(pointage.idvigile)">
-                {{getAffection(pointage.idvigile)?.idposte?.libelle}}
-              </ng-container>
-            </b>
-            <b style="width: 400px; white-space: no-wrap; text-align: center;">
-              <ng-container *ngIf="getAffection(pointage.idvigile)">
-                {{getAffection(pointage.idvigile)?.idposte?.zone?.code}}
-              </ng-container>
-            </b>
-            <span style="width: 300px; white-space: no-wrap; text-align: right;">
-              {{pointage.date.toDate() | date:"dd-MM-yyyy HH:mm:ss"}}
-            </span>
-
+          <div class="card shadow-1">
+            <div>
+              Liste des pointages bruts
+            </div>
+            <div *ngIf="pointagesTotaux.length> 0 && affectations.length > 0">
+              <app-display-pointages [pointages]="pointagesTotaux" [affectations]="affectations">
+              </app-display-pointages>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" #absenceModal id="absenceModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Arborescence des absences
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <app-display-pointages [pointages]="absences" [affectations]="affectations">
+        </app-display-pointages>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #pointagesModal id="pointagesModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Pointages bruts
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <app-display-pointages [pointages]="pointages" [affectations]="affectations">
+        </app-display-pointages>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
       </div>
     </div>
   </div>
