@@ -108,6 +108,8 @@ import { RecapJourneeComponent } from './pages/recap/recap-journee/recap-journee
 import { RecapZoneComponent } from './pages/recap/recap-zone/recap-zone.component';
 import { UploadAffectationComponent } from './algorithmes/upload-affectation/upload-affectation.component';
 import { DisplayPointagesComponent } from './composants/display-pointages/display-pointages.component';
+import { RecapVeilleComponent } from './pages/recap/recap-veille/recap-veille.component';
+import { RecapVeilleZoneComponent } from './pages/recap/recap-veille-zone/recap-veille-zone.component';
 
 @NgModule({
   declarations: [
@@ -211,6 +213,8 @@ import { DisplayPointagesComponent } from './composants/display-pointages/displa
     RecapZoneComponent,
     UploadAffectationComponent,
     DisplayPointagesComponent,
+    RecapVeilleComponent,
+    RecapVeilleZoneComponent,
   ],
   imports: [
     BrowserModule,

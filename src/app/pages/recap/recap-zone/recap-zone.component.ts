@@ -8,6 +8,7 @@ import { Poste } from 'src/app/models/poste.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { ZoneDak } from 'src/app/models/zone.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-recap-zone',
@@ -27,6 +28,7 @@ export class RecapZoneComponent implements OnInit {
   postes = new Array<Poste>();
   postesControles = new Array<any>();
   postesControlesDeuxFois = new Array<any>();
+  suivis = new Array<any>();
 
   nbVigiles = 0;
   nbVigilesQuiOntPointes = 0;
@@ -149,6 +151,16 @@ export class RecapZoneComponent implements OnInit {
     return affectations[0];
   }
 
+  getAffectionByPoste(idposte: number): Affectation | undefined {
+    console.log('idposte');
+    console.log(idposte);
+    let affectations = this.affectations.filter((aff) => {
+      return aff.idposte.idposte == idposte;
+    })
+    console.log(affectations[0])
+    return affectations[0];
+  }
+
   isPosteControlee(poste: Poste) {
     return this.postesControles.indexOf(poste.idposte) !== -1;
   }
@@ -157,6 +169,50 @@ export class RecapZoneComponent implements OnInit {
     return zones.filter((z) => {
       return z.code === code;
     })[0];
+  }
+
+  voirPostes() {
+    console.log('open modal postesModal');
+    const modale = document.getElementById('postesModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  voirPointages() {
+    console.log('open modal pointagesModal');
+    const modale = document.getElementById('pointagesModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  voirAbsences() {
+    console.log('open modal absenceModal');
+    const modale = document.getElementById('absenceModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  voirSuivis() {
+    console.log('open modal suivisModal');
+    const modale = document.getElementById('suivisModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
   }
 
 }

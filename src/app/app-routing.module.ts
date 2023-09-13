@@ -77,12 +77,14 @@ import { ImportationLocalisationPostesComponent } from './algorithmes/importatio
 import { ImportationAffectationsComponent } from './algorithmes/importation-affectations/importation-affectations.component';
 import { RecapJourneeComponent } from './pages/recap/recap-journee/recap-journee.component';
 import { RecapZoneComponent } from './pages/recap/recap-zone/recap-zone.component';
+import { RecapVeilleComponent } from './pages/recap/recap-veille/recap-veille.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
   { path: 'importation-affectations', component: ImportationAffectationsComponent },
 
-  { path: 'recap-veille', component: RecapJourneeComponent },
+  { path: 'recap-jour', component: RecapJourneeComponent },
+  { path: 'recap-veille', component: RecapVeilleComponent },
   { path: 'recap-veille/:code', component: RecapZoneComponent },
   { path: 'upload-affectation', component: UploadAffectationComponent },
 

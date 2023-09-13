@@ -1,8 +1,5 @@
 <div class="page">
   <div class="entete">
-    <h1>
-      {{zone.code}}
-    </h1>
     <div class="page-entete-titre">
       Récapitulatif de la veille
     </div>
@@ -54,6 +51,16 @@
         </div>
       </div>
       <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Zones contrôlés
+          </div>
+          <div class="stat-valeur">
+            {{zonesControlees.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
         <div class="stat" (click)="voirPostes()">
           <div class="stat-titre">
             Postes contrôlés
@@ -79,22 +86,22 @@
             Switchs
           </div>
           <div class="stat-valeur">
-            {{pointages.length}}
+            {{suivis.length}}
           </div>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-6">
+      <div class="col-3">
         <div class="card shadow-1">
           <div style="margin-top: 0px;">
             <div>
-              Postes
+              Zones
             </div>
             <div class="row">
-              <div *ngFor="let poste of postes" class="col-lg-4">
-                <div class="poste" [ngClass]="{'controlee': isPosteControlee(poste)}">
-                  {{poste.libelle.replace("NUIT", "")}}
+              <div *ngFor="let zone of zones" class="col-lg-6">
+                <div (click)="goToZone(zone)" class="zone" [ngClass]="{'controlee': isZoneControlee(zone)}">
+                  {{zone.code}}
                 </div>
               </div>
             </div>
@@ -102,7 +109,7 @@
         </div>
       </div>
 
-      <div class="col-6">
+      <div class="col-9">
         <div style="margin-bottom: 20px;">
           <div class="card shadow-1">
             <div style="margin-bottom: 5px;">
@@ -112,20 +119,21 @@
             </app-display-pointages>
           </div>
         </div>
-        <div style="margin-bottom: 20px;">
+        <div style="margin-top: 20px;">
           <div class="card shadow-1">
             <div>
               Liste des pointages bruts
             </div>
-            <app-display-pointages [pointages]="pointagesTotaux" [affectations]="affectations">
-            </app-display-pointages>
+            <div *ngIf="pointagesTotaux.length> 0 && affectations.length > 0">
+              <app-display-pointages [pointages]="pointagesTotaux" [affectations]="affectations">
+              </app-display-pointages>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 
 <!-- Modal -->

@@ -1,25 +1,34 @@
-<div *ngFor="let pointage of pointages" class="pointage" [ngClass]="{'red': pointage.absence}">
-
-  <b style="width: 200px; text-align: center;">
-    {{pointage.matricule}}
-  </b>
-  <span style="width: 500px; display: inline-block; flex: 1 1 auto">
-    {{pointage.nomsVigile}}
-  </span>
-  <b style="width: 400px; white-space: no-wrap;">
-    <ng-container *ngIf="getAffection(pointage.idvigile)">
-      {{getAffection(pointage.idvigile)?.idposte?.libelle}}
-    </ng-container>
-  </b>
-  <b style="width: 400px; white-space: no-wrap; text-align: center;">
-    <ng-container *ngIf="getAffection(pointage.idvigile)">
-      {{getAffection(pointage.idvigile)?.idposte?.zone?.code}}
-    </ng-container>
-  </b>
-  <span style="width: 300px; white-space: no-wrap; text-align: right;">
-    {{pointage.date.toDate() | date:"dd-MM-yyyy HH:mm:ss"}}
-  </span>
-  <span style="width: 20px;">
-
-  </span>
-</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Matr.</th>
+      <th scope="col">Vigile</th>
+      <th scope="col">Poste</th>
+      <th scope="col">Zone</th>
+      <th scope="col">Heure</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let pointage of pointages" [ngClass]="{'red': pointage.absence}">
+      <th scope="row">
+        <b>
+          {{pointage.matricule}}
+        </b>
+      </th>
+      <td>
+        {{pointage.nomsVigile}}
+      </td>
+      <td>
+        <b *ngIf="getAffection(pointage.idvigile)">
+          {{getAffection(pointage.idvigile)?.idposte?.libelle}}
+        </b>
+      </td>
+      <td>
+        <b *ngIf="getAffection(pointage.idvigile)">
+          {{getAffection(pointage.idvigile)?.idposte?.zone?.code}}
+        </b>
+      </td>
+      <td>{{pointage.date.toDate() | date:"dd-MM-yyyy HH:mm:ss"}}</td>
+    </tr>
+  </tbody>
+</table>
