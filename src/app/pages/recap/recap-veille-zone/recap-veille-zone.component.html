@@ -1,1 +1,236 @@
-<p>recap-veille-zone works!</p>
+<div class="page">
+    <div class="entete">
+        <h1>
+            {{zone.code}}
+        </h1>
+        <div class="page-entete-titre">
+            Récapitulatif de la veille
+        </div>
+        <div>
+            Du <b>{{debut | date:"dd/MM/yyyy"}}</b> à <b>{{debut | date: "HH:mm:ss"}}</b>
+            Au <b>{{fin | date:"dd/MM/yyyy"}}</b> à <b>{{fin | date: "HH:mm:ss"}}</b>
+        </div>
+    </div>
+    <div class="page-contenu">
+        <div class="row">
+            <div class="col-3">
+                <div class="stat" (click)="voirPointages()">
+                    <div class="stat-titre">
+                        Nombre de pointages
+                    </div>
+                    <div class="stat-valeur">
+                        {{pointages.length}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="stat" (click)="voirPointages()">
+                    <div class="stat-titre">
+                        Vigiles qui ont pointés
+                    </div>
+                    <div class="stat-valeur">
+                        {{vigilesQuiOntPointes.length}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="stat" (click)="voirPointages()">
+                    <div class="stat-titre">
+                        Vigiles qui ont pointés deux fois
+                    </div>
+                    <div class="stat-valeur">
+                        {{vigilesQuiOntPointesDeuxFois.length}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="stat red" (click)="voirAbsences()">
+                    <div class="stat-titre">
+                        Absences
+                    </div>
+                    <div class="stat-valeur">
+                        {{absences.length}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="stat" (click)="voirPostes()">
+                    <div class="stat-titre">
+                        Postes contrôlés
+                    </div>
+                    <div class="stat-valeur">
+                        {{postesControles.length}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="stat" (click)="voirPostes()">
+                    <div class="stat-titre">
+                        Postes contrôlés deux fois
+                    </div>
+                    <div class="stat-valeur">
+                        {{postesControlesDeuxFois.length}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="stat" (click)="voirSuivis()">
+                    <div class="stat-titre">
+                        Switchs
+                    </div>
+                    <div class="stat-valeur">
+                        {{suivis.length}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card shadow-1">
+                    <div style="margin-top: 0px;">
+                        <div>
+                            Postes
+                        </div>
+                        <div class="row">
+                            <div *ngFor="let poste of postes" class="col-lg-4">
+                                <div class="poste" [ngClass]="{'controlee': isPosteControlee(poste)}">
+                                    {{poste.libelle.replace("NUIT", "")}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div style="margin-bottom: 20px;">
+                    <div class="card shadow-1">
+                        <div style="margin-bottom: 5px;">
+                            Liste des absences
+                        </div>
+                        <app-display-pointages [pointages]="absences" [affectations]="affectations">
+                        </app-display-pointages>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <div class="card shadow-1">
+                        <div>
+                            Liste des pointages bruts
+                        </div>
+                        <app-display-pointages [pointages]="pointagesTotaux" [affectations]="affectations">
+                        </app-display-pointages>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" #absenceModalzone id="absenceModalzone" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Absences
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <app-display-pointages [pointages]="absences" [affectations]="affectations">
+                </app-display-pointages>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #pointagesModalzone id="pointagesModalzone" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Pointages
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <app-display-pointages [pointages]="pointages" [affectations]="affectations">
+                </app-display-pointages>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #postesModalzone id="postesModalzone" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Postes controlés
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let id of postesControles" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
+                    {{getAffectionByPoste(id)?.idposte.libelle}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #suivisModalzone id="suivisModalzone" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Switchs
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Poste</th>
+                            <th scope="col">Vigile</th>
+                            <th scope="col">Switch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let suivi of suivis">
+                            <th scope="row">
+                                {{suivi.idswitch}}
+                            </th>
+                            <td>
+                                <b>
+                                    {{suivi.idaffectation.idposte.libelle}}
+                                </b>
+                            </td>
+                            <td>{{suivi.idvigileBase.noms}}</td>
+                            <td>{{suivi.idvigileSwitch.noms}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>

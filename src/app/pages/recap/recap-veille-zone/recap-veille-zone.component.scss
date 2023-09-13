@@ -1,0 +1,60 @@
+.stat {
+    height: 70px;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+
+    &.red {
+        color: red;
+    }
+
+    line-height: 1.15;
+    background-color: #231709;
+
+    &-titre {
+        font-size: 12px;
+    }
+
+    &-valeur {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+}
+
+.pointage {
+    padding-top: 10px;
+    border-bottom: 1px solid #303030;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+
+    &.red {
+        background-color: rgba(red, 0.1);
+    }
+}
+
+.poste {
+    text-align: center;
+    background-color: #231709;
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+
+    &.controlee {
+        background-color: #E3B505;
+        color: black;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}

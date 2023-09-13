@@ -56,6 +56,7 @@ export class UploadAffectationComponent implements OnInit {
             idposte: affectation.idposte.idposte,
             libellePoste: affectation.idposte.libelle,
             jourRepos: affectation.jourRepos,
+            remplacant: true
           }
           this.resultats.push(aff2);
         }

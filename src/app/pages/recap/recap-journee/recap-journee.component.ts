@@ -9,6 +9,7 @@ import { position } from 'html2canvas/dist/types/css/property-descriptors/positi
 import { ZoneDak } from 'src/app/models/zone.model';
 import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
+import { Suivi } from 'src/app/models/suivi.model';
 
 @Component({
   selector: 'app-recap-journee',
@@ -25,6 +26,7 @@ export class RecapJourneeComponent implements OnInit {
   absences = new Array<any>();
   zones = new Array<ZoneDak>();
   zonesControlees = new Array<any>();
+  suivis = new Array<any>();
 
   postesControles = new Array<any>();
   postesControlesDeuxFois = new Array<any>();
@@ -54,8 +56,10 @@ export class RecapJourneeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.debut.setDate(this.debut.getDate() - 1);
+    // this.debut.setDate(this.debut.getDate() - 1);
     this.debut.setHours(6, 0, 0);
+
+    this.fin.setDate(this.fin.getDate() + 1);
     this.fin.setHours(6, 0, 0);
 
     this.zoneService.getAll("zone").then((zones) => {
@@ -66,6 +70,14 @@ export class RecapJourneeComponent implements OnInit {
       this.affectations = affectations;
 
       const db = getFirestore(this.app);
+      const q2 = query(collection(db, "switch"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
+      getDocs(q2).then((querySnapshots2) => {
+        querySnapshots2.forEach((doc) => {
+          let s = doc.data() as Suivi;
+
+          this.suivis.push(s);
+        });
+      });
       const q = query(collection(db, "pointage"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
       getDocs(q).then((querySnapshots) => {
         querySnapshots.forEach((doc) => {
@@ -129,12 +141,55 @@ export class RecapJourneeComponent implements OnInit {
     return affectations[0];
   }
 
+  getAffectionByPoste(idposte: number): Affectation | undefined {
+    console.log('idposte');
+    console.log(idposte);
+    let affectations = this.affectations.filter((aff) => {
+      return aff.idposte?.idposte == idposte;
+    })
+    console.log(affectations[0])
+    return affectations[0];
+  }
+
   goToZone(zone: ZoneDak) {
     if (this.isZoneControlee(zone))
-      this.router.navigate(["recap-veille", zone.code]);
+      this.router.navigate(["recap-jour", zone.code]);
+  }
+
+  voirPostes() {
+    console.log('open modal postesModal');
+    const modale = document.getElementById('postesModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
   }
 
   voirPointages() {
+    console.log('open modal pointagesModal');
+    const modale = document.getElementById('pointagesModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  voirPointagesDeuxFois() {
+    console.log('open modal vigilesDeuxFoisModal');
+    const modale = document.getElementById('vigilesDeuxFoisModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  voirAbsences() {
     console.log('open modal absenceModal');
     const modale = document.getElementById('absenceModal');
 
@@ -144,4 +199,16 @@ export class RecapJourneeComponent implements OnInit {
       myModal.show();
     }
   }
+
+  voirSuivis() {
+    console.log('open modal suivisModal');
+    const modale = document.getElementById('suivisModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
 }

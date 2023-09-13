@@ -25,7 +25,7 @@ export class PointageSuiviComponent implements OnInit {
   date = new Date();
   pointages = new Array<Pointage>();
 
-  marge = 10;
+  marge = 100;
 
   constructor(
     private pointageService: PointageService,
@@ -113,14 +113,31 @@ export class PointageSuiviComponent implements OnInit {
 
   getPointage(vigile: Vigile, date: Date): Pointage | undefined {
     let pointage: Pointage | undefined;
-
+    let tous = new Array<any>();
     this.pointages.forEach((p) => {
       const d = this.toDate(p.date)
       if (p.idvigile === vigile.idvigile && d && this.dateToJourAnnee(d) === this.dateToJourAnnee(date)) {
         pointage = p;
+        tous.push(p);
       }
     });
-    return pointage;
+    /* let affectation = new Affectation();
+    this.resultatsAffectations.forEach((a) => {
+      if (a.idvigile.idvigile === vigile.idvigile) {
+        affectation = a;
+      }
+      if (a.remplacant.idvigile === vigile.idvigile) {
+        affectation = a;
+      }
+    }); */
+    tous.sort((a, b) => {
+      let diff1 = 1000 * this.calcCrow(0, 0, this.getMinDifferenceLatitude(a, date), this.getMinDifferenceLongitude(a, date));
+      let diff2 = 1000 * this.calcCrow(0, 0, this.getMinDifferenceLatitude(b, date), this.getMinDifferenceLongitude(b, date));
+      console.log("diff1 - diff2");
+      console.log(diff1 - diff2);
+      return diff1 - diff2 > 0 ? 1 : -1;
+    });
+    return tous[0];
   }
 
   dateToJourAnnee(date: Date) {

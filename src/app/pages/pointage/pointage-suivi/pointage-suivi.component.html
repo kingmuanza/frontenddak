@@ -29,7 +29,8 @@
                                 Date
                             </span>
                         </div>
-                        <input [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" type="date" class="form-control">
+                        <input [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" type="date"
+                            class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-2">
@@ -40,8 +41,9 @@
     </div>
     <div class="page-contenu">
         <div class="mb-4">
-            <label for="customRange1" class="form-label">Marge de distance pour les pointages en mètres : {{marge}} mètres </label>
-            <input [(ngModel)]="marge" type="range" class="form-range" min="0" max="100" step="1">
+            <label for="customRange1" class="form-label">Marge de distance pour les pointages en mètres : {{marge}}
+                mètres </label>
+            <input [(ngModel)]="marge" type="range" class="form-range" min="10" max="200" step="2">
         </div>
         <div *ngIf="zone.idzone !== 0 && date">
             <ng-container>
@@ -79,7 +81,8 @@
                             </td>
                             <td>
                                 <div *ngIf="getPointageVigileDate(affectation, date) ">
-                                    {{ toDate(getPointageVigileDate(affectation, date)?.date) | date: 'yyyy-MM-dd HH:mm:ss'}}
+                                    {{ toDate(getPointageVigileDate(affectation, date)?.date) | date: 'yyyy-MM-dd
+                                    HH:mm:ss'}}
                                 </div>
                             </td>
                             <td>{{showVigile(affectation, date)?.noms}}</td>
@@ -98,20 +101,28 @@
                             </td>
                             <td>
 
-                                <span *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude " [ngClass]="{ 'bon': isBonneLocalisation(affectation, date), 'mauvais': !isBonneLocalisation(affectation, date)} ">
+                                <span
+                                    *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude "
+                                    [ngClass]="{ 'bon': isBonneLocalisation(affectation, date), 'mauvais': !isBonneLocalisation(affectation, date)} ">
                                     <i class="bi-geo-alt "></i>&nbsp;&nbsp;&nbsp;
-                                    
+
                                 </span>
-                                <span *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence " style="color: green; ">
+                                <span
+                                    *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence "
+                                    style="color: green; ">
                                     <i class="bi-fingerprint "></i>&nbsp;&nbsp;&nbsp;
                                 </span>
-                                <span *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence " [ngClass]="{ 'bon': isBonHoraire(affectation, date)} ">
+                                <span
+                                    *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence "
+                                    [ngClass]="{ 'bon': isBonHoraire(affectation, date)} ">
                                     <i class="bi-clock "></i>
                                 </span>
                             </td>
                             <td style="text-align: right">
-                                <div *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude ">
-                                    {{1000 * calcCrow(0, 0, getMinDifferenceLatitude(affectation, date), getMinDifferenceLongitude(affectation, date)) | number}} m
+                                <div
+                                    *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude ">
+                                    {{1000 * calcCrow(0, 0, getMinDifferenceLatitude(affectation, date),
+                                    getMinDifferenceLongitude(affectation, date)) | number}} m
                                 </div>
                             </td>
                         </tr>

@@ -9,6 +9,7 @@ import { Vigile } from 'src/app/models/vigile.model';
 import { ZoneDak } from 'src/app/models/zone.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import * as bootstrap from 'bootstrap';
+import { Suivi } from 'src/app/models/suivi.model';
 
 @Component({
   selector: 'app-recap-zone',
@@ -65,10 +66,10 @@ export class RecapZoneComponent implements OnInit {
             this.zone = this.getZoneByCode(code!, zones);
             console.log("code : " + code);
             this.zone.code = code;
-            this.debut.setDate(this.debut.getDate() - 1);
             this.debut.setHours(6, 0, 0);
-            this.fin.setHours(6, 0, 0);
 
+            this.fin.setDate(this.fin.getDate() + 1);
+            this.fin.setHours(6, 0, 0);
 
             this.posteService.getPostesByZone(this.zone).then((postes) => {
               this.postes = postes;
@@ -80,6 +81,14 @@ export class RecapZoneComponent implements OnInit {
               console.log("Nombre de affectations : " + affectations.length);
 
               const db = getFirestore(this.app);
+              const q2 = query(collection(db, "switch"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
+              getDocs(q2).then((querySnapshots2) => {
+                querySnapshots2.forEach((doc) => {
+                  let s = doc.data() as Suivi;
+
+                  this.suivis.push(s);
+                });
+              });
               const q = query(collection(db, "pointage"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
               getDocs(q).then((querySnapshots) => {
                 querySnapshots.forEach((doc) => {
@@ -155,7 +164,7 @@ export class RecapZoneComponent implements OnInit {
     console.log('idposte');
     console.log(idposte);
     let affectations = this.affectations.filter((aff) => {
-      return aff.idposte.idposte == idposte;
+      return aff?.idposte?.idposte == idposte;
     })
     console.log(affectations[0])
     return affectations[0];
@@ -173,7 +182,7 @@ export class RecapZoneComponent implements OnInit {
 
   voirPostes() {
     console.log('open modal postesModal');
-    const modale = document.getElementById('postesModal');
+    const modale = document.getElementById('postesModalzone');
 
     console.log(modale);
     if (modale != null) {
@@ -184,7 +193,7 @@ export class RecapZoneComponent implements OnInit {
 
   voirPointages() {
     console.log('open modal pointagesModal');
-    const modale = document.getElementById('pointagesModal');
+    const modale = document.getElementById('pointagesModalzone');
 
     console.log(modale);
     if (modale != null) {
@@ -195,7 +204,7 @@ export class RecapZoneComponent implements OnInit {
 
   voirAbsences() {
     console.log('open modal absenceModal');
-    const modale = document.getElementById('absenceModal');
+    const modale = document.getElementById('absenceModalzone');
 
     console.log(modale);
     if (modale != null) {
@@ -206,7 +215,7 @@ export class RecapZoneComponent implements OnInit {
 
   voirSuivis() {
     console.log('open modal suivisModal');
-    const modale = document.getElementById('suivisModal');
+    const modale = document.getElementById('suivisModalzone');
 
     console.log(modale);
     if (modale != null) {

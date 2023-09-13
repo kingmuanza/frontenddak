@@ -4,6 +4,12 @@
   text-align: center;
   color: white;
   margin-bottom: 20px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
 
   &.red {
     color: red;
@@ -12,7 +18,9 @@
   line-height: 1.15;
   background-color: #231709;
 
-  &-titre {}
+  &-titre {
+    font-size: 12px;
+  }
 
   &-valeur {
     font-size: 1.5em;

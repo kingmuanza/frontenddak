@@ -1,4 +1,9 @@
 <div class="page" style="overflow-y: auto;">
+    <div style="display: none;">
+        <button (click)="mettreEnLigne()">
+            Mettre en ligne
+        </button>
+    </div>
     <div class="page-entete">
         <div *ngIf="poste.idposte!=0" class="page-entete-titre">
             Poste : {{poste.libelle}}, <b>{{poste.horaire | uppercase}}</b>

@@ -20,6 +20,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { VigileService } from 'src/app/services/vigile.service';
 import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { Suivi } from 'src/app/models/suivi.model';
 
 @Component({
   selector: 'app-poste-view',
@@ -67,6 +69,18 @@ export class PosteViewComponent implements OnInit {
   rechercheRemplacant = "";
   affectation: Affectation | undefined;
 
+  mettreEnLigne() {
+    console.log('mettre en ligne');
+
+    const db = getFirestore(this.app);
+    setDoc(doc(db, "poste", this.poste.idposte + ""), JSON.parse(JSON.stringify(this.poste))).then((value) => {
+      console.log("Terminé");
+      console.log(value);
+      console.log(this.poste);
+    });
+
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -80,7 +94,17 @@ export class PosteViewComponent implements OnInit {
     private contratCtrlService: ContratCtrlService,
   ) {
 
-    this.app = initializeApp(FIREBASECONFIG);
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
+      authDomain: "dak-security.firebaseapp.com",
+      projectId: "dak-security",
+      storageBucket: "dak-security.appspot.com",
+      messagingSenderId: "448692904510",
+      appId: "1:448692904510:web:216883edce596209e6276f",
+      measurementId: "G-L0FKMS4EQH"
+    };
+    this.app = initializeApp(firebaseConfig);
   }
 
   ngOnInit(): void {
