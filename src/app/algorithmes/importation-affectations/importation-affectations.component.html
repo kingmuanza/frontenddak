@@ -1,6 +1,6 @@
 <h1>
   Affectations
-  {{affectations.length}}
+  {{affectationsBrutes.length}}
 </h1>
 <h2>
   Postes
@@ -12,15 +12,26 @@
   </button>
 </h3>
 <div style="padding: 50px;">
-  <div *ngFor="let affectation of affectations" style="margin-bottom: 20px;">
-    <div>
-      {{affectation | json}}
-    </div>
-    <div>
-      <button (click)="saveAffectation(affectation)">
-        Mettre en ligne
-      </button>
-    </div>
+  <div *ngFor="let affectation of affectationsBrutes" style="margin-bottom: 20px;">
+    {{affectation | json}}
   </div>
+  <!-- <div *ngFor="let affectation of affectations" style="margin-bottom: 20px;">
+    <div *ngIf="affectation.idposte.zone.code=='PGJ'">
+      <div>
+        {{affectation.idposte.zone.code | json}}
+        {{affectation.idposte.codeagiv | json}}
+        {{affectation.idposte.libelle | json}}
+      </div>
+      <div>
+        {{affectation.idvigile.noms | json}}
+        {{affectation.idvigile.matricule | json}}
+      </div>
+      <div>
+        <button (click)="saveAffectation(affectation)">
+          Mettre en ligne
+        </button>
+      </div>
+    </div>
+  </div> -->
 
 </div>

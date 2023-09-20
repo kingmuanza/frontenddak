@@ -14,6 +14,7 @@ export class ImportationAffectationsComponent implements OnInit {
 
   lignes = new Array<string>();
   affectations = new Array<any>();
+  affectationsBrutes = new Array<any>();
   postes = new Array<Poste>();
   vigiles = new Array<Vigile>();
 
@@ -31,17 +32,29 @@ export class ImportationAffectationsComponent implements OnInit {
         this.postes = postes.filter((p) => {
           return p.codeagiv;
         });
-        this.http.get('assets/data/affecations-cool2.csv', { responseType: 'text' }).subscribe((data: string) => {
+        this.http.get('assets/data/affecations-cool3.csv', { responseType: 'text' }).subscribe((data: string) => {
           console.log("data");
           console.log(data);
           this.lignes = data.split("\n");
           this.lignes.shift();
           this.lignes.forEach((ligne) => {
             let donnees = ligne.split(",");
-            if (donnees[2] && donnees[0]) {
+            if (donnees[1]) {
+              const poste = this.getPosteBy(donnees[1]);
+              if (poste) {
+                if (poste.zone) {
+                  if (poste.zone.code == "PGJ") {
+                    if (!donnees[8]) {
+                      this.affectationsBrutes.push(poste);
+                    }
+                  }
+                }
+              }
+            }
+            /* if (donnees[2] && donnees[0]) {
               if (!donnees[8]) {
                 if (this.getPosteBy(donnees[1])) {
-                  if (this.getVigileByMatricule(donnees[2])) {
+                  if (this.getVigileByMatricule(donnees[2].trim())) {
                     const affectationBrute = {
                       date: new Date(donnees[0]),
                       poste: donnees[1],
@@ -53,6 +66,7 @@ export class ImportationAffectationsComponent implements OnInit {
                       remplacant: donnees[6],
                       jourRepos: donnees[7],
                     };
+
                     let affectation = new Affectation();
                     affectation.dateAffectation = affectationBrute.date;
                     affectation.horaire = affectationBrute.horaire;
@@ -65,7 +79,7 @@ export class ImportationAffectationsComponent implements OnInit {
                   }
                 }
               }
-            }
+            } */
           });
         });
       });
