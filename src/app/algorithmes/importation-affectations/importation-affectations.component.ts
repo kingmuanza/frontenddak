@@ -39,29 +39,22 @@ export class ImportationAffectationsComponent implements OnInit {
           this.lignes.shift();
           this.lignes.forEach((ligne) => {
             let donnees = ligne.split(",");
-            if (donnees[1]) {
-              const poste = this.getPosteBy(donnees[1]);
-              if (poste) {
-                if (poste.zone) {
-                  if (poste.zone.code == "PGJ") {
-                    if (!donnees[8]) {
-                      this.affectationsBrutes.push(poste);
-                    }
-                  }
-                }
-              }
-            }
-            /* if (donnees[2] && donnees[0]) {
+
+            if (donnees[2]) {
               if (!donnees[8]) {
                 if (this.getPosteBy(donnees[1])) {
-                  if (this.getVigileByMatricule(donnees[2].trim())) {
+                  let matricule = donnees[2].trim();
+                  matricule = matricule.replace("N", "").replace("J", "").trim();
+                  let matriculeRemplacant = donnees[6].trim();
+                  matriculeRemplacant = matriculeRemplacant.replace("N", "").replace("J", "").trim();
+                  if (this.getVigileByMatricule(matricule)) {
                     const affectationBrute = {
-                      date: new Date(donnees[0]),
+                      date: donnees[0] ? new Date(donnees[0]) : new Date("2016-01-01"),
                       poste: donnees[1],
                       posteLocal: this.getPosteBy(donnees[1]),
-                      matricule: donnees[2],
-                      vigile: this.getVigileByMatricule(donnees[2]),
-                      remplacantVigile: this.getVigileByMatricule(donnees[6]),
+                      matricule: matricule,
+                      vigile: this.getVigileByMatricule(matricule),
+                      remplacantVigile: this.getVigileByMatricule(matriculeRemplacant),
                       horaire: donnees[4].toLowerCase(),
                       remplacant: donnees[6],
                       jourRepos: donnees[7],
@@ -79,7 +72,7 @@ export class ImportationAffectationsComponent implements OnInit {
                   }
                 }
               }
-            } */
+            }
           });
         });
       });
