@@ -39,30 +39,32 @@ export class UploadAffectationComponent implements OnInit {
       this.affectations = affectations;
 
       this.affectations.forEach((affectation) => {
-        let aff1 = {
-          id: affectation.idvigile.idvigile + "",
-          idvigile: affectation.idvigile.idvigile,
-          nomsVigile: affectation.idvigile.noms,
-          idposte: affectation.idposte.idposte,
-          libellePoste: affectation.idposte.libelle,
-          jourRepos: affectation.jourRepos,
-        }
-        this.resultats.push(aff1);
-        if (affectation.remplacant) {
-          let aff2 = {
-            id: affectation.remplacant.idvigile + "",
-            idvigile: affectation.remplacant.idvigile,
-            nomsVigile: affectation.remplacant.noms,
+        if (affectation.idposte) {
+          let aff1 = {
+            id: affectation.idvigile.idvigile + "",
+            idvigile: affectation.idvigile.idvigile,
+            nomsVigile: affectation.idvigile.noms,
             idposte: affectation.idposte.idposte,
             libellePoste: affectation.idposte.libelle,
             jourRepos: affectation.jourRepos,
-            remplacant: true
           }
-          this.resultats.push(aff2);
+          this.resultats.push(aff1);
+          if (affectation.remplacant) {
+            let aff2 = {
+              id: affectation.remplacant.idvigile + "",
+              idvigile: affectation.remplacant.idvigile,
+              nomsVigile: affectation.remplacant.noms,
+              idposte: affectation.idposte.idposte,
+              libellePoste: affectation.idposte.libelle,
+              jourRepos: affectation.jourRepos,
+              remplacant: true
+            }
+            this.resultats.push(aff2);
+          }
+          this.resultats = this.resultats.sort((a, b) => {
+            return a.idvigile < b.idvigile ? -1 : 1;
+          });
         }
-        this.resultats = this.resultats.sort((a, b) => {
-          return a.idvigile < b.idvigile ? -1 : 1;
-        });
       });
     });
   }
