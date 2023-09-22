@@ -48,6 +48,22 @@ export class PointageService {
     });
   }
 
+  getAllRemoteSites(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const postes = new Array<any>();
+      const db = getFirestore(this.app);
+      getDocs(collection(db, "contratSite")).then((resultats) => {
+        resultats.forEach((resultat) => {
+          // doc.data() is never undefined for query doc snapshots
+          /* console.log(resultat.id);
+          console.log(resultat.data()); */
+          postes.push(resultat.data());
+        });
+        resolve(postes);
+      });
+    });
+  }
+
   getAllRemotePostes(): Promise<any> {
     return new Promise((resolve, reject) => {
       const postes = new Array<any>();

@@ -1,134 +1,155 @@
 <div class="page">
-    <div class="page-entete">
-        <div class="page-entete-titre">
-            Fiche de pointage
-        </div>
-        <div class="boutons">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Zone
-                            </span>
-                        </div>
-                        <select type="text" [(ngModel)]="zone" class="form-control">
-                            <ng-container *ngFor="let z of zones">
-                                <option [ngValue]="z"
-                                    *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
-                                    {{z.libelle}}
-                                </option>
-                            </ng-container>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Date
-                            </span>
-                        </div>
-                        <input [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" type="date"
-                            class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <button class="btn primaire" (click)="getAffectationByZone(zone, date)">Générer</button>
-                </div>
-            </div>
-        </div>
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      Fiche de pointage
     </div>
-    <div class="page-contenu">
-        <div class="mb-4">
-            <label for="customRange1" class="form-label">Marge de distance pour les pointages en mètres : {{marge}}
-                mètres </label>
-            <input [(ngModel)]="marge" type="range" class="form-range" min="10" max="200" step="2">
+    <div class="boutons">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Zone
+              </span>
+            </div>
+            <select type="text" [(ngModel)]="zone" class="form-control">
+              <ng-container *ngFor="let z of zones">
+                <option [ngValue]="z" *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
+                  {{z.libelle}}
+                </option>
+              </ng-container>
+            </select>
+          </div>
         </div>
-        <div *ngIf="zone.idzone !== 0 && date">
-            <ng-container>
-                Liste des vigiles en service dans la zone <b>{{zone.libelle}}</b>
-            </ng-container>
-            <ng-container>
-                le <b>{{date | date: 'EEEE dd-MM-yyyy'}}</b>
-            </ng-container>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Date
+              </span>
+            </div>
+            <input [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" type="date"
+              class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <button class="btn primaire" (click)="getAffectationByZone(zone, date)">Générer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="mb-4">
+      <label for="customRange1" class="form-label">Marge de distance pour les pointages en mètres : {{marge}}
+        mètres </label>
+      <input [(ngModel)]="marge" type="range" class="form-range" min="10" max="200" step="2">
+    </div>
+    <div *ngIf="zone.idzone !== 0 && date">
+      <ng-container>
+        Liste des vigiles en service dans la zone <b>{{zone.libelle}}</b>
+      </ng-container>
+      <ng-container>
+        le <b>{{date | date: 'EEEE dd-MM-yyyy'}}</b>
+      </ng-container>
+    </div>
+    <div style="margin-top: 20px;">
+      <table class="table table-bordered row-border hover">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Vigile</th>
+            <th>Zone</th>
+            <th>Poste</th>
+            <th>Commentaire</th>
+            <th style="text-align: center;">Pointage</th>
+            <th style="text-align: right">Appr.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let affectation of resultatsAffectations">
+            <tr (click)="voirPointage(affectation)"
+              [ngClass]="{'red': getPointageVigileDate(affectation, date)?.absence}">
+
+              <td>
+                <div *ngIf="getPointageVigileDate(affectation, date) ">
+                  {{ toDate(getPointageVigileDate(affectation, date)?.date) | date: 'yyyy-MM-dd HH:mm:ss'}}
+                </div>
+              </td>
+              <td>{{showVigile(affectation, date)?.noms}}</td>
+              <td>{{affectation.idposte.zone.libelle}}</td>
+              <td>
+                {{affectation.idposte.libelle}}
+              </td>
+              <td>
+                <div *ngIf="getPointageVigileDate(affectation, date)">
+                  <b *ngIf="getPointageVigileDate(affectation, date)?.raison">
+                    {{ getPointageVigileDate(affectation, date)?.raison }} :
+                  </b>
+                  <ng-container *ngIf="getPointageVigileDate(affectation, date)?.commentaire">
+
+                    "{{ getPointageVigileDate(affectation, date)?.commentaire }}"
+                  </ng-container>
+
+                </div>
+              </td>
+              <td>
+                <span
+                  *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude "
+                  [ngClass]="{ 'bon': isBonneLocalisation(affectation, date), 'mauvais': !isBonneLocalisation(affectation, date)} ">
+                  <i class="bi-geo-alt "></i>&nbsp;&nbsp;&nbsp;
+
+                </span>
+                <span
+                  *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence "
+                  style="color: green; ">
+                  <i class="bi-fingerprint "></i>&nbsp;&nbsp;&nbsp;
+                </span>
+                <span
+                  *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence "
+                  [ngClass]="{ 'bon': isBonHoraire(affectation, date)} ">
+                  <i class="bi-clock "></i>
+                </span>
+              </td>
+              <td style="text-align: right">
+                <div
+                  *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude ">
+                  {{1000 * calcCrow(0, 0, getMinDifferenceLatitude(affectation, date),
+                  getMinDifferenceLongitude(affectation, date)) | number}} m
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" #pointageModal id="pointageModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Postes controlés
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          {{pointageEnCours | json}}
         </div>
         <div style="margin-top: 20px;">
-            <table class="table table-bordered row-border hover">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Date</th>
-                        <th>Vigile</th>
-                        <th>Repos</th>
-                        <th>Zone</th>
-                        <th>Poste</th>
-                        <th>Horaire</th>
-                        <th>Commentaire</th>
-                        <th style="text-align: center;">Pointage</th>
-                        <th style="text-align: right">Appr.</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <ng-container *ngFor="let affectation of resultatsAffectations">
-                        <tr>
-                            <td style="text-align: center;">
-                                <ng-container *ngIf=" getPointageVigileDate(affectation, date) ">
-                                    <div class="absence" *ngIf=" getPointageVigileDate(affectation, date)?.absence ">
-
-                                    </div>
-                                </ng-container>
-                            </td>
-                            <td>
-                                <div *ngIf="getPointageVigileDate(affectation, date) ">
-                                    {{ toDate(getPointageVigileDate(affectation, date)?.date) | date: 'yyyy-MM-dd
-                                    HH:mm:ss'}}
-                                </div>
-                            </td>
-                            <td>{{showVigile(affectation, date)?.noms}}</td>
-                            <td>{{jourSemaine(showVigile(affectation, date).jourRepos)}}</td>
-                            <td>{{affectation.idposte.zone.libelle}}</td>
-                            <td>
-                                {{affectation.idposte.libelle}}
-                            </td>
-                            <td>{{affectation.horaire | uppercase}}</td>
-                            <td>
-                                <div *ngIf="getPointageVigileDate(affectation, date) ">
-                                    <b>
-                                        {{ getPointageVigileDate(affectation, date)?.raison }} :
-                                    </b> "{{ getPointageVigileDate(affectation, date)?.commentaire }}"
-                                </div>
-                            </td>
-                            <td>
-
-                                <span
-                                    *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude "
-                                    [ngClass]="{ 'bon': isBonneLocalisation(affectation, date), 'mauvais': !isBonneLocalisation(affectation, date)} ">
-                                    <i class="bi-geo-alt "></i>&nbsp;&nbsp;&nbsp;
-
-                                </span>
-                                <span
-                                    *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence "
-                                    style="color: green; ">
-                                    <i class="bi-fingerprint "></i>&nbsp;&nbsp;&nbsp;
-                                </span>
-                                <span
-                                    *ngIf="getPointageVigileDate(affectation, date) && !getPointageVigileDate(affectation, date)?.absence "
-                                    [ngClass]="{ 'bon': isBonHoraire(affectation, date)} ">
-                                    <i class="bi-clock "></i>
-                                </span>
-                            </td>
-                            <td style="text-align: right">
-                                <div
-                                    *ngIf="getPointageVigileDate(affectation, date) && getPointageVigileDate(affectation, date)?.latitude ">
-                                    {{1000 * calcCrow(0, 0, getMinDifferenceLatitude(affectation, date),
-                                    getMinDifferenceLongitude(affectation, date)) | number}} m
-                                </div>
-                            </td>
-                        </tr>
-                    </ng-container>
-                </tbody>
-            </table>
+          {{affectationEnCours | json}}
         </div>
+        <div style="margin-top: 20px;">
+          {{posteEnCours | json}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
     </div>
+  </div>
 </div>

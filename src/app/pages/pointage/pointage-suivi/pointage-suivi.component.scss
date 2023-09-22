@@ -1,14 +1,18 @@
 .absence {
-    height: 15px;
-    width: 15px;
-    background-color: red;
-    display: inline-block;
+  height: 15px;
+  width: 15px;
+  background-color: red;
+  display: inline-block;
 }
 
 .bon {
-    color: green;
+  color: green;
 }
 
 .mauvais {
-    color: red;
+  color: red;
+}
+
+.red {
+  background-color: rgba(red, 0.1);
 }

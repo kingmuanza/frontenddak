@@ -6,6 +6,7 @@ import { Vigile } from 'src/app/models/vigile.model';
 import { ZoneDak } from 'src/app/models/zone.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { PointageService } from 'src/app/services/pointage.service';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-pointage-suivi',
@@ -14,8 +15,12 @@ import { PointageService } from 'src/app/services/pointage.service';
 })
 export class PointageSuiviComponent implements OnInit {
 
+  pointageEnCours: any;
+  affectationEnCours: any;
+  posteEnCours: any;
   zones = new Array<ZoneDak>();
   postes = new Array<Poste>();
+  remoteSites = new Array<any>();
   remotePostes = new Array<any>();
   affectations = new Array<Affectation>();
   resultatsAffectations = new Array<Affectation>();
@@ -37,30 +42,36 @@ export class PointageSuiviComponent implements OnInit {
   ngOnInit(): void {
 
     this.pointageService.getPointages().then((pointages) => {
-      console.log('pointages');
-      console.log(pointages);
+      // console.log('pointages');
+      // console.log(pointages);
       this.pointages = pointages;
     });
 
     this.pointageService.getAllRemotePostes().then((remotePostes) => {
-      console.log('remotePostes');
-      console.log(remotePostes);
+      // console.log('remotePostes');
+      // console.log(remotePostes);
       this.remotePostes = remotePostes;
     });
 
+    this.pointageService.getAllRemoteSites().then((remoteSites) => {
+      // console.log('remoteSites');
+      // console.log(remoteSites);
+      this.remoteSites = remoteSites;
+    });
+
     this.zoneService.getAll('zone').then((zones) => {
-      console.log('data');
-      console.log(zones);
+      // console.log('data');
+      // console.log(zones);
       this.zones = zones;
 
       this.affectationService.getAll('affectation').then((affectations) => {
-        console.log('affectations');
-        console.log(affectations);
+        // console.log('affectations');
+        // console.log(affectations);
         this.affectations = affectations;
 
         this.posteService.getAll('poste').then((data) => {
-          console.log('data');
-          console.log(data);
+          // console.log('data');
+          // console.log(data);
           this.postes = data;
         });
 
@@ -96,6 +107,20 @@ export class PointageSuiviComponent implements OnInit {
         this.vigiles.push(affectation.idvigile);
       }
     });
+
+    this.resultatsAffectations.sort((a, b) => {
+      let d1 = this.toDate(this.getPointageVigileDate(a, date)?.date);
+      let d2 = this.toDate(this.getPointageVigileDate(b, date)?.date);
+      if (d1 && d2) {
+        return d1 > d2 ? 1 : -1
+      } else if (d1 && !d2) {
+        return 1;
+      } else if (!d1 && d2) {
+        return -1
+      }
+      return 0;
+    });
+    this.resultatsAffectations = this.resultatsAffectations.reverse();
   }
 
   showVigile(affectation: Affectation, d: Date): Vigile {
@@ -133,8 +158,8 @@ export class PointageSuiviComponent implements OnInit {
     tous.sort((a, b) => {
       let diff1 = 1000 * this.calcCrow(0, 0, this.getMinDifferenceLatitude(a, date), this.getMinDifferenceLongitude(a, date));
       let diff2 = 1000 * this.calcCrow(0, 0, this.getMinDifferenceLatitude(b, date), this.getMinDifferenceLongitude(b, date));
-      console.log("diff1 - diff2");
-      console.log(diff1 - diff2);
+      // console.log("diff1 - diff2");
+      // console.log(diff1 - diff2);
       return diff1 - diff2 > 0 ? 1 : -1;
     });
     return tous[0];
@@ -178,8 +203,8 @@ export class PointageSuiviComponent implements OnInit {
 
   getRemotePoste(poste: Poste) {
     let remotePoste: any = new Poste();
-    this.remotePostes.forEach((p) => {
-      if (p.idposte === poste.idposte) {
+    this.remoteSites.forEach((p) => {
+      if (p.nom === poste?.idcontratsite?.nom) {
         remotePoste = p;
       }
     });
@@ -259,4 +284,23 @@ export class PointageSuiviComponent implements OnInit {
   toRad(value: number) {
     return value * Math.PI / 180;
   }
+
+
+  voirPointage(affectation: any) {
+    let pointage = this.getPointageVigileDate(affectation, this.date);
+    this.pointageEnCours = pointage;
+    this.affectationEnCours = affectation.idposte;
+    this.posteEnCours = this.remoteSites.filter((p) => {
+      return p.nom === affectation?.idposte?.idcontratsite?.nom;
+    });
+    // console.log('open modal pointageModal');
+    const modale = document.getElementById('pointageModal');
+
+    // console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
 }
