@@ -1,149 +1,164 @@
 <div class="page">
-    <div class="page-entete">
-        <div class="page-entete-titre">
-            Liste des postes
-        </div>
-        <div class="boutons">
-            <div class="row">
-                <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
-                    <div class="nouveau">
-                        <a routerLink="/poste/edit" class="btn nouveau">
-                            Nouveau
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Horaire
-                            </span>
-                        </div>
-                        <select (ngModelChange)="initZone()" [(ngModel)]="horaire" class="form-control">
-                            <option value="tous">Tous</option>
-                            <option value="jour">Jour</option>
-                            <option value="nuit">Nuit</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Zone
-                            </span>
-                        </div>
-
-                        <select type="text" [(ngModel)]="zone" class="form-control">
-                            <ng-container *ngFor="let z of zones">
-                                <option [ngValue]="z"
-                                    *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
-                                    {{z.libelle}}
-                                </option>
-                            </ng-container>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Nom
-                            </span>
-                        </div>
-                        <input type="text" [(ngModel)]="nom" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <button [disabled]="zone.idzone===0 && !nom" class="btn primaire"
-                        (click)="rechercher(horaire, zone, nom)">Rechercher</button>
-                </div>
-            </div>
-        </div>
-        <div class="boutons">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="type">
-                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="parfait"
-                            type="radio" name="afficher"> &nbsp;Parfaits &nbsp;&nbsp;
-                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="vacant"
-                            type="radio" name="afficher"> &nbsp;Vacants &nbsp;&nbsp;
-                        <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="tous" type="radio"
-                            name="afficher"> &nbsp;Tous &nbsp;&nbsp;
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      Liste des postes
     </div>
-    <div class=" page-contenu ">
-        <div class="card shadow-1 ">
-            <div class="card-body">
-                <div class="card-title mb-3">
-                    {{libelle}}
-                </div>
-                <table datatable [dtOptions]="dtOptions " [dtTrigger]="dtTrigger " class="row-border hover ">
-                    <thead>
-                        <tr>
-                            <th>Libellé</th>
-                            <!-- <th>Code</th> -->
-                            <th>Code AGIV</th>
-                            <th>Zone</th>
-                            <th>Contrat</th>
-                            <th>Contrat</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let poste of resultats">
-                            <!-- <td>
+    <div class="boutons">
+      <div class="row">
+        <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
+          <div class="nouveau">
+            <a routerLink="/poste/edit" class="btn nouveau">
+              Nouveau
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Horaire
+              </span>
+            </div>
+            <select (ngModelChange)="initZone()" [(ngModel)]="horaire" class="form-control">
+              <option value="tous">Tous</option>
+              <option value="jour">Jour</option>
+              <option value="nuit">Nuit</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Zone
+              </span>
+            </div>
+
+            <select type="text" [(ngModel)]="zone" class="form-control">
+              <ng-container *ngFor="let z of zones">
+                <option [ngValue]="z" *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
+                  {{z.libelle}}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Nom
+              </span>
+            </div>
+            <input type="text" [(ngModel)]="nom" class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <button [disabled]="zone.idzone===0 && !nom" class="btn primaire"
+            (click)="rechercher(horaire, zone, nom)">Rechercher</button>
+        </div>
+      </div>
+    </div>
+    <div class="boutons">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="type">
+            <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="parfait" type="radio"
+              name="afficher"> &nbsp;Parfaits &nbsp;&nbsp;
+            <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="vacant" type="radio"
+              name="afficher"> &nbsp;Vacants &nbsp;&nbsp;
+            <input (ngModelChange)="afficherPostes($event)" [(ngModel)]="afficher" value="tous" type="radio"
+              name="afficher"> &nbsp;Tous &nbsp;&nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class=" page-contenu ">
+    <div class="card shadow-1 ">
+      <div class="card-body">
+        <div class="card-title mb-3">
+          <button *ngIf="resultats.length > 0" class="btn btn-primary" (click)="mettreToutEnLigne()"
+            style="float: right;">
+            <ng-container *ngIf="!miseEnLigneEnCours">
+              Mettre les {{resultats.length}} postes en ligne &nbsp; <i class="bi bi-cloud-arrow-up-fill"></i>
+            </ng-container>
+            <ng-container *ngIf="miseEnLigneEnCours">
+              Mise en ligne de {{index}} sur {{resultats.length}} postes &nbsp; <i
+                class="bi bi-cloud-arrow-up-fill"></i>
+            </ng-container>
+          </button>
+          Résultats de la recherche : {{resultats.length}}
+          <div style="color: red;" *ngIf="resultats.length > 0">
+            {{postesSansCodeAgiv.length}} postes sans code AGIV
+          </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+          <table datatable [dtOptions]="dtOptions " [dtTrigger]="dtTrigger " class="row-border hover ">
+            <thead>
+              <tr>
+                <th>Libellé</th>
+                <!-- <th>Code</th> -->
+                <th>Code AGIV</th>
+                <th>Zone</th>
+                <th>Contrat</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let poste of resultats">
+                <!-- <td>
                                 <span [ngClass]="{'important': !vacanteur[poste.idposte]}">
                                     {{poste.idposte}}
                                 </span>
                             </td> -->
-                            <!-- <td>{{poste.libelle}}</td> -->
-                            <td>{{poste.code}}</td>
-                            <td style="width: 300px;">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            AGIV
-                                        </span>
-                                    </div>
-                                    <input type="text" [(ngModel)]="poste.codeagiv" class="form-control">
-                                    <button (click)="save(poste)" class="btn btn-primary">
-                                        Save
-                                    </button>
-                                </div>
-                            </td>
-                            <td>{{poste.zone?.libelle}}</td>
-                            <td>
-                                <b *ngIf="poste.idcontratsite">
-                                    {{poste.idcontratsite.idcontrat.libelle}}
-                                </b>
-                                <span *ngIf="!poste.idcontratsite" style="color: red;">
-                                    Aucun contrat
-                                </span>
-                            </td>
-                            <td>
-                                <button class="btn" (click)="edit(poste.idposte)">
-                                    Voir
-                                </button>
+                <!-- <td>{{poste.libelle}}</td> -->
+                <td>{{poste.code}}</td>
+                <td style="width: 300px;">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        AGIV
+                      </span>
+                    </div>
+                    <input type="text" [(ngModel)]="poste.codeagiv" class="form-control">
+                    <button (click)="save(poste)" class="btn btn-primary">
+                      Save
+                    </button>
+                  </div>
+                </td>
+                <td>{{poste.zone?.libelle}}</td>
+                <td>
+                  <b *ngIf="poste.idcontratsite">
+                    {{poste.idcontratsite.idcontrat.libelle}}
+                  </b>
+                  <span *ngIf="!poste.idcontratsite" style="color: red;">
+                    Aucun contrat
+                  </span>
+                </td>
+                <td>
+                  <button class="btn" (click)="edit(poste.idposte)">
+                    Voir
+                  </button>
 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-    </div>
 
-    <div [hidden]="true">
-        <div *ngFor="let poste of postes">
-            <app-display-poste [poste]="poste" [affectations]="affectations" (isNotVacant)="isNotVacant(poste, $event)">
-
-            </app-display-poste>
-        </div>
+      </div>
     </div>
+  </div>
+
+  <div [hidden]="true">
+    <div *ngFor="let poste of postes">
+      <app-display-poste [poste]="poste" [affectations]="affectations" (isNotVacant)="isNotVacant(poste, $event)">
+
+      </app-display-poste>
+    </div>
+  </div>
 </div>
 
 <div style="height: 25vh;">

@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { NotifierService } from 'angular-notifier';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
 import { Subject } from 'rxjs';
 import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
@@ -19,6 +21,8 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 })
 export class PosteListComponent implements OnInit, OnDestroy {
 
+  app: any;
+
   // Datatables
   dtOptions: any = DatatablesOptions;
   dtTrigger = new Subject<any>();
@@ -26,6 +30,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
   dtInstance!: Promise<DataTables.Api>;
 
   postes = new Array<Poste>();
+  postesSansCodeAgiv = new Array<Poste>();
   resultatsPrimaires = new Array<Poste>();
   resultats = new Array<Poste>();
 
@@ -42,6 +47,9 @@ export class PosteListComponent implements OnInit, OnDestroy {
 
   mesDroits = droits;
 
+  miseEnLigneEnCours = false;
+  index = 0;
+
   constructor(
     private router: Router,
     private posteService: JarvisService<Poste>,
@@ -50,7 +58,18 @@ export class PosteListComponent implements OnInit, OnDestroy {
     private posteCtrlService: PosteCtrlService,
     private authService: AuthService,
     private notifierService: NotifierService,
-  ) { }
+  ) {
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
+      authDomain: "dak-security.firebaseapp.com",
+      projectId: "dak-security",
+      storageBucket: "dak-security.appspot.com",
+      messagingSenderId: "448692904510",
+      appId: "1:448692904510:web:216883edce596209e6276f",
+      measurementId: "G-L0FKMS4EQH"
+    };
+    this.app = initializeApp(firebaseConfig);
+  }
 
   ngOnInit(): void {
     this.authService.currentUserSubject.subscribe((utilisateur) => {
@@ -98,6 +117,31 @@ export class PosteListComponent implements OnInit, OnDestroy {
     }
   }
 
+  mettreEnLigne(poste: Poste) {
+    console.log('mettre en ligne');
+    const db = getFirestore(this.app);
+    return new Promise((resolve, reject) => {
+      setDoc(doc(db, "poste", poste.idposte + ""), JSON.parse(JSON.stringify(poste))).then((value) => {
+        console.log("Terminé");
+        console.log(value);
+        console.log(poste);
+        resolve(poste);
+      });
+    });
+
+  }
+
+  async mettreToutEnLigne() {
+    this.miseEnLigneEnCours = true;
+    for (let index = 0; index < this.resultats.length; index++) {
+      const poste = this.resultats[index];
+      await this.mettreEnLigne(poste);
+      this.index = index + 1;
+    }
+    this.miseEnLigneEnCours = false;
+    this.notifierService.notify('success', "Mise en ligne effectuée avec succès");
+  }
+
   afficherPostes(afficher?: string) {
     setTimeout(() => {
       this.resultats = new Array<Poste>();
@@ -119,6 +163,9 @@ export class PosteListComponent implements OnInit, OnDestroy {
         });
         this.resultats = this.resultats.concat(postes);
       }
+      this.postesSansCodeAgiv = this.resultats.filter((p) => {
+        return !p.codeagiv
+      });
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.destroy();
         this.dtTrigger.next('');

@@ -1,225 +1,225 @@
 <div class="page" style="overflow-y: auto;">
-    <div style="display: none;">
-        <button (click)="mettreEnLigne()">
-            Mettre en ligne
+  <div>
+
+  </div>
+  <div class="page-entete">
+    <div *ngIf="poste.idposte!=0" class="page-entete-titre">
+      Poste : {{poste.libelle}}, <b>{{poste.horaire | uppercase}}</b>
+
+    </div>
+    <div *ngIf="poste.idcontratsite">
+      <ng-container *ngIf="mesDroits.contratEdit">
+        Contrat : <a [routerLink]="'/contrat/view/' + poste.idcontratsite.idcontrat.idcontrat">
+          {{poste.idcontratsite.idcontrat.libelle}}
+        </a>,
+      </ng-container>
+
+      Site : {{poste.idcontratsite.idcontratSite}}, {{poste.idcontratsite.nom}},
+    </div>
+    <div>
+      Code : {{poste.code}}
+    </div>
+    <div>
+      Code AGIV : {{poste.codeagiv}}
+    </div>
+    <div class="">
+      <a routerLink="/poste" class="btn btn-link" style="padding: 0; margin: 0;">
+        Revenir à la liste des postes
+      </a>
+    </div>
+  </div>
+  <div class="boutons">
+    <div class="row">
+      <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
+        <div class="nouveau">
+          <a [routerLink]="'/poste/edit/' + poste.idposte " class="btn nouveau">
+            Modifier
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
+        <button class="btn btn-primary" (click)="mettreEnLigne()">
+          Mettre en ligne &nbsp; <i class="bi bi-cloud-arrow-up-fill"></i>
         </button>
+      </div>
     </div>
-    <div class="page-entete">
-        <div *ngIf="poste.idposte!=0" class="page-entete-titre">
-            Poste : {{poste.libelle}}, <b>{{poste.horaire | uppercase}}</b>
-
+  </div>
+  <div class="page-contenu">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="card">
+          <div>
+            <div class="petit-titre">
+              Informations
+            </div>
+            <div>
+              <div>
+                Ville : <a href="#">{{poste.zone?.idville?.libelle}}</a>, Zone : <a
+                  href="#">{{poste.zone?.libelle}}</a>, Quartier : <a href="#">{{poste.idquartier?.nom}}</a>
+              </div>
+              <div>
+                Personne à contacter : <a>{{poste.contact}}</a>, Téléphone : {{poste.tel}}
+              </div>
+            </div>
+          </div>
         </div>
-        <div *ngIf="poste.idcontratsite">
-            <ng-container *ngIf="mesDroits.contratEdit">
-                Contrat : <a [routerLink]="'/contrat/view/' + poste.idcontratsite.idcontrat.idcontrat">
-                    {{poste.idcontratsite.idcontrat.libelle}}
-                </a>,
+        <div class="card">
+          <div>
+            <div class="petit-titre">
+              Coordonnées géographiques
+            </div>
+            <div>
+              <div>
+                Laltitude : {{poste.latitude}}, Longitude : {{poste.longitude}}
+              </div>
+              <div>
+                <button class="btn btn-link" (click)="openGoogleMap()">Voir la localisation</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" *ngIf="poste.idcontratsite">
+          <div>
+            <div class="petit-titre">
+              Exigences du contrat :
+              <b>
+                Personnel
+              </b>
+            </div>
+            <div>
+              <div>
+                <ul>
+                  <ng-container *ngFor="let item of exigences">
+                    <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(item)}"
+                      *ngIf="item.horaire === poste.horaire">
+                      <span>
+                        {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
+                      </span>
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="card">
+          <div style="margin-bottom: 10px;">
+            Liste des vigiles titulaires en poste
+            <button *ngIf="!exigencesVerifiees" class="btn btn-link" style="float: right;" (click)="openModal()">
+              Ajouter un vigile
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-lg-6" *ngFor="let affectation of affectations">
+
+              <div style="border: 1px solid #aaa; ">
+                <app-vigile [vigile]="affectation.idvigile"></app-vigile>
+              </div>
+              <div
+                style="margin-bottom: 20px; text-align: center;border: 1px solid #aaa; padding: 10px;border-top: 0px solid #fff;">
+                <a [routerLink]="'/affectation/view/'+affectation.idaffectation">Voir l'affectation</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="margin-bottom: 10px;">
+            Liste des remplacants
+          </div>
+          <div class="row">
+            <ng-container *ngFor="let remplacant of remplacantsDuPoste">
+              <div class="col-lg-6" *ngIf="remplacant">
+                <div style="border: 0px solid #aaa; margin-bottom: 20px;">
+                  <app-vigile [vigile]="remplacant"></app-vigile>
+                </div>
+              </div>
             </ng-container>
+          </div>
+        </div>
+        <div class="card" style="display: none;">
+          <div style="margin-top: 20px; margin-bottom: 16px;">
+            Equipements reçus non basiques
+          </div>
+          <div *ngIf="equipementsvigiles.length === 0" style="opacity: 0.5">
+            Aucun équipement reçu
+          </div>
+          <div *ngIf="equipementsvigiles.length  > 0">
+            <ng-container *ngFor="let equipement of equipementsvigiles">
+              <ng-container *ngIf="equipement.quantite">
+                <app-display-equipement [equipement]="equipement"></app-display-equipement>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="height: 25vh;">
 
-            Site : {{poste.idcontratsite.idcontratSite}}, {{poste.idcontratsite.nom}},
-        </div>
-        <div>
-            Code : {{poste.code}}
-        </div>
-        <div>
-            Code AGIV : {{poste.codeagiv}}
-        </div>
-        <div class="">
-            <a routerLink="/poste" class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la liste des postes
-            </a>
-        </div>
-    </div>
-    <div class="boutons">
-        <div class="row">
-            <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
-                <div class="nouveau">
-                    <a [routerLink]="'/poste/edit/' + poste.idposte " class="btn nouveau">
-                        Modifier
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="page-contenu">
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="card">
-                    <div>
-                        <div class="petit-titre">
-                            Informations
-                        </div>
-                        <div>
-                            <div>
-                                Ville : <a href="#">{{poste.zone?.idville?.libelle}}</a>, Zone : <a
-                                    href="#">{{poste.zone?.libelle}}</a>, Quartier : <a
-                                    href="#">{{poste.idquartier?.nom}}</a>
-                            </div>
-                            <div>
-                                Personne à contacter : <a>{{poste.contact}}</a>, Téléphone : {{poste.tel}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div>
-                        <div class="petit-titre">
-                            Coordonnées géographiques
-                        </div>
-                        <div>
-                            <div>
-                                Laltitude : {{poste.latitude}}, Longitude : {{poste.longitude}}
-                            </div>
-                            <div>
-                                <button class="btn btn-link" (click)="openGoogleMap()">Voir la localisation</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card" *ngIf="poste.idcontratsite">
-                    <div>
-                        <div class="petit-titre">
-                            Exigences du contrat :
-                            <b>
-                                Personnel
-                            </b>
-                        </div>
-                        <div>
-                            <div>
-                                <ul>
-                                    <ng-container *ngFor="let item of exigences">
-                                        <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(item)}"
-                                            *ngIf="item.horaire === poste.horaire">
-                                            <span>
-                                                {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
-                                            </span>
-                                        </li>
-                                    </ng-container>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-7">
-                <div class="card">
-                    <div style="margin-bottom: 10px;">
-                        Liste des vigiles titulaires en poste
-                        <button *ngIf="!exigencesVerifiees" class="btn btn-link" style="float: right;"
-                            (click)="openModal()">
-                            Ajouter un vigile
-                        </button>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6" *ngFor="let affectation of affectations">
-
-                            <div style="border: 1px solid #aaa; ">
-                                <app-vigile [vigile]="affectation.idvigile"></app-vigile>
-                            </div>
-                            <div
-                                style="margin-bottom: 20px; text-align: center;border: 1px solid #aaa; padding: 10px;border-top: 0px solid #fff;">
-                                <a [routerLink]="'/affectation/view/'+affectation.idaffectation">Voir l'affectation</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div style="margin-bottom: 10px;">
-                        Liste des remplacants
-                    </div>
-                    <div class="row">
-                        <ng-container *ngFor="let remplacant of remplacantsDuPoste">
-                            <div class="col-lg-6" *ngIf="remplacant">
-                                <div style="border: 0px solid #aaa; margin-bottom: 20px;">
-                                    <app-vigile [vigile]="remplacant"></app-vigile>
-                                </div>
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-                <div class="card" style="display: none;">
-                    <div style="margin-top: 20px; margin-bottom: 16px;">
-                        Equipements reçus non basiques
-                    </div>
-                    <div *ngIf="equipementsvigiles.length === 0" style="opacity: 0.5">
-                        Aucun équipement reçu
-                    </div>
-                    <div *ngIf="equipementsvigiles.length  > 0">
-                        <ng-container *ngFor="let equipement of equipementsvigiles">
-                            <ng-container *ngIf="equipement.quantite">
-                                <app-display-equipement [equipement]="equipement"></app-display-equipement>
-                            </ng-container>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div style="height: 25vh;">
-
-    </div>
+  </div>
 </div>
 
 
 <!-- Modal -->
 <div class="modal fade" #vigilesPropositionsModal id="vigilesPropositionsModal" tabindex="-1"
-    aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Choisir le vigile à affecter
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Choisir le vigile à affecter
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Vigile
+              </span>
             </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Vigile
-                            </span>
-                        </div>
-                        <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
-                            class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
-                        <select #vigileElement [(ngModel)]="vigile" (ngModelChange)="getAffectation($event)"
-                            class="form-control">
-                            <ng-container *ngFor="let v of vigiles">
-                                <option [ngValue]="v" *ngIf="!v.estRemplacant && !v.estRemplacantConge">
-                                    {{v.noms}}
-                                </option>
-                            </ng-container>
-                        </select>
-                    </div>
-                    <div *ngIf="affectation && affectation.idposte">
-                        Affectation actuelle : {{affectation.idposte?.libelle}}
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Remplacant
-                            </span>
-                        </div>
-                        <input [(ngModel)]="rechercheRemplacant" (ngModelChange)="getRemplacants($event)" type="text"
-                            class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
-                        <select #vigileElement [(ngModel)]="remplacant" class="form-control">
-                            <ng-container *ngFor="let v of remplacants">
-                                <option [ngValue]="v" *ngIf="!v.estRemplacant">
-                                    {{v.noms}}
-                                </option>
-                            </ng-container>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn nouveau" (click)="affecter(vigile, remplacant)">
-                    Affecter ici
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            </div>
+            <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text" class="form-control"
+              placeholder="Rechercher ici..." style="max-width: 150px;">
+            <select #vigileElement [(ngModel)]="vigile" (ngModelChange)="getAffectation($event)" class="form-control">
+              <ng-container *ngFor="let v of vigiles">
+                <option [ngValue]="v" *ngIf="!v.estRemplacant && !v.estRemplacantConge">
+                  {{v.noms}}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+          <div *ngIf="affectation && affectation.idposte">
+            Affectation actuelle : {{affectation.idposte?.libelle}}
+          </div>
         </div>
+        <div class="mb-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Remplacant
+              </span>
+            </div>
+            <input [(ngModel)]="rechercheRemplacant" (ngModelChange)="getRemplacants($event)" type="text"
+              class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
+            <select #vigileElement [(ngModel)]="remplacant" class="form-control">
+              <ng-container *ngFor="let v of remplacants">
+                <option [ngValue]="v" *ngIf="!v.estRemplacant">
+                  {{v.noms}}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn nouveau" (click)="affecter(vigile, remplacant)">
+          Affecter ici
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
     </div>
+  </div>
 </div>

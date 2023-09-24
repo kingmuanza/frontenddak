@@ -69,18 +69,6 @@ export class PosteViewComponent implements OnInit {
   rechercheRemplacant = "";
   affectation: Affectation | undefined;
 
-  mettreEnLigne() {
-    console.log('mettre en ligne');
-
-    const db = getFirestore(this.app);
-    setDoc(doc(db, "poste", this.poste.idposte + ""), JSON.parse(JSON.stringify(this.poste))).then((value) => {
-      console.log("Terminé");
-      console.log(value);
-      console.log(this.poste);
-    });
-
-  }
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -159,6 +147,19 @@ export class PosteViewComponent implements OnInit {
         });
       }
     });
+  }
+
+  mettreEnLigne() {
+    console.log('mettre en ligne');
+    const db = getFirestore(this.app);
+    setDoc(doc(db, "poste", this.poste.idposte + ""), JSON.parse(JSON.stringify(this.poste))).then((value) => {
+      console.log("Terminé");
+      console.log(value);
+      console.log(this.poste);
+
+      this.notifierService.notify('success', "Mise en ligne effectuée avec succès");
+    });
+
   }
 
   openGoogleMap() {
