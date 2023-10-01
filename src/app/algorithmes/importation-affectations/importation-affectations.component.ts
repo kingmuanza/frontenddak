@@ -48,7 +48,6 @@ export class ImportationAffectationsComponent implements OnInit {
                   matricule = matricule.replace("N", "").replace("J", "").trim();
                   let matriculeRemplacant = donnees[6].trim();
                   matriculeRemplacant = matriculeRemplacant.replace("N", "").replace("J", "").trim();
-
                   if (this.getVigileByMatricule(matricule)) {
                     const affectationBrute = {
                       date: donnees[0] ? new Date(donnees[0]) : new Date("2016-01-01"),
