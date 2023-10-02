@@ -45,58 +45,58 @@ export class ImportationAffectationsComponent implements OnInit {
                 if (this.getPosteBy(donnees[1])) {
 
                   let matricule = donnees[2].trim();
-                  matricule = matricule.replace("N", "").replace("J", "").trim();
                   let matriculeRemplacant = donnees[6].trim();
-                  matriculeRemplacant = matriculeRemplacant.replace("N", "").replace("J", "").trim();
-                  if (this.getVigileByMatricule(matricule)) {
-                    const affectationBrute = {
-                      date: donnees[0] ? new Date(donnees[0]) : new Date("2016-01-01"),
-                      poste: donnees[1],
-                      posteLocal: this.getPosteBy(donnees[1]),
-                      matricule: matricule,
-                      vigile: this.getVigileByMatricule(matricule),
-                      remplacantVigile: this.getVigileByMatricule(matriculeRemplacant),
-                      horaire: donnees[4].toLowerCase(),
-                      remplacant: donnees[6],
-                      jourRepos: donnees[7],
-                    };
+                  if (matricule.indexOf("N") !== -1 || matricule.indexOf("J")) {
 
-                    let affectation = new Affectation();
-                    affectation.dateAffectation = affectationBrute.date;
-                    affectation.horaire = affectationBrute.horaire;
-                    affectation.idposte = affectationBrute.posteLocal;
-                    affectation.idvigile = affectationBrute.vigile!;
-                    affectation.jourRepos = affectationBrute.jourRepos;
-                    affectation.remplacant = affectationBrute.remplacantVigile;
+                    matricule = matricule.replace("N", "").replace("J", "").trim();
+                    matriculeRemplacant = matriculeRemplacant.replace("N", "").replace("J", "").trim();
+                    if (this.getVigileByMatricule(matricule)) {
+                      const affectationBrute = {
+                        date: donnees[0] ? new Date(donnees[0]) : new Date("2016-01-01"),
+                        poste: donnees[1],
+                        posteLocal: this.getPosteBy(donnees[1]),
+                        matricule: matricule,
+                        vigile: this.getVigileByMatricule(matricule),
+                        remplacantVigile: this.getVigileByMatricule(matriculeRemplacant),
+                        horaire: donnees[4].toLowerCase(),
+                        remplacant: donnees[6],
+                        jourRepos: donnees[7],
+                      };
 
-                    this.affectations.push(affectation);
-                  }
+                      let affectation = new Affectation();
+                      affectation.dateAffectation = affectationBrute.date;
+                      affectation.horaire = affectationBrute.horaire;
+                      affectation.idposte = affectationBrute.posteLocal;
+                      affectation.idvigile = affectationBrute.vigile!;
+                      affectation.jourRepos = affectationBrute.jourRepos;
+                      affectation.remplacant = affectationBrute.remplacantVigile;
 
-                  let matricule2 = donnees[2].trim();
-                  let matriculeRemplacant2 = donnees[6].trim();
+                      this.affectations.push(affectation);
+                    }
+                  } else {
+                    if (this.getVigileByMatricule(matricule)) {
+                      const affectationBrute = {
+                        date: donnees[0] ? new Date(donnees[0]) : new Date("2016-01-01"),
+                        poste: donnees[1],
+                        posteLocal: this.getPosteBy(donnees[1]),
+                        matricule: matricule,
+                        vigile: this.getVigileByMatricule(matricule),
+                        remplacantVigile: this.getVigileByMatricule(matriculeRemplacant),
+                        horaire: donnees[4].toLowerCase(),
+                        remplacant: donnees[6],
+                        jourRepos: donnees[7],
+                      };
 
-                  if (this.getVigileByMatricule(matricule2)) {
-                    const affectationBrute = {
-                      date: donnees[0] ? new Date(donnees[0]) : new Date("2016-01-01"),
-                      poste: donnees[1],
-                      posteLocal: this.getPosteBy(donnees[1]),
-                      matricule: matricule2,
-                      vigile: this.getVigileByMatricule(matricule2),
-                      remplacantVigile: this.getVigileByMatricule(matriculeRemplacant2),
-                      horaire: donnees[4].toLowerCase(),
-                      remplacant: donnees[6],
-                      jourRepos: donnees[7],
-                    };
+                      let affectation = new Affectation();
+                      affectation.dateAffectation = affectationBrute.date;
+                      affectation.horaire = affectationBrute.horaire;
+                      affectation.idposte = affectationBrute.posteLocal;
+                      affectation.idvigile = affectationBrute.vigile!;
+                      affectation.jourRepos = affectationBrute.jourRepos;
+                      affectation.remplacant = affectationBrute.remplacantVigile;
 
-                    let affectation = new Affectation();
-                    affectation.dateAffectation = affectationBrute.date;
-                    affectation.horaire = affectationBrute.horaire;
-                    affectation.idposte = affectationBrute.posteLocal;
-                    affectation.idvigile = affectationBrute.vigile!;
-                    affectation.jourRepos = affectationBrute.jourRepos;
-                    affectation.remplacant = affectationBrute.remplacantVigile;
-
-                    this.affectations.push(affectation);
+                      this.affectations.push(affectation);
+                    }
                   }
                 }
               }

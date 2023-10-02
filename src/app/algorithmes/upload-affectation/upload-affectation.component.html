@@ -4,11 +4,11 @@
   </button>
 </div>
 <div>
-  <div *ngFor="let resultat of resultats" style="margin-bottom: 50px;">
+  <div *ngFor="let resultat of remplacantsFinaux" style="margin-bottom: 50px;">
     {{resultat | json}}
 
 
-    <button (click)="mettreEnLigne(resultat)">
+    <button (click)="mettreEnLigneTitulaire(resultat)">
       Mettre en ligne
     </button>
   </div>
