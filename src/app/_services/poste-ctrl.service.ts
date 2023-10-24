@@ -85,6 +85,20 @@ export class PosteCtrlService {
     });
   }
 
+  async getPostesNoZone(): Promise<Poste[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "poste-no-zone").subscribe({
+        next: (data) => {
+          const resulats = data as Poste[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
   async getPostesByName(nom: string): Promise<Poste[]> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "nom" + '/' + nom.toLowerCase()).subscribe({

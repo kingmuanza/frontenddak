@@ -36,6 +36,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
 
   zones = new Array<ZoneDak>();
   zone = new ZoneDak();
+  zeroZone = new ZoneDak();
   horaire = 'tous';
   affectations = new Array<Affectation>();
   afficher = 'tous';
@@ -110,6 +111,11 @@ export class PosteListComponent implements OnInit, OnDestroy {
     } else {
       if (nom) {
         this.posteCtrlService.getPostesByName(nom).then((postes) => {
+          this.resultatsPrimaires = postes;
+          this.afficherPostes(this.afficher);
+        });
+      } else {
+        this.posteCtrlService.getPostesNoZone().then((postes) => {
           this.resultatsPrimaires = postes;
           this.afficherPostes(this.afficher);
         });

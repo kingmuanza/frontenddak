@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Poste } from 'src/app/models/poste.model';
 import { Vigile } from 'src/app/models/vigile.model';
+import { ZoneDak } from 'src/app/models/zone.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
 @Component({
@@ -12,20 +16,35 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 })
 export class ImportationAffectationsComponent implements OnInit {
 
+  // Datatables
+  dtOptions: any = DatatablesOptions;
+  dtTrigger = new Subject<any>();
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
+  dtInstance!: Promise<DataTables.Api>;
+
   lignes = new Array<string>();
   affectations = new Array<any>();
+  resultats = new Array<any>();
   affectationsBrutes = new Array<any>();
   postes = new Array<Poste>();
   vigiles = new Array<Vigile>();
+  zones = new Array<ZoneDak>();
+  zone = new ZoneDak();
 
   constructor(
     private http: HttpClient,
     private posteService: JarvisService<Poste>,
     private vigileService: JarvisService<Vigile>,
     private affectationService: JarvisService<Affectation>,
+    private zoneService: JarvisService<ZoneDak>,
   ) { }
 
   ngOnInit(): void {
+    this.zoneService.getAll('zone').then((zones) => {
+      console.log('data');
+      console.log(zones);
+      this.zones = zones;
+    });
     this.vigileService.getAll("vigile").then((vigiles) => {
       this.vigiles = vigiles;
       this.posteService.getAll("poste").then((postes) => {
@@ -33,8 +52,7 @@ export class ImportationAffectationsComponent implements OnInit {
           return p.codeagiv;
         });
         this.http.get('assets/data/affecations-cool3.csv', { responseType: 'text' }).subscribe((data: string) => {
-          console.log("data");
-          console.log(data);
+
           this.lignes = data.split("\n");
           this.lignes.shift();
           this.lignes.forEach((ligne) => {
@@ -43,7 +61,6 @@ export class ImportationAffectationsComponent implements OnInit {
             if (donnees[2]) {
               if (!donnees[8]) {
                 if (this.getPosteBy(donnees[1])) {
-
                   let matricule = donnees[2].trim();
                   let matriculeRemplacant = donnees[6].trim();
                   if (matricule.indexOf("N") !== -1 || matricule.indexOf("J")) {
@@ -102,6 +119,8 @@ export class ImportationAffectationsComponent implements OnInit {
               }
             }
           });
+          this.resultats = this.affectations;
+          this.dtTrigger.next("");
         });
       });
     });
@@ -114,6 +133,12 @@ export class ImportationAffectationsComponent implements OnInit {
     if (postes.length > 0) {
       return postes[0];
     } else {
+      let postesTests = this.postes.filter((p) => {
+        return p.codeagiv === codeagiv.replace("N", "").replace("J", "")
+      });
+      if (postesTests.length > 0) {
+        return postesTests[0];
+      }
       return undefined;
     }
   }

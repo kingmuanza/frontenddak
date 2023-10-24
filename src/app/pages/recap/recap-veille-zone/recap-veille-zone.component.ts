@@ -89,8 +89,8 @@ export class RecapVeilleZoneComponent implements OnInit {
                   this.suivis.push(s);
                 });
               });
-              // const q = query(collection(db, "pointage"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
-              const q = query(collection(db, "pointage"), orderBy("date", 'desc'));
+              const q = query(collection(db, "pointage"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
+              // const q = query(collection(db, "pointage"), orderBy("date", 'desc'));
               getDocs(q).then((querySnapshots) => {
                 querySnapshots.forEach((doc) => {
                   let pointage = doc.data() as any;

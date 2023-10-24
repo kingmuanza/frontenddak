@@ -35,6 +35,7 @@
             </div>
 
             <select type="text" [(ngModel)]="zone" class="form-control">
+              <option [ngValue]="zeroZone">Aucune zone</option>
               <ng-container *ngFor="let z of zones">
                 <option [ngValue]="z" *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
                   {{z.libelle}}
@@ -54,8 +55,7 @@
           </div>
         </div>
         <div class="col-lg-2">
-          <button [disabled]="zone.idzone===0 && !nom" class="btn primaire"
-            (click)="rechercher(horaire, zone, nom)">Rechercher</button>
+          <button class="btn primaire" (click)="rechercher(horaire, zone, nom)">Rechercher</button>
         </div>
       </div>
     </div>
