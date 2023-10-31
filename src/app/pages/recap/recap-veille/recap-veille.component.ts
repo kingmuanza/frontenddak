@@ -37,6 +37,8 @@ export class RecapVeilleComponent implements OnInit {
   vigilesQuiOntPointes = new Array<number>();
   vigilesQuiOntPointesDeuxFois = new Array<number>();
 
+  terminee = false;
+
   constructor(
     private affectationService: JarvisService<Affectation>,
     private zoneService: JarvisService<ZoneDak>,
@@ -55,7 +57,8 @@ export class RecapVeilleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.debut.setDate(this.debut.getDate() - 1);
+    //this.debut.setDate(this.debut.getDate() - 1);
+    this.debut.setDate(this.debut.getDate() - 8);
     this.debut.setHours(6, 0, 0);
     this.fin.setHours(6, 0, 0);
 
@@ -107,6 +110,8 @@ export class RecapVeilleComponent implements OnInit {
 
         this.postesControles = [...new Set(this.getAffectations(this.vigilesQuiOntPointes))];
         this.postesControlesDeuxFois = [...new Set(this.getAffectations(this.vigilesQuiOntPointesDeuxFois))];
+
+        this.terminee = true;
       });
     });
   }
@@ -157,6 +162,17 @@ export class RecapVeilleComponent implements OnInit {
   voirPostes() {
     console.log('open modal postesModal');
     const modale = document.getElementById('postesModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  voirPostes2() {
+    console.log('open modal postesModal2');
+    const modale = document.getElementById('postesModal2');
 
     console.log(modale);
     if (modale != null) {

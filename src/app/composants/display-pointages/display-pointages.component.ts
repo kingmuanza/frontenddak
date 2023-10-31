@@ -18,12 +18,12 @@ export class DisplayPointagesComponent implements OnInit {
 
 
   getAffection(idvigile: number): Affectation | undefined {
-    console.log('idvigile');
-    console.log(idvigile);
+    // console.log('idvigile');
+    // console.log(idvigile);
     let affectations = this.affectations.filter((aff) => {
       return aff.idvigile.idvigile == idvigile;
     })
-    console.log(affectations[0])
+    // console.log(affectations[0])
     return affectations[0];
   }
 

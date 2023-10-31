@@ -8,7 +8,7 @@
       Au <b>{{fin | date:"dd/MM/yyyy"}}</b> à <b>{{fin | date: "HH:mm:ss"}}</b>
     </div>
   </div>
-  <div class="page-contenu">
+  <div class="page-contenu" *ngIf="terminee">
     <div class="row">
       <div class="col-3">
         <div class="stat" (click)="voirPointages()">
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="stat" (click)="voirPostes()">
+        <div class="stat" (click)="voirPostes2()">
           <div class="stat-titre">
             Postes contrôlés deux fois
           </div>
@@ -189,9 +189,35 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div *ngFor="let id of postesControles" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
-          {{getAffectionByPoste(id)?.idposte.libelle}}
-        </div>
+        <ol>
+          <li *ngFor="let id of postesControles" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
+            {{getAffectionByPoste(id)?.idposte.libelle}}
+          </li>
+        </ol>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #postesModal2 id="postesModal2" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Postes controlés deux fois
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ol>
+          <li *ngFor="let id of postesControlesDeuxFois" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
+            {{getAffectionByPoste(id)?.idposte.libelle}}
+          </li>
+        </ol>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

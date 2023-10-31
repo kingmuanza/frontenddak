@@ -66,7 +66,8 @@ export class RecapVeilleZoneComponent implements OnInit {
             this.zone = this.getZoneByCode(code!, zones);
             console.log("code : " + code);
             this.zone.code = code;
-            this.debut.setDate(this.debut.getDate() - 1);
+            // this.debut.setDate(this.debut.getDate() - 1);
+            this.debut.setDate(this.debut.getDate() - 8);
             this.debut.setHours(6, 0, 0);
             this.fin.setHours(6, 0, 0);
 
@@ -184,6 +185,17 @@ export class RecapVeilleZoneComponent implements OnInit {
   voirPostes() {
     console.log('open modal postesModal');
     const modale = document.getElementById('postesModalzone');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  voirPostes2() {
+    console.log('open modal postesModal2');
+    const modale = document.getElementById('postesModalzone2');
 
     console.log(modale);
     if (modale != null) {
