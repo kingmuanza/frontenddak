@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="stat" (click)="voirPointages()">
+        <div class="stat" (click)="voirVigiles()">
           <div class="stat-titre">
             Vigiles qui ont pointés
           </div>
@@ -194,6 +194,61 @@
             {{getAffectionByPoste(id)?.idposte.libelle}}
           </li>
         </ol>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #vigilesModal id="vigilesModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Vigiles qui ont pointé
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">N.</th>
+              <th scope="col">Matricule</th>
+              <th scope="col">Noms</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vigile of getVigilesQuiOntPointes(); let i = index">
+              <td scope="row">
+                {{i+1}}
+              </td>
+              <th scope="row">
+                {{vigile?.matricule}}
+              </th>
+              <td>
+                {{vigile?.nomsVigile}}
+              </td>
+              <td>
+                <div *ngIf="vigile" style="display: flex; justify-content: space-between;">
+                  <span *ngIf="vigile.date">
+                    {{vigile.date.toDate() | date:"HH:mm:ss"}}
+                  </span>
+                  <span>
+                    <span *ngIf="vigile.date2">
+                      {{vigile.date2.toDate() | date:"HH:mm:ss"}}
+                    </span>
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

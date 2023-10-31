@@ -101,7 +101,7 @@ export class RecapVeilleComponent implements OnInit {
         this.zonesControlees = [...new Set(this.zonesControlees)];
 
         let pointagesString = this.pointages.map((p) => {
-          return p.idvigile
+          return p.idvigile;
         });
         let findDuplicates = (arr: Array<number>) => arr.filter((item, index) => arr.indexOf(item) !== index)
 
@@ -192,6 +192,17 @@ export class RecapVeilleComponent implements OnInit {
     }
   }
 
+  voirVigiles() {
+    console.log('open modal vigilesModal');
+    const modale = document.getElementById('vigilesModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
   voirAbsences() {
     console.log('open modal absenceModal');
     const modale = document.getElementById('absenceModal');
@@ -212,6 +223,46 @@ export class RecapVeilleComponent implements OnInit {
       const myModal = new bootstrap.Modal(modale);
       myModal.show();
     }
+  }
+
+  getVigileOnPointages(idvigile: number): any {
+    const pointages = this.pointages.filter((p) => {
+      return p.idvigile === idvigile;
+    });
+    if (pointages.length > 1) {
+      const vigiles = pointages
+        .map((p) => {
+          return {
+            nomsVigile: p.nomsVigile,
+            matricule: p.matricule,
+            idvigile: p.idvigile,
+            date: p.date,
+            date2: p.date,
+          };
+        });
+
+      let vigile = vigiles[0];
+      vigile["date2"] = vigiles[1].date;
+      return vigile;
+    } else {
+      const vigiles = pointages
+        .map((p) => {
+          return {
+            nomsVigile: p.nomsVigile,
+            matricule: p.matricule,
+            idvigile: p.idvigile,
+            date: p.date,
+            date2: null,
+          };
+        });
+      return vigiles[0];
+    }
+  }
+
+  getVigilesQuiOntPointes(): Array<any> {
+    return this.vigilesQuiOntPointes.map((v) => {
+      return this.getVigileOnPointages(v);
+    })
   }
 
 }

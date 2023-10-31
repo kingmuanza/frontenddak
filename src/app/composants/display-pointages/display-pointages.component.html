@@ -1,6 +1,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th scope="col">N.</th>
       <th scope="col">Matr.</th>
       <th scope="col">Vigile</th>
       <th scope="col">Poste</th>
@@ -9,11 +10,16 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let pointage of pointages" [ngClass]="{'red': pointage.absence}">
+    <tr *ngFor="let pointage of pointages; let i =index" [ngClass]="{'red': pointage.absence}">
       <th scope="row">
         <b>
-          {{pointage.matricule}}
+          {{i+1}}
         </b>
+      </th>
+      <th scope="row">
+
+        {{pointage.matricule}}
+
       </th>
       <td>
         {{pointage.nomsVigile}}
