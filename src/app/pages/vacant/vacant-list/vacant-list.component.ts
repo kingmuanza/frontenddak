@@ -10,6 +10,12 @@ import { NotifierService } from 'angular-notifier';
 import { DataTableDirective } from 'angular-datatables';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { Suivi } from 'src/app/models/suivi.model';
+import { ZoneDak } from 'src/app/models/zone.model';
+import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { VigileService } from 'src/app/services/vigile.service';
+import { VigileCtrlService } from 'src/app/_services/vigile-ctrl-service';
 
 
 @Component({
@@ -25,232 +31,205 @@ export class VacantListComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   dtInstance!: Promise<DataTables.Api>;
 
-  postes = new Array<any>();
-  vigiles = new Array<Vigile>();
-  sanctions = new Array<Suivi>();
-  remplacants = new Array<Vigile>();
+  zones = new Array<ZoneDak>();
+  zone = new ZoneDak();
+  zeroZone = new ZoneDak();
+  horaire = 'tous';
   affectations = new Array<Affectation>();
-  display = "block";
-  horaire = "jour";
-  posteConcernee = new Poste();
-  processing = false;
+  postesStringOfAffectations = new Array<number>();
+  afficher = 'tous';
+  postes = new Array<Poste>();
+  resultats = new Array<any>();
+  lignes = new Array<string>();
+  postesSansCodeAgiv = new Array<Poste>();
 
-  propositions = new Array<{
-    vigile: Vigile,
-    poste?: Poste,
-    remplacant?: Vigile,
-  }>();
-
-  zone: any
+  loading = false;
+  suggestions = new Array<Affectation>();
+  poste = new Poste();
 
   constructor(
+    private http: HttpClient,
     private router: Router,
-    private affectationService: JarvisService<Affectation>,
     private posteService: JarvisService<Poste>,
-    private vigileService: JarvisService<Vigile>,
-    private sanctionService: JarvisService<Suivi>,
+    private zoneService: JarvisService<ZoneDak>,
+    private vigileCtrlService: VigileCtrlService,
+    private affectationService: JarvisService<Affectation>,
+    private posteCtrlService: PosteCtrlService,
+    private authService: AuthService,
     private notifierService: NotifierService,
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
-    this.sanctionService.getAll('suiviposte').then((data) => {
-      console.log('data');
-      console.log(data);
-      this.sanctions = data;
-    });
-    this.posteService.getAll('poste').then((data) => {
-      console.log('data');
-      console.log(data);
-      this.postes = [];
-      data.forEach((poste) => {
-        if (!poste.bon) {
-          this.postes.push(poste);
-        }
+    this.importerAffectations();
+    this.affectationService.getAll('affectation').then((affectations) => {
+      this.affectations = affectations;
+      this.postesStringOfAffectations = affectations.filter((aff) => !aff.arret).map((aff) => {
+        return aff.idposte.idposte;
       });
-      this.getAffectations().then(() => {
+      this.zoneService.getAll('zone').then((zones) => {
+        console.log('data');
+        console.log(zones);
+        this.zones = zones;
         this.dtTrigger.next('');
-        this.getVigiles().then((vigiles) => {
-          this.vigiles = vigiles;
-          this.propositions = [];
-          this.vigiles.forEach((v) => {
-            this.propositions.push({vigile: v})
-          });
+      });
+    });
+  }
+
+  initZone() {
+    this.zone = new ZoneDak();
+  }
+
+  importerAffectations() {
+    this.http.get('assets/data/affecations-cool3.csv', { responseType: 'text' }).subscribe((data: string) => {
+      this.lignes = data.split("\n");
+      this.lignes.shift();
+      this.lignes = this.lignes.filter((ligne) => {
+        let donnees = ligne.split(",");
+        return donnees[1] && donnees[1].trim();
+      })
+      console.log("import terminé", this.lignes.length);
+    });
+  }
+
+  rechercher(zone?: ZoneDak) {
+    this.resultats = new Array<Poste>();
+    this.loading = true;
+    if (zone && zone.idzone !== 0) {
+      this.posteCtrlService.getPostesByZone(zone).then((postes) => {
+        this.postes = postes;
+        this.resultats = postes.filter((p) => {
+          return this.postesStringOfAffectations.indexOf(p.idposte) === -1;
         });
-      });
-    });
-  }
-
-  getSanctions(vigile: Vigile): number {
-    let nombre = 0;
-    this.sanctions.forEach((s) => {
-      if (s.idvigile.idvigile === vigile.idvigile) {
-        nombre++;
-      }
-    });
-    return nombre;
-  }
-
-  getNombreAffectationJour(poste: Poste): number {
-    const dernieresAffectations = new Array<any>();
-    this.affectations.forEach((affectation) => {
-      if (affectation.idposte.idposte === poste.idposte && !affectation.arret) {
-        if (affectation.horaire.toLowerCase() === 'jour') {
-          dernieresAffectations.push(affectation);
-        }
-      }
-    });
-    return dernieresAffectations.length;
-  }
-
-  getNombreAffectationNuit(poste: Poste): number {
-    const dernieresAffectations = new Array<any>();
-    this.affectations.forEach((affectation) => {
-      if (affectation.idposte.idposte === poste.idposte && !affectation.arret) {
-        if (affectation.horaire.toLowerCase() === 'nuit') {
-          dernieresAffectations.push(affectation);
-        }
-      }
-    });
-    return dernieresAffectations.length;
-  }
-
-  getAffectations(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.affectationService.getAll('affectation').then((data) => {
-        console.log('data');
-        console.log(data);
-        this.affectations = data;
-        resolve();
-      });
-    });
-  }
-
-  edit(id: string) {
-    this.router.navigate(['poste', 'edit', id]);
-  }
-
-  libellePrime(libelle: string) {
-    if (libelle)
-      return "OUI";
-
-    return "NON";
-  }
-
-  openModal(poste: Poste, horaire: string) {
-    this.posteConcernee = poste;
-    this.horaire = horaire;
-    
-    this.vigiles = this.vigiles.sort((v1, v2) => {
-      return this.score(v1,poste) - this.score(v2,poste) > 0 ? -1: 1;
-    });
-    this.propositions = [];
-    this.vigiles.forEach((v) => {
-      if (v.horaire === horaire) {
-        this.propositions.push({vigile: v, poste: this.posteConcernee});
-      }
-    });
-    console.log('open modal');
-    const modale = document.getElementById('exampleModal');
-    
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
-    }
-  }
-
-  affecter(p:{
-    vigile: Vigile,
-    poste?: Poste,
-    remplacant?: Vigile,
-  }) {
-    console.log('close modal');
-    console.log(p.vigile.noms);
-    console.log(p.remplacant?.noms);
-    console.log(p.poste?.libelle);
-    const modale = document.getElementById('exampleModal');
-    
-    console.log(modale);
-    if (modale != null) {
-      const myModal = bootstrap.Modal.getInstance(modale);
-      myModal?.hide();
-    }
-
-    const affectation = new Affectation();
-    affectation.dateAffectation = new Date();
-    affectation.horaire = p.vigile.horaire;
-    affectation.remplacant = p.remplacant;
-    affectation.idposte = p.poste;
-    affectation.idvigile = p.vigile;
-    
-    this.processing = true;
-    this.affectationService.ajouter('affectation', affectation).then((data) => {
-      console.log('data');
-      console.log(data);
-      this.processing = false;
-      this.notifierService.notify('success', "Ajout effectué avec succès");
-      this.router.navigate(['affectation']);
-    }).catch((e) => {
-      this.processing = false;
-    });
-  }
-
-  getVigiles(): Promise<Array<Vigile>> {
-    const vigiles = new Array<Vigile>();
-    this.remplacants = new Array<Vigile>();
-    return new Promise((resolve, reject) => {
-      this.vigileService.getAll('vigile').then((data) => {
-        console.log('data');
-        data.forEach((vigile) => {
-          if (!vigile.estRemplacant) {
-            if (1 > this.getNombreAffectation(vigile).length) {
-              vigiles.push(vigile);
-            }
-          } else {
-            this.remplacants.push(vigile);
+        this.resultats = this.resultats.map((r) => {
+          return {
+            ...r,
+            suggestions: this.rechercherDansAgiv(r),
           }
         });
-        resolve(vigiles);
+        this.postesSansCodeAgiv = this.resultats.filter((p) => {
+          return !p.codeagiv
+        });
+        this.loading = false;
+        // this.afficherPostes();
       });
+    }
+  }
+
+  afficherPostes() {
+    setTimeout(() => {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next('');
+      });
+    }, 500);
+  }
+
+  edit(id: string | number) {
+    this.router.navigate(['poste', 'view', id]);
+  }
+
+
+  save(poste: Poste) {
+    this.posteService.modifier('poste', poste.idposte, poste).then((data) => {
+      console.log('data');
+      console.log(data);
+      this.notifierService.notify('success', "Modification effectuée avec succès");
+    }).catch((e) => {
     });
   }
 
-  getNombreAffectation(vigile: Vigile) {
-    const dernieresAffectations = new Array<any>();
-    this.affectations.forEach((affectation) => {
-      if (affectation.idvigile.idvigile === vigile.idvigile && !affectation.arret) {
-        if (true) {
-          dernieresAffectations.push(affectation);
+  async getVigileByMatricule(matricule: string): Promise<Vigile> {
+    let vigile = await this.vigileCtrlService.getVigileByMatricule(matricule);
+    return vigile;
+  }
+
+  creerAffectation(aff: Affectation) {
+    aff.arret = null;
+    // this.closeModal("suggestions");
+    this.affectationService.ajouter("affectation", aff).then(() => {
+      window.location.reload();
+    });
+  }
+
+  rechercherDansAgiv(poste: Poste) {
+    if (poste.codeagiv) {
+      let resultats = new Array<any>()
+      let lignes = this.lignes.filter((ligne) => {
+        let donnees = ligne.split(",");
+        if (donnees[1]) {
+          return donnees[1].trim().indexOf(poste.codeagiv.trim()) !== -1;
+        } else {
+          return false;
         }
-      }
-    });
-    return dernieresAffectations;
+      });
+      return lignes.length;
+    } else {
+      return 0;
+    }
   }
 
-  score(vigile: Vigile, poste: Poste): number {
-
-    let score = 0;
-    if (vigile.zone?.idzone === poste.zone?.idzone) {
-      score += 1;
-    }
-    if (vigile.quartier?.idquartier === poste.idquartier?.idquartier) {
-      score += 1;
-    }
-    return score;
-  }
-
-  reorganiser() {
-    console.log('open modal');
-    const modale = document.getElementById('exampleModal');
-    
+  openModal(idElement: string) {
+    console.log(`open modal ${idElement}`);
+    const modale = document.getElementById(idElement);
     console.log(modale);
     if (modale != null) {
       const myModal = new bootstrap.Modal(modale);
       myModal.show();
     }
   }
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+
+  closeModal(idElement: string) {
+    console.log(`open modal ${idElement}`);
+    const modale = document.getElementById(idElement);
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.hide();
+    }
   }
-  
+
+  async ouvrirSuggestions(poste: Poste) {
+    this.openModal("suggestions");
+    this.poste = poste;
+    let suggestions = this.rechercherAffectationDansAGIV(poste);
+    this.suggestions = new Array<any>();
+    for (let index = 0; index < suggestions.length; index++) {
+      const element = suggestions[index];
+      let aff = new Affectation();
+      aff.dateAffectation = new Date(element[0]);
+      aff.idposte = poste;
+      aff.idvigile = await this.getVigileByMatricule(element[2]);
+      aff.horaire = element[4];
+      aff.remplacant = await this.getVigileByMatricule(element[6]);
+      aff.jourRepos = element[7];
+      aff.arret = element[8] ? new Date(element[8]) : null;
+      this.suggestions.push(aff);
+    }
+  }
+
+  rechercherAffectationDansAGIV(poste: Poste): Array<any> {
+    if (poste.codeagiv) {
+      let resultats = new Array<any>()
+      let lignes = this.lignes.filter((ligne) => {
+        let donnees = ligne.split(",");
+        if (donnees[1]) {
+          return donnees[1].trim().indexOf(poste.codeagiv.trim()) !== -1;
+        } else {
+          return false;
+        }
+      });
+      return lignes.map((ligne) => {
+        let donnees = ligne.split(",");
+        return donnees;
+      });
+    } else {
+      return [];
+    }
+  }
+
+  ngOnDestroy(): void {
+  }
+
 }

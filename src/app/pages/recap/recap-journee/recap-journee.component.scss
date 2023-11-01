@@ -41,11 +41,12 @@
 
 .zone {
   text-align: center;
-  background-color: #231709;
-  color: white;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  padding: 10px;
+  // background-color: #231709;
+  background: rgba(black, 0.1);
+  // color: white;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 8px;
 
   &.controlee {
     background-color: #E3B505;

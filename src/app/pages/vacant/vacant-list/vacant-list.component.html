@@ -1,156 +1,189 @@
 <div class="page">
-    <div class="page-entete">
-        <div class="page-entete-titre">
-            Liste des postes vacants
-        </div>
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      Liste des postes vacants
     </div>
-    <div class="page-contenu">
-        <div class="page-contenu-titre">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="nouveau">
-                        <a (click)="reorganiser()" class="btn nouveau">
-                            Proposer une réorganisation
-                        </a>
+    <div class="boutons">
+      <div class="row">
+
+        <div class="col-lg-2">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Horaire
+              </span>
+            </div>
+            <select (ngModelChange)="initZone()" [(ngModel)]="horaire" class="form-control">
+              <option value="tous">Tous</option>
+              <option value="jour">Jour</option>
+              <option value="nuit">Nuit</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Zone
+              </span>
+            </div>
+
+            <select type="text" [(ngModel)]="zone" class="form-control">
+              <option [ngValue]="zeroZone">Aucune zone</option>
+              <ng-container *ngFor="let z of zones">
+                <option [ngValue]="z" *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
+                  {{z.libelle}}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-lg-2">
+          <button [disabled]="loading" class="btn primaire" (click)="rechercher(zone)">
+            <ng-container *ngIf="!loading">
+              Rechercher
+            </ng-container>
+            <ng-container *ngIf="loading">
+              Recherche en cours...
+            </ng-container>
+
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-contenu">
+
+    <div class="card shadow-1 ">
+      <div class="card-body">
+        <div class="card-title mb-3">
+          Résultats de la recherche : {{resultats.length}} postes vacants sur {{postes.length}}
+          <div style="color: red;" *ngIf="resultats.length > 0">
+            {{postesSansCodeAgiv.length}} postes sans code AGIV
+          </div>
+        </div>
+        <div style="margin-top: 40px;">
+          <table datatable [dtOptions]="dtOptions " [dtTrigger]="dtTrigger " class="row-border hover ">
+            <thead>
+              <tr>
+                <th>Libellé</th>
+                <!-- <th>Code</th> -->
+                <th>Code AGIV</th>
+                <th>Zone</th>
+                <th>Contrat</th>
+                <th>Actions</th>
+                <th style="text-align: right; width: 50px;">Sugg.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let poste of resultats">
+
+                <td (click)="edit(poste.idposte)">{{poste.code}}</td>
+                <td style="width: 300px;">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        AGIV
+                      </span>
                     </div>
-                </div>
-            </div>
-            <div *ngIf="!processing" class="page-contenu-corps">
-                <div class="card shadow-1">
-                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Libellé</th>
-                                <th>Contrat</th>
-                                <th class="text-right">Nbr Vigil Jr.</th>
-                                <th class="text-right">Nbr Vigil Aff Jr.</th>
-                                <th class="text-right">Nbr Vigil Nt.</th>
-                                <th class="text-right">Nbr Vigil Aff Nt.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <ng-container *ngFor="let poste of postes">
-                                <tr>
-                                    <td>{{poste.idposte}}</td>
-                                    <td>{{poste.libelle}}</td>
-                                    <td>{{poste.contrat}}</td>
-                                    <td class="text-right">
-                                        {{poste.nombreVigileJour ?poste.nombreVigileJour:0}}
-                                    </td>
-                                    <td class="text-right">
-                                        <div (click)="openModal(poste, 'jour')" *ngIf="poste.nombreVigileJour > getNombreAffectationJour(poste)" class="idea">
-                                        </div>
-                                        <div class="nombre" [ngClass]="{'red': poste.nombreVigileJour > getNombreAffectationJour(poste)}">
-                                            {{getNombreAffectationJour(poste)}}
-                                        </div>
-                                    </td>
-                                    <td class="text-right">
-                                        {{poste.nombreVigileNuit ? poste.nombreVigileNuit:0}}
-                                    </td>
-                                    <td class="text-right">
-                                        <div (click)="openModal(poste, 'nuit')" *ngIf="poste.nombreVigileNuit > getNombreAffectationNuit(poste)" class="idea">
-                                        </div>
-                                        <div class="nombre" [ngClass]="{'red': poste.nombreVigileNuit > getNombreAffectationNuit(poste)}">
-                                            {{getNombreAffectationNuit(poste)}}
-                                        </div>
-                                    </td>
-                                </tr>
-                            </ng-container>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                    <input type="text" [(ngModel)]="poste.codeagiv" class="form-control">
+                    <button (click)="save(poste)" class="btn btn-primary">
+                      Save
+                    </button>
+                  </div>
+                </td>
+                <td>{{poste.zone?.libelle}}</td>
+                <td>
+                  <b *ngIf="poste.idcontratsite">
+                    {{poste.idcontratsite.idcontrat.libelle}}
+
+                  </b>
+                  <span *ngIf="!poste.idcontratsite" style="color: red;">
+                    Aucun contrat
+                  </span>
+                </td>
+                <td>
+                  <button *ngIf="poste.suggestions > 0" class="btn btn-primary btn-sm"
+                    (click)="ouvrirSuggestions(poste)">
+                    Rechercher dans AGIV
+                  </button>
+                </td>
+                <td style="text-align: right; width: 50px;">
+                  {{poste.suggestions}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
+
 <!-- Modal -->
-<div class="modal fade" #exampleModal id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Suggestion : {{posteConcernee.libelle}}, {{posteConcernee.zone?.libelle}}, {{posteConcernee.idquartier?.nom}},
-                    <span style="text-transform: capitalize;">
-                        {{horaire}}
-                    </span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div *ngIf="vigiles.length == 0">
-                    Vous devez procéder à un recrutemeent
-                </div>
-                <div *ngIf="vigiles.length == 1">
-                    Vous pouvez affecter le vigile
-                    <b>
-                        {{vigiles[0].noms}}
-                    </b> au poste
-                    <b>
-                        {{posteConcernee.libelle}}
-                    </b>
-                </div>
-                <div *ngIf="vigiles.length > 1">
-                    <div style="margin-bottom: 15px;">
-                        Vous pouvez effectuer une des affectations suivantes :
-                    </div>
-                    <table class="table table-bordered table-dark">
-                        <thead>
-                            <tr>
-                                <th style="text-align: center;">#</th>
-                                <th>Vigile</th>
-                                <th>Rempl.</th>
-                                <th style="text-align: center;">Zone</th>
-                                <th style="text-align: center;">Quartier</th>
-                                <th style="text-align: center;">Score</th>
-                                <th style="text-align: center;">Sanctions</th>
-                                <th style="text-align: center;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let p of propositions; let i=index">
-                                <td style="text-align: center;"> {{i+1}} </td>
-                                <td>
-                                    {{p.vigile.noms}}
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <select type="text" class="form-control" [(ngModel)]="p.remplacant">
-                                            <ng-container *ngFor="let vigile of remplacants">
-                                            <option [ngValue]="vigile" *ngIf="vigile.jourRepos !== p.vigile.jourRepos && vigile.horaire === p.vigile.horaire">
-                                                {{vigile.noms}}
-                                            </option>
-                                            </ng-container>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    {{p.vigile.zone?.libelle}}
-                                    <div *ngIf="posteConcernee.zone?.idzone === p.vigile.zone?.idzone" class="match"></div>
-                                </td>
-                                <td>
-                                    {{p.vigile.quartier?.nom}}
-                                    <div *ngIf="posteConcernee.idquartier?.idquartier === p.vigile.quartier?.idquartier" class="match"></div>
-                                </td>
-                                <td style="text-align: right;">
-                                    {{score(p.vigile, posteConcernee)}}
-                                </td>
-                                <td style="text-align: right;">
-                                    {{getSanctions(p.vigile)}}
-                                </td>
-                                <td style="text-align: center;">
-                                    <button (click)="affecter(p)" type="button" class="btn btn-primary btn-sm">Appliquer</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
-            </div>
-        </div>
+<div class="modal fade" id="suggestions" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Suggestions d'affectations
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding: 8px;">
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Début</th>
+              <th scope="col">Poste</th>
+              <th scope="col">Vigile</th>
+              <th scope="col">Horaire</th>
+              <th scope="col">Remplacant</th>
+              <th scope="col">Repos</th>
+              <th scope="col" style="text-align: right;">Arrêt</th>
+              <th scope="col" style="text-align: center;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sugg of suggestions; let i = index">
+              <td scope="row">
+                {{sugg.dateAffectation | date:"yyyy-MM-dd"}}
+              </td>
+              <td scope="row">
+                {{sugg.idposte.codeagiv }}
+              </td>
+              <td scope="row">
+                {{sugg.idvigile.noms}}
+              </td>
+              <td scope="row">
+                {{sugg.horaire}}
+              </td>
+              <td scope="row">
+                {{sugg.remplacant.noms }}
+              </td>
+              <td scope="row">
+                {{sugg.jourRepos}}
+              </td>
+              <td scope="row" style="text-align: right;">
+                <ng-container *ngIf="sugg.arret">
+                  {{sugg.arret | date:"yyyy-MM-dd"}}
+                </ng-container>
+              </td>
+              <td>
+                <button (click)="creerAffectation(sugg)" class="btn btn-sm btn-primary">
+                  Restaurer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
     </div>
+  </div>
 </div>
