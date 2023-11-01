@@ -11,7 +11,7 @@
   <div class="page-contenu" *ngIf="terminee">
     <div class="row">
       <div class="col-3">
-        <div class="stat" (click)="voirPointages()">
+        <div class="stat" (click)="openModal('pointagesModal')">
           <div class="stat-titre">
             Nombre de pointages
           </div>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="stat" (click)="voirVigiles()">
+        <div class="stat" (click)="openModal('vigilesModal')">
           <div class="stat-titre">
             Vigiles qui ont pointés
           </div>
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="stat" (click)="voirPointages()">
+        <div class="stat" (click)="openModal('vigilesModal2')">
           <div class="stat-titre">
             Vigiles qui ont pointés deux fois
           </div>
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="stat red" (click)="voirAbsences()">
+        <div class="stat red" (click)="openModal('absenceModal')">
           <div class="stat-titre">
             Absences
           </div>
@@ -61,7 +61,7 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="stat" (click)="voirPostes()">
+        <div class="stat" (click)="openModal('postesModal')">
           <div class="stat-titre">
             Postes contrôlés
           </div>
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="stat" (click)="voirPostes2()">
+        <div class="stat" (click)="openModal('postesModal2')">
           <div class="stat-titre">
             Postes contrôlés deux fois
           </div>
@@ -81,12 +81,12 @@
         </div>
       </div>
       <div class="col-3">
-        <div class="stat" (click)="voirSuivis()">
+        <div class="stat" (click)="openModal('suivisModal')">
           <div class="stat-titre">
             Switchs
           </div>
           <div class="stat-valeur">
-            {{suivis.length}}
+            {{remplacements.length}}
           </div>
         </div>
       </div>
@@ -98,9 +98,10 @@
             <div>
               Zones
             </div>
-            <div class="row">
+            <div class="row gx-2">
               <div *ngFor="let zone of zones" class="col-lg-6">
-                <div (click)="goToZone(zone)" class="zone" [ngClass]="{'controlee': isZoneControlee(zone)}">
+                <div (click)="goToZone(zone)" class="zone "
+                  [ngClass]="{'controlee': isZoneControlee(zone),'shadow-1': isZoneControlee(zone)}">
                   {{zone.code}}
                 </div>
               </div>
@@ -111,16 +112,19 @@
 
       <div class="col-9">
         <div style="margin-bottom: 20px;">
-          <div class="card shadow-1">
+          <div class="card shadow-1" style="max-height: 400px;min-height: 200px; overflow-y: scroll">
             <div style="margin-bottom: 5px;">
               Liste des absences
             </div>
-            <app-display-pointages [pointages]="absences" [affectations]="affectations">
-            </app-display-pointages>
+            <div>
+              <app-display-pointages [pointages]="absences" [affectations]="affectations">
+              </app-display-pointages>
+            </div>
           </div>
         </div>
+
         <div style="margin-top: 20px;">
-          <div class="card shadow-1">
+          <div class="card shadow-1" style="max-height: 400px; overflow-y: scroll">
             <div>
               Liste des pointages bruts
             </div>
@@ -212,7 +216,7 @@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding: 8px;">
 
         <table class="table">
           <thead>
@@ -220,7 +224,11 @@
               <th scope="col">N.</th>
               <th scope="col">Matricule</th>
               <th scope="col">Noms</th>
-              <th scope="col">Date</th>
+              <th scope="col">Poste</th>
+              <th scope="col">Zone</th>
+              <th scope="col" style="text-align: right;">Date</th>
+              <th scope="col" style="text-align: right;">Date</th>
+              <th scope="col" style="text-align: right;">Nombre</th>
             </tr>
           </thead>
           <tbody>
@@ -231,24 +239,119 @@
               <th scope="row">
                 {{vigile?.matricule}}
               </th>
+              <td style="width: 110px;">
+                <div class="ellipsis">
+                  {{vigile?.nomsVigile}}
+                </div>
+              </td>
+              <th>
+                <div class="ellipsis">
+                  {{vigile?.poste}}
+                </div>
+              </th>
+              <th>
+                {{vigile?.zone}}
+              </th>
               <td>
-                {{vigile?.nomsVigile}}
+                <div *ngIf="vigile" style="text-align: right;">
+                  <span *ngIf="vigile.date">
+                    {{vigile.date.toDate() | date:"yyyy-MM-dd HH:mm:ss"}}
+                  </span>
+                </div>
               </td>
               <td>
-                <div *ngIf="vigile" style="display: flex; justify-content: space-between;">
-                  <span *ngIf="vigile.date">
-                    {{vigile.date.toDate() | date:"HH:mm:ss"}}
-                  </span>
+                <div *ngIf="vigile" style="text-align: right;">
                   <span>
                     <span *ngIf="vigile.date2">
-                      {{vigile.date2.toDate() | date:"HH:mm:ss"}}
+                      {{vigile.date2.toDate() | date:"yyyy-MM-dd HH:mm:ss"}}
                     </span>
                   </span>
                 </div>
               </td>
+              <td style="text-align: right;">
+                {{vigile.nombre}}
+              </td>
             </tr>
           </tbody>
         </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #vigilesModal2 id="vigilesModal2" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Vigiles qui ont pointé deux fois
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding: 8px;">
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">N.</th>
+              <th scope="col">Matricule</th>
+              <th scope="col">Noms</th>
+              <th scope="col">Poste</th>
+              <th scope="col">Zone</th>
+              <th scope="col" style="text-align: right;">Date</th>
+              <th scope="col" style="text-align: right;">Date</th>
+              <th scope="col" style="text-align: right;">Nombre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vigile of getVigilesQuiOntPointesDeux(); let i = index">
+              <td scope="row">
+                {{i+1}}
+              </td>
+              <th scope="row">
+                {{vigile?.matricule}}
+              </th>
+              <td style="width: 110px;">
+                <div class="ellipsis">
+                  {{vigile?.nomsVigile}}
+                </div>
+              </td>
+              <th>
+                <div class="ellipsis">
+                  {{vigile?.poste}}
+                </div>
+              </th>
+              <th>
+                {{vigile?.zone}}
+              </th>
+              <td>
+                <div *ngIf="vigile" style="text-align: right;">
+                  <span *ngIf="vigile.date">
+                    {{vigile.date.toDate() | date:"yyyy-MM-dd HH:mm:ss"}}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div *ngIf="vigile" style="text-align: right;">
+                  <span>
+                    <span *ngIf="vigile.date2">
+                      {{vigile.date2.toDate() | date:"yyyy-MM-dd HH:mm:ss"}}
+                    </span>
+                  </span>
+                </div>
+              </td>
+              <td style="text-align: right;">
+                {{vigile.nombre}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -292,27 +395,25 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <table class="table">
+        <table class="table table-border row-border hover">
           <thead>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Poste</th>
-              <th scope="col">Vigile</th>
-              <th scope="col">Switch</th>
+              <th>Date</th>
+              <th>Poste</th>
+              <th>Vigile remplacé</th>
+              <th>Vigile remplacant</th>
+              <th>Responsable</th>
+              <th>Statut</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let suivi of suivis">
-              <th scope="row">
-                {{suivi.idswitch}}
-              </th>
-              <td>
-                <b>
-                  {{suivi.idaffectation.idposte.libelle}}
-                </b>
-              </td>
-              <td>{{suivi.idvigileBase.noms}}</td>
-              <td>{{suivi.idvigileSwitch.noms}}</td>
+            <tr *ngFor="let switch of remplacements">
+              <td>{{toDate(switch.date) | date: "yyyy-MM-dd HH:mm"}}</td>
+              <td>{{switch.libellePoste}}</td>
+              <td>{{switch.nomsVigile}}</td>
+              <td>{{switch.nomsVigileSwitch}}</td>
+              <td>{{switch.idresponsable?.noms}}</td>
+              <td>{{switch.statut}}</td>
             </tr>
           </tbody>
         </table>

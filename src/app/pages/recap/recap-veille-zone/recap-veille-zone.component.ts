@@ -36,7 +36,42 @@ export class RecapVeilleZoneComponent implements OnInit {
   nbVigilesQuiOntPointesDeuxFois = 0;
   vigiles = new Array<Vigile>();
   vigilesQuiOntPointes = new Array<number>();
-  vigilesQuiOntPointesDeuxFois = new Array<number>();
+  vigilesQuiOntPointesDeuxFois = new Array<number>()
+
+  remplacements = new Array<any>();
+
+  public barChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true
+  };
+
+  public vigilesBarChartLabels = ['Vigiles pointés 2 fois', 'Vigiles pointés une fois', 'Vigiles non pointés'];
+  public postesBarChartLabels = ['Postes Contôlés 2 fois', 'Postes contrôlés une fois', 'Postes non contrôlés'];
+  public barChartLegend = true;
+
+  vigilesDataChart = [0, 0, 0,];
+  postesDataChart = [0, 0, 0,];
+  afficher = false;
+
+  public vigilesBarChartData = [
+    {
+      data: this.vigilesDataChart,
+      label: 'Pointages Vigiles',
+      backgroundColor: ["green", '#E3B505', "#CE352C",],
+      hoverBackgroundColor: ["darkgreen", '#E3B500', "darkred",],
+      hoverBorderColor: "white"
+    },
+  ];
+
+  public postesBarChartData = [
+    {
+      data: this.postesDataChart,
+      label: 'Postes Contrôlés',
+      backgroundColor: ["green", '#E3B505', "#CE352C",],
+      hoverBackgroundColor: ["darkgreen", '#E3B500', "darkred",],
+      hoverBorderColor: "white"
+    },
+  ];
 
   constructor(
     private affectationService: JarvisService<Affectation>,
@@ -56,7 +91,19 @@ export class RecapVeilleZoneComponent implements OnInit {
     this.app = initializeApp(firebaseConfig);
   }
 
+  setDates() {
+    // this.debut.setDate(this.debut.getDate() - 1);
+    this.debut.setDate(this.debut.getDate() - 8);
+    this.debut.setHours(6, 0, 0);
+    this.fin.setHours(6, 0, 0);
+  }
+
   ngOnInit(): void {
+
+    this.setDates();
+    this.getSwitchs().then((remplacements) => {
+      this.remplacements = remplacements;
+    });
 
     this.route.paramMap.subscribe((paramMap) => {
       const code = paramMap.get("code");
@@ -66,70 +113,79 @@ export class RecapVeilleZoneComponent implements OnInit {
             this.zone = this.getZoneByCode(code!, zones);
             console.log("code : " + code);
             this.zone.code = code;
-            // this.debut.setDate(this.debut.getDate() - 1);
-            this.debut.setDate(this.debut.getDate() - 8);
-            this.debut.setHours(6, 0, 0);
-            this.fin.setHours(6, 0, 0);
+
 
 
             this.posteService.getPostesByZone(this.zone).then((postes) => {
               this.postes = postes;
-            });
 
 
-            this.affectationService.getAll("affectation").then((affectations) => {
-              this.affectations = affectations;
-              console.log("Nombre de affectations : " + affectations.length);
-
-              const db = getFirestore(this.app);
-              const q2 = query(collection(db, "switch"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
-              getDocs(q2).then((querySnapshots2) => {
-                querySnapshots2.forEach((doc) => {
-                  let s = doc.data() as Suivi;
-
-                  this.suivis.push(s);
+              this.affectationService.getAll("affectation").then((affectations) => {
+                this.affectations = affectations.filter((aff) => {
+                  return aff.idposte.zone.code === code;
                 });
-              });
-              const q = query(collection(db, "pointage"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
-              // const q = query(collection(db, "pointage"), orderBy("date", 'desc'));
-              getDocs(q).then((querySnapshots) => {
-                querySnapshots.forEach((doc) => {
-                  let pointage = doc.data() as any;
-                  let aff = this.getAffection(pointage.idvigile);
-                  if (aff) {
-                    let poste = aff.idposte;
-                    if (poste) {
-                      let zone = poste.zone as ZoneDak;
-                      if (zone) {
-                        if (zone.code === code.trim()) {
-                          if (pointage.absence) {
-                            this.absences.push(pointage);
-                          } else {
-                            this.pointages.push(pointage);
+                console.log("Nombre de affectations : " + this.affectations.length);
+
+                const db = getFirestore(this.app);
+                const q2 = query(collection(db, "switch"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
+                getDocs(q2).then((querySnapshots2) => {
+                  querySnapshots2.forEach((doc) => {
+                    let s = doc.data() as Suivi;
+
+                    this.suivis.push(s);
+                  });
+                });
+                const q = query(collection(db, "pointage"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
+                // const q = query(collection(db, "pointage"), orderBy("date", 'desc'));
+                getDocs(q).then((querySnapshots) => {
+                  querySnapshots.forEach((doc) => {
+                    let pointage = doc.data() as any;
+                    let aff = this.getAffection(pointage.idvigile);
+                    if (aff) {
+                      let poste = aff.idposte;
+                      if (poste) {
+                        let zone = poste.zone as ZoneDak;
+                        if (zone) {
+                          if (zone.code === code.trim()) {
+                            if (pointage.absence) {
+                              this.absences.push(pointage);
+                            } else {
+                              this.pointages.push(pointage);
+                            }
+                            this.pointagesTotaux.push(pointage);
                           }
-                          this.pointagesTotaux.push(pointage);
                         }
                       }
                     }
-                  }
+                  });
+
+                  this.pointagesTotaux.forEach((p) => {
+                    const code = this.getAffection(p.idvigile)?.idposte?.zone?.code;
+
+                  });
+
+
+                  let pointagesString = this.pointages.map((p) => {
+                    return p.idvigile
+                  });
+                  let findDuplicates = (arr: Array<number>) => arr.filter((item, index) => arr.indexOf(item) !== index)
+
+                  this.vigilesQuiOntPointes = [...new Set(pointagesString)];
+                  this.vigilesQuiOntPointesDeuxFois = [...new Set(findDuplicates(pointagesString))];
+
+                  this.vigilesDataChart[0] = this.vigilesQuiOntPointesDeuxFois.length;
+                  this.vigilesDataChart[1] = this.vigilesQuiOntPointes.length - this.vigilesQuiOntPointesDeuxFois.length;
+                  this.vigilesDataChart[2] = this.affectations.length - this.vigilesQuiOntPointes.length - this.vigilesQuiOntPointesDeuxFois.length;
+
+                  this.postesControles = [...new Set(this.getAffectations(this.vigilesQuiOntPointes))];
+                  this.postesControlesDeuxFois = [...new Set(this.getAffectations(this.vigilesQuiOntPointesDeuxFois))];
+
+                  this.postesDataChart[0] = this.postesControlesDeuxFois.length;
+                  this.postesDataChart[1] = this.postesControles.length - this.postesControlesDeuxFois.length;
+                  this.postesDataChart[2] = this.postes.length - this.postesControles.length - this.postesControlesDeuxFois.length;
+
+                  this.afficher = true;
                 });
-
-                this.pointagesTotaux.forEach((p) => {
-                  const code = this.getAffection(p.idvigile)?.idposte?.zone?.code;
-
-                });
-
-
-                let pointagesString = this.pointages.map((p) => {
-                  return p.idvigile
-                });
-                let findDuplicates = (arr: Array<number>) => arr.filter((item, index) => arr.indexOf(item) !== index)
-
-                this.vigilesQuiOntPointes = [...new Set(pointagesString)];
-                this.vigilesQuiOntPointesDeuxFois = [...new Set(findDuplicates(pointagesString))];
-
-                this.postesControles = [...new Set(this.getAffectations(this.vigilesQuiOntPointes))];
-                this.postesControlesDeuxFois = [...new Set(this.getAffectations(this.vigilesQuiOntPointesDeuxFois))];
               });
             });
           }
@@ -182,59 +238,95 @@ export class RecapVeilleZoneComponent implements OnInit {
     })[0];
   }
 
-  voirPostes() {
-    console.log('open modal postesModal');
-    const modale = document.getElementById('postesModalzone');
-
+  openModal(idElement: string) {
+    console.log(`open modal ${idElement}`);
+    const modale = document.getElementById(idElement);
     console.log(modale);
     if (modale != null) {
       const myModal = new bootstrap.Modal(modale);
       myModal.show();
+    }
+
+  }
+
+  getSwitchs(): Promise<Array<any>> {
+    console.log('getSwitchs');
+    return new Promise((resolve, reject) => {
+      const db = getFirestore(this.app);
+      const q = query(collection(db, "changements"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
+      getDocs(q).then((querySnapshots) => {
+        let remplacements = new Array<any>();
+        querySnapshots.forEach((doc) => {
+          let changement: any;
+          changement = doc.data();
+          remplacements.push(changement);
+        });
+        resolve(remplacements);
+      });
+    });
+  }
+
+  toDate(timestp: any): Date | undefined {
+    if (timestp && timestp.seconds) {
+      return new Date(timestp.seconds * 1000);
+
+    } else {
+      return undefined;
     }
   }
 
-  voirPostes2() {
-    console.log('open modal postesModal2');
-    const modale = document.getElementById('postesModalzone2');
+  getVigileOnPointages(idvigile: number): any {
+    const pointages = this.pointages.filter((p) => {
+      return p.idvigile === idvigile;
+    });
+    if (pointages.length > 1) {
+      const vigiles = pointages
+        .map((p) => {
+          return {
+            nomsVigile: p.nomsVigile,
+            matricule: p.matricule,
+            idvigile: p.idvigile,
+            date: p.date,
+            date2: p.date,
+            nombre: 1,
+          };
+        });
 
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
+      let vigile = vigiles[0];
+      if (vigiles[1].date.toDate() > vigile.date2.toDate()) {
+        vigile["date2"] = vigiles[1].date;
+      } else {
+        vigile.date2 = vigile.date;
+        vigile.date = vigiles[1].date
+      }
+      vigile.nombre = pointages.length;
+      return vigile;
+    } else {
+      const vigiles = pointages
+        .map((p) => {
+          return {
+            nomsVigile: p.nomsVigile,
+            matricule: p.matricule,
+            idvigile: p.idvigile,
+            date: p.date,
+            date2: null,
+            nombre: 1,
+          };
+        });
+      return vigiles[0];
     }
   }
 
-  voirPointages() {
-    console.log('open modal pointagesModal');
-    const modale = document.getElementById('pointagesModalzone');
-
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
-    }
+  getVigilesQuiOntPointes(): Array<any> {
+    return this.vigilesQuiOntPointes.map((v) => {
+      return this.getVigileOnPointages(v);
+    })
   }
 
-  voirAbsences() {
-    console.log('open modal absenceModal');
-    const modale = document.getElementById('absenceModalzone');
-
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
-    }
-  }
-
-  voirSuivis() {
-    console.log('open modal suivisModal');
-    const modale = document.getElementById('suivisModalzone');
-
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
-    }
+  getVigilesQuiOntPointesDeux(): Array<any> {
+    return this.vigilesQuiOntPointesDeuxFois.map((v) => {
+      return this.getVigileOnPointages(v);
+    })
   }
 
 }
