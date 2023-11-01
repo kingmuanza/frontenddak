@@ -40,13 +40,16 @@ export class RecapVeilleComponent implements OnInit {
   suivis = new Array<any>();
 
   postesControles = new Array<any>();
+  postesControlesUneFois = new Array<any>();
   postesControlesDeuxFois = new Array<any>();
 
   nbVigiles = 0;
   nbVigilesQuiOntPointes = 0;
   nbVigilesQuiOntPointesDeuxFois = 0;
+
   vigiles = new Array<Vigile>();
   vigilesQuiOntPointes = new Array<string>();
+  vigilesQuiOntPointesUneFois = new Array<string>();
   vigilesQuiOntPointesDeuxFois = new Array<string>();
 
   terminee = false;
@@ -113,9 +116,15 @@ export class RecapVeilleComponent implements OnInit {
 
         this.vigilesQuiOntPointes = [...new Set(pointagesString)];
         this.vigilesQuiOntPointesDeuxFois = [...new Set(findDuplicates(pointagesString))];
+        this.vigilesQuiOntPointesUneFois = this.vigilesQuiOntPointes.filter((v) => {
+          return this.vigilesQuiOntPointesDeuxFois.indexOf(v) === -1;
+        })
 
         this.postesControles = [...new Set(this.getAffectations(this.vigilesQuiOntPointes))];
         this.postesControlesDeuxFois = [...new Set(this.getAffectations(this.vigilesQuiOntPointesDeuxFois))];
+        this.postesControlesUneFois = this.postesControles.filter((p) => {
+          return this.postesControlesDeuxFois.indexOf(p) === -1;
+        })
 
         this.terminee = true;
       });
@@ -124,7 +133,7 @@ export class RecapVeilleComponent implements OnInit {
 
   setDates() {
     //this.debut.setDate(this.debut.getDate() - 1);
-    this.debut.setDate(this.debut.getDate() - 8);
+    this.debut.setDate(this.debut.getDate() - 9);
     this.debut.setHours(6, 0, 0);
     this.fin.setHours(6, 0, 0);
   }
@@ -261,6 +270,12 @@ export class RecapVeilleComponent implements OnInit {
 
   getVigilesQuiOntPointes(): Array<any> {
     return this.vigilesQuiOntPointes.map((v) => {
+      return this.getVigileOnPointages(v);
+    })
+  }
+
+  getVigilesQuiOntPointesUne(): Array<any> {
+    return this.vigilesQuiOntPointesUneFois.map((v) => {
       return this.getVigileOnPointages(v);
     })
   }

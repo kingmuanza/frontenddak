@@ -31,22 +31,22 @@
         </div>
       </div>
       <div class="col-3">
+        <div class="stat" (click)="openModal('vigilesModal1')">
+          <div class="stat-titre">
+            Vigiles qui ont pointés une fois
+          </div>
+          <div class="stat-valeur">
+            {{vigilesQuiOntPointesUneFois.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
         <div class="stat" (click)="openModal('vigilesModal2')">
           <div class="stat-titre">
             Vigiles qui ont pointés deux fois
           </div>
           <div class="stat-valeur">
             {{vigilesQuiOntPointesDeuxFois.length}}
-          </div>
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="stat red" (click)="openModal('absenceModal')">
-          <div class="stat-titre">
-            Absences
-          </div>
-          <div class="stat-valeur">
-            {{absences.length}}
           </div>
         </div>
       </div>
@@ -71,6 +71,16 @@
         </div>
       </div>
       <div class="col-3">
+        <div class="stat" (click)="openModal('postesModal1')">
+          <div class="stat-titre">
+            Postes contrôlés une fois
+          </div>
+          <div class="stat-valeur">
+            {{postesControlesUneFois.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
         <div class="stat" (click)="openModal('postesModal2')">
           <div class="stat-titre">
             Postes contrôlés deux fois
@@ -87,6 +97,16 @@
           </div>
           <div class="stat-valeur">
             {{remplacements.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat red" (click)="openModal('absenceModal')">
+          <div class="stat-titre">
+            Absences
+          </div>
+          <div class="stat-valeur">
+            {{absences.length}}
           </div>
         </div>
       </div>
@@ -183,30 +203,6 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" #postesModal id="postesModal" tabindex="-1">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">
-          Postes controlés
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <ol>
-          <li *ngFor="let id of postesControles" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
-            {{getAffectionByPoste(id)?.idposte.libelle}}
-          </li>
-        </ol>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
 <div class="modal fade" #vigilesModal id="vigilesModal" tabindex="-1">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -270,6 +266,69 @@
               </td>
               <td style="text-align: right;">
                 {{vigile.nombre}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #vigilesModal1 id="vigilesModal1" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Vigiles qui ont pointé une fois
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding: 8px;">
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">N.</th>
+              <th scope="col">Matricule</th>
+              <th scope="col">Noms</th>
+              <th scope="col">Poste</th>
+              <th scope="col">Zone</th>
+              <th scope="col" style="text-align: right;">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vigile of getVigilesQuiOntPointesUne(); let i = index">
+              <td scope="row">
+                {{i+1}}
+              </td>
+              <th scope="row">
+                {{vigile?.matricule}}
+              </th>
+              <td style="width: 110px;">
+                <div class="ellipsis">
+                  {{vigile?.nomsVigile}}
+                </div>
+              </td>
+              <th>
+                <div class="ellipsis">
+                  {{vigile?.poste}}
+                </div>
+              </th>
+              <th>
+                {{vigile?.zone}}
+              </th>
+              <td>
+                <div *ngIf="vigile" style="text-align: right;">
+                  <span *ngIf="vigile.date">
+                    {{vigile.date.toDate() | date:"yyyy-MM-dd HH:mm:ss"}}
+                  </span>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -361,6 +420,90 @@
 </div>
 
 <!-- Modal -->
+<div class="modal fade" #postesModal id="postesModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Postes controlés
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>N.</th>
+              <th>Nom</th>
+              <th>Zone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let id of postesControles; let i = index"
+              style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
+              <td>
+                {{i+1}}
+              </td>
+              <td>
+                {{getAffectionByPoste(id)?.idposte.libelle}}
+              </td>
+              <td>
+                {{getAffectionByPoste(id)?.idposte.zone.code}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #postesModal1 id="postesModal1" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Postes controlés une fois
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>N.</th>
+              <th>Nom</th>
+              <th>Zone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let id of postesControlesUneFois; let i = index"
+              style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
+              <td>
+                {{i+1}}
+              </td>
+              <td>
+                {{getAffectionByPoste(id)?.idposte.libelle}}
+              </td>
+              <td>
+                {{getAffectionByPoste(id)?.idposte.zone.code}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
 <div class="modal fade" #postesModal2 id="postesModal2" tabindex="-1">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -371,11 +514,29 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <ol>
-          <li *ngFor="let id of postesControlesDeuxFois" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
-            {{getAffectionByPoste(id)?.idposte.libelle}}
-          </li>
-        </ol>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>N.</th>
+              <th>Nom</th>
+              <th>Zone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let id of postesControlesDeuxFois; let i = index"
+              style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
+              <td>
+                {{i+1}}
+              </td>
+              <td>
+                {{getAffectionByPoste(id)?.idposte.libelle}}
+              </td>
+              <td>
+                {{getAffectionByPoste(id)?.idposte.zone.code}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
