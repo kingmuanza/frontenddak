@@ -3,23 +3,13 @@ import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, query, collection, where, orderBy, getDocs } from 'firebase/firestore';
+import { VigileFromWeb } from 'src/app/_types/vigile.from.web';
 import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Suivi } from 'src/app/models/suivi.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { ZoneDak } from 'src/app/models/zone.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
-
-type VigileFromWeb = {
-  nomsVigile: string,
-  matricule: string,
-  idvigile: number,
-  date: any,
-  date2: any,
-  nombre: number,
-  poste?: string,
-  zone?: string,
-}
 
 @Component({
   selector: 'app-recap-veille',
@@ -118,13 +108,13 @@ export class RecapVeilleComponent implements OnInit {
         this.vigilesQuiOntPointesDeuxFois = [...new Set(findDuplicates(pointagesString))];
         this.vigilesQuiOntPointesUneFois = this.vigilesQuiOntPointes.filter((v) => {
           return this.vigilesQuiOntPointesDeuxFois.indexOf(v) === -1;
-        })
+        });
 
         this.postesControles = [...new Set(this.getAffectations(this.vigilesQuiOntPointes))];
         this.postesControlesDeuxFois = [...new Set(this.getAffectations(this.vigilesQuiOntPointesDeuxFois))];
         this.postesControlesUneFois = this.postesControles.filter((p) => {
           return this.postesControlesDeuxFois.indexOf(p) === -1;
-        })
+        });
 
         this.terminee = true;
       });

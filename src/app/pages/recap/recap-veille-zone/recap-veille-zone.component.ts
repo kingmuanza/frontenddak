@@ -4,6 +4,7 @@ import * as bootstrap from 'bootstrap';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, query, collection, where, orderBy, getDocs } from 'firebase/firestore';
 import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
+import { VigileFromWeb } from 'src/app/_types/vigile.from.web';
 import { Affectation } from 'src/app/models/affectation.model';
 import { Poste } from 'src/app/models/poste.model';
 import { Suivi } from 'src/app/models/suivi.model';
@@ -28,6 +29,7 @@ export class RecapVeilleZoneComponent implements OnInit {
 
   postes = new Array<Poste>();
   postesControles = new Array<any>();
+  postesControlesUneFois = new Array<any>();
   postesControlesDeuxFois = new Array<any>();
   suivis = new Array<any>();
 
@@ -35,8 +37,9 @@ export class RecapVeilleZoneComponent implements OnInit {
   nbVigilesQuiOntPointes = 0;
   nbVigilesQuiOntPointesDeuxFois = 0;
   vigiles = new Array<Vigile>();
-  vigilesQuiOntPointes = new Array<number>();
-  vigilesQuiOntPointesDeuxFois = new Array<number>()
+  vigilesQuiOntPointes = new Array<string>();
+  vigilesQuiOntPointesUneFois = new Array<string>();
+  vigilesQuiOntPointesDeuxFois = new Array<string>()
 
   remplacements = new Array<any>();
 
@@ -92,8 +95,9 @@ export class RecapVeilleZoneComponent implements OnInit {
   }
 
   setDates() {
+
     // this.debut.setDate(this.debut.getDate() - 1);
-    this.debut.setDate(this.debut.getDate() - 8);
+    this.debut.setDate(this.debut.getDate() - 10);
     this.debut.setHours(6, 0, 0);
     this.fin.setHours(6, 0, 0);
   }
@@ -140,7 +144,7 @@ export class RecapVeilleZoneComponent implements OnInit {
                 getDocs(q).then((querySnapshots) => {
                   querySnapshots.forEach((doc) => {
                     let pointage = doc.data() as any;
-                    let aff = this.getAffection(pointage.idvigile);
+                    let aff = this.getAffection(pointage.matricule);
                     if (aff) {
                       let poste = aff.idposte;
                       if (poste) {
@@ -160,18 +164,21 @@ export class RecapVeilleZoneComponent implements OnInit {
                   });
 
                   this.pointagesTotaux.forEach((p) => {
-                    const code = this.getAffection(p.idvigile)?.idposte?.zone?.code;
+                    const code = this.getAffection(p.matricule)?.idposte?.zone?.code;
 
                   });
 
 
                   let pointagesString = this.pointages.map((p) => {
-                    return p.idvigile
+                    return p.matricule;
                   });
-                  let findDuplicates = (arr: Array<number>) => arr.filter((item, index) => arr.indexOf(item) !== index)
+                  let findDuplicates = (arr: Array<string>) => arr.filter((item, index) => arr.indexOf(item) !== index)
 
                   this.vigilesQuiOntPointes = [...new Set(pointagesString)];
                   this.vigilesQuiOntPointesDeuxFois = [...new Set(findDuplicates(pointagesString))];
+                  this.vigilesQuiOntPointesUneFois = this.vigilesQuiOntPointes.filter((v) => {
+                    return this.vigilesQuiOntPointesDeuxFois.indexOf(v) === -1;
+                  });
 
                   this.vigilesDataChart[0] = this.vigilesQuiOntPointesDeuxFois.length;
                   this.vigilesDataChart[1] = this.vigilesQuiOntPointes.length - this.vigilesQuiOntPointesDeuxFois.length;
@@ -179,6 +186,9 @@ export class RecapVeilleZoneComponent implements OnInit {
 
                   this.postesControles = [...new Set(this.getAffectations(this.vigilesQuiOntPointes))];
                   this.postesControlesDeuxFois = [...new Set(this.getAffectations(this.vigilesQuiOntPointesDeuxFois))];
+                  this.postesControlesUneFois = this.postesControles.filter((p) => {
+                    return this.postesControlesDeuxFois.indexOf(p) === -1;
+                  });
 
                   this.postesDataChart[0] = this.postesControlesDeuxFois.length;
                   this.postesDataChart[1] = this.postesControles.length - this.postesControlesDeuxFois.length;
@@ -194,7 +204,7 @@ export class RecapVeilleZoneComponent implements OnInit {
     });
   }
 
-  getAffectations(ids: Array<number>): Array<string> {
+  getAffectations(ids: Array<string>): Array<string> {
     let affs = new Array<Affectation>();
     for (let index = 0; index < ids.length; index++) {
       const id = ids[index];
@@ -208,21 +218,17 @@ export class RecapVeilleZoneComponent implements OnInit {
     });
   }
 
-  getAffection(idvigile: number): Affectation | undefined {
-    console.log('idvigile');
-    console.log(idvigile);
+  getAffection(matricule: string): Affectation | undefined {
     let affectations = this.affectations.filter((aff) => {
-      return aff.idvigile.idvigile == idvigile;
+      return aff.idvigile.matricule == matricule;
     })
-    // console.log(affectations[0])
+    console.log(affectations[0])
     return affectations[0];
   }
 
   getAffectionByPoste(idposte: number): Affectation | undefined {
-    console.log('idposte');
-    console.log(idposte);
     let affectations = this.affectations.filter((aff) => {
-      return aff?.idposte?.idposte == idposte;
+      return aff.idposte?.idposte == idposte;
     })
     console.log(affectations[0])
     return affectations[0];
@@ -275,12 +281,14 @@ export class RecapVeilleZoneComponent implements OnInit {
     }
   }
 
-  getVigileOnPointages(idvigile: number): any {
+  getVigileOnPointages(matricule: string): any {
     const pointages = this.pointages.filter((p) => {
-      return p.idvigile === idvigile;
+      return p.matricule === matricule;
     });
+    console.log("getVigileOnPointages");
+    console.log("pointages", pointages);
     if (pointages.length > 1) {
-      const vigiles = pointages
+      const vigiles: Array<VigileFromWeb> = pointages
         .map((p) => {
           return {
             nomsVigile: p.nomsVigile,
@@ -299,10 +307,13 @@ export class RecapVeilleZoneComponent implements OnInit {
         vigile.date2 = vigile.date;
         vigile.date = vigiles[1].date
       }
+      let affectation = this.getAffection(vigile.matricule);
       vigile.nombre = pointages.length;
+      vigile.poste = affectation?.idposte.libelle;
+      vigile.zone = affectation?.idposte.zone.code;
       return vigile;
     } else {
-      const vigiles = pointages
+      const vigiles: Array<VigileFromWeb> = pointages
         .map((p) => {
           return {
             nomsVigile: p.nomsVigile,
@@ -313,7 +324,12 @@ export class RecapVeilleZoneComponent implements OnInit {
             nombre: 1,
           };
         });
-      return vigiles[0];
+      let vigile = vigiles[0];
+      let affectation = this.getAffection(vigile.matricule);
+      vigile.nombre = pointages.length;
+      vigile.poste = affectation?.idposte.libelle;
+      vigile.zone = affectation?.idposte.zone.code;
+      return vigile;
     }
   }
 
@@ -325,6 +341,12 @@ export class RecapVeilleZoneComponent implements OnInit {
 
   getVigilesQuiOntPointesDeux(): Array<any> {
     return this.vigilesQuiOntPointesDeuxFois.map((v) => {
+      return this.getVigileOnPointages(v);
+    })
+  }
+
+  getVigilesQuiOntPointesUne(): Array<any> {
+    return this.vigilesQuiOntPointesUneFois.map((v) => {
       return this.getVigileOnPointages(v);
     })
   }

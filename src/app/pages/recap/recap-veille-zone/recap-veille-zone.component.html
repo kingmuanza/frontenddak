@@ -13,7 +13,7 @@
   </div>
   <div class="page-contenu">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-5">
         <div class="row">
           <div class="col-6">
             <div class="stat" (click)="openModal('pointagesModal')">
@@ -46,6 +46,16 @@
             </div>
           </div>
           <div class="col-6">
+            <div class="stat" (click)="openModal('vigilesModal1')">
+              <div class="stat-titre">
+                Vigiles qui ont pointés une fois
+              </div>
+              <div class="stat-valeur">
+                {{vigilesQuiOntPointesUneFois.length}}
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
             <div class="stat" (click)="openModal('vigilesModal2')">
               <div class="stat-titre">
                 Vigiles qui ont pointés deux fois
@@ -62,6 +72,16 @@
               </div>
               <div class="stat-valeur">
                 {{postesControles.length}}
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="stat" (click)="openModal('postesModal1')">
+              <div class="stat-titre">
+                Postes contrôlés une fois
+              </div>
+              <div class="stat-valeur">
+                {{postesControlesUneFois.length}}
               </div>
             </div>
           </div>
@@ -97,21 +117,25 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
-        <div class="card shadow-1">
-          <div style="display: block" *ngIf="afficher">
-            <canvas baseChart [datasets]="vigilesBarChartData" [labels]="vigilesBarChartLabels"
-              [options]="barChartOptions" [legend]="barChartLegend" type="pie">
-            </canvas>
+      <div class="col-7">
+        <div class="row">
+          <div class="col-6">
+            <div class="card shadow-1">
+              <div style="display: block" *ngIf="afficher">
+                <canvas baseChart [datasets]="vigilesBarChartData" [labels]="vigilesBarChartLabels"
+                  [options]="barChartOptions" [legend]="barChartLegend" type="pie">
+                </canvas>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="card shadow-1">
-          <div style="display: block" *ngIf="afficher">
-            <canvas baseChart [datasets]="postesBarChartData" [labels]="postesBarChartLabels"
-              [options]="barChartOptions" [legend]="barChartLegend" type="doughnut">
-            </canvas>
+          <div class="col-6">
+            <div class="card shadow-1">
+              <div style="display: block" *ngIf="afficher">
+                <canvas baseChart [datasets]="postesBarChartData" [labels]="postesBarChartLabels"
+                  [options]="barChartOptions" [legend]="barChartLegend" type="doughnut">
+                </canvas>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -290,6 +314,65 @@
 </div>
 
 <!-- Modal -->
+<div class="modal fade" #vigilesModal1 id="vigilesModal1" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Vigiles qui ont pointé une fois
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding: 8px;">
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">N.</th>
+              <th scope="col">Matricule</th>
+              <th scope="col">Noms</th>
+              <th scope="col">Date</th>
+              <th scope="col" style="text-align: right;">Nombre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vigile of getVigilesQuiOntPointesUne(); let i = index">
+              <td scope="row">
+                {{i+1}}
+              </td>
+              <th scope="row">
+                {{vigile?.matricule}}
+              </th>
+              <td>
+                {{vigile?.nomsVigile}}
+              </td>
+              <td>
+                <div *ngIf="vigile" style="display: flex; justify-content: space-between;">
+                  <span *ngIf="vigile.date">
+                    {{vigile.date.toDate() | date:"HH:mm:ss"}}
+                  </span>
+                  <span>
+                    <span *ngIf="vigile.date2">
+                      {{vigile.date2.toDate() | date:"HH:mm:ss"}}
+                    </span>
+                  </span>
+                </div>
+              </td>
+              <td style="text-align: right;">
+                {{vigile.nombre}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
 <div class="modal fade" #vigilesModal2 id="vigilesModal2" tabindex="-1">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -340,6 +423,30 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #postesModal1 id="postesModal1" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Postes controlés une fois
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ol>
+          <li *ngFor="let id of postesControlesUneFois" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
+            {{getAffectionByPoste(id)?.idposte.libelle}}
+          </li>
+        </ol>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

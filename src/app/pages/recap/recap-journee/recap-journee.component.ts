@@ -11,17 +11,7 @@ import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
 import { Suivi } from 'src/app/models/suivi.model';
 import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
-
-type VigileFromWeb = {
-  nomsVigile: string,
-  matricule: string,
-  idvigile: number,
-  date: any,
-  date2: any,
-  nombre: number,
-  poste?: string,
-  zone?: string,
-}
+import { VigileFromWeb } from 'src/app/_types/vigile.from.web';
 
 @Component({
   selector: 'app-recap-journee',
@@ -135,14 +125,14 @@ export class RecapJourneeComponent implements OnInit {
 
   setDates() {
     //this.debut.setDate(this.debut.getDate() - 1);
-    /*
-        this.debut.setHours(6, 0, 0);
-        this.fin.setDate(this.fin.getDate() + 1);
-        this.fin.setHours(6, 0, 0);
-     */
-    this.debut.setDate(this.debut.getDate() - 9);
+
     this.debut.setHours(6, 0, 0);
+    this.fin.setDate(this.fin.getDate() + 1);
     this.fin.setHours(6, 0, 0);
+
+    /* this.debut.setDate(this.debut.getDate() - 9);
+    this.debut.setHours(6, 0, 0);
+    this.fin.setHours(6, 0, 0); */
   }
 
   ngOnInit(): void {
