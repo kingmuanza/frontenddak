@@ -10,6 +10,18 @@ import { ZoneDak } from 'src/app/models/zone.model';
 import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
 import { Suivi } from 'src/app/models/suivi.model';
+import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
+
+type VigileFromWeb = {
+  nomsVigile: string,
+  matricule: string,
+  idvigile: number,
+  date: any,
+  date2: any,
+  nombre: number,
+  poste?: string,
+  zone?: string,
+}
 
 @Component({
   selector: 'app-recap-journee',
@@ -17,6 +29,7 @@ import { Suivi } from 'src/app/models/suivi.model';
   styleUrls: ['./recap-journee.component.scss']
 })
 export class RecapJourneeComponent implements OnInit {
+
   debut = new Date();
   fin = new Date();
   app: any;
@@ -29,41 +42,39 @@ export class RecapJourneeComponent implements OnInit {
   suivis = new Array<any>();
 
   postesControles = new Array<any>();
+  postesControlesUneFois = new Array<any>();
   postesControlesDeuxFois = new Array<any>();
 
   nbVigiles = 0;
   nbVigilesQuiOntPointes = 0;
   nbVigilesQuiOntPointesDeuxFois = 0;
+
   vigiles = new Array<Vigile>();
-  vigilesQuiOntPointes = new Array<number>();
-  vigilesQuiOntPointesDeuxFois = new Array<number>();
+  vigilesQuiOntPointes = new Array<string>();
+  vigilesQuiOntPointesUneFois = new Array<string>();
+  vigilesQuiOntPointesDeuxFois = new Array<string>();
+
+  terminee = false;
+  remplacements = new Array<any>();
 
   constructor(
     private affectationService: JarvisService<Affectation>,
     private zoneService: JarvisService<ZoneDak>,
     private router: Router,
   ) {
-    const firebaseConfig = {
-      apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
-      authDomain: "dak-security.firebaseapp.com",
-      projectId: "dak-security",
-      storageBucket: "dak-security.appspot.com",
-      messagingSenderId: "448692904510",
-      appId: "1:448692904510:web:216883edce596209e6276f",
-      measurementId: "G-L0FKMS4EQH"
-    };
+    const firebaseConfig = FIREBASECONFIG;
     this.app = initializeApp(firebaseConfig);
   }
 
-  ngOnInit(): void {
-    // this.debut.setDate(this.debut.getDate() - 1);
-    this.debut.setHours(6, 0, 0);
+  declencher() {
 
-    this.fin.setDate(this.fin.getDate() + 1);
-    this.fin.setHours(6, 0, 0);
+    this.setDates();
 
     this.zoneService.getAll("zone").then((zones) => {
       this.zones = zones.sort((a, b) => a.code.localeCompare(b.code));
+    });
+    this.getSwitchs().then((remplacements) => {
+      this.remplacements = remplacements;
     });
 
     this.affectationService.getAll("affectation").then((affectations) => {
@@ -79,6 +90,7 @@ export class RecapJourneeComponent implements OnInit {
         });
       });
       const q = query(collection(db, "pointage"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
+      // const q = query(collection(db, "pointage"), orderBy("date", 'desc'));
       getDocs(q).then((querySnapshots) => {
         querySnapshots.forEach((doc) => {
           let pointage = doc.data() as any;
@@ -91,7 +103,7 @@ export class RecapJourneeComponent implements OnInit {
         });
 
         this.pointagesTotaux.forEach((p) => {
-          const code = this.getAffection(p.idvigile)?.idposte?.zone?.code;
+          const code = this.getAffection(p.matricule)?.idposte?.zone?.code;
           if (code) {
             this.zonesControlees.push(code);
           }
@@ -100,24 +112,48 @@ export class RecapJourneeComponent implements OnInit {
         this.zonesControlees = [...new Set(this.zonesControlees)];
 
         let pointagesString = this.pointages.map((p) => {
-          return p.idvigile
+          return p.matricule;
         });
-        let findDuplicates = (arr: Array<number>) => arr.filter((item, index) => arr.indexOf(item) !== index)
+        let findDuplicates = (arr: Array<string>) => arr.filter((item, index) => arr.indexOf(item) !== index)
 
         this.vigilesQuiOntPointes = [...new Set(pointagesString)];
         this.vigilesQuiOntPointesDeuxFois = [...new Set(findDuplicates(pointagesString))];
+        this.vigilesQuiOntPointesUneFois = this.vigilesQuiOntPointes.filter((v) => {
+          return this.vigilesQuiOntPointesDeuxFois.indexOf(v) === -1;
+        })
 
         this.postesControles = [...new Set(this.getAffectations(this.vigilesQuiOntPointes))];
         this.postesControlesDeuxFois = [...new Set(this.getAffectations(this.vigilesQuiOntPointesDeuxFois))];
+        this.postesControlesUneFois = this.postesControles.filter((p) => {
+          return this.postesControlesDeuxFois.indexOf(p) === -1;
+        })
+
+        this.terminee = true;
       });
     });
+  }
+
+  setDates() {
+    //this.debut.setDate(this.debut.getDate() - 1);
+    /*
+        this.debut.setHours(6, 0, 0);
+        this.fin.setDate(this.fin.getDate() + 1);
+        this.fin.setHours(6, 0, 0);
+     */
+    this.debut.setDate(this.debut.getDate() - 9);
+    this.debut.setHours(6, 0, 0);
+    this.fin.setHours(6, 0, 0);
+  }
+
+  ngOnInit(): void {
+    this.declencher();
   }
 
   isZoneControlee(zone: ZoneDak) {
     return this.zonesControlees.indexOf(zone.code) !== -1;
   }
 
-  getAffectations(ids: Array<number>): Array<string> {
+  getAffectations(ids: Array<string>): Array<string> {
     let affs = new Array<Affectation>();
     for (let index = 0; index < ids.length; index++) {
       const id = ids[index];
@@ -131,19 +167,15 @@ export class RecapJourneeComponent implements OnInit {
     });
   }
 
-  getAffection(idvigile: number): Affectation | undefined {
-    console.log('idvigile');
-    console.log(idvigile);
+  getAffection(matricule: string): Affectation | undefined {
     let affectations = this.affectations.filter((aff) => {
-      return aff.idvigile.idvigile == idvigile;
+      return aff.idvigile.matricule == matricule;
     })
     console.log(affectations[0])
     return affectations[0];
   }
 
   getAffectionByPoste(idposte: number): Affectation | undefined {
-    console.log('idposte');
-    console.log(idposte);
     let affectations = this.affectations.filter((aff) => {
       return aff.idposte?.idposte == idposte;
     })
@@ -156,59 +188,109 @@ export class RecapJourneeComponent implements OnInit {
       this.router.navigate(["recap-jour", zone.code]);
   }
 
-  voirPostes() {
-    console.log('open modal postesModal');
-    const modale = document.getElementById('postesModal');
-
+  openModal(idElement: string) {
+    console.log(`open modal ${idElement}`);
+    const modale = document.getElementById(idElement);
     console.log(modale);
     if (modale != null) {
       const myModal = new bootstrap.Modal(modale);
       myModal.show();
+    }
+
+  }
+
+  getSwitchs(): Promise<Array<any>> {
+    console.log('getSwitchs');
+    return new Promise((resolve, reject) => {
+      const db = getFirestore(this.app);
+      const q = query(collection(db, "changements"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
+      getDocs(q).then((querySnapshots) => {
+        let remplacements = new Array<any>();
+        querySnapshots.forEach((doc) => {
+          let changement: any;
+          changement = doc.data();
+          remplacements.push(changement);
+        });
+        resolve(remplacements);
+      });
+    });
+  }
+
+  toDate(timestp: any): Date | undefined {
+    if (timestp && timestp.seconds) {
+      return new Date(timestp.seconds * 1000);
+
+    } else {
+      return undefined;
     }
   }
 
-  voirPointages() {
-    console.log('open modal pointagesModal');
-    const modale = document.getElementById('pointagesModal');
+  getVigileOnPointages(matricule: string): any {
+    const pointages = this.pointages.filter((p) => {
+      return p.matricule === matricule;
+    });
+    if (pointages.length > 1) {
+      const vigiles: Array<VigileFromWeb> = pointages
+        .map((p) => {
+          return {
+            nomsVigile: p.nomsVigile,
+            matricule: p.matricule,
+            idvigile: p.idvigile,
+            date: p.date,
+            date2: p.date,
+            nombre: 1,
+          };
+        });
 
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
+      let vigile = vigiles[0];
+      if (vigiles[1].date.toDate() > vigile.date2.toDate()) {
+        vigile["date2"] = vigiles[1].date;
+      } else {
+        vigile.date2 = vigile.date;
+        vigile.date = vigiles[1].date
+      }
+      let affectation = this.getAffection(vigile.matricule);
+      vigile.nombre = pointages.length;
+      vigile.poste = affectation?.idposte.libelle;
+      vigile.zone = affectation?.idposte.zone.code;
+      return vigile;
+    } else {
+      const vigiles: Array<VigileFromWeb> = pointages
+        .map((p) => {
+          return {
+            nomsVigile: p.nomsVigile,
+            matricule: p.matricule,
+            idvigile: p.idvigile,
+            date: p.date,
+            date2: null,
+            nombre: 1,
+          };
+        });
+      let vigile = vigiles[0];
+      let affectation = this.getAffection(vigile.matricule);
+      vigile.nombre = pointages.length;
+      vigile.poste = affectation?.idposte.libelle;
+      vigile.zone = affectation?.idposte.zone.code;
+      return vigile;
     }
   }
 
-  voirPointagesDeuxFois() {
-    console.log('open modal vigilesDeuxFoisModal');
-    const modale = document.getElementById('vigilesDeuxFoisModal');
-
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
-    }
+  getVigilesQuiOntPointes(): Array<any> {
+    return this.vigilesQuiOntPointes.map((v) => {
+      return this.getVigileOnPointages(v);
+    })
   }
 
-  voirAbsences() {
-    console.log('open modal absenceModal');
-    const modale = document.getElementById('absenceModal');
-
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
-    }
+  getVigilesQuiOntPointesUne(): Array<any> {
+    return this.vigilesQuiOntPointesUneFois.map((v) => {
+      return this.getVigileOnPointages(v);
+    })
   }
 
-  voirSuivis() {
-    console.log('open modal suivisModal');
-    const modale = document.getElementById('suivisModal');
-
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.show();
-    }
+  getVigilesQuiOntPointesDeux(): Array<any> {
+    return this.vigilesQuiOntPointesDeuxFois.map((v) => {
+      return this.getVigileOnPointages(v);
+    })
   }
 
 }
