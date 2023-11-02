@@ -85,6 +85,20 @@ export class PosteCtrlService {
     });
   }
 
+  async getPostesVacantsByZone(zone: ZoneDak): Promise<Poste[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "zone" + '/' + zone.idzone + "/vacants").subscribe({
+        next: (data) => {
+          const resulats = data as Poste[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
   async getPostesNoZone(): Promise<Poste[]> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "poste-no-zone").subscribe({

@@ -1,0 +1,46 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Début</th>
+      <th scope="col">Poste</th>
+      <th scope="col">Vigile</th>
+      <th scope="col">Horaire</th>
+      <th scope="col">Remplacant</th>
+      <th scope="col">Repos</th>
+      <th scope="col" style="text-align: right;">Arrêt</th>
+      <th scope="col" style="text-align: center;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let sugg of suggestions; let i = index">
+      <td scope="row">
+        {{sugg.dateAffectation | date:"yyyy-MM-dd"}}
+      </td>
+      <td scope="row">
+        {{sugg.idposte.codeagiv }}
+      </td>
+      <td scope="row">
+        {{sugg.idvigile.noms}}
+      </td>
+      <td scope="row">
+        {{sugg.horaire}}
+      </td>
+      <td scope="row">
+        {{sugg.remplacant.noms }}
+      </td>
+      <td scope="row">
+        {{sugg.jourRepos}}
+      </td>
+      <td scope="row" style="text-align: right;">
+        <ng-container *ngIf="sugg.arret">
+          {{sugg.arret | date:"yyyy-MM-dd"}}
+        </ng-container>
+      </td>
+      <td>
+        <button *ngIf="sugg.idvigile.noms" (click)="creerAffectation(sugg)" class="btn btn-sm btn-primary">
+          Restaurer
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

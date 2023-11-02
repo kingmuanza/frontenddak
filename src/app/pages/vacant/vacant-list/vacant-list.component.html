@@ -64,7 +64,7 @@
           </div>
         </div>
         <div style="margin-top: 40px;">
-          <table datatable [dtOptions]="dtOptions " [dtTrigger]="dtTrigger " class="row-border hover ">
+          <table class="table row-border hover ">
             <thead>
               <tr>
                 <th>Libellé</th>
@@ -98,6 +98,7 @@
                   <b *ngIf="poste.idcontratsite">
                     {{poste.idcontratsite.idcontrat.libelle}}
 
+
                   </b>
                   <span *ngIf="!poste.idcontratsite" style="color: red;">
                     Aucun contrat
@@ -127,59 +128,17 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">
+        <div class="modal-title" id="exampleModalLabel">
           Suggestions d'affectations
-        </h5>
+          <h5>
+            Poste : {{poste.libelle}}
+          </h5>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" style="padding: 8px;">
 
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Début</th>
-              <th scope="col">Poste</th>
-              <th scope="col">Vigile</th>
-              <th scope="col">Horaire</th>
-              <th scope="col">Remplacant</th>
-              <th scope="col">Repos</th>
-              <th scope="col" style="text-align: right;">Arrêt</th>
-              <th scope="col" style="text-align: center;">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let sugg of suggestions; let i = index">
-              <td scope="row">
-                {{sugg.dateAffectation | date:"yyyy-MM-dd"}}
-              </td>
-              <td scope="row">
-                {{sugg.idposte.codeagiv }}
-              </td>
-              <td scope="row">
-                {{sugg.idvigile.noms}}
-              </td>
-              <td scope="row">
-                {{sugg.horaire}}
-              </td>
-              <td scope="row">
-                {{sugg.remplacant.noms }}
-              </td>
-              <td scope="row">
-                {{sugg.jourRepos}}
-              </td>
-              <td scope="row" style="text-align: right;">
-                <ng-container *ngIf="sugg.arret">
-                  {{sugg.arret | date:"yyyy-MM-dd"}}
-                </ng-container>
-              </td>
-              <td>
-                <button (click)="creerAffectation(sugg)" class="btn btn-sm btn-primary">
-                  Restaurer
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <app-suggestions-affectations-poste [suggestions]="suggestions"></app-suggestions-affectations-poste>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

@@ -110,6 +110,7 @@ import { UploadAffectationComponent } from './algorithmes/upload-affectation/upl
 import { DisplayPointagesComponent } from './composants/display-pointages/display-pointages.component';
 import { RecapVeilleComponent } from './pages/recap/recap-veille/recap-veille.component';
 import { RecapVeilleZoneComponent } from './pages/recap/recap-veille-zone/recap-veille-zone.component';
+import { SuggestionsAffectationsPosteComponent } from './composants/suggestions-affectations-poste/suggestions-affectations-poste.component';
 
 @NgModule({
   declarations: [
@@ -215,6 +216,7 @@ import { RecapVeilleZoneComponent } from './pages/recap/recap-veille-zone/recap-
     DisplayPointagesComponent,
     RecapVeilleComponent,
     RecapVeilleZoneComponent,
+    SuggestionsAffectationsPosteComponent,
   ],
   imports: [
     BrowserModule,

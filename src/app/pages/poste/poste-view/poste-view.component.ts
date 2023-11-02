@@ -68,6 +68,7 @@ export class PosteViewComponent implements OnInit {
   rechercheVigile = "";
   rechercheRemplacant = "";
   affectation: Affectation | undefined;
+  suggestions = new Array<any>();
 
   constructor(
     private router: Router,
@@ -118,6 +119,10 @@ export class PosteViewComponent implements OnInit {
           console.log('le poste recupéré');
           console.log(poste);
           this.poste = poste;
+
+          this.getAffectationsInAGIV(this.poste).then((suggestions) => {
+            this.suggestions = suggestions;
+          });
 
           this.affectationCtrlService.getAffectationsOfPoste(poste).then((affectations) => {
             this.affectations = affectations;
@@ -250,6 +255,10 @@ export class PosteViewComponent implements OnInit {
       this.myModal = new bootstrap.Modal(modale);
       this.myModal.show();
     }
+  }
+
+  async getAffectationsInAGIV(poste: Poste): Promise<Array<Affectation>> {
+    return this.affectationCtrlService.getAffectationsInAGIV(poste);
   }
 
 }

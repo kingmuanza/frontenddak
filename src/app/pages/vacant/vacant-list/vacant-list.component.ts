@@ -16,6 +16,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { VigileService } from 'src/app/services/vigile.service';
 import { VigileCtrlService } from 'src/app/_services/vigile-ctrl-service';
+import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class VacantListComponent implements OnInit, OnDestroy {
     private zoneService: JarvisService<ZoneDak>,
     private vigileCtrlService: VigileCtrlService,
     private affectationService: JarvisService<Affectation>,
+    private affectationCtrlService: AffectationCtrlService,
     private posteCtrlService: PosteCtrlService,
     private authService: AuthService,
     private notifierService: NotifierService,
@@ -82,14 +84,8 @@ export class VacantListComponent implements OnInit, OnDestroy {
   }
 
   importerAffectations() {
-    this.http.get('assets/data/affecations-cool3.csv', { responseType: 'text' }).subscribe((data: string) => {
-      this.lignes = data.split("\n");
-      this.lignes.shift();
-      this.lignes = this.lignes.filter((ligne) => {
-        let donnees = ligne.split(",");
-        return donnees[1] && donnees[1].trim();
-      })
-      console.log("import terminé", this.lignes.length);
+    this.affectationCtrlService.importerAffectations().then((lignes) => {
+      this.lignes = lignes;
     });
   }
 
@@ -99,14 +95,14 @@ export class VacantListComponent implements OnInit, OnDestroy {
     if (zone && zone.idzone !== 0) {
       this.posteCtrlService.getPostesByZone(zone).then((postes) => {
         this.postes = postes;
-        this.resultats = postes.filter((p) => {
-          return this.postesStringOfAffectations.indexOf(p.idposte) === -1;
-        });
-        this.resultats = this.resultats.map((r) => {
-          return {
+      });
+      this.posteCtrlService.getPostesVacantsByZone(zone).then((postes) => {
+        let resultats = postes;
+        resultats.forEach((r) => {
+          this.resultats.push({
             ...r,
             suggestions: this.rechercherDansAgiv(r),
-          }
+          });
         });
         this.postesSansCodeAgiv = this.resultats.filter((p) => {
           return !p.codeagiv
@@ -114,6 +110,8 @@ export class VacantListComponent implements OnInit, OnDestroy {
         this.loading = false;
         // this.afficherPostes();
       });
+    } else {
+      this.loading = false;
     }
   }
 
@@ -140,11 +138,6 @@ export class VacantListComponent implements OnInit, OnDestroy {
     });
   }
 
-  async getVigileByMatricule(matricule: string): Promise<Vigile> {
-    let vigile = await this.vigileCtrlService.getVigileByMatricule(matricule);
-    return vigile;
-  }
-
   creerAffectation(aff: Affectation) {
     aff.arret = null;
     // this.closeModal("suggestions");
@@ -153,21 +146,9 @@ export class VacantListComponent implements OnInit, OnDestroy {
     });
   }
 
-  rechercherDansAgiv(poste: Poste) {
-    if (poste.codeagiv) {
-      let resultats = new Array<any>()
-      let lignes = this.lignes.filter((ligne) => {
-        let donnees = ligne.split(",");
-        if (donnees[1]) {
-          return donnees[1].trim().indexOf(poste.codeagiv.trim()) !== -1;
-        } else {
-          return false;
-        }
-      });
-      return lignes.length;
-    } else {
-      return 0;
-    }
+  rechercherDansAgiv(poste: Poste): number {
+    console.log(poste.code, new Date().getMinutes(), new Date().getSeconds())
+    return this.affectationCtrlService.rechercherPosteDansAgiv(poste);
   }
 
   openModal(idElement: string) {
@@ -180,53 +161,16 @@ export class VacantListComponent implements OnInit, OnDestroy {
     }
   }
 
-  closeModal(idElement: string) {
-    console.log(`open modal ${idElement}`);
-    const modale = document.getElementById(idElement);
-    console.log(modale);
-    if (modale != null) {
-      const myModal = new bootstrap.Modal(modale);
-      myModal.hide();
-    }
-  }
-
   async ouvrirSuggestions(poste: Poste) {
     this.openModal("suggestions");
     this.poste = poste;
-    let suggestions = this.rechercherAffectationDansAGIV(poste);
-    this.suggestions = new Array<any>();
-    for (let index = 0; index < suggestions.length; index++) {
-      const element = suggestions[index];
-      let aff = new Affectation();
-      aff.dateAffectation = new Date(element[0]);
-      aff.idposte = poste;
-      aff.idvigile = await this.getVigileByMatricule(element[2]);
-      aff.horaire = element[4];
-      aff.remplacant = await this.getVigileByMatricule(element[6]);
-      aff.jourRepos = element[7];
-      aff.arret = element[8] ? new Date(element[8]) : null;
-      this.suggestions.push(aff);
-    }
+    console.log("poste");
+    console.log(poste);
+    this.suggestions = await this.getAffectationsInAGIV(poste);
   }
 
-  rechercherAffectationDansAGIV(poste: Poste): Array<any> {
-    if (poste.codeagiv) {
-      let resultats = new Array<any>()
-      let lignes = this.lignes.filter((ligne) => {
-        let donnees = ligne.split(",");
-        if (donnees[1]) {
-          return donnees[1].trim().indexOf(poste.codeagiv.trim()) !== -1;
-        } else {
-          return false;
-        }
-      });
-      return lignes.map((ligne) => {
-        let donnees = ligne.split(",");
-        return donnees;
-      });
-    } else {
-      return [];
-    }
+  async getAffectationsInAGIV(poste: Poste): Promise<Array<Affectation>> {
+    return this.affectationCtrlService.getAffectationsInAGIV(poste);
   }
 
   ngOnDestroy(): void {
