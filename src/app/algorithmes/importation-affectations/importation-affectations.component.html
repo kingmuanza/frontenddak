@@ -34,6 +34,12 @@
             </select>
           </div>
         </div>
+        <div class="col-lg-2">
+          <button class="btn primaire" (click)="rechercher()">
+            Rechercher
+          </button>
+
+        </div>
       </div>
     </div>
   </div>
@@ -51,7 +57,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let affectation of affectations">
+        <tr *ngFor="let affectation of resultats">
           <td>{{affectation.idposte?.zone.code}}</td>
           <td>
             {{affectation.idposte?.codeagiv}}

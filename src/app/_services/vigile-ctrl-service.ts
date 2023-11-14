@@ -44,5 +44,19 @@ export class VigileCtrlService {
     });
   }
 
+  async getVigilesVacants(): Promise<Vigile[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "vacants").subscribe({
+        next: (data) => {
+          const resulats = data as Vigile[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
 
 }

@@ -23,8 +23,8 @@ export class ImportationAffectationsComponent implements OnInit {
   dtInstance!: Promise<DataTables.Api>;
 
   lignes = new Array<string>();
-  affectations = new Array<any>();
-  resultats = new Array<any>();
+  affectations = new Array<Affectation>();
+  resultats = new Array<Affectation>();
   affectationsBrutes = new Array<any>();
   postes = new Array<Poste>();
   vigiles = new Array<Vigile>();
@@ -51,9 +51,10 @@ export class ImportationAffectationsComponent implements OnInit {
         this.postes = postes.filter((p) => {
           return p.codeagiv;
         });
-        this.http.get('assets/data/affecations-cool3.csv', { responseType: 'text' }).subscribe((data: string) => {
+        this.http.get('assets/data/affectations-cool5.csv', { responseType: 'text' }).subscribe((data: string) => {
 
           this.lignes = data.split("\n");
+          console.log('lignes', this.lignes.length);
           this.lignes.shift();
           this.lignes.forEach((ligne) => {
             let donnees = ligne.split(",");
@@ -174,5 +175,11 @@ export class ImportationAffectationsComponent implements OnInit {
     return new Promise((resolve, reject) => setTimeout(() => {
       resolve("pause");
     }, ms));
+  }
+
+  rechercher() {
+    this.resultats = this.affectations.filter((aff) => {
+      return aff.idposte?.zone.code === this.zone.code;
+    })
   }
 }
