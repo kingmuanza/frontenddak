@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Affectation } from 'src/app/models/affectation.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
-import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 
@@ -17,6 +17,8 @@ export class UploadAffectationComponent implements OnInit {
   remplacants = new Array<any>();
   remplacantsFinaux = new Array<any>();
   app: any;
+
+  logs = new Array<string>();
 
 
   constructor(
@@ -86,7 +88,7 @@ export class UploadAffectationComponent implements OnInit {
     const db = getFirestore(this.app);
     let ref = doc(db, "affectation", aff.id);
     await setDoc(ref, JSON.parse(JSON.stringify(aff)), { merge: true });
-    console.log("affectation " + aff.id + " mis à jour");
+    this.log("affectation " + aff.id + " mis à jour");
   }
 
   async mettreEnLigneRemplacant(aff: any) {
@@ -94,29 +96,69 @@ export class UploadAffectationComponent implements OnInit {
     const db = getFirestore(this.app);
     let ref = doc(db, "affectation-remplacant", aff.id);
     await setDoc(ref, JSON.parse(JSON.stringify(aff)), { merge: true });
-    console.log("affectation " + aff.id + " mis à jour");
+    this.log("affectation " + aff.id + " mis à jour");
+  }
+
+  async suppressionTitulaires() {
+    const db = getFirestore(this.app);
+    const q = query(collection(db, "affectation"),);
+    let querySnapshots = await getDocs(q);
+
+    this.log("Supression des anciennes affectations des titulaires")
+
+    for (let index = 0; index < querySnapshots.docs.length; index++) {
+      const aff = querySnapshots.docs[index].data() as any;
+      let ref = doc(db, "affectation", aff.id);
+      await deleteDoc(ref);
+      this.log("Supression de l'affectation : " + aff.id);
+    }
+  }
+
+  async suppressionRemplacants() {
+    const db = getFirestore(this.app);
+    const q = query(collection(db, "affectation-remplacant"),);
+    let querySnapshots = await getDocs(q);
+
+    this.log("Supression des anciennes affectations des remplacants")
+
+    for (let index = 0; index < querySnapshots.docs.length; index++) {
+      const aff = querySnapshots.docs[index].data() as any;
+      let ref = doc(db, "affectation-remplacant", aff.id);
+      await deleteDoc(ref);
+      this.log("Supression de l'affectation remplacant : " + aff.id);
+    }
   }
 
   async mettreToutEnLigne() {
+    this.log('Début, ne fermez pas la fenêtre !!!');
+    await this.suppressionTitulaires();
     await this.mettreToutTitulaireEnLigne();
+
+    await this.suppressionRemplacants();
     await this.mettreToutRemplacantEnLigne();
+    this.log('Terminé !!!');
   }
 
   async mettreToutTitulaireEnLigne() {
     for (let index = 0; index < this.resultats.length; index++) {
       const affectation = this.resultats[index];
       await this.mettreEnLigneTitulaire(affectation);
-      console.log("affectations : affectation " + affectation.id + " mis à jour");
+      console.log("affectation " + affectation.id + " mis à jour");
       let pause = await this.timeout(200);
       console.log(pause);
     }
+  }
+
+  log(l: string) {
+    console.log(l);
+    this.logs.unshift(l)
   }
 
   async mettreToutRemplacantEnLigne() {
     for (let index = 0; index < this.remplacantsFinaux.length; index++) {
       const affectation = this.remplacantsFinaux[index];
       await this.mettreEnLigneRemplacant(affectation);
-      console.log("affectations : affectation remplacant " + affectation.id + " mis à jour");
+      console.log("remplacant " + affectation.id + " mis à jour");
       let pause = await this.timeout(200);
       console.log(pause);
     }

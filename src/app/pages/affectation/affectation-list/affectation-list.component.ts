@@ -114,6 +114,9 @@ export class AffectationListComponent implements OnInit, OnDestroy {
       });
     }, 500);
   }
+  mettreToutEnLigne() {
+    this.router.navigate(["upload-affectation"]);
+  }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();

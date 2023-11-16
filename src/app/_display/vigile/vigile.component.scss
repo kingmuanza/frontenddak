@@ -1,19 +1,22 @@
 .app-vigile {
-    min-height: 100px;
-    padding: 16px;
-    margin-bottom: 16px;
-    background-color: white;
-    line-height: 1.15;
-    &.vacant {
-        border: 1px solid rgba(red, 0.5);
-        background-color: rgba(red, 0.1);
-    }
+  min-height: 100px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: white;
+  line-height: 1.15;
+  text-align: center;
+
+  &.vacant {
+    border: 1px solid rgba(red, 0.5);
+    background-color: rgba(red, 0.1);
+  }
 }
 
 .cliquable {
-    cursor: pointer;
-    color: #231709;
-    &:hover {
-        opacity: 0.8;
-    }
+  cursor: pointer;
+  color: #231709;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }

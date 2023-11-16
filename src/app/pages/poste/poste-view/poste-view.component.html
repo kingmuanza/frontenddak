@@ -129,10 +129,20 @@
             Liste des remplacants
           </div>
           <div class="row">
-            <ng-container *ngFor="let remplacant of remplacantsDuPoste">
-              <div class="col-lg-6" *ngIf="remplacant">
+            <ng-container *ngFor="let affectation of affectations">
+              <div class="col-lg-6" *ngIf="affectation.remplacant">
                 <div style="border: 0px solid #aaa; margin-bottom: 20px;">
-                  <app-vigile [vigile]="remplacant"></app-vigile>
+                  <div style="text-align: center;padding: 10px; padding-top: 20px; background-color: #eee;">
+                    <b>
+                      {{affectation.remplacant.noms}}
+                    </b>
+                    <div>
+                      {{affectation.remplacant.matricule}}
+                    </div>
+                    <div style="margin-bottom: 10px; text-align: center;padding: 10px;">
+                      <a [routerLink]="'/affectation/view/'+affectation.idaffectation">Voir l'affectation</a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </ng-container>

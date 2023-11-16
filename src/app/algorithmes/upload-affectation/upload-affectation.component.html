@@ -1,3 +1,27 @@
+<div class="page">
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      Mettre toutes les affectations en ligne {{resultats.length}}
+    </div>
+    <div class="boutons">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="nouveau">
+            <a (click)="mettreToutEnLigne()" class="btn nouveau">
+              Mettre tout en ligne
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div *ngFor="let lo of logs">
+      {{lo}}
+    </div>
+  </div>
+</div>
+<!--
 <div style="margin-bottom: 50px;">
   <button (click)="mettreToutEnLigne()">
     Mettre tout en ligne
@@ -6,10 +30,6 @@
 <div>
   <div *ngFor="let resultat of remplacantsFinaux" style="margin-bottom: 50px;">
     {{resultat | json}}
-
-
-    <button (click)="mettreEnLigneTitulaire(resultat)">
-      Mettre en ligne
-    </button>
   </div>
 </div>
+ -->
