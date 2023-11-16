@@ -19,6 +19,9 @@ export class SuggestionsAffectationsPosteComponent implements OnInit {
 
   creerAffectation(aff: Affectation) {
     aff.arret = null;
+    if (aff.remplacant.idvigile === 0) {
+      aff.remplacant = null;
+    }
     // this.closeModal("suggestions");
     this.affectationService.ajouter("affectation", aff).then(() => {
       window.location.reload();
