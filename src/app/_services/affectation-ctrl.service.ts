@@ -31,7 +31,7 @@ export class AffectationCtrlService {
 
   importerAffectations(): Promise<Array<string>> {
     return new Promise((resolve, reject) => {
-      this.http.get('assets/data/affecations-cool3.csv', { responseType: 'text' }).subscribe((data: string) => {
+      this.http.get('assets/data/affectations-cool5.csv', { responseType: 'text' }).subscribe((data: string) => {
         let lignes = data.split("\n");
         lignes.shift();
         lignes = lignes.filter((ligne) => {

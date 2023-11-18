@@ -122,8 +122,8 @@ export class RecapVeilleComponent implements OnInit {
   }
 
   setDates() {
-    //this.debut.setDate(this.debut.getDate() - 1);
-    this.debut.setDate(this.debut.getDate() - 9);
+    this.debut.setDate(this.debut.getDate() - 1);
+    //this.debut.setDate(this.debut.getDate() - 9);
     this.debut.setHours(6, 0, 0);
     this.fin.setHours(6, 0, 0);
   }
