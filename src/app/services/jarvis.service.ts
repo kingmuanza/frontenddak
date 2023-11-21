@@ -238,7 +238,7 @@ export class JarvisService<T> {
     });
   }
 
-  jourSemaine(jour: number) {
+  jourSemaine(jour: number | string) {
     if (jour == 1)
       return "Lundi";
     if (jour == 2)

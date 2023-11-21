@@ -21,9 +21,26 @@
               </span>
             </div>
             <select [(ngModel)]="horaire" class="form-control">
-              <option value="jour">Tous</option>
+              <option value="tous">Tous</option>
               <option value="jour">Jour</option>
               <option value="nuit">Nuit</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Zone
+              </span>
+            </div>
+
+            <select type="text" [(ngModel)]="zone" class="form-control">
+              <ng-container *ngFor="let z of zones">
+                <option [ngValue]="z" *ngIf="horaire === 'tous' || (z.horaire && z.horaire === horaire)">
+                  {{z.libelle}}
+                </option>
+              </ng-container>
             </select>
           </div>
         </div>
@@ -37,17 +54,27 @@
         <div class="col-lg-12">
           <div class="type">
             <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="encours"
-              type="radio" name="afficher"> &nbsp;En cours &nbsp;&nbsp;
+              type="radio" name="afficher"> &nbsp;En cours ({{encours().length}}) &nbsp;&nbsp;
             <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="arret"
-              type="radio" name="afficher"> &nbsp;Arrêtées &nbsp;&nbsp;
+              type="radio" name="afficher"> &nbsp;Arrêtées ({{resultats.length - encours().length}})&nbsp;&nbsp;
             <input (ngModelChange)="afficherAffectationsEnCours($event)" [(ngModel)]="afficher" value="tous"
-              type="radio" name="afficher"> &nbsp;Toutes &nbsp;&nbsp;
+              type="radio" name="afficher"> &nbsp;Toutes ({{resultats.length}}) &nbsp;&nbsp;
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="">
+    <div style="color: red;">
+      <span style="margin-right: 50px;">
+        {{sansRemplacants().length}} affectations sans remplacants
+      </span>
+      <span>
+        {{sansJourRepos().length}} affectations sans jour de repos
+      </span>
+
+    </div>
+
     <div class="page-contenu-corps">
       <div class="card shadow-1">
         <div style="margin-bottom: 15px;">
@@ -80,7 +107,7 @@
                 <td>{{affectation.idposte?.zone.libelle}}</td>
                 <td>{{affectation.idposte?.zone?.horaire}}</td>
                 <td>{{affectation.idvigile?.noms}}</td>
-                <td>{{jourSemaine(affectation.idvigile.jourRepos)}}</td>
+                <td>{{jourSemaine(affectation.jourRepos)}}</td>
                 <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
                 <td>{{affectation.arret?.split('T')[0]}}</td>
               </tr>
