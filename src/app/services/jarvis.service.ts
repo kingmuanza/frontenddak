@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { LoadingService } from './loading.service';
+import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class JarvisService<T> {
   constructor(
     private http: HttpClient,
     private loadingService: LoadingService,
+    private validationService: ValidationService,
   ) {
     const url = sessionStorage.getItem('serveur-dak');
     if (url) {
@@ -132,16 +134,20 @@ export class JarvisService<T> {
     this.infos();
     this.showLoader();
     return new Promise((resolve, reject) => {
-      this.http.post(this.URL + this.package + table, objet).subscribe({
-        next: (data) => {
-          this.hideLoader();
-          resolve(data);
-        },
-        error: (e) => {
-          // this.hideLoader();
-          reject(e);
-        }
-      });
+      if (this.validationService.validate(objet)) {
+        this.http.post(this.URL + this.package + table, objet).subscribe({
+          next: (data) => {
+            this.hideLoader();
+            resolve(data);
+          },
+          error: (e) => {
+            this.hideLoader();
+            reject(e);
+          }
+        });
+      } else {
+        reject(new Error("Objet non validé"));
+      }
     });
   }
 
@@ -269,6 +275,7 @@ export class JarvisService<T> {
 
     return "";
   }
+
   libelleStatut(fonction: string | number) {
     if (fonction == "1")
       return "Absent[e]";

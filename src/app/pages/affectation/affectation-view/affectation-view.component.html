@@ -68,6 +68,25 @@
               </button>
             </div>
 
+            <div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Jour de repos
+                  </span>
+                </div>
+                <select [(ngModel)]="affectation.jourRepos" class="form-control">
+                  <option [value]="1">Lundi</option>
+                  <option [value]="2">Mardi</option>
+                  <option [value]="3">Mercredi</option>
+                  <option [value]="4">Jeudi</option>
+                  <option [value]="5">Vendredi</option>
+                  <option [value]="6">Samedi</option>
+                  <option [value]="7">Dimanche</option>
+                </select>
+              </div>
+            </div>
+
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text">
@@ -82,8 +101,6 @@
             </div>
 
             <div>
-
-              &nbsp;
               <button (click)="retour()" class="btn">
                 Retour
               </button>
