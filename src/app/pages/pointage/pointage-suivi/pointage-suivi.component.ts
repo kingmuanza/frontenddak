@@ -28,6 +28,7 @@ export class PointageSuiviComponent implements OnInit {
     affectation: Affectation,
     pointage: Pointage | undefined,
     vigile: Vigile,
+    isRemplacant: boolean,
   }>();
   vigiles = new Array<Vigile>();
   zone = new ZoneDak();
@@ -111,6 +112,7 @@ export class PointageSuiviComponent implements OnInit {
         affectation: affectation,
         pointage: pointage,
         vigile: vigile,
+        isRemplacant: vigileStatus.isRemplacant,
       }
     });
   }

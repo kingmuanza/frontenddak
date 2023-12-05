@@ -78,9 +78,11 @@
 
               <td>
                 {{data.vigile.matricule}}
+
               </td>
 
               <td>
+                <b *ngIf="data.isRemplacant" style="float: right;">R</b>
                 {{data.vigile.noms}}
               </td>
 
