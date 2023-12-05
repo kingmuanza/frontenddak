@@ -1,5 +1,10 @@
 <div class="page">
   <div class="page-entete">
+    <div *ngIf="affectation.idposte" class="page-entete-titre">
+      <b>
+        {{affectation.idposte.libelle}}
+      </b>
+    </div>
     <div *ngIf="affectation.idvigile" class="page-entete-titre">
       {{affectation.idvigile.noms}}
     </div>
@@ -75,7 +80,7 @@
                     Jour de repos
                   </span>
                 </div>
-                <select [(ngModel)]="affectation.jourRepos" class="form-control">
+                <select [(ngModel)]="jourRepos" class="form-control">
                   <option [value]="1">Lundi</option>
                   <option [value]="2">Mardi</option>
                   <option [value]="3">Mercredi</option>
@@ -84,6 +89,9 @@
                   <option [value]="6">Samedi</option>
                   <option [value]="7">Dimanche</option>
                 </select>
+                <button (click)="modifierJourDeRepos()" class="btn btn-primary">
+                  Mettre à jour le jour de repos
+                </button>
               </div>
             </div>
 

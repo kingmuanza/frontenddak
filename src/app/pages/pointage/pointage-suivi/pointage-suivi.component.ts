@@ -24,6 +24,11 @@ export class PointageSuiviComponent implements OnInit {
   remotePostes = new Array<any>();
   affectations = new Array<Affectation>();
   resultatsAffectations = new Array<Affectation>();
+  resultatsAffectations2 = new Array<{
+    affectation: Affectation,
+    pointage: Pointage | undefined,
+    vigile: Vigile,
+  }>();
   vigiles = new Array<Vigile>();
   zone = new ZoneDak();
   horaire = 'tous';
@@ -81,17 +86,33 @@ export class PointageSuiviComponent implements OnInit {
 
   getAffectationByZone(zone: ZoneDak, d: Date) {
     const date = new Date(d);
-    this.resultatsAffectations = new Array<Affectation>();
     this.resultatsAffectations = this.affectations.filter((affectation) => {
       const isBonneZone = affectation.idposte?.zone?.idzone === zone.idzone;
       const isBonneDateDebut = date.getTime() >= new Date(affectation.dateAffectation).getTime();
-      let isBonneDateFin = true;
+      let isBonneDateFin = false;
       if (affectation.arret) {
         isBonneDateFin = new Date(affectation.arret).getTime() >= date.getTime();
+      } else {
+        isBonneDateFin = true
       }
       return isBonneZone && isBonneDateDebut && isBonneDateFin;
     });
+
     this.getVigilesConcernes(date);
+
+    this.resultatsAffectations2 = this.resultatsAffectations.map((affectation) => {
+      let pointage = this.getPointageVigileDate(affectation, date);
+
+      const vigileStatus = this.showVigile(affectation, date);
+      let vigile = vigileStatus.vigile;
+      vigile.noms = vigile.noms + (vigileStatus.isRemplacant ? "" : "")
+
+      return {
+        affectation: affectation,
+        pointage: pointage,
+        vigile: vigile,
+      }
+    });
   }
 
   getVigilesConcernes(date: Date) {
@@ -123,16 +144,19 @@ export class PointageSuiviComponent implements OnInit {
     this.resultatsAffectations = this.resultatsAffectations.reverse();
   }
 
-  showVigile(affectation: Affectation, d: Date): Vigile {
+  showVigile(affectation: Affectation, d: Date): { vigile: Vigile, isRemplacant: boolean } {
+    console.log("showVigile")
     const date = new Date(d);
     let jour = date.getDay();
     if (jour === 0) {
       jour = 7;
     }
-    if (affectation.idvigile.jourRepos === jour) {
-      return affectation.remplacant;
+    if (Number(affectation.jourRepos) == jour) {
+      const remplacant = affectation.remplacant;
+      remplacant.noms = remplacant.noms
+      return { vigile: remplacant, isRemplacant: true };
     } else {
-      return affectation.idvigile;
+      return { vigile: affectation.idvigile, isRemplacant: false };
     }
   }
 
@@ -141,25 +165,14 @@ export class PointageSuiviComponent implements OnInit {
     let tous = new Array<any>();
     this.pointages.forEach((p) => {
       const d = this.toDate(p.date)
-      if (p.idvigile === vigile.idvigile && d && this.dateToJourAnnee(d) === this.dateToJourAnnee(date)) {
+      if (p.matricule === vigile.matricule && d && this.dateToJourAnnee(d) === this.dateToJourAnnee(date)) {
         pointage = p;
         tous.push(p);
       }
     });
-    /* let affectation = new Affectation();
-    this.resultatsAffectations.forEach((a) => {
-      if (a.idvigile.idvigile === vigile.idvigile) {
-        affectation = a;
-      }
-      if (a.remplacant.idvigile === vigile.idvigile) {
-        affectation = a;
-      }
-    }); */
     tous.sort((a, b) => {
       let diff1 = 1000 * this.calcCrow(0, 0, this.getMinDifferenceLatitude(a, date), this.getMinDifferenceLongitude(a, date));
       let diff2 = 1000 * this.calcCrow(0, 0, this.getMinDifferenceLatitude(b, date), this.getMinDifferenceLongitude(b, date));
-      // console.log("diff1 - diff2");
-      // console.log(diff1 - diff2);
       return diff1 - diff2 > 0 ? 1 : -1;
     });
     return tous[0];
@@ -171,7 +184,7 @@ export class PointageSuiviComponent implements OnInit {
 
   getPointageVigileDate(affectation: Affectation, d: Date) {
     const date = new Date(d);
-    return this.getPointage(this.showVigile(affectation, date), date);
+    return this.getPointage(this.showVigile(affectation, date).vigile, date);
   }
 
   toDate(timestp: any): Date | undefined {
@@ -184,7 +197,7 @@ export class PointageSuiviComponent implements OnInit {
   }
 
   isBonneLocalisation(affectation: Affectation, date: Date): boolean {
-    const pointage = this.getPointageVigileDate(affectation, date)
+
     const distanceEnMetres = 1000 * this.calcCrow(0, 0, this.getMinDifferenceLatitude(affectation, date), this.getMinDifferenceLongitude(affectation, date))
     if (distanceEnMetres > this.marge) {
       return false;

@@ -19,6 +19,7 @@ export class AffectationViewComponent implements OnInit {
   remplacant = new Vigile();
   vigiles = new Array<Vigile>();
   rechercheVigile = "";
+  jourRepos = "";
 
   constructor(
     private _location: Location,
@@ -37,6 +38,7 @@ export class AffectationViewComponent implements OnInit {
           console.log('le affectation recupéré');
           console.log(affectation);
           this.affectation = affectation;
+          this.jourRepos = affectation.jourRepos;
           this.date = this.affectation.dateAffectation;
           this.remplacant = this.affectation.remplacant;
           this.vigiles = [this.remplacant];
@@ -66,6 +68,14 @@ export class AffectationViewComponent implements OnInit {
 
   modifierRemplacant() {
     this.affectation.remplacant = this.remplacant,
+      this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
+        this.notifierService.notify('success', "Remplacant mis à jour avec succès");
+        this.retour();
+      });
+  }
+
+  modifierJourDeRepos() {
+    this.affectation.jourRepos = this.jourRepos,
       this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
         this.notifierService.notify('success', "Remplacant mis à jour avec succès");
         this.retour();
