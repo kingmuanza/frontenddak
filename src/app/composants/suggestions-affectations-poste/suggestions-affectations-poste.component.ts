@@ -28,4 +28,10 @@ export class SuggestionsAffectationsPosteComponent implements OnInit {
     });
   }
 
+
+  jourSemaine(jour: number | string) {
+    return this.affectationService.jourSemaine(Number(jour))
+  }
+
+
 }

@@ -347,9 +347,15 @@ export class AffectationCreateComponent implements OnInit {
   setAffectationACauseDuPoste(item?: Affectation) {
     if (item) {
       this.affectationAArreterACauseDuPoste = item;
+
     } else {
       this.affectationAArreterACauseDuPoste = new Affectation();
     }
+  }
+
+  setJourRepos(p: Poste) {
+    if (p.jourRepos)
+      this.affectation.jourRepos = p.jourRepos;
   }
 
   toJour(d: Date): number {

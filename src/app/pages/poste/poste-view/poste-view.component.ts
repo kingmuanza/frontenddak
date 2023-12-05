@@ -70,6 +70,8 @@ export class PosteViewComponent implements OnInit {
   affectation: Affectation | undefined;
   suggestions = new Array<any>();
 
+  jourRepos = "";
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -119,6 +121,8 @@ export class PosteViewComponent implements OnInit {
           console.log('le poste recupéré');
           console.log(poste);
           this.poste = poste;
+
+          this.jourRepos = this.poste.jourRepos;
 
           this.getAffectationsInAGIV(this.poste).then((suggestions) => {
             this.suggestions = suggestions;
@@ -230,7 +234,7 @@ export class PosteViewComponent implements OnInit {
     });
   }
 
-  jourSemaine(jour: number) {
+  jourSemaine(jour: number | string) {
     return this.jarvisService.jourSemaine(jour);
   }
 
@@ -260,5 +264,15 @@ export class PosteViewComponent implements OnInit {
   async getAffectationsInAGIV(poste: Poste): Promise<Array<Affectation>> {
     return this.affectationCtrlService.getAffectationsInAGIV(poste);
   }
+
+
+  modifierJourDeRepos() {
+    this.poste.jourRepos = this.jourRepos;
+    this.jarvisService.modifier('poste', this.poste.idposte, this.poste).then(() => {
+      this.notifierService.notify('success', "Jour de repos mis à jour avec succès");
+
+    });
+  }
+
 
 }

@@ -6,6 +6,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 import { Location } from '@angular/common';
 import { Vigile } from 'src/app/models/vigile.model';
 import { VigileService } from 'src/app/services/vigile.service';
+import { Poste } from 'src/app/models/poste.model';
 
 @Component({
   selector: 'app-affectation-view',
@@ -27,6 +28,8 @@ export class AffectationViewComponent implements OnInit {
     private router: Router,
     private notifierService: NotifierService,
     private affectationService: JarvisService<Affectation>,
+    private jarvisService: JarvisService<Vigile>,
+    private posteService: JarvisService<Poste>,
     private vigileService: VigileService,
   ) { }
 
@@ -74,12 +77,22 @@ export class AffectationViewComponent implements OnInit {
       });
   }
 
-  modifierJourDeRepos() {
-    this.affectation.jourRepos = this.jourRepos,
-      this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
-        this.notifierService.notify('success', "Remplacant mis à jour avec succès");
-        this.retour();
-      });
+  async modifierJourDeRepos() {
+    let oui = confirm("Les jours de repos du vigile et du poste seront aussi mis à jour. Voulez-vous continuer ? ");
+    if (oui) {
+
+      this.affectation.jourRepos = this.jourRepos;
+      await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
+
+      this.affectation.idvigile.jourRepos = Number(this.jourRepos);
+      await this.jarvisService.modifier('vigile', this.affectation.idvigile.idvigile, this.affectation.idvigile);
+
+      this.affectation.idposte.jourRepos = Number(this.jourRepos);
+      await this.posteService.modifier('poste', this.affectation.idposte.idposte, this.affectation.idposte);
+
+      this.notifierService.notify('success', "Jour de repos mis à jour avec succès");
+      this.retour();
+    }
   }
 
   getVigiles(texte: string) {

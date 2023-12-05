@@ -1,3 +1,4 @@
+import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
@@ -27,7 +28,7 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
   constructor(
     private router: Router,
     private vigileService: JarvisService<Vigile>,
-    private affectationService: JarvisService<Affectation>,
+    private affectationService: AffectationCtrlService,
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -54,7 +55,7 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
 
   getAffectionOfVigile(vigile: Vigile): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.affectationService.getAll('affectation').then((data) => {
+      this.affectationService.getAffectationsOfVigile(vigile).then((data) => {
         this.affectations = new Array<Affectation>();
         console.log('data');
         console.log(data);

@@ -123,6 +123,20 @@ export class AffectationCtrlService {
     });
   }
 
+  async getAffectationsOfVigile(vigile: Vigile): Promise<Array<Affectation>> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "vigile" + '/all/' + vigile.idvigile).subscribe({
+        next: (datas) => {
+          const resulat = datas as Array<Affectation>;
+          resolve(resulat);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
   async getAffectationsOfPoste(poste: Poste): Promise<Array<Affectation>> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "poste" + '/' + poste.idposte).subscribe({

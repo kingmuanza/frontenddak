@@ -116,7 +116,7 @@ export class VigileComponent implements OnInit, OnChanges {
 
   voirPoste() {
     if (this.cliquable) {
-      this.router.navigate(['poste', 'edit', this.affectation.idposte?.idposte]);
+      this.router.navigate(['poste', 'view', this.affectation.idposte?.idposte]);
     }
   }
 

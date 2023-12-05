@@ -4,8 +4,7 @@
   </div>
   <div class="page-entete">
     <div *ngIf="poste.idposte!=0" class="page-entete-titre">
-      Poste : {{poste.libelle}}, <b>{{poste.horaire | uppercase}}</b>
-
+      <b>Poste : {{poste.libelle}}</b>
     </div>
     <div *ngIf="poste.idcontratsite">
       <ng-container *ngIf="mesDroits.contratEdit">
@@ -87,18 +86,43 @@
               </b>
             </div>
             <div>
-              <div>
-                <ul>
-                  <ng-container *ngFor="let item of exigences">
-                    <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(item)}"
-                      *ngIf="item.horaire === poste.horaire">
-                      <span>
-                        {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
-                      </span>
-                    </li>
-                  </ng-container>
-                </ul>
+              <ul>
+                <ng-container *ngFor="let item of exigences">
+                  <li class="element-supprimable" [ngClass]="{'erreur': !verifierExigence(item)}"
+                    *ngIf="item.horaire === poste.horaire">
+                    <span>
+                      {{item.quantite}} {{item.typeVigile}} {{item.horaire}}
+                    </span>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div>
+            <div class="petit-titre">
+              Jour de repos
+            </div>
+            <div>
+              <div class="input-group mb-3">
+
+                <select [(ngModel)]="jourRepos" class="form-control">
+                  <option [value]="1">Lundi</option>
+                  <option [value]="2">Mardi</option>
+                  <option [value]="3">Mercredi</option>
+                  <option [value]="4">Jeudi</option>
+                  <option [value]="5">Vendredi</option>
+                  <option [value]="6">Samedi</option>
+                  <option [value]="7">Dimanche</option>
+                </select>
+                <button (click)="modifierJourDeRepos()" class="btn btn-primary">
+                  Mettre à jour le jour de repos
+                </button>
               </div>
+            </div>
+            <div *ngIf="affectations[0]">
+              Suggestion : {{jourSemaine(affectations[0].jourRepos)}}
             </div>
           </div>
         </div>
@@ -166,7 +190,7 @@
       </div>
     </div>
   </div>
-  <div class="page-contenu">
+  <div *ngIf="!exigencesVerifiees" class="page-contenu">
     <div class="card shadow-1">
       <div class="card-body">
         <div>

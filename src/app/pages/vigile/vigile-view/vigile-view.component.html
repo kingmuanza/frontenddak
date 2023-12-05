@@ -1,231 +1,232 @@
 <div class="page">
-    <div class="page-entete">
-        <div class="row">
-            <div class="col-2">
-                <img [src]="image" alt="Photo du vigile" style="width: 100%;">
-            </div>
-            <div class="col-10">
-                <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
-                    {{vigile.noms}}
-                    <b>
-                        {{statut}}
-                    </b>
-                </div>
-                <div>
-                    <div>
-                        Fonction : {{libelleFonction(vigile.fonction)}}, Tel : {{vigile.tel}}
-                        <br>
-                        <ng-container *ngIf="affectation">
-                            <div>
-                                Poste :
-                                <a [routerLink]="'/poste/view/' + affectation.idposte?.idposte">
-                                    {{affectation.idposte?.libelle}}
-                                </a>
-                            </div>
-                            <div *ngIf="affectation.remplacant">
-                                Remplacant :
-                                {{affectation.remplacant?.noms}}
-                                <!-- <a [routerLink]="'/vigile/view/' + affectation.remplacant?.idvigile">
+  <div class="page-entete">
+    <div class="row">
+      <div class="col-2">
+        <img [src]="image" alt="Photo du vigile" style="width: 100%;">
+      </div>
+      <div class="col-10">
+        <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
+          {{vigile.noms}}
+          <b>
+            {{statut}}
+          </b>
+        </div>
+        <div>
+          <div>
+            Fonction : {{libelleFonction(vigile.fonction)}}, Tel : {{vigile.tel}}
+            <br>
+            <ng-container *ngIf="affectation">
+              <div>
+                Poste :
+                <a [routerLink]="'/poste/view/' + affectation.idposte?.idposte">
+                  {{affectation.idposte?.libelle}}
+                </a>
+              </div>
+              <div *ngIf="affectation.remplacant">
+                Remplacant :
+                {{affectation.remplacant?.noms}}
+                <!-- <a [routerLink]="'/vigile/view/' + affectation.remplacant?.idvigile">
                                 </a> -->
-                            </div>
-                        </ng-container>
-                        <ng-container *ngIf="!affectation && !vigile.estRemplacant">
-                            Poste : <b style="color: red;">VACANT</b>
-                        </ng-container>
-                    </div>
-                </div>
-                <div>
-                    Statut : {{libelleStatut(vigile.statut)}}
-                </div>
-                <div>
-                    Jour de repos : {{jourSemaine(vigile.jourRepos)}}
-                </div>
-                <div *ngIf="vigile.dateEntree">
-                    Date d'entrée : {{vigile.dateEntree | date:"yyyy-MM-dd"}}
-                </div>
-                <div *ngIf="vigile.badge">
-                    Badge reçu
-                </div>
-            </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!affectation && !vigile.estRemplacant">
+              Poste : <b style="color: red;">VACANT</b>
+            </ng-container>
+          </div>
         </div>
-        <div class="">
-            <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la liste des vigiles
-            </a>
+        <div>
+          Statut : {{libelleStatut(vigile.statut)}}
         </div>
+        <div>
+          Jour de repos : {{jourSemaine(vigile.jourRepos)}}
+        </div>
+        <div *ngIf="vigile.dateEntree">
+          Date d'entrée : {{vigile.dateEntree | date:"yyyy-MM-dd"}}
+        </div>
+        <div *ngIf="vigile.badge">
+          Badge reçu
+        </div>
+      </div>
     </div>
-    <div class="boutons" *ngIf="mesDroits.vigileEdit">
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="nouveau">
-                    <a [routerLink]="'/vigile/edit/' + vigile.idvigile " class="btn nouveau">
-                        Modifier
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="">
+      <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
+        Revenir à la liste des vigiles
+      </a>
     </div>
-    <div class="page-contenu">
-        <div class="row">
-            <div class="col-3">
-                <div class="stat">
-                    <div class="stat-titre">
-                        Sanctions
-                    </div>
-                    <div class="stat-valeur">
-                        {{sanctions.length}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="stat">
-                    <div class="stat-titre">
-                        Départ en congés
-                    </div>
-                    <div class="stat-valeur">
-                        {{vigile.debutConge | date: 'dd-MM-YYYY'}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="stat">
-                    <div class="stat-titre">
-                        Permissions
-                    </div>
-                    <div class="stat-valeur">
-                        {{permissions.length}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="stat">
-                    <div class="stat-titre">
-                        Jour de repos
-                    </div>
-                    <div class="stat-valeur">
-                        {{jourSemaine(vigile.jourRepos)}}
-                    </div>
-                </div>
-            </div>
+  </div>
+  <div class="boutons" *ngIf="mesDroits.vigileEdit">
+    <div class="row">
+      <div class="col-lg-2">
+        <div class="nouveau">
+          <a [routerLink]="'/vigile/edit/' + vigile.idvigile " class="btn nouveau">
+            Modifier
+          </a>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="row">
+      <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Sanctions
+          </div>
+          <div class="stat-valeur">
+            {{sanctions.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Départ en congés
+          </div>
+          <div class="stat-valeur">
+            {{vigile.debutConge | date: 'dd-MM-YYYY'}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Permissions
+          </div>
+          <div class="stat-valeur">
+            {{permissions.length}}
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="stat">
+          <div class="stat-titre">
+            Jour de repos
+          </div>
+          <div class="stat-valeur">
+            {{jourSemaine(vigile.jourRepos)}}
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <div *ngIf="vigile.estRemplacant" class="remplacant-programme">
-            <div style="margin-top: 20px; margin-bottom: 20px">
-                Programme de la semaine
+    <div *ngIf="vigile.estRemplacant" class="remplacant-programme">
+      <div style="margin-top: 20px; margin-bottom: 20px">
+        Programme de la semaine
+      </div>
+      <div class="row">
+        <div class="col-lg-2" *ngFor="let aff of affectationsActuelles">
+          <div style="border-left: 2px solid #aaa; padding-left: 20px;">
+            <div>
+              {{jourSemaine(aff.idvigile.jourRepos)}}
             </div>
-            <div class="row">
-                <div class="col-lg-2" *ngFor="let aff of affectationsActuelles">
-                    <div style="border-left: 2px solid #aaa; padding-left: 20px;">
-                        <div>
-                            {{jourSemaine(aff.idvigile.jourRepos)}}
-                        </div>
-                        <div>
-                            {{aff.idvigile.noms}}
-                        </div>
-                    </div>
-                </div>
+            <div>
+              {{aff.idvigile.noms}}
             </div>
+          </div>
         </div>
-
-        <div style="margin-bottom: 40px; display: none;">
-            <div style="margin-top: 20px; margin-bottom: 16px;">
-                Equipements reçus
-            </div>
-            <div *ngIf="equipements.length === 0" style="opacity: 0.5">
-                Aucun équipement reçu
-            </div>
-            <div *ngIf="equipements.length  > 0">
-                <ng-container *ngFor="let equipement of equipements">
-                    <ng-container *ngIf="equipement.quantite">
-                        <app-display-equipement [equipement]="equipement"></app-display-equipement>
-                    </ng-container>
-                </ng-container>
-            </div>
-        </div>
-        <div style="margin-top: 20px;" *ngIf="vigile">
-            <div style="margin-top: 20px; margin-bottom: 20px;">
-                Historique des affectations
-            </div>
-            <app-tableau-affectations [vigile]="vigile"></app-tableau-affectations>
-        </div>
-        <div style="margin-top: 20px;" *ngIf="vigile">
-            <div style="margin-top: 20px; margin-bottom: 20px;">
-                Permissions accordées
-            </div>
-            <table datatable [dtOptions]="dtOptionsPermissions" [dtTrigger]="dtTriggerPermissions"
-                class="row-border hover">
-                <thead>
-                    <tr>
-                        <th>Vigile</th>
-                        <th>Du</th>
-                        <th>Au</th>
-                        <th>Commentaire</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let permission of permissions" (click)="edit(permission.idpermission)">
-                        <td>{{permission.idvigile?.noms}}</td>
-                        <td>{{permission.dateDebut | date:'yyyy-MM-dd'}}</td>
-                        <td>{{permission.dateFin | date:'yyyy-MM-dd'}}</td>
-                        <td>{{permission.commentaire}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div style="margin-top: 20px;" *ngIf="vigile">
-            <div style="margin-top: 20px; margin-bottom: 20px;">
-                Sanctions
-            </div>
-            <table datatable [dtOptions]="dtOptionsSanctions" [dtTrigger]="dtTriggerSanctions" class="row-border hover">
-                <thead>
-                    <tr>
-                        <th>Vigile</th>
-                        <th>Date</th>
-                        <th>Date Effet</th>
-                        <th>Jours pris</th>
-                        <th>Motif</th>
-                        <th>Commentaire</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let sanction of sanctions" (click)="edit(sanction.idsuiviPoste)">
-                        <td>{{sanction.idvigile?.noms}}</td>
-                        <td>{{sanction.dateSuivi | date:'yyyy-MM-dd'}}</td>
-                        <td>{{sanction.dateEffet | date:'yyyy-MM-dd'}}</td>
-                        <td>{{sanction.nombreAbsence}}</td>
-                        <td>{{sanction.motifSanction}}</td>
-                        <td>{{sanction.commentaire}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+      </div>
     </div>
+
+    <div style="margin-bottom: 40px; display: none;">
+      <div style="margin-top: 20px; margin-bottom: 16px;">
+        Equipements reçus
+      </div>
+      <div *ngIf="equipements.length === 0" style="opacity: 0.5">
+        Aucun équipement reçu
+      </div>
+      <div *ngIf="equipements.length  > 0">
+        <ng-container *ngFor="let equipement of equipements">
+          <ng-container *ngIf="equipement.quantite">
+            <app-display-equipement [equipement]="equipement"></app-display-equipement>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <div style="margin-top: 20px;" *ngIf="vigile">
+      <div class="card">
+        <div style="margin-top: 20px; margin-bottom: 20px;">
+          Historique des affectations
+        </div>
+        <app-tableau-affectations [vigile]="vigile"></app-tableau-affectations>
+      </div>
+    </div>
+    <div style="margin-top: 20px;" *ngIf="vigile">
+      <div style="margin-top: 20px; margin-bottom: 20px;">
+        Permissions accordées
+      </div>
+      <table datatable [dtOptions]="dtOptionsPermissions" [dtTrigger]="dtTriggerPermissions" class="row-border hover">
+        <thead>
+          <tr>
+            <th>Vigile</th>
+            <th>Du</th>
+            <th>Au</th>
+            <th>Commentaire</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let permission of permissions" (click)="edit(permission.idpermission)">
+            <td>{{permission.idvigile?.noms}}</td>
+            <td>{{permission.dateDebut | date:'yyyy-MM-dd'}}</td>
+            <td>{{permission.dateFin | date:'yyyy-MM-dd'}}</td>
+            <td>{{permission.commentaire}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 20px;" *ngIf="vigile">
+      <div style="margin-top: 20px; margin-bottom: 20px;">
+        Sanctions
+      </div>
+      <table datatable [dtOptions]="dtOptionsSanctions" [dtTrigger]="dtTriggerSanctions" class="row-border hover">
+        <thead>
+          <tr>
+            <th>Vigile</th>
+            <th>Date</th>
+            <th>Date Effet</th>
+            <th>Jours pris</th>
+            <th>Motif</th>
+            <th>Commentaire</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sanction of sanctions" (click)="edit(sanction.idsuiviPoste)">
+            <td>{{sanction.idvigile?.noms}}</td>
+            <td>{{sanction.dateSuivi | date:'yyyy-MM-dd'}}</td>
+            <td>{{sanction.dateEffet | date:'yyyy-MM-dd'}}</td>
+            <td>{{sanction.nombreAbsence}}</td>
+            <td>{{sanction.motifSanction}}</td>
+            <td>{{sanction.commentaire}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" #parrainModal id="parrainModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Arborescence des parrains
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Arborescence des parrains
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
 
-                <ul *ngFor="let p of parrains">
-                    <li [ngClass]="{'bold': p.idvigile === vigile.idvigile}">
-                        {{p.noms}}
-                        <br> Tel : {{p.tel}}
-                    </li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
-            </div>
-        </div>
+        <ul *ngFor="let p of parrains">
+          <li [ngClass]="{'bold': p.idvigile === vigile.idvigile}">
+            {{p.noms}}
+            <br> Tel : {{p.tel}}
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
+      </div>
     </div>
+  </div>
 </div>

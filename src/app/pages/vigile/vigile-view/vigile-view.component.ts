@@ -6,6 +6,7 @@ import * as bootstrap from 'bootstrap';
 import { initializeApp } from 'firebase/app';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { Subject } from 'rxjs';
+import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
 import { droits } from 'src/app/data/droits';
@@ -74,7 +75,7 @@ export class VigileViewComponent implements OnInit {
     private notifierService: NotifierService,
     private parrainService: ParrainService,
     private vigileService: JarvisService<Vigile>,
-    private affectationService: JarvisService<Affectation>,
+    private affectationService: AffectationCtrlService,
     private zoneService: JarvisService<ZoneDak>,
     private quartierService: JarvisService<Quartier>,
     private villeService: JarvisService<Ville>,
@@ -267,19 +268,19 @@ export class VigileViewComponent implements OnInit {
 
   getAffectionOfVigile(vigile: Vigile): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.affectationService.getAll('affectation').then((data) => {
+      this.affectationService.getAffectationsOfVigile(vigile).then((data) => {
         console.log('data');
         console.log(data);
         data.forEach((affectation) => {
-          if (vigile.estRemplacant) {
-            if (affectation.remplacant && affectation.remplacant.idvigile === vigile.idvigile) {
-              this.affectations.push(affectation);
-            }
-          } else {
-            if (affectation.idvigile.idvigile === vigile.idvigile) {
-              this.affectations.push(affectation);
-            }
+
+          if (affectation.remplacant && affectation.remplacant.idvigile === vigile.idvigile) {
+            this.affectations.push(affectation);
           }
+
+          if (affectation.idvigile.idvigile === vigile.idvigile) {
+            this.affectations.push(affectation);
+          }
+
         });
         resolve();
       });

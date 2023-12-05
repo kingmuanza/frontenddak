@@ -28,22 +28,6 @@
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text">
-                  Jour de repos
-                </span>
-              </div>
-              <select [(ngModel)]="affectation.jourRepos" class="form-control">
-                <option [value]="1">Lundi</option>
-                <option [value]="2">Mardi</option>
-                <option [value]="3">Mercredi</option>
-                <option [value]="4">Jeudi</option>
-                <option [value]="5">Vendredi</option>
-                <option [value]="6">Samedi</option>
-                <option [value]="7">Dimanche</option>
-              </select>
-            </div>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
                   Zone
                 </span>
               </div>
@@ -59,8 +43,8 @@
                   Poste
                 </span>
               </div>
-              <select (ngModelChange)="setAffectationACauseDuPoste()" type="text" [(ngModel)]="affectation.idposte"
-                class="form-control">
+              <select (ngModelChange)="setAffectationACauseDuPoste(); setJourRepos($event)"
+                [(ngModel)]="affectation.idposte" class="form-control">
                 <option [ngValue]="poste" *ngFor="let poste of postes">
                   {{poste.libelle}}
                 </option>
@@ -85,6 +69,23 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Jour de repos
+                </span>
+              </div>
+              <select [(ngModel)]="affectation.jourRepos" class="form-control">
+                <option [value]="1">Lundi</option>
+                <option [value]="2">Mardi</option>
+                <option [value]="3">Mercredi</option>
+                <option [value]="4">Jeudi</option>
+                <option [value]="5">Vendredi</option>
+                <option [value]="6">Samedi</option>
+                <option [value]="7">Dimanche</option>
+              </select>
             </div>
             <div
               *ngIf="!canNotBeAffectation || (canNotBeAffectation && affectationAArreterACauseDuPoste.idaffectation!==0)">
