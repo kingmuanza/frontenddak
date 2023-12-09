@@ -1,81 +1,95 @@
 .input-group {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .equipements {
-    padding: 20px;
-    padding-top: 10px;
-    border: 2px solid #303030;
-    margin-top: 20px;
-    &-titre {
-        font-weight: bold;
-    }
+  padding: 20px;
+  padding-top: 10px;
+  border: 2px solid #303030;
+  margin-top: 20px;
+
+  &-titre {
+    font-weight: bold;
+  }
 }
 
 .vigile {
-    height: 100px;
-    padding: 16px;
-    background-color: #efeefe;
+  height: 100px;
+  padding: 16px;
+  background-color: #efeefe;
 }
 
 .nav-link.active {
-    background-color: #fff;
-    color: #231709;
-    // font-weight: bold;
-    // font-weight: bold;
+  background-color: #fff;
+  color: #231709;
+  // font-weight: bold;
+  // font-weight: bold;
 }
 
 .infos-titre {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
 ul li.erreur {
-    color: red;
-    span {
-        color: #000;
-    }
+  color: red;
+
+  span {
+    color: #000;
+  }
 }
 
 .supprimer {
-    color: red;
-    cursor: pointer;
-    &:hover {
-        opacity: 0.5;
-    }
+  color: red;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.5;
+  }
 }
 
 .card {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .petit-titre {
-    margin-bottom: 10px;
-    color: #231709;
+  margin-bottom: 10px;
+  color: #231709;
 }
 
 .exigence {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .selectionnee {
-    border: 2px solid green;
-    margin-bottom: 20px;
+  border: 2px solid green;
+  margin-bottom: 20px;
 }
 
 .element-supprimable {
+  .supprimer {
+    display: none;
+  }
+
+  &:hover {
     .supprimer {
-        display: none;
+      display: inline;
     }
-    &:hover {
-        .supprimer {
-            display: inline;
-        }
-    }
+  }
 }
 
 .vigile-proposition {
-    cursor: pointer;
-    &:hover {
-        opacity: 0.5;
-    }
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+.voir-affectation {
+  margin-bottom: 20px;
+  margin-top: -10px;
+  text-align: center;
+  border: 1px solid #aaa;
+  padding: 10px;
+  border-top: 0px solid #fff;
 }

@@ -33,5 +33,9 @@ export class SuggestionsAffectationsPosteComponent implements OnInit {
     return this.affectationService.jourSemaine(Number(jour))
   }
 
+  isValidDate(d: any) {
+    let time = Date.parse(d)
+    return d instanceof Date && !isNaN(time);
+  }
 
 }

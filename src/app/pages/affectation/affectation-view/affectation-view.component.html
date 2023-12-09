@@ -15,6 +15,11 @@
     </div>
   </div>
   <div class="page-contenu">
+
+    <div *ngIf="affectation.arret" class="information-arret">
+      L'affectation a été mise à l'arrêt et ne peut être modifiée
+    </div>
+
     <div class="page-contenu-titre">
 
       <div class="page-contenu-corps">
@@ -29,7 +34,7 @@
               </div>
               <input [ngModel]="date | date: 'yyyy-MM-dd'" (ngModelChange)="date = $event" type="date"
                 class="form-control">
-              <button (click)="modifierDate()" class="btn btn-primary">
+              <button *ngIf="!affectation.arret" (click)="modifierDate()" class="btn btn-primary">
                 Mettre à jour
               </button>
             </div>
@@ -42,6 +47,7 @@
               </div>
               <input readonly [value]="affectation.idposte?.libelle" class="form-control">
             </div>
+
             <div>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -68,7 +74,7 @@
                   </option>
                 </ng-container>
               </select>
-              <button (click)="modifierRemplacant()" class="btn btn-primary">
+              <button *ngIf="!affectation.arret" (click)="modifierRemplacant()" class="btn btn-primary">
                 Mettre à jour le remplacant
               </button>
             </div>
@@ -89,7 +95,7 @@
                   <option [value]="6">Samedi</option>
                   <option [value]="7">Dimanche</option>
                 </select>
-                <button (click)="modifierJourDeRepos()" class="btn btn-primary">
+                <button *ngIf="!affectation.arret" (click)="modifierJourDeRepos()" class="btn btn-primary">
                   Mettre à jour le jour de repos
                 </button>
               </div>
@@ -101,16 +107,22 @@
                   Date de fin d'affectation
                 </span>
               </div>
-              <input [ngModel]="affectation.arret | date: 'yyyy-MM-dd'" (ngModelChange)="affectation.arret = $event"
-                type="date" class="form-control">
-              <button [disabled]="!affectation.arret" (click)="arreter()" class="btn btn-danger">
+              <input [ngModel]="arret | date: 'yyyy-MM-dd'" (ngModelChange)="arret = $event" type="date"
+                class="form-control">
+              <button *ngIf="!affectation.arret" [disabled]="!arret" (click)="arreter()" class="btn btn-danger">
                 Arrêter cette affectation
               </button>
             </div>
 
-            <div>
+            <div style="margin-top: 20px;">
               <button (click)="retour()" class="btn">
                 Retour
+              </button>
+              &nbsp;
+              &nbsp;
+              <button *ngIf="affectation.arret" [disabled]="!affectation.arret" (click)="relancer()"
+                class="btn btn-primary">
+                Relancer cette affectation
               </button>
             </div>
           </div>

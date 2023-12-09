@@ -7,6 +7,7 @@ import { Location } from '@angular/common';
 import { Vigile } from 'src/app/models/vigile.model';
 import { VigileService } from 'src/app/services/vigile.service';
 import { Poste } from 'src/app/models/poste.model';
+import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 
 @Component({
   selector: 'app-affectation-view',
@@ -22,12 +23,15 @@ export class AffectationViewComponent implements OnInit {
   rechercheVigile = "";
   jourRepos = "";
 
+  arret = undefined;
+
   constructor(
     private _location: Location,
     private route: ActivatedRoute,
     private router: Router,
     private notifierService: NotifierService,
     private affectationService: JarvisService<Affectation>,
+    private affectationCtrlService: AffectationCtrlService,
     private jarvisService: JarvisService<Vigile>,
     private posteService: JarvisService<Poste>,
     private vigileService: VigileService,
@@ -54,11 +58,26 @@ export class AffectationViewComponent implements OnInit {
 
   arreter() {
     console.log(this.affectation);
-    this.affectation.arret = new Date(this.affectation.arret);
-    this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
-      this.notifierService.notify('success', "Affectation mise en arrêt avec succès");
+    if (this.arret) {
+      this.affectation.arret = new Date(this.arret);
+      this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
+        this.notifierService.notify('success', "Affectation mise en arrêt avec succès");
+        this.router.navigate(['affectation']);
+      });
+    }
+  }
+
+  async relancer() {
+    console.log(this.affectation);
+    let aff = await this.affectationCtrlService.getAffectationOfVigile(this.affectation.idvigile);
+    if (aff) {
+      this.notifierService.notify('error', "Le vigile a dejà une autre affectation en cours au poste " + aff.idposte.libelle);
+    } else {
+      this.affectation.arret = null;
+      await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
+      this.notifierService.notify('success', "Affectation relancée avec succès");
       this.router.navigate(['affectation']);
-    });
+    }
   }
 
   modifierDate() {
@@ -69,12 +88,17 @@ export class AffectationViewComponent implements OnInit {
     });
   }
 
-  modifierRemplacant() {
-    this.affectation.remplacant = this.remplacant,
-      this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
-        this.notifierService.notify('success', "Remplacant mis à jour avec succès");
-        this.retour();
-      });
+  async modifierRemplacant() {
+    let ancienneAffectation = this.dupliquer(this.affectation);
+    await this.affectationService.ajouter('affectation', ancienneAffectation);
+    this.notifierService.notify('success', "Création d'une nouvelle affectation");
+
+    this.affectation.remplacant = this.remplacant;
+    this.affectation.dateAffectation = new Date();
+
+    await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
+    this.notifierService.notify('success', "Remplacant mis à jour avec succès");
+    this.retour();
   }
 
   async modifierJourDeRepos() {
@@ -108,6 +132,13 @@ export class AffectationViewComponent implements OnInit {
 
   retour() {
     this._location.back();
+  }
+
+  dupliquer(affectation: Affectation): Affectation {
+    let aff: Affectation = JSON.parse(JSON.stringify(affectation));
+    aff.idaffectation = 0;
+    aff.arret = new Date();
+    return aff;
   }
 
 }

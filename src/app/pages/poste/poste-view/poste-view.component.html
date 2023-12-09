@@ -137,13 +137,13 @@
           </div>
           <div class="row">
             <div class="col-lg-6" *ngFor="let affectation of affectations">
-
               <div style="border: 1px solid #aaa; ">
                 <app-vigile [vigile]="affectation.idvigile"></app-vigile>
               </div>
-              <div
-                style="margin-bottom: 20px; text-align: center;border: 1px solid #aaa; padding: 10px;border-top: 0px solid #fff;">
-                <a [routerLink]="'/affectation/view/'+affectation.idaffectation">Voir l'affectation</a>
+              <div class="voir-affectation">
+                <a [routerLink]="'/affectation/view/'+affectation.idaffectation">
+                  Voir l'affectation
+                </a>
               </div>
             </div>
           </div>

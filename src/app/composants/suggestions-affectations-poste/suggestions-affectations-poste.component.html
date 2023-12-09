@@ -14,7 +14,9 @@
   <tbody>
     <tr *ngFor="let sugg of suggestions; let i = index">
       <td scope="row">
-        {{sugg.dateAffectation | date:"yyyy-MM-dd"}}
+        <ng-container *ngIf="sugg.dateAffectation && isValidDate(sugg.dateAffectation)">
+          {{sugg.dateAffectation | date:"yyyy-MM-dd"}}
+        </ng-container>
       </td>
       <td scope="row">
         {{sugg.idposte.codeagiv }}
@@ -32,7 +34,7 @@
         {{jourSemaine(sugg.jourRepos)}}
       </td>
       <td scope="row" style="text-align: right;">
-        <ng-container *ngIf="sugg.arret">
+        <ng-container *ngIf="sugg.arret && isValidDate(sugg.arret)">
           {{sugg.arret | date:"yyyy-MM-dd"}}
         </ng-container>
       </td>

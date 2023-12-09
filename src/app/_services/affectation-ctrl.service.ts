@@ -109,7 +109,7 @@ export class AffectationCtrlService {
     return resultats
   }
 
-  async getAffectationOfVigile(vigile: Vigile): Promise<Affectation> {
+  async getAffectationOfVigile(vigile: Vigile): Promise<Affectation | undefined> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "vigile" + '/' + vigile.idvigile).subscribe({
         next: (data) => {

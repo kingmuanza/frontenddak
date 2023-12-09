@@ -177,15 +177,17 @@ export class PosteViewComponent implements OnInit {
   }
 
   getVigiles(texte: string) {
-    this.vigileService.rechercheCalme(texte).then((vigiles) => {
-      this.vigiles = vigiles;
-    });
+    if (texte.length > 3)
+      this.vigileService.rechercheCalme(texte).then((vigiles) => {
+        this.vigiles = vigiles;
+      });
   }
 
   getRemplacants(texte: string) {
-    this.vigileService.rechercheCalme(texte).then((vigiles) => {
-      this.remplacants = vigiles;
-    });
+    if (texte.length > 3)
+      this.vigileService.rechercheCalme(texte).then((vigiles) => {
+        this.remplacants = vigiles;
+      });
   }
 
   isVigileVerifieExigence(vigile: Vigile, exigence: PosteVigile): boolean {
@@ -199,30 +201,36 @@ export class PosteViewComponent implements OnInit {
   }
 
 
-  affecter(vigile: Vigile, remplacant: Vigile) {
+  async affecter(vigile: Vigile, remplacant: Vigile) {
     if (vigile) {
-      let affectation = new Affectation();
-      affectation.dateAffectation = new Date();
-      affectation.horaire = vigile.horaire;
-      affectation.idposte = this.poste;
-      affectation.idvigile = vigile;
-      if (remplacant) {
-        affectation.remplacant = remplacant;
-      }
-
-      if (this.affectation && this.affectation.idposte) {
-        this.affectation.arret = new Date();
-        this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
-          this.affectationService.ajouter('affectation', affectation).then(() => {
-            window.location.reload();
-          });
-        });
+      let affectationActuelleDuVigile = await this.affectationCtrlService.getAffectationOfVigile(vigile);
+      console.log('affectationActuelleDuVigile', affectationActuelleDuVigile)
+      if (affectationActuelleDuVigile && affectationActuelleDuVigile.idposte) {
+        let continuer = confirm("Le vigile " + vigile.noms + " est déjà affecté au poste suivant : "
+          + affectationActuelleDuVigile.idposte.libelle
+          + ". \nVoulez-vous mettre fin à cette affectation et créer une nouvelle ?");
+        if (continuer) {
+          this.saveAffectation(vigile, remplacant);
+        }
       } else {
-        this.affectationService.ajouter('affectation', affectation).then(() => {
-          window.location.reload();
-        });
+        this.saveAffectation(vigile, remplacant);
       }
     }
+  }
+
+  private saveAffectation(vigile: Vigile, remplacant: Vigile) {
+    let affectation = new Affectation();
+    affectation.dateAffectation = new Date();
+    affectation.horaire = vigile.horaire;
+    affectation.idposte = this.poste;
+    affectation.idvigile = vigile;
+    affectation.jourRepos = this.poste.jourRepos;
+    if (remplacant) {
+      affectation.remplacant = remplacant;
+    }
+    this.affectationService.ajouter('affectation', affectation).then(() => {
+      window.location.reload();
+    });
   }
 
   getAffectation(vigile: Vigile) {
