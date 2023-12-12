@@ -21,7 +21,7 @@ export class DisplayPointagesComponent implements OnInit {
     // console.log('idvigile');
     // console.log(idvigile);
     let affectations = this.affectations.filter((aff) => {
-      return aff.idvigile.idvigile == idvigile;
+      return aff.idvigile?.idvigile == idvigile;
     })
     // console.log(affectations[0])
     return affectations[0];

@@ -152,7 +152,7 @@ export class RecapVeilleComponent implements OnInit {
 
   getAffection(matricule: string): Affectation | undefined {
     let affectations = this.affectations.filter((aff) => {
-      return aff.idvigile.matricule == matricule;
+      return aff.idvigile?.matricule == matricule;
     })
     console.log(affectations[0])
     return affectations[0];
