@@ -19,8 +19,11 @@ export class AffectationViewComponent implements OnInit {
   affectation = new Affectation();
   date = new Date();
   remplacant = new Vigile();
+  vigile = new Vigile();
   vigiles = new Array<Vigile>();
+  remplacants = new Array<Vigile>();
   rechercheVigile = "";
+  rechercheRemplacant = "";
   jourRepos = "";
 
   arret = undefined;
@@ -47,8 +50,10 @@ export class AffectationViewComponent implements OnInit {
           this.affectation = affectation;
           this.jourRepos = affectation.jourRepos;
           this.date = this.affectation.dateAffectation;
+          this.vigile = this.affectation.idvigile;
           this.remplacant = this.affectation.remplacant;
-          this.vigiles = [this.remplacant];
+          this.remplacants = [this.remplacant];
+          this.vigiles = [this.vigile];
         });
       } else {
         this.affectation.dateAffectation = new Date().toISOString().split('T')[0];
@@ -69,14 +74,19 @@ export class AffectationViewComponent implements OnInit {
 
   async relancer() {
     console.log(this.affectation);
-    let aff = await this.affectationCtrlService.getAffectationOfVigile(this.affectation.idvigile);
-    if (aff) {
-      this.notifierService.notify('error', "Le vigile a dejà une autre affectation en cours au poste " + aff.idposte.libelle);
-    } else {
-      this.affectation.arret = null;
-      await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
-      this.notifierService.notify('success', "Affectation relancée avec succès");
-      this.router.navigate(['affectation']);
+    let oui = confirm("Etes-vous sur de vouloir relancer cette affectation ?");
+    if (oui) {
+      let aff = await this.affectationCtrlService.getAffectationOfVigile(this.affectation.idvigile);
+      console.log("affectation precedente");
+      console.log(aff);
+      if (aff && Object.keys(aff).length) {
+        this.notifierService.notify('error', "Le vigile a dejà une autre affectation en cours au poste " + aff.idposte.libelle);
+      } else {
+        this.affectation.arret = null;
+        await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
+        this.notifierService.notify('success', "Affectation relancée avec succès");
+        this.router.navigate(['affectation']);
+      }
     }
   }
 
@@ -86,6 +96,19 @@ export class AffectationViewComponent implements OnInit {
       this.notifierService.notify('success', "Date de l'affectation mise à jour avec succès");
       this.retour();
     });
+  }
+
+  async modifierVigile() {
+    let ancienneAffectation = this.dupliquer(this.affectation);
+    await this.affectationService.ajouter('affectation', ancienneAffectation);
+    this.notifierService.notify('success', "Création d'une nouvelle affectation");
+
+    this.affectation.idvigile = this.vigile;
+    this.affectation.dateAffectation = new Date();
+
+    await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
+    this.notifierService.notify('success', "Vigile mis à jour avec succès");
+    this.retour();
   }
 
   async modifierRemplacant() {
@@ -123,6 +146,13 @@ export class AffectationViewComponent implements OnInit {
     if (texte.length > 4)
       this.vigileService.rechercheCalme(texte).then((vigiles) => {
         this.vigiles = vigiles;
+      });
+  }
+
+  getRemplacants(texte: string) {
+    if (texte.length > 4)
+      this.vigileService.rechercheCalme(texte).then((vigiles) => {
+        this.remplacants = vigiles;
       });
   }
 

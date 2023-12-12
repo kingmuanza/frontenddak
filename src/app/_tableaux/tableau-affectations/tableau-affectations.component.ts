@@ -46,7 +46,7 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
   }
 
   edit(id: string | number) {
-    this.router.navigate(['affectation', 'edit', id]);
+    this.router.navigate(['affectation', 'view', id]);
   }
 
   jourSemaine(jour: number) {
@@ -60,15 +60,7 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
         console.log('data');
         console.log(data);
         data.forEach((affectation) => {
-          if (vigile.estRemplacant) {
-            if (affectation.remplacant && affectation.remplacant.idvigile === vigile.idvigile) {
-              this.affectations.push(affectation);
-            }
-          } else {
-            if (affectation.idvigile.idvigile === vigile.idvigile) {
-              this.affectations.push(affectation);
-            }
-          }
+          this.affectations.push(affectation);
         });
         resolve();
       });
@@ -78,10 +70,14 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
   refresh() {
     setTimeout(() => {
       this.getAffectionOfVigile(this.vigile).then(() => {
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
+        if (this.dtElement.dtInstance) {
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next('');
+          });
+        } else {
           this.dtTrigger.next('');
-        });
+        }
       });
 
     }, 500);

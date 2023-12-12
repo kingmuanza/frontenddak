@@ -55,7 +55,18 @@
                     Vigile
                   </span>
                 </div>
-                <input readonly type="text" [value]="affectation.idvigile?.noms" class="form-control">
+                <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
+                  class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
+                <select [(ngModel)]="vigile" class="form-control">
+                  <ng-container *ngFor="let v of vigiles | actifs">
+                    <option [ngValue]="v">
+                      {{v.noms}}
+                    </option>
+                  </ng-container>
+                </select>
+                <button *ngIf="!affectation.arret" (click)="modifierVigile()" class="btn btn-primary">
+                  Mettre à jour le titulaire
+                </button>
               </div>
             </div>
 
@@ -65,10 +76,10 @@
                   Remplacant
                 </span>
               </div>
-              <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text" class="form-control"
-                placeholder="Rechercher ici..." style="max-width: 150px;">
+              <input [(ngModel)]="rechercheRemplacant" (ngModelChange)="getRemplacants($event)" type="text"
+                class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
               <select [(ngModel)]="remplacant" class="form-control">
-                <ng-container *ngFor="let v of vigiles | actifs">
+                <ng-container *ngFor="let v of remplacants | actifs">
                   <option [ngValue]="v">
                     {{v.noms}}
                   </option>

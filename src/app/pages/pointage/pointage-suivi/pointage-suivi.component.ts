@@ -155,8 +155,12 @@ export class PointageSuiviComponent implements OnInit {
     }
     if (Number(affectation.jourRepos) == jour) {
       const remplacant = affectation.remplacant;
-      remplacant.noms = remplacant.noms
-      return { vigile: remplacant, isRemplacant: true };
+      if (remplacant) {
+        remplacant.noms = remplacant.noms
+        return { vigile: remplacant, isRemplacant: true };
+      } else {
+        return { vigile: affectation.idvigile, isRemplacant: true };
+      }
     } else {
       return { vigile: affectation.idvigile, isRemplacant: false };
     }
