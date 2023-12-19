@@ -1,3 +1,4 @@
+import { JourPris } from './../../../models/jourpris.model';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
@@ -27,6 +28,7 @@ export class SanctionEditComponent implements OnInit {
   nombre = 1;
   ojrdhui = new Date();
   datesPrises = new Array<Date>();
+  jourpris = new Array<JourPris>();
 
   mesDroits = droits;
 
@@ -39,6 +41,7 @@ export class SanctionEditComponent implements OnInit {
     private jarvisService: JarvisService<any>,
     private authService: AuthService,
     private vigileService: VigileService,
+    private jourPrisService: JarvisService<JourPris>,
   ) { }
 
   ngOnInit(): void {
@@ -63,7 +66,14 @@ export class SanctionEditComponent implements OnInit {
       if (id) {
         this.jarvisService.get('suiviposte', Number(id)).then((suivi) => {
           this.suivi = suivi;
-          this.getVigiles(this.suivi.idvigile.nom).then((vigiles) => {
+
+          this.jourPrisService.getAll("jourpris").then((jourpris) => {
+            this.jourpris = jourpris.filter((jp) => {
+              return jp.idsuiviPoste.idsuiviPoste === this.suivi.idsuiviPoste;
+            })
+          });
+
+          this.getVigiles(this.suivi.idvigile.noms).then((vigiles) => {
             this.vigiles = vigiles;
             console.log('le suivi recupéré');
             console.log(suivi);
@@ -102,7 +112,7 @@ export class SanctionEditComponent implements OnInit {
     });
   }
 
-  save() {
+  async save() {
     console.log('suivi à enregistrer');
     console.log(this.suivi);
     if (this.suivi.dateSuivi)
@@ -113,30 +123,30 @@ export class SanctionEditComponent implements OnInit {
     if (this.suivi.idsuiviPoste == 0) {
       if (this.suivi.motifSanction && this.suivi.idvigile) {
         this.processing = true;
-        this.jarvisService.ajouter('suiviposte', this.suivi).then((data) => {
-          console.log('data');
-          console.log(data);
-          this.processing = false;
-          this.notifierService.notify('success', "Ajout effectué avec succès");
-          this.router.navigate(['sanction']);
-        }).catch((e) => {
-          this.processing = false;
-        });
+        await this.jarvisService.ajouter('suiviposte', this.suivi);
+        this.notifierService.notify('success', "Ajout effectué avec succès");
       } else {
         this.notifierService.notify('error', "Veuillez renseigner un code et un libellé");
       }
     } else {
       this.processing = true;
-      this.jarvisService.modifier('suiviposte', this.suivi.idsuiviPoste, this.suivi).then((data) => {
-        console.log('data');
-        console.log(data);
-        this.processing = false;
-        this.notifierService.notify('success', "Modification effectuée avec succès");
-        this.router.navigate(['sanction']);
-      }).catch((e) => {
-        this.processing = false;
-      });
+      await this.jarvisService.modifier('suiviposte', this.suivi.idsuiviPoste, this.suivi);
+      this.notifierService.notify('success', "Modification effectuée avec succès");
     }
+
+    if (this.datesPrises.length > 1) {
+      for (let index = 0; index < this.datesPrises.length; index++) {
+        const date = this.datesPrises[index];
+        let jourpris = new JourPris();
+        jourpris.date = date;
+        jourpris.idsuiviPoste = this.suivi;
+        await this.jourPrisService.ajouter("jourpris", jourpris)
+        this.notifierService.notify('success', `${index + 1} jours avec succès`);
+      }
+    }
+
+    this.processing = false;
+    this.router.navigate(['sanction']);
   }
 
   supprimer() {

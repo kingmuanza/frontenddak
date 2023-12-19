@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { Vigile } from 'src/app/models/vigile.model';
 import { Ville } from 'src/app/models/ville.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 
@@ -41,8 +42,8 @@ export class JourprisListComponent implements OnInit {
     });
   }
 
-  edit(id: number) {
-    this.router.navigate(['jourpris', 'edit', id]);
+  edit(vigile: Vigile) {
+    this.router.navigate(['vigile', 'view', vigile.idvigile]);
   }
 
   ngOnDestroy(): void {

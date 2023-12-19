@@ -25,15 +25,17 @@
                 <th>ID</th>
                 <th>Date</th>
                 <th>Vigile</th>
-                <th>Consommee</th>
+                <th style="text-align: center;">Consommé</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let jourpris of resultats" (click)="edit(jourpris.idjourPris)">
+              <tr *ngFor="let jourpris of resultats" (click)="edit(jourpris.idsuiviPoste.idvigile)">
                 <td>{{jourpris.idjourPris}}</td>
                 <td>{{jourpris.date | date: "yyyy-MM-dd"}}</td>
                 <td>{{jourpris.idsuiviPoste.idvigile.noms}}</td>
-                <td>{{jourpris.consommee}}</td>
+                <td style="text-align: center;">
+                  <input type="checkbox" [(ngModel)]="jourpris.consommee" onclick="return false;">
+                </td>
               </tr>
             </tbody>
           </table>
