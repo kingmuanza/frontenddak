@@ -53,61 +53,42 @@ export class SanctionEditComponent implements OnInit {
           this.mesDroits = droits;
         }
       }
-
     });
     this.authService.notifier();
-
     this.ojrdhui.setDate(this.ojrdhui.getDate() - 1)
-    this.getPostes().then((postes) => {
-      this.postes = postes;
-      this.route.paramMap.subscribe((paramMap) => {
-        const id = paramMap.get('id');
 
-        if (id) {
-          this.jarvisService.get('suiviposte', Number(id)).then((suivi) => {
-            this.suivi = suivi;
-            this.getVigiles(this.suivi.idvigile.nom).then((vigiles) => {
-              this.vigiles = vigiles;
-              console.log('le suivi recupéré');
-              console.log(suivi);
-              this.calculerDatesFutures(suivi)
+    this.route.paramMap.subscribe((paramMap) => {
+      const id = paramMap.get('id');
 
-              this.suivi.dateSuivi = suivi.dateSuivi?.split('T')[0];
-              // this.suivi.arret = suivi.finContrat?.split('T')[0];
+      if (id) {
+        this.jarvisService.get('suiviposte', Number(id)).then((suivi) => {
+          this.suivi = suivi;
+          this.getVigiles(this.suivi.idvigile.nom).then((vigiles) => {
+            this.vigiles = vigiles;
+            console.log('le suivi recupéré');
+            console.log(suivi);
+            this.calculerDatesFutures(suivi)
 
-              this.getJourSemaine(this.suivi.dateSuivi);
-              postes.forEach((poste) => {
-                if (this.suivi.poste && poste.idposte == this.suivi.poste.idposte) {
-                  this.suivi.poste = poste;
-                }
-              });
-              vigiles.forEach((vigile) => {
-                if (this.suivi.idvigile && vigile.idvigile == this.suivi.idvigile.idvigile) {
-                  this.suivi.idvigile = vigile;
-                }
-              });
-              vigiles.forEach((vigile) => {
-                if (this.suivi.remplacant && vigile.idvigile == this.suivi.remplacant.idvigile) {
-                  this.suivi.remplacant = vigile;
-                }
-              });
+            this.suivi.dateSuivi = suivi.dateSuivi?.split('T')[0];
+
+            this.getJourSemaine(this.suivi.dateSuivi);
+
+            vigiles.forEach((vigile) => {
+              if (this.suivi.idvigile && vigile.idvigile == this.suivi.idvigile.idvigile) {
+                this.suivi.idvigile = vigile;
+              }
+            });
+            vigiles.forEach((vigile) => {
+              if (this.suivi.remplacant && vigile.idvigile == this.suivi.remplacant.idvigile) {
+                this.suivi.remplacant = vigile;
+              }
             });
           });
-        } else {
-          this.getJourSemaine();
-        }
+        });
+      } else {
+        this.getJourSemaine();
+      }
 
-      });
-    });
-  }
-
-  getPostes(): Promise<Array<any>> {
-    return new Promise((resolve, reject) => {
-      this.jarvisService.getAll('poste').then((postes) => {
-        console.log('postes');
-        console.log(postes);
-        resolve(postes);
-      });
     });
   }
 

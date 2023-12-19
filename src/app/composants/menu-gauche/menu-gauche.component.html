@@ -138,6 +138,16 @@
             Suivi des postes
           </a>
         </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.sanction">
+          <a routerLinkActive="active" routerLink="sanctionnees">
+            Sanctionnés
+          </a>
+        </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.sanction">
+          <a routerLinkActive="active" routerLink="jourpris">
+            Jour Pris
+          </a>
+        </div>
         <div class="menu-gauche-item" *ngIf="mesDroits.permission">
           <a routerLinkActive="active" routerLink="permission">
             Permissions

@@ -79,6 +79,9 @@ import { RecapJourneeComponent } from './pages/recap/recap-journee/recap-journee
 import { RecapZoneComponent } from './pages/recap/recap-zone/recap-zone.component';
 import { RecapVeilleComponent } from './pages/recap/recap-veille/recap-veille.component';
 import { RecapVeilleZoneComponent } from './pages/recap/recap-veille-zone/recap-veille-zone.component';
+import { SanctionneesListComponent } from './pages/sanction/sanctionnees-list/sanctionnees-list.component';
+import { SanctionneesViewComponent } from './pages/sanction/sanctionnees-view/sanctionnees-view.component';
+import { JourprisListComponent } from './pages/jourpris/jourpris-list/jourpris-list.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
@@ -160,6 +163,12 @@ const routes: Routes = [
   { path: 'poste/edit', component: PosteEditComponent },
   { path: 'poste/edit/:id', component: PosteEditComponent },
   { path: 'poste/view/:id', component: PosteViewComponent },
+
+  { path: 'sanctionnees', component: SanctionneesListComponent },
+  { path: 'sanctionnees/view/id', component: SanctionneesViewComponent },
+
+  { path: 'jourpris', component: JourprisListComponent },
+  { path: 'jourpris/view/id', component: SanctionneesViewComponent },
 
   { path: 'sanction', component: SanctionListComponent },
   { path: 'sanction/edit', component: SanctionEditComponent },

@@ -1,0 +1,43 @@
+<div class="page">
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      Liste des jours pris
+    </div>
+    <div class="boutons">
+      <div class="row">
+        <div class="col-lg-2">
+          <div class="nouveau">
+            <a routerLink="/sanction" class="btn nouveau">
+              Voir les sanctions
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="page-contenu-titre">
+      <div class="page-contenu-corps">
+        <div class="card shadow-1">
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table-border row-border hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Vigile</th>
+                <th>Consommee</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let jourpris of resultats" (click)="edit(jourpris.idjourPris)">
+                <td>{{jourpris.idjourPris}}</td>
+                <td>{{jourpris.date | date: "yyyy-MM-dd"}}</td>
+                <td>{{jourpris.idsuiviPoste.idvigile.noms}}</td>
+                <td>{{jourpris.consommee}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

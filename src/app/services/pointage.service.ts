@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
-import { collection, getDoc, getDocs } from "firebase/firestore";
+import { collection, getDoc, getDocs, query, where } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
@@ -43,6 +43,26 @@ export class PointageService {
           }
           pointages.push(x);
         });
+        resolve(pointages);
+      });
+    });
+  }
+
+  getAbsences(): Promise<Array<any>> {
+    console.log("get absences");
+    return new Promise((resolve, reject) => {
+      const pointages = new Array<any>();
+      const db = getFirestore(this.app);
+      let q = query(collection(db, "pointage"), where("absence", "==", true))
+      getDocs(q).then((resultats) => {
+        resultats.forEach((resultat) => {
+          let x = {
+            id: resultat.id,
+            ...resultat.data()
+          }
+          pointages.push(x);
+        });
+        console.log("return  absences");
         resolve(pointages);
       });
     });

@@ -111,6 +111,10 @@ import { DisplayPointagesComponent } from './composants/display-pointages/displa
 import { RecapVeilleComponent } from './pages/recap/recap-veille/recap-veille.component';
 import { RecapVeilleZoneComponent } from './pages/recap/recap-veille-zone/recap-veille-zone.component';
 import { SuggestionsAffectationsPosteComponent } from './composants/suggestions-affectations-poste/suggestions-affectations-poste.component';
+import { SanctionneesListComponent } from './pages/sanction/sanctionnees-list/sanctionnees-list.component';
+import { SanctionneesViewComponent } from './pages/sanction/sanctionnees-view/sanctionnees-view.component';
+import { JourprisListComponent } from './pages/jourpris/jourpris-list/jourpris-list.component';
+import { JourprisViewComponent } from './pages/jourpris/jourpris-view/jourpris-view.component';
 
 @NgModule({
   declarations: [
@@ -217,6 +221,10 @@ import { SuggestionsAffectationsPosteComponent } from './composants/suggestions-
     RecapVeilleComponent,
     RecapVeilleZoneComponent,
     SuggestionsAffectationsPosteComponent,
+    SanctionneesListComponent,
+    SanctionneesViewComponent,
+    JourprisListComponent,
+    JourprisViewComponent,
   ],
   imports: [
     BrowserModule,
