@@ -97,7 +97,7 @@ export class RecapVeilleZoneComponent implements OnInit {
   setDates() {
 
     // this.debut.setDate(this.debut.getDate() - 1);
-    this.debut.setDate(this.debut.getDate() - 10);
+    this.debut.setDate(this.debut.getDate() - 1);
     this.debut.setHours(6, 0, 0);
     this.fin.setHours(6, 0, 0);
   }
@@ -126,7 +126,7 @@ export class RecapVeilleZoneComponent implements OnInit {
 
               this.affectationService.getAll("affectation").then((affectations) => {
                 this.affectations = affectations.filter((aff) => {
-                  return aff.idposte.zone.code === code;
+                  return aff.idposte?.zone?.code === code;
                 });
                 console.log("Nombre de affectations : " + this.affectations.length);
 

@@ -78,8 +78,10 @@ export class VigileComponent implements OnInit, OnChanges {
           });
         } else {
           data.forEach((affectation) => {
-            if (affectation.idvigile.idvigile === vigile.idvigile && !affectation.arret) {
-              this.affectations.push(affectation);
+            if (affectation?.idvigile?.idvigile && vigile?.idvigile && !affectation.arret) {
+              if (affectation?.idvigile?.idvigile === vigile.idvigile && !affectation.arret) {
+                this.affectations.push(affectation);
+              }
             }
           });
         }

@@ -7,6 +7,7 @@ import { ZoneDak } from 'src/app/models/zone.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { PointageService } from 'src/app/services/pointage.service';
 import * as bootstrap from 'bootstrap';
+import { JourPris } from 'src/app/models/jourpris.model';
 
 @Component({
   selector: 'app-pointage-suivi',
@@ -29,12 +30,15 @@ export class PointageSuiviComponent implements OnInit {
     pointage: Pointage | undefined,
     vigile: Vigile,
     isRemplacant: boolean,
+    isSanctionnee?: boolean,
   }>();
   vigiles = new Array<Vigile>();
   zone = new ZoneDak();
   horaire = 'tous';
   date = new Date();
   pointages = new Array<Pointage>();
+
+  jourpriss = new Array<JourPris>();
 
   marge = 100;
 
@@ -43,10 +47,16 @@ export class PointageSuiviComponent implements OnInit {
     private posteService: JarvisService<Poste>,
     private zoneService: JarvisService<ZoneDak>,
     private affectationService: JarvisService<Affectation>,
+    private jourprisService: JarvisService<JourPris>,
   ) { }
 
   ngOnInit(): void {
 
+    this.jourprisService.getAll('jourpris').then((data) => {
+      console.log('data');
+      console.log(data);
+      this.jourpriss = data;
+    });
     this.pointageService.getPointages().then((pointages) => {
       // console.log('pointages');
       // console.log(pointages);
@@ -113,6 +123,7 @@ export class PointageSuiviComponent implements OnInit {
         pointage: pointage,
         vigile: vigile,
         isRemplacant: vigileStatus.isRemplacant,
+        isSanctionnee: vigileStatus.isSanctionnee,
       }
     });
   }
@@ -146,7 +157,7 @@ export class PointageSuiviComponent implements OnInit {
     this.resultatsAffectations = this.resultatsAffectations.reverse();
   }
 
-  showVigile(affectation: Affectation, d: Date): { vigile: Vigile, isRemplacant: boolean } {
+  showVigile(affectation: Affectation, d: Date): { vigile: Vigile, isRemplacant: boolean, isSanctionnee?: boolean } {
     console.log("showVigile")
     const date = new Date(d);
     let jour = date.getDay();
@@ -155,8 +166,16 @@ export class PointageSuiviComponent implements OnInit {
     }
     if (Number(affectation.jourRepos) == jour) {
       const remplacant = affectation.remplacant;
+      const sanctionnee = this.jourpriss.filter((jp) => {
+        if (affectation.idvigile?.idvigile && jp.idsuiviPoste?.idvigile?.idvigile) {
+          return affectation.idvigile?.idvigile === jp.idsuiviPoste?.idvigile?.idvigile
+        }
+        return false;
+      });
+      if (sanctionnee.length > 0) {
+        return { vigile: affectation.idvigile, isRemplacant: false, isSanctionnee: true };
+      }
       if (remplacant) {
-        remplacant.noms = remplacant.noms
         return { vigile: remplacant, isRemplacant: true };
       } else {
         return { vigile: affectation.idvigile, isRemplacant: true };

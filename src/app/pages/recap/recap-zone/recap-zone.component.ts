@@ -127,7 +127,7 @@ export class RecapZoneComponent implements OnInit {
 
               this.affectationService.getAll("affectation").then((affectations) => {
                 this.affectations = affectations.filter((aff) => {
-                  return aff.idposte.zone.code === code;
+                  return aff.idposte?.zone?.code === code;
                 });
                 console.log("Nombre de affectations : " + this.affectations.length);
 
