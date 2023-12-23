@@ -101,12 +101,17 @@ export class SanctionneesListComponent implements OnInit {
 
     console.log("Starting online importation");
 
-    this.pointages = await this.pointageService.getAbsences()
+    pointages = await this.pointageService.getAbsences();
+    console.log("pointages", pointages);
     for (let i = 0; i < pointages.length; i++) {
       const pointage = pointages[i];
       if (pointage.absence && pointage.idvigile && pointage.id) {
-        if (Number(pointage.id.slice(0, 14)) > this.numeroLePlusHaut) {
+        console.log((i + 1) + " a traversé la première ligne ");
+
+        if (Number(pointage.id.slice(0, 14)) > this.numeroLePlusHaut || true) {
+          console.log((i + 1) + " a traversé la deuxième ligne ");
           if (!this.isNumeroDansNumeros(pointage.id)) {
+            console.log((i + 1) + " a traversé la troisième ligne ");
             let identifiant = pointage.id.slice(0, 8) + '' + pointage.idvigile;
             console.log(identifiant);
             if (!this.isElementDansListe(identifiant, doubles)) {

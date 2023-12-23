@@ -72,7 +72,7 @@
 
               <td>
                 <div *ngIf="data.pointage ">
-                  {{ toDate(data.pointage?.date) | date: 'yyyy-MM-dd HH:mm:ss'}}
+                  {{ toDate(data.pointage.date) | date: 'yyyy-MM-dd HH:mm:ss'}}
                 </div>
               </td>
 
@@ -95,11 +95,11 @@
               <td>
                 <div *ngIf="data.pointage">
                   <b *ngIf="data.pointage?.raison">
-                    {{ data.pointage?.raison }} :
+                    {{ data.pointage.raison }} :
                   </b>
                   <ng-container *ngIf="data.pointage?.commentaire">
 
-                    "{{ data.pointage?.commentaire }}"
+                    "{{ data.pointage.commentaire }}"
                   </ng-container>
 
                 </div>

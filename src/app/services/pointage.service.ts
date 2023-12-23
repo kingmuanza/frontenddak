@@ -51,19 +51,20 @@ export class PointageService {
   getAbsences(): Promise<Array<any>> {
     console.log("get absences");
     return new Promise((resolve, reject) => {
-      const pointages = new Array<any>();
+      const absences = new Array<any>();
       const db = getFirestore(this.app);
-      let q = query(collection(db, "pointage"), where("absence", "==", true))
+      let q = query(collection(db, "pointage"), where("absence", "==", true));
       getDocs(q).then((resultats) => {
         resultats.forEach((resultat) => {
           let x = {
             id: resultat.id,
             ...resultat.data()
           }
-          pointages.push(x);
+          absences.push(x);
         });
-        console.log("return  absences");
-        resolve(pointages);
+        console.log("return absences");
+        console.log(absences.length);
+        resolve(absences);
       });
     });
   }
