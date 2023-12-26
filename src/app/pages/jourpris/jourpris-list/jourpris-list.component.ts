@@ -25,6 +25,10 @@ export class JourprisListComponent implements OnInit {
   resultats = new Array<JourPris>();
   villes = new Array<Ville>();
   ville = null;
+  aujourdhui: Date | undefined;
+
+  consommation = "tous";
+
 
   constructor(
     private router: Router,
@@ -42,8 +46,72 @@ export class JourprisListComponent implements OnInit {
     });
   }
 
+
+
   edit(vigile: Vigile) {
     this.router.navigate(['vigile', 'view', vigile.idvigile]);
+  }
+
+  rechercher() {
+    if (this.aujourdhui) {
+      this.jourprisService.getAll('jourpris').then((data) => {
+        console.log('data');
+        console.log(data);
+        this.jourpriss = data.filter((jourPris) => {
+          let dateSuivi = new Date(jourPris.date);
+          dateSuivi.setDate(dateSuivi.getDate() + 1)
+          const jourSuivi = dateSuivi.toISOString().split("T")[0];
+          const jour = new Date(this.aujourdhui!).toISOString().split("T")[0];
+          const mmJour = jourSuivi == jour;
+          console.log("dateSuivi", dateSuivi)
+          console.log("jourSuivi", jourSuivi)
+          console.log("jour", jour)
+          console.log("mmJour", mmJour)
+          return mmJour
+        });
+        this.resultats = this.jourpriss;
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger.next('');
+        });
+      });
+    } else {
+      this.jourprisService.getAll('jourpris').then((data) => {
+        console.log('data');
+        console.log(data);
+        this.jourpriss = data;
+        this.resultats = data;
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger.next('');
+        });
+      });
+
+    }
+  }
+
+  afficher(event: any) {
+    console.log("event", event);
+    switch (event) {
+      case "tous":
+        this.resultats = this.jourpriss;
+        break;
+
+      case "consommees":
+        this.resultats = this.jourpriss.filter((j) => j.consommee);
+        break;
+
+      case "nonconsommees":
+        this.resultats = this.jourpriss.filter((j) => !j.consommee);
+        break;
+
+      default:
+        break;
+    }
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next('');
+    });
   }
 
   ngOnDestroy(): void {

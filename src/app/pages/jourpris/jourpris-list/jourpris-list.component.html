@@ -1,7 +1,7 @@
 <div class="page">
   <div class="page-entete">
     <div class="page-entete-titre">
-      Liste des jours pris
+      Liste des sanctionnés et des jours pris
     </div>
     <div class="boutons">
       <div class="row">
@@ -12,8 +12,33 @@
             </a>
           </div>
         </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Date
+              </span>
+            </div>
+            <input [ngModel]="aujourdhui | date:'yyyy-MM-dd'" (ngModelChange)="aujourdhui = $event" type="date"
+              class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <button (click)="rechercher()" class="btn primaire">Rechercher</button>
+        </div>
       </div>
     </div>
+  </div>
+  <div>
+    <span class="consommation">
+      <input type="radio" name="consommation" (change)="afficher('tous')" value="tous"> Tous
+    </span>
+    <span class="consommation">
+      <input type="radio" name="consommation" (change)="afficher('consommees')" value="consommees"> Consommés
+    </span>
+    <span class="consommation">
+      <input type="radio" name="consommation" (change)="afficher('nonconsommees')" value="nonconsommees"> Non consommés
+    </span>
   </div>
   <div class="page-contenu">
     <div class="page-contenu-titre">
