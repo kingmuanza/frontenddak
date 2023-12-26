@@ -243,7 +243,7 @@
       <div class="modal-body">
         <ol>
           <li *ngFor="let id of postesControles" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
-            {{getAffectionByPoste(id)?.idposte.libelle}}
+            {{getAffectionByPoste(id)?.idposte?.libelle}}
           </li>
         </ol>
       </div>
@@ -444,7 +444,7 @@
       <div class="modal-body">
         <ol>
           <li *ngFor="let id of postesControlesUneFois" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
-            {{getAffectionByPoste(id)?.idposte.libelle}}
+            {{getAffectionByPoste(id)?.idposte?.libelle}}
           </li>
         </ol>
       </div>
@@ -468,7 +468,7 @@
       <div class="modal-body">
         <ol>
           <li *ngFor="let id of postesControlesDeuxFois" style="border-bottom: 1px solid #aaa; padding-bottom: 10px;">
-            {{getAffectionByPoste(id)?.idposte.libelle}}
+            {{getAffectionByPoste(id)?.idposte?.libelle}}
           </li>
         </ol>
       </div>

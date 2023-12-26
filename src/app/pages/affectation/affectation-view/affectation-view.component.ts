@@ -134,7 +134,7 @@ export class AffectationViewComponent implements OnInit {
       this.affectation.idvigile.jourRepos = Number(this.jourRepos);
       await this.jarvisService.modifier('vigile', this.affectation.idvigile.idvigile, this.affectation.idvigile);
 
-      this.affectation.idposte.jourRepos = Number(this.jourRepos);
+      this.affectation.idposte.jourRepos = Number(this.jourRepos) + "";
       await this.posteService.modifier('poste', this.affectation.idposte.idposte, this.affectation.idposte);
 
       this.notifierService.notify('success', "Jour de repos mis à jour avec succès");

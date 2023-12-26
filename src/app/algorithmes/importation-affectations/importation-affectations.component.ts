@@ -84,7 +84,7 @@ export class ImportationAffectationsComponent implements OnInit {
                       let affectation = new Affectation();
                       affectation.dateAffectation = affectationBrute.date;
                       affectation.horaire = affectationBrute.horaire;
-                      affectation.idposte = affectationBrute.posteLocal;
+                      affectation.idposte = affectationBrute.posteLocal!;
                       affectation.idvigile = affectationBrute.vigile!;
                       affectation.jourRepos = affectationBrute.jourRepos;
                       affectation.remplacant = affectationBrute.remplacantVigile;
@@ -108,7 +108,7 @@ export class ImportationAffectationsComponent implements OnInit {
                       let affectation = new Affectation();
                       affectation.dateAffectation = affectationBrute.date;
                       affectation.horaire = affectationBrute.horaire;
-                      affectation.idposte = affectationBrute.posteLocal;
+                      affectation.idposte = affectationBrute.posteLocal!;
                       affectation.idvigile = affectationBrute.vigile!;
                       affectation.jourRepos = affectationBrute.jourRepos;
                       affectation.remplacant = affectationBrute.remplacantVigile;

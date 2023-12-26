@@ -1,127 +1,126 @@
 <div class="page">
-    <div class="page-entete">
-        <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
-            {{vigile.noms}}
-        </div>
-        <div *ngIf="vigile.idvigile==0" class="page-entete-titre">
-            Ajouter un vigile
-        </div>
+  <div class="page-entete">
+    <div *ngIf="vigile.idvigile!=0" class="page-entete-titre">
+      {{vigile.noms}}
+    </div>
+    <div *ngIf="vigile.idvigile==0" class="page-entete-titre">
+      Ajouter un vigile
+    </div>
+    <div>
+      <div>
+        {{libelleFonction(vigile.fonction)}}
+      </div>
+      <div>
+        {{affectation?.idposte?.libelle}}
+      </div>
+    </div>
+    <div class="">
+      <a *ngIf="vigile.idvigile!=0" [routerLink]="'/vigile/view/' + vigile.idvigile" class="btn btn-link"
+        style="padding: 0; margin-right: 20px;">
+        Voir
+      </a>
+      <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
+        Revenir à la liste des vigiles
+      </a>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#home" type="button"
+            role="tab" aria-controls="home" aria-selected="true">
+            Informations
+          </a>
+        </li>
+        <li *ngIf="vigile.idvigile != 0" class="nav-item" role="presentation">
+          <a class="nav-link" id="conges-tab" data-bs-toggle="tab" data-bs-target="#conges" type="button" role="tab"
+            aria-controls="conges" aria-selected="false">
+            Congés
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab"
+            aria-controls="profile" aria-selected="false">
+            Equipements
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link " id="photo-tab" data-bs-toggle="tab" data-bs-target="#photo" type="button" role="tab"
+            aria-controls="photo" aria-selected="false">
+            Photo
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="tab-content" id="myTabContent"
+      style="background-color: #fff; padding: 10px; padding-left: 16px; padding-right: 16px; padding-top: 2px;">
+
+      <div *ngIf="vigile.idvigile != 0" class="tab-pane fade" id="photo" role="tabpanel" aria-labelledby="photo-tab">
         <div>
-            <div>
-                {{libelleFonction(vigile.fonction)}}
+          <div class="row">
+            <div class="col-lg-6">
+              <div style="margin-bottom: 20px; margin-top: 20px;">
+                <img [src]="url" style="width: 100%;">
+              </div>
+
             </div>
-            <div>
-                {{affectation?.idposte.libelle}}
-            </div>
+          </div>
         </div>
-        <div class="">
-            <a *ngIf="vigile.idvigile!=0" [routerLink]="'/vigile/view/' + vigile.idvigile" class="btn btn-link"
-                style="padding: 0; margin-right: 20px;">
-                Voir
-            </a>
-            <a routerLink="/vigile" class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la liste des vigiles
-            </a>
+      </div>
+
+      <div class="tab-pane fade" id="conges" role="tabpanel" aria-labelledby="conges-tab">
+        <app-form-conge [idvigile]="vigile.idvigile" [vigiles]="vigiles" (onSaveEvent)="save()">
+        </app-form-conge>
+      </div>
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div *ngIf="vigile.idvigile === 0">
+          <app-form-vigile [vigile]="vigile" [vigiles]="[]" [quartiers]="quartiers" [villes]="villes"
+            [nationalites]="nationalites" (onSupprimerEvent)="supprimer()" (onSaveEvent)="save()">
+          </app-form-vigile>
         </div>
+        <div *ngIf="vigile.idvigile !== 0">
+          <app-form-vigile [vigile]="vigile" [vigiles]="[]" [quartiers]="quartiers" [villes]="villes"
+            [nationalites]="nationalites" (onSupprimerEvent)="supprimer()" (onSaveEvent)="save()">
+          </app-form-vigile>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <app-form-equipement [vigile]="vigile"></app-form-equipement>
+      </div>
     </div>
-    <div class="page-contenu">
-        <div class="">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#home"
-                        type="button" role="tab" aria-controls="home" aria-selected="true">
-                        Informations
-                    </a>
-                </li>
-                <li *ngIf="vigile.idvigile != 0" class="nav-item" role="presentation">
-                    <a class="nav-link" id="conges-tab" data-bs-toggle="tab" data-bs-target="#conges" type="button"
-                        role="tab" aria-controls="conges" aria-selected="false">
-                        Congés
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
-                        role="tab" aria-controls="profile" aria-selected="false">
-                        Equipements
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link " id="photo-tab" data-bs-toggle="tab" data-bs-target="#photo" type="button"
-                        role="tab" aria-controls="photo" aria-selected="false">
-                        Photo
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="tab-content" id="myTabContent"
-            style="background-color: #fff; padding: 10px; padding-left: 16px; padding-right: 16px; padding-top: 2px;">
-
-            <div *ngIf="vigile.idvigile != 0" class="tab-pane fade" id="photo" role="tabpanel"
-                aria-labelledby="photo-tab">
-                <div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div style="margin-bottom: 20px; margin-top: 20px;">
-                                <img [src]="url" style="width: 100%;">
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="conges" role="tabpanel" aria-labelledby="conges-tab">
-                <app-form-conge [idvigile]="vigile.idvigile" [vigiles]="vigiles" (onSaveEvent)="save()">
-                </app-form-conge>
-            </div>
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div *ngIf="vigile.idvigile === 0">
-                    <app-form-vigile [vigile]="vigile" [vigiles]="[]" [quartiers]="quartiers" [villes]="villes"
-                        [nationalites]="nationalites" (onSupprimerEvent)="supprimer()" (onSaveEvent)="save()">
-                    </app-form-vigile>
-                </div>
-                <div *ngIf="vigile.idvigile !== 0">
-                    <app-form-vigile [vigile]="vigile" [vigiles]="[]" [quartiers]="quartiers" [villes]="villes"
-                        [nationalites]="nationalites" (onSupprimerEvent)="supprimer()" (onSaveEvent)="save()">
-                    </app-form-vigile>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <app-form-equipement [vigile]="vigile"></app-form-equipement>
-            </div>
-        </div>
-        <div style="height: 25vh;">
-
-        </div>
+    <div style="height: 25vh;">
 
     </div>
+
+  </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" #parrainModal id="parrainModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Arborescence des parrains
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Arborescence des parrains
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
 
-                <ul *ngFor="let p of parrains">
-                    <li [ngClass]="{'bold': p.idvigile === vigile.idvigile}">
-                        {{p.noms}}
-                        <br> Tel : {{p.tel}}
-                    </li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
-            </div>
-        </div>
+        <ul *ngFor="let p of parrains">
+          <li [ngClass]="{'bold': p.idvigile === vigile.idvigile}">
+            {{p.noms}}
+            <br> Tel : {{p.tel}}
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
+      </div>
     </div>
+  </div>
 </div>

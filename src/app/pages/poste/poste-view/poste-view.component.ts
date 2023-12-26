@@ -20,8 +20,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { VigileService } from 'src/app/services/vigile.service';
 import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
-import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { getFirestore, setDoc, doc, query, collection, getDocs, where, deleteDoc } from 'firebase/firestore';
 import { Suivi } from 'src/app/models/suivi.model';
+import { AffectationLigne } from 'src/app/models/affectation.ligne.model';
 
 @Component({
   selector: 'app-poste-view',
@@ -39,6 +40,7 @@ export class PosteViewComponent implements OnInit {
   zones = new Array<any>();
   quartiers = new Array<any>();
   affectations = new Array<Affectation>();
+  affectationsLignes = new Array<any>();
   vigiles = new Array<Vigile>();
   remplacants = new Array<Vigile>();
   remplacantsDuPoste = new Array<Vigile>();
@@ -122,6 +124,10 @@ export class PosteViewComponent implements OnInit {
           console.log(poste);
           this.poste = poste;
 
+          this.getAffectationsEnLigne().then((affectationsLignes) => {
+            this.affectationsLignes = affectationsLignes;
+          });
+
           this.jourRepos = this.poste.jourRepos;
 
           this.getAffectationsInAGIV(this.poste).then((suggestions) => {
@@ -158,6 +164,27 @@ export class PosteViewComponent implements OnInit {
     });
   }
 
+  getAffectationsEnLigne(): Promise<Array<any>> {
+    console.log("get affectations");
+    return new Promise((resolve, reject) => {
+      const affectationsLignes = new Array<any>();
+      const db = getFirestore(this.app);
+      let q = query(collection(db, "affectation"), where("codeagiv", "==", this.poste.codeagiv));
+      getDocs(q).then((resultats) => {
+        resultats.forEach((resultat) => {
+          let x = {
+            id: resultat.id,
+            ...resultat.data()
+          }
+          affectationsLignes.push(x);
+        });
+        console.log("return affectationsLignes");
+        console.log(affectationsLignes.length);
+        resolve(affectationsLignes);
+      });
+    });
+  }
+
   mettreEnLigne() {
     console.log('mettre en ligne');
     const db = getFirestore(this.app);
@@ -165,10 +192,28 @@ export class PosteViewComponent implements OnInit {
       console.log("Terminé");
       console.log(value);
       console.log(this.poste);
-
       this.notifierService.notify('success', "Mise en ligne effectuée avec succès");
     });
+  }
 
+  async mettreEnLigneLesAffectations() {
+    for (let index = 0; index < this.affectations.length; index++) {
+      const affectation = this.affectations[index];
+      let affectationLigne = new AffectationLigne();
+      affectationLigne.id = affectation.idvigile.matricule
+      affectationLigne.nomsVigile = affectation.idvigile.noms
+      affectationLigne.matricule = affectation.idvigile.matricule
+      affectationLigne.idposte = affectation.idposte.idposte
+      affectationLigne.jourRepos = affectation.jourRepos
+      affectationLigne.libellePoste = affectation.idposte.libelle
+      affectationLigne.codeagiv = affectation.idposte.codeagiv
+      const db = getFirestore(this.app);
+      await setDoc(doc(db, "affectation", affectationLigne.id + ""), JSON.parse(JSON.stringify(affectationLigne)));
+      console.log("Terminé");
+      console.log(affectationLigne);
+      this.notifierService.notify('success', "Mise en ligne de " + affectationLigne.nomsVigile + " effectuée avec succès");
+    }
+    window.location.reload();
   }
 
   openGoogleMap() {
@@ -273,13 +318,27 @@ export class PosteViewComponent implements OnInit {
     return this.affectationCtrlService.getAffectationsInAGIV(poste);
   }
 
-
   modifierJourDeRepos() {
     this.poste.jourRepos = this.jourRepos;
     this.jarvisService.modifier('poste', this.poste.idposte, this.poste).then(() => {
       this.notifierService.notify('success', "Jour de repos mis à jour avec succès");
 
     });
+  }
+
+  supprimer(affectationLigne: AffectationLigne) {
+    let oui = confirm("Etes-vous sûr de vouloir mettre l'affectation en ligne ?");
+    if (oui) {
+      console.log('supprimer affectationLigne');
+      const db = getFirestore(this.app);
+      deleteDoc(doc(db, "affectation", affectationLigne.id + "")).then((value) => {
+        console.log("Terminé");
+        console.log(value);
+        console.log(affectationLigne);
+        this.notifierService.notify('success', "Suppression effectuée avec succès");
+        window.location.reload();
+      });
+    }
   }
 
 

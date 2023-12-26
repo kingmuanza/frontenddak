@@ -36,9 +36,14 @@
           </a>
         </div>
       </div>
-      <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
-        <button class="btn btn-primary" (click)="mettreEnLigne()">
-          Mettre en ligne &nbsp; <i class="bi bi-cloud-arrow-up-fill"></i>
+      <div class="col-lg-3" *ngIf="mesDroits.posteEdit">
+        <button class="btn btn-primary" (click)="mettreEnLigne()" style="width: 100%;">
+          Mettre en ligne les infos &nbsp; <i class="bi bi-cloud-arrow-up-fill"></i>
+        </button>
+      </div>
+      <div class="col-lg-3" *ngIf="mesDroits.posteEdit">
+        <button class="btn btn-success" (click)="mettreEnLigneLesAffectations()" style="width: 100%;">
+          Mettre en ligne les affectations &nbsp; <i class="bi bi-cloud-arrow-up-fill"></i>
         </button>
       </div>
     </div>
@@ -46,6 +51,34 @@
   <div class="page-contenu">
     <div class="row">
       <div class="col-lg-5">
+
+        <div class="card affectations-ligne">
+          <div class="">
+            <div class="card-title">
+              Affectations en ligne
+            </div>
+            <table class="table">
+              <tbody>
+                <tr *ngFor="let affectationLigne of affectationsLignes">
+                  <td style="width: 100px;">
+                    <b>
+                      {{affectationLigne.matricule}}
+                    </b>
+                  </td>
+                  <td>
+                    {{affectationLigne.nomsVigile}}
+                  </td>
+                  <td style="text-align: right;">
+                    <button (click)="supprimer(affectationLigne)" class="btn btn-sm btn-danger btn-error">
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <div class="card">
           <div>
             <div class="petit-titre">

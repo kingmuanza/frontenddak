@@ -153,7 +153,7 @@ export class RecapJourneeComponent implements OnInit {
       }
     }
     return affs.map((a) => {
-      return a.idposte.idposte;
+      return a.idposte.idposte + "";
     });
   }
 
