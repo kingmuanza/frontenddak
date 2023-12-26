@@ -1,79 +1,86 @@
 <div class="page">
-    <div class="page-entete">
-        <div class="page-entete-titre">
-            Suivi de postes
-        </div>
-        <div class="boutons">
-            <div class="row">
-                <div class="col-lg-3" *ngIf="mesDroits.vigileEdit">
-                    <div class="nouveau">
-                        <a routerLink="/sanction/edit" class="btn nouveau">
-                            Ajouter une sanction
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <button (click)="importer()" class="btn primaire">Importer</button>
-                </div>
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Date
-                            </span>
-                        </div>
-                        <input type="date" name="date" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Horaire
-                            </span>
-                        </div>
-                        <select type="date" name="date" class="form-control">
-                            <option value="jour">Jour</option>
-                            <option value="nuit">Nuit</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-2">
-                    <button class="btn primaire">Rechercher</button>
-                </div>
-            </div>
-        </div>
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      Suivi de postes
     </div>
-    <div class="page-contenu">
-        <div class="page-contenu-corps">
-            <div class="card shadow-1">
-                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Date Sanction</th>
-                            <th>Date Effet</th>
-                            <th>Jours</th>
-                            <th>Vigile</th>
-                            <th>Horaire</th>
-                            <th>Commentaire</th>
-                            <th>Pointage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let sanction of sanctions" (click)="edit(sanction.idsuiviPoste)">
-                            <td>{{sanction.idsuiviPoste}}</td>
-                            <td>{{sanction.dateSuivi | date: 'yyyy-MM-dd'}}</td>
-                            <td>{{sanction.dateEffet | date: 'yyyy-MM-dd'}}</td>
-                            <td>{{sanction.nombreAbsence}}</td>
-                            <td>{{sanction.idvigile?.noms}}</td>
-                            <td style="text-transform: capitalize;">{{sanction.horaire}}</td>
-                            <td>{{sanction.commentaire}}</td>
-                            <td>{{sanction.numero}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <p>
+      Nous récupérons la date à laquelle la sanction a été notifiée
+    </p>
+    <div class="boutons">
+      <div class="row">
+        <div class="col-lg-3" *ngIf="mesDroits.vigileEdit">
+          <div class="nouveau">
+            <a routerLink="/sanction/edit" class="btn nouveau">
+              Ajouter une sanction
+            </a>
+          </div>
         </div>
+        <div class="col-lg-2">
+          <button (click)="importer()" class="btn primaire">Importer</button>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Date
+              </span>
+            </div>
+            <input [ngModel]="aujourdhui | date:'yyyy-MM-dd'" (ngModelChange)="aujourdhui = $event" type="date"
+              class="form-control">
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Horaire
+              </span>
+            </div>
+            <select type="date" name="date" class="form-control">
+              <option value="jour">Jour</option>
+              <option value="nuit">Nuit</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <button (click)="rechercher()" class="btn primaire">Rechercher</button>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="page-contenu">
+    <div class="page-contenu-corps">
+      <div class="card shadow-1">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+          <thead>
+            <tr>
+              <th>Date Sanction</th>
+              <th>Date Effet</th>
+              <th>Jours à prendre</th>
+              <th>Vigile</th>
+              <th>Jour Repos</th>
+              <th>Commentaire</th>
+              <th style="text-align: right;">Jours Confirmés</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sanction of sanctions" (click)="edit(sanction.idsuiviPoste)">
+              <td>{{sanction.dateSuivi | date: 'yyyy-MM-dd HH:mm'}}</td>
+              <td>{{sanction.dateEffet | date: 'yyyy-MM-dd'}}</td>
+              <td>{{sanction.nombreAbsence}}</td>
+              <td>{{sanction.idvigile?.noms}}</td>
+              <td>
+                <ng-container *ngIf="sanction.idvigile?.jourRepos">
+                  {{jourSemaine(sanction.idvigile?.jourRepos)}}
+                </ng-container>
+
+              </td>
+              <td>{{sanction.commentaire}}</td>
+              <td style="text-align: right;">{{joursConfirmes(sanction)}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

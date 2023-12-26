@@ -4,6 +4,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { droits } from 'src/app/data/droits';
+import { JourPris } from 'src/app/models/jourpris.model';
 import { Suivi } from 'src/app/models/suivi.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { AuthService } from 'src/app/services/auth.service';
@@ -29,6 +30,9 @@ export class SanctionListComponent implements OnInit, OnDestroy {
   numeros = new Array<string>();
 
   numeroLePlusHaut = 0;
+  jourpris = new Array<JourPris>();
+
+  aujourdhui: Date | undefined;
 
   mesDroits = droits;
 
@@ -38,6 +42,7 @@ export class SanctionListComponent implements OnInit, OnDestroy {
     private vigileService: JarvisService<Vigile>,
     private pointageService: PointageService,
     private authService: AuthService,
+    private jourPrisService: JarvisService<JourPris>,
   ) { }
 
   ngOnInit(): void {
@@ -54,27 +59,77 @@ export class SanctionListComponent implements OnInit, OnDestroy {
 
     });
     this.authService.notifier();
-    this.suiviService.getAll('suiviposte').then((data) => {
-      console.log('data');
-      console.log(data);
-      this.sanctions = data;
-      this.sanctions.forEach((sanction) => {
-        if (sanction.numero) {
-          this.numeros.push(sanction.numero);
-        }
-      });
-      console.log("this.numeros");
-      console.log(this.numeros);
-      this.numeroLePlusHaut = this.getNumeroLePlusHaut();
-
-      console.log("this.numeroLePlusHaut");
-      console.log(this.numeroLePlusHaut);
+    this.getInfos().then(() => {
       this.dtTrigger.next('');
-      this.pointageService.getPointages().then((pointages) => {
-        this.pointages = pointages;
+    });
+  }
 
+  getInfos() {
+    return new Promise((resolve, reject) => {
+      this.jourPrisService.getAll("jourpris").then((jourpris) => {
+        this.jourpris = jourpris;
+
+        this.suiviService.getAll('suiviposte').then((data) => {
+          console.log('data');
+          console.log(data);
+          this.sanctions = data.filter((s) => {
+            if (this.aujourdhui) {
+              let dateSuivi = new Date(s.dateSuivi);
+              dateSuivi.setDate(dateSuivi.getDate() + 1)
+              const jourSuivi = dateSuivi.toISOString().split("T")[0];
+              const jour = new Date(this.aujourdhui).toISOString().split("T")[0];
+              const mmJour = jourSuivi == jour;
+              console.log("dateSuivi", dateSuivi)
+              console.log("jourSuivi", jourSuivi)
+              console.log("jour", jour)
+              console.log("mmJour", mmJour)
+              return mmJour
+            } else {
+              return true
+            }
+          });
+          this.sanctions.forEach((sanction) => {
+            if (sanction.numero) {
+              this.numeros.push(sanction.numero);
+            }
+          });
+          console.log("this.numeros");
+          console.log(this.numeros);
+          this.numeroLePlusHaut = this.getNumeroLePlusHaut();
+
+          console.log("this.numeroLePlusHaut");
+          console.log(this.numeroLePlusHaut);
+          resolve(this.sanctions);
+        });
       });
     });
+  }
+
+  rechercher() {
+    if (this.aujourdhui) {
+      console.log("this.aujourdhui");
+      console.log(this.aujourdhui);
+      this.getInfos().then(() => {
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger.next('');
+        });
+      })
+    } else {
+      this.getInfos().then(() => {
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger.next('');
+        });
+      })
+    }
+  }
+
+  joursConfirmes(suivi: Suivi) {
+    let jourPris = this.jourpris.filter((jp) => {
+      return jp.idsuiviPoste.idsuiviPoste === suivi.idsuiviPoste;
+    });
+    return jourPris.length
   }
 
 
@@ -97,17 +152,24 @@ export class SanctionListComponent implements OnInit, OnDestroy {
     return is;
   }
 
-
   async importOnlineAbsences(pointages: any[]): Promise<number> {
     // Evitez les doubles absences
     let doubles = new Array<string>();
     let n = 0;
 
+    console.log("Starting online importation");
+
+    pointages = await this.pointageService.getAbsences();
+    console.log("pointages", pointages);
     for (let i = 0; i < pointages.length; i++) {
       const pointage = pointages[i];
       if (pointage.absence && pointage.idvigile && pointage.id) {
-        if (Number(pointage.id.slice(0, 14)) > this.numeroLePlusHaut) {
+        console.log((i + 1) + " a traversé la première ligne ");
+
+        if (Number(pointage.id.slice(0, 14)) > this.numeroLePlusHaut || true) {
+          console.log((i + 1) + " a traversé la deuxième ligne ");
           if (!this.isNumeroDansNumeros(pointage.id)) {
+            console.log((i + 1) + " a traversé la troisième ligne ");
             let identifiant = pointage.id.slice(0, 8) + '' + pointage.idvigile;
             console.log(identifiant);
             if (!this.isElementDansListe(identifiant, doubles)) {
@@ -135,8 +197,11 @@ export class SanctionListComponent implements OnInit, OnDestroy {
       }
     }
 
+    console.log("Ending online importation");
+
     return n;
   }
+
 
   toDate(timestp: any): Date {
     if (timestp.seconds) {

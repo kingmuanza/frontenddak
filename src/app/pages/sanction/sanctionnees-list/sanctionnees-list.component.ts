@@ -93,7 +93,6 @@ export class SanctionneesListComponent implements OnInit {
     return is;
   }
 
-
   async importOnlineAbsences(pointages: any[]): Promise<number> {
     // Evitez les doubles absences
     let doubles = new Array<string>();
