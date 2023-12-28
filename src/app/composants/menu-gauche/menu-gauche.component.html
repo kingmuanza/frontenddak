@@ -128,6 +128,11 @@
             Affectations
           </a>
         </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.affectation">
+          <a routerLinkActive="active" routerLink="affectation-temporaire">
+            Affectations temporaires
+          </a>
+        </div>
         <div class="menu-gauche-item" *ngIf="mesDroits.switchs">
           <a routerLinkActive="active" routerLink="switch">
             Switchs

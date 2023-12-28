@@ -115,6 +115,8 @@ import { SanctionneesListComponent } from './pages/sanction/sanctionnees-list/sa
 import { SanctionneesViewComponent } from './pages/sanction/sanctionnees-view/sanctionnees-view.component';
 import { JourprisListComponent } from './pages/jourpris/jourpris-list/jourpris-list.component';
 import { JourprisViewComponent } from './pages/jourpris/jourpris-view/jourpris-view.component';
+import { AffectationTemporaireListComponent } from './pages/affectation-temporaire/affectation-temporaire-list/affectation-temporaire-list.component';
+import { AffectationTemporaireEditComponent } from './pages/affectation-temporaire/affectation-temporaire-edit/affectation-temporaire-edit.component';
 
 @NgModule({
   declarations: [
@@ -225,6 +227,8 @@ import { JourprisViewComponent } from './pages/jourpris/jourpris-view/jourpris-v
     SanctionneesViewComponent,
     JourprisListComponent,
     JourprisViewComponent,
+    AffectationTemporaireListComponent,
+    AffectationTemporaireEditComponent,
   ],
   imports: [
     BrowserModule,

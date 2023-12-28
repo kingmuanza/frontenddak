@@ -82,6 +82,8 @@ import { RecapVeilleZoneComponent } from './pages/recap/recap-veille-zone/recap-
 import { SanctionneesListComponent } from './pages/sanction/sanctionnees-list/sanctionnees-list.component';
 import { SanctionneesViewComponent } from './pages/sanction/sanctionnees-view/sanctionnees-view.component';
 import { JourprisListComponent } from './pages/jourpris/jourpris-list/jourpris-list.component';
+import { AffectationTemporaireEditComponent } from './pages/affectation-temporaire/affectation-temporaire-edit/affectation-temporaire-edit.component';
+import { AffectationTemporaireListComponent } from './pages/affectation-temporaire/affectation-temporaire-list/affectation-temporaire-list.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
@@ -111,6 +113,10 @@ const routes: Routes = [
   { path: 'affectation/edit', component: AffectationCreateComponent },
   { path: 'affectation/edit/:id', component: AffectationEditComponent },
   { path: 'affectation/view/:id', component: AffectationViewComponent },
+
+  { path: 'affectation-temporaire', component: AffectationTemporaireListComponent },
+  { path: 'affectation-temporaire/edit', component: AffectationTemporaireEditComponent },
+  { path: 'affectation-temporaire/edit/:id', component: AffectationTemporaireEditComponent },
 
   { path: 'conge-dashboard', component: CongeDashboardComponent },
   { path: 'conge', component: CongeListComponent },

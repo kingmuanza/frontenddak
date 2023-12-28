@@ -10,4 +10,5 @@ export class Affectation {
   horaire = '';
   jourRepos = '';
   remplacant: any;
+  placement = 0;
 }

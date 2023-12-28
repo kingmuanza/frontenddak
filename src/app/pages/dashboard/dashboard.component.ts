@@ -93,12 +93,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.posteService.getAll('poste').then((data) => {
       this.postes = data;
     });
-
-    this.calculService.getBesoinVigiles().then((besoinVigile) => {
-      this.besoinVigile = besoinVigile;
-      this.terminee = true;
-    });
-
+    /*
+        this.calculService.getBesoinVigiles().then((besoinVigile) => {
+          this.besoinVigile = besoinVigile;
+          this.terminee = true;
+        });
+     */
     this.zoneService.getAll('zone').then((zones) => {
       console.log('data');
       console.log(zones);
