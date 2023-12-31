@@ -9,6 +9,7 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 import { VigileService } from 'src/app/services/vigile.service';
 import { Location } from '@angular/common';
 import { JourPris } from 'src/app/models/jourpris.model';
+import { ZoneDak } from 'src/app/models/zone.model';
 
 @Component({
   selector: 'app-affectation-temporaire-edit',
@@ -19,18 +20,21 @@ export class AffectationTemporaireEditComponent implements OnInit {
 
   affectation = new Affectation();
   date = new Date();
+  arret = new Date();
   remplacant = new Vigile();
   vigile = new Vigile();
   vigiles = new Array<Vigile>();
   remplacants = new Array<Vigile>();
   rechercheVigile = "";
-  rechercheRemplacant = "";
   jourRepos = "";
 
   jourpriss = new Array<JourPris>();
+  jourpris = new JourPris();
   resultats = new Array<JourPris>();
 
-  arret = undefined;
+  postes = new Array<Poste>();
+  zone = new ZoneDak();
+  zones = new Array<ZoneDak>();
 
   constructor(
     private _location: Location,
@@ -43,9 +47,17 @@ export class AffectationTemporaireEditComponent implements OnInit {
     private posteService: JarvisService<Poste>,
     private vigileService: VigileService,
     private jourprisService: JarvisService<JourPris>,
+    private zoneService: JarvisService<ZoneDak>,
+    private jourPrisService: JarvisService<JourPris>,
   ) { }
 
   ngOnInit(): void {
+    this.setFin();
+    this.zoneService.getAll('zone').then((data) => {
+      console.log('data');
+      console.log(data);
+      this.zones = data;
+    });
     this.route.paramMap.subscribe((paramMap) => {
       const id = paramMap.get('id');
       if (id) {
@@ -73,15 +85,10 @@ export class AffectationTemporaireEditComponent implements OnInit {
     });
   }
 
-  arreter() {
-    console.log(this.affectation);
-    if (this.arret) {
-      this.affectation.arret = new Date(this.arret);
-      this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
-        this.notifierService.notify('success', "Affectation mise en arrêt avec succès");
-        this.router.navigate(['affectation']);
-      });
-    }
+  setFin() {
+    this.arret = new Date(this.date);
+    let date = new Date(this.date);
+    this.arret.setDate(date.getDate() + 1);
   }
 
   async relancer() {
@@ -102,57 +109,56 @@ export class AffectationTemporaireEditComponent implements OnInit {
     }
   }
 
-  modifierDate() {
-    this.affectation.dateAffectation = new Date(this.date);
-    this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation).then(() => {
-      this.notifierService.notify('success', "Date de l'affectation mise à jour avec succès");
-      this.retour();
+  setListePostes(zone: ZoneDak) {
+    this.getPostes(zone).then((postes) => {
+      this.postes = postes.sort((a, b) => {
+        return a.libelle > b.libelle ? 1 : -1;
+      });
     });
   }
 
-  async modifierVigile() {
-    let ancienneAffectation = this.dupliquer(this.affectation);
-    await this.affectationService.ajouter('affectation', ancienneAffectation);
-    this.notifierService.notify('success', "Création d'une nouvelle affectation");
-
-    this.affectation.idvigile = this.vigile;
-    this.affectation.dateAffectation = new Date();
-
-    await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
-    this.notifierService.notify('success', "Vigile mis à jour avec succès");
-    this.retour();
+  getPostes(zone: ZoneDak): Promise<Array<Poste>> {
+    return new Promise((resolve, reject) => {
+      this.posteService.getAll('poste').then((data) => {
+        const postes = new Array<Poste>();
+        console.log('postes');
+        console.log(postes);
+        data.forEach((poste) => {
+          if (poste.zone.idzone == zone.idzone) {
+            postes.push(poste);
+          }
+        });
+        resolve(postes);
+      });
+    });
   }
 
-  async modifierRemplacant() {
-    let ancienneAffectation = this.dupliquer(this.affectation);
-    await this.affectationService.ajouter('affectation', ancienneAffectation);
-    this.notifierService.notify('success', "Création d'une nouvelle affectation");
+  async creerAffectation() {
+    if (!this.jourpris) {
+      return;
+    }
+    this.affectation.type = "1";
+    this.affectation.dateAffectation = new Date(this.date);
 
-    this.affectation.remplacant = this.remplacant;
-    this.affectation.dateAffectation = new Date();
+    this.affectation.arret = new Date(this.arret);
+    let vigile = await this.jarvisService.get("vigile", this.jourpris.idsuiviPoste.idvigile.idvigile)
+    this.affectation.idvigile = vigile;
+    console.log("Affectation");
+    console.log(this.affectation);
 
-    await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
-    this.notifierService.notify('success', "Remplacant mis à jour avec succès");
-    this.retour();
-  }
-
-  async modifierJourDeRepos() {
-    let oui = confirm("Les jours de repos du vigile et du poste seront aussi mis à jour. Voulez-vous continuer ? ");
-    if (oui) {
-
-      this.affectation.jourRepos = this.jourRepos;
-      await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
-
-      this.affectation.idvigile.jourRepos = Number(this.jourRepos);
-      await this.jarvisService.modifier('vigile', this.affectation.idvigile.idvigile, this.affectation.idvigile);
-
-      this.affectation.idposte.jourRepos = Number(this.jourRepos) + "";
-      await this.posteService.modifier('poste', this.affectation.idposte.idposte, this.affectation.idposte);
-
-      this.notifierService.notify('success', "Jour de repos mis à jour avec succès");
+    this.jourpris.consommee = true;
+    try {
+      await this.affectationService.ajouter('affectation', this.affectation);
+      await this.jourPrisService.modifier("jourpris", this.jourpris.idjourPris, this.jourpris);
+      this.notifierService.notify('success', "Création d'une nouvelle affectation temporaire");
       this.retour();
+
+    } catch (error) {
+      console.log("error")
+      console.log(error)
     }
   }
+
 
   getVigiles(texte: string) {
     if (texte.length > 4) {
@@ -162,14 +168,9 @@ export class AffectationTemporaireEditComponent implements OnInit {
       this.resultats = this.jourpriss.filter((j) => {
         return j.idsuiviPoste.idvigile.noms.toLowerCase().indexOf(texte.toLowerCase()) !== -1
       })
+    } else {
+      this.resultats = this.jourpriss
     }
-  }
-
-  getRemplacants(texte: string) {
-    if (texte.length > 4)
-      this.vigileService.rechercheCalme(texte).then((vigiles) => {
-        this.remplacants = vigiles;
-      });
   }
 
   jourSemaine(jour: number | string) {

@@ -331,8 +331,10 @@ export class AffectationCreateComponent implements OnInit {
     let affectation: Affectation | null;
     affectation = null;
     this.affectations.forEach((aff) => {
-      if (!aff.arret && aff.remplacant.idvigile === vigile.idvigile && aff.idvigile.jourRepos === jour) {
-        affectation = aff;
+      if (!aff.arret && aff.remplacant && aff.idvigile) {
+        if (aff.remplacant.idvigile === vigile.idvigile && aff.idvigile.jourRepos === jour) {
+          affectation = aff;
+        }
       }
     });
 

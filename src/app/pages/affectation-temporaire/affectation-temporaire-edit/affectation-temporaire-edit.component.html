@@ -2,7 +2,7 @@
   <div class="page-entete">
     <div *ngIf="affectation.idposte" class="page-entete-titre">
       <b>
-        {{affectation.idposte.libelle}}
+        Effectuer une affectation temporaire
       </b>
     </div>
     <div *ngIf="affectation.idvigile" class="page-entete-titre">
@@ -16,10 +16,6 @@
   </div>
   <div class="page-contenu">
 
-    <div *ngIf="affectation.arret" class="information-arret">
-      L'affectation a été mise à l'arrêt et ne peut être modifiée
-    </div>
-
     <div class="page-contenu-titre">
 
       <div class="page-contenu-corps">
@@ -32,11 +28,30 @@
                   Date affectation
                 </span>
               </div>
-              <input [ngModel]="date | date: 'yyyy-MM-dd'" (ngModelChange)="date = $event" type="date"
+              <input [ngModel]="date | date: 'yyyy-MM-dd'" (ngModelChange)="date = $event; setFin()" type="date"
                 class="form-control">
-              <button *ngIf="!affectation.arret" (click)="modifierDate()" class="btn btn-primary">
-                Mettre à jour
-              </button>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Date de fin d'affectation
+                </span>
+              </div>
+              <input [ngModel]="arret | date: 'yyyy-MM-dd'" (ngModelChange)="arret = $event" type="date"
+                class="form-control">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Zone
+                </span>
+              </div>
+              <select (ngModelChange)="setListePostes($event)" type="text" [(ngModel)]="zone" class="form-control">
+                <option [ngValue]="z" *ngFor="let z of zones">
+                  {{z.libelle}}
+                </option>
+              </select>
             </div>
 
             <div class="input-group mb-3">
@@ -45,7 +60,11 @@
                   Poste
                 </span>
               </div>
-              <input readonly [value]="affectation.idposte?.libelle" class="form-control">
+              <select [(ngModel)]="affectation.idposte" class="form-control">
+                <option [ngValue]="poste" *ngFor="let poste of postes">
+                  {{poste.libelle}}
+                </option>
+              </select>
             </div>
 
             <div>
@@ -57,7 +76,7 @@
                 </div>
                 <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
                   class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
-                <select [(ngModel)]="vigile" class="form-control">
+                <select [(ngModel)]="jourpris" class="form-control">
                   <ng-container *ngFor="let v of resultats">
                     <option [ngValue]="v">
                       {{v.date|date:"yyyy-MM-dd"}}
@@ -66,76 +85,18 @@
                     </option>
                   </ng-container>
                 </select>
-                <button *ngIf="!affectation.arret" (click)="modifierVigile()" class="btn btn-primary">
-                  Mettre à jour le titulaire
-                </button>
               </div>
-            </div>
-
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  Remplacant
-                </span>
-              </div>
-              <input [(ngModel)]="rechercheRemplacant" (ngModelChange)="getRemplacants($event)" type="text"
-                class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
-              <select [(ngModel)]="remplacant" class="form-control">
-                <ng-container *ngFor="let v of remplacants | actifs">
-                  <option [ngValue]="v">
-                    {{v.noms}}
-                  </option>
-                </ng-container>
-              </select>
-              <button *ngIf="!affectation.arret" (click)="modifierRemplacant()" class="btn btn-primary">
-                Mettre à jour le remplacant
-              </button>
-            </div>
-
-            <div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    Jour de repos
-                  </span>
-                </div>
-                <select [(ngModel)]="jourRepos" class="form-control">
-                  <option [value]="1">Lundi</option>
-                  <option [value]="2">Mardi</option>
-                  <option [value]="3">Mercredi</option>
-                  <option [value]="4">Jeudi</option>
-                  <option [value]="5">Vendredi</option>
-                  <option [value]="6">Samedi</option>
-                  <option [value]="7">Dimanche</option>
-                </select>
-                <button *ngIf="!affectation.arret" (click)="modifierJourDeRepos()" class="btn btn-primary">
-                  Mettre à jour le jour de repos
-                </button>
-              </div>
-            </div>
-
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  Date de fin d'affectation
-                </span>
-              </div>
-              <input [ngModel]="arret | date: 'yyyy-MM-dd'" (ngModelChange)="arret = $event" type="date"
-                class="form-control">
-              <button *ngIf="!affectation.arret" [disabled]="!arret" (click)="arreter()" class="btn btn-danger">
-                Arrêter cette affectation
-              </button>
             </div>
 
             <div style="margin-top: 20px;">
-              <button (click)="retour()" class="btn">
-                Retour
+
+              <button *ngIf="!affectation.arret" (click)="creerAffectation()" class="btn btn-primary">
+                Créer l'affectation temporaire
               </button>
               &nbsp;
               &nbsp;
-              <button *ngIf="affectation.arret" [disabled]="!affectation.arret" (click)="relancer()"
-                class="btn btn-primary">
-                Relancer cette affectation
+              <button (click)="retour()" class="btn">
+                Retour
               </button>
             </div>
           </div>

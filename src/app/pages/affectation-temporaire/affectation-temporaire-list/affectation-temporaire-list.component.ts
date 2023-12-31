@@ -64,9 +64,9 @@ export class AffectationTemporaireListComponent implements OnInit, OnDestroy {
     this.affectationService.getAll('affectation').then((data) => {
       console.log('data');
       console.log(data);
-      this.affectations = data.filter((aff) => aff.placement);
-      this.resultats = data.filter((aff) => aff.placement);
-      this.resultatsPrimaires = data.filter((aff) => aff.placement);
+      this.affectations = data.filter((aff) => aff.type);
+      this.resultats = data.filter((aff) => aff.type);
+      this.resultatsPrimaires = data.filter((aff) => aff.type);
       // this.afficherAffectationsEnCours(this.afficher);
       this.dtTrigger.next('');
     });
