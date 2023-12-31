@@ -94,22 +94,22 @@
                 <th>Zone</th>
                 <th>Horaire</th>
                 <th>Vigile</th>
-                <th>Repos</th>
-                <th>Remplacant</th>
-                <th>Arrêt</th>
+                <th>en Ligne</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let affectation of resultats" (click)="edit(affectation.idaffectation)">
+              <tr *ngFor="let affectation of resultats">
                 <td>{{affectation.idaffectation}}</td>
                 <td noWrap>{{affectation.dateAffectation?.split('T')[0]}}</td>
                 <td>{{affectation.idposte?.libelle}}</td>
                 <td>{{affectation.idposte?.zone.libelle}}</td>
                 <td>{{affectation.idposte?.zone?.horaire}}</td>
                 <td>{{affectation.idvigile?.noms}}</td>
-                <td>{{jourSemaine(affectation.jourRepos)}}</td>
-                <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
-                <td>{{affectation.arret?.split('T')[0]}}</td>
+                <td>
+                  <button class="btn btn-sm" (click)="mettreEnLigneTemporaire(affectation)">
+                    Mettre en ligne
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>

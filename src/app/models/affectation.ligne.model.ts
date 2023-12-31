@@ -6,5 +6,6 @@ export class AffectationLigne {
   jourRepos: string | number = 0;
   libellePoste = "";
   matricule = "";
-  nomsVigile = ""
+  nomsVigile = "";
+  dateAffectation = new Date();
 }

@@ -10,6 +10,9 @@ import { VigileService } from 'src/app/services/vigile.service';
 import { Location } from '@angular/common';
 import { JourPris } from 'src/app/models/jourpris.model';
 import { ZoneDak } from 'src/app/models/zone.model';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { AffectationLigne } from 'src/app/models/affectation.ligne.model';
 
 @Component({
   selector: 'app-affectation-temporaire-edit',
@@ -36,6 +39,8 @@ export class AffectationTemporaireEditComponent implements OnInit {
   zone = new ZoneDak();
   zones = new Array<ZoneDak>();
 
+  app: any;
+
   constructor(
     private _location: Location,
     private route: ActivatedRoute,
@@ -49,7 +54,18 @@ export class AffectationTemporaireEditComponent implements OnInit {
     private jourprisService: JarvisService<JourPris>,
     private zoneService: JarvisService<ZoneDak>,
     private jourPrisService: JarvisService<JourPris>,
-  ) { }
+  ) {
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
+      authDomain: "dak-security.firebaseapp.com",
+      projectId: "dak-security",
+      storageBucket: "dak-security.appspot.com",
+      messagingSenderId: "448692904510",
+      appId: "1:448692904510:web:216883edce596209e6276f",
+      measurementId: "G-L0FKMS4EQH"
+    };
+    this.app = initializeApp(firebaseConfig);
+  }
 
   ngOnInit(): void {
     this.setFin();
@@ -151,6 +167,7 @@ export class AffectationTemporaireEditComponent implements OnInit {
       await this.affectationService.ajouter('affectation', this.affectation);
       await this.jourPrisService.modifier("jourpris", this.jourpris.idjourPris, this.jourpris);
       this.notifierService.notify('success', "Création d'une nouvelle affectation temporaire");
+      await this.mettreEnLigneTemporaire(this.affectation);
       this.retour();
 
     } catch (error) {
@@ -159,6 +176,25 @@ export class AffectationTemporaireEditComponent implements OnInit {
     }
   }
 
+  async mettreEnLigneTemporaire(affectation: Affectation) {
+    let aff: AffectationLigne = {
+      id: affectation.idvigile.matricule,
+      idvigile: affectation.idvigile.idvigile,
+      matricule: affectation.idvigile.matricule,
+      nomsVigile: affectation.idvigile.noms,
+      idposte: affectation.idposte.idposte,
+      libellePoste: affectation.idposte.libelle,
+      codeagiv: affectation.idposte.codeagiv,
+      jourRepos: affectation.jourRepos,
+      dateAffectation: affectation.dateAffectation,
+    }
+    console.log("affectation temporaire " + aff.id);
+    const db = getFirestore(this.app);
+    let ref = doc(db, "affectation-temporaire", aff.id);
+    await setDoc(ref, JSON.parse(JSON.stringify(aff)), { merge: true });
+    console.log("affectation " + aff.id + " mis à jour");
+    this.notifierService.notify('success', "Affectation temporaire mise en ligne");
+  }
 
   getVigiles(texte: string) {
     if (texte.length > 4) {
