@@ -7,7 +7,7 @@ import { Changement } from 'src/app/models/changement.model';
 import { Poste } from 'src/app/models/poste.model';
 import { Vigile } from 'src/app/models/vigile.model';
 import { JarvisService } from 'src/app/services/jarvis.service';
-import { doc, setDoc } from "firebase/firestore";
+import { Timestamp, doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { Responsable } from 'src/app/models/responsable.model';
@@ -135,7 +135,7 @@ export class SwitchEditComponent implements OnInit {
     this.affectationsResultats = new Array<Affectation>().concat(this.affectations);
     setTimeout(() => {
       this.affectationsResultats = this.affectationsResultats.filter((affectation) => {
-        return affectation.idposte.idposte === this.poste.idposte;
+        return affectation.idposte && this.poste && affectation.idposte.idposte === this.poste.idposte;
       });
     }, 250);
   }
@@ -144,6 +144,8 @@ export class SwitchEditComponent implements OnInit {
     console.log(this.changement);
     this.changement.idvigileBase = this.changement.idaffectation.idvigile;
     if (this.changement.idswitch == 0) {
+      const db = getFirestore(this.app);
+      this.changement.date = Timestamp.fromDate(new Date());
       this.processing = true;
       this.changementService.ajouter('switch', this.changement).then((data) => {
         console.log('data');

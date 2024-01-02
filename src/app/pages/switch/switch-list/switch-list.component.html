@@ -31,18 +31,6 @@
       </div>
     </div>
   </div>
-  <div style="display: none;">
-    les remplacem,nts
-    <div style="margin-bottom: 40px;" *ngFor="let s of remplacements">
-      {{s | json}}
-    </div>
-  </div>
-  <div class="page-contenu" style="display: none;">
-    <span style="margin-right: 40px;">
-      <input type="radio" name="validees" [(ngModel)]="statut" value="aucun">&nbsp; Demandes de switchs
-    </span>
-    <input type="radio" name="validees" [(ngModel)]="statut" value="valide">&nbsp; Switchs validés
-  </div>
   <div [ngStyle]="{'display': statut==='aucun' ? 'block': 'none'}" class="page-contenu">
     <div class="page-contenu-titre">
       <div class="page-contenu-corps">
@@ -99,15 +87,19 @@
                 {{demande.nomsVigileSwitch}}
               </b>
             </div>
+            <div>
+              Statut :
+              <b>
+                {{demande.responsable ? "Validé": "En attente"}}
+              </b>
+            </div>
             <div style="margin-top: 20px;">
-
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">
                     Responsable
                   </span>
                 </div>
-
                 <select type="text" [(ngModel)]="responsable" class="form-control"
                   [ngClass]="{'is-invalid': !responsable && montrerErreur}">
                   <ng-container *ngFor="let r of responsables">

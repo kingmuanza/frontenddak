@@ -101,10 +101,10 @@
               <tr *ngFor="let affectation of resultats">
                 <td>{{affectation.idaffectation}}</td>
                 <td noWrap>{{affectation.dateAffectation?.split('T')[0]}}</td>
-                <td>{{affectation.idposte?.libelle}}</td>
-                <td>{{affectation.idposte?.zone.libelle}}</td>
-                <td>{{affectation.idposte?.zone?.horaire}}</td>
-                <td>{{affectation.idvigile?.noms}}</td>
+                <td>{{affectation.idposte.libelle}}</td>
+                <td>{{affectation.idposte.zone.libelle}}</td>
+                <td>{{affectation.idposte.zone?.horaire}}</td>
+                <td>{{affectation.idvigile.noms}}</td>
                 <td>
                   <button class="btn btn-sm" (click)="mettreEnLigneTemporaire(affectation)">
                     Mettre en ligne

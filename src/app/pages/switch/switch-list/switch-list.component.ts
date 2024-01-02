@@ -75,7 +75,7 @@ export class SwitchListComponent implements OnInit, OnDestroy {
   }
 
   refresh() {
-    this.getSwitchsNonValidees().then((remplacements) => {
+    this.getSwitchs().then((remplacements) => {
       this.remplacements = remplacements;
       this.dtTrigger.next('');
     });
@@ -85,8 +85,8 @@ export class SwitchListComponent implements OnInit, OnDestroy {
     this.router.navigate(['switch', 'view', id]);
   }
 
-  getSwitchsNonValidees(): Promise<Array<any>> {
-    console.log('getSwitchsNonValidés');
+  getSwitchs(): Promise<Array<any>> {
+    console.log('getSwitchs');
     return new Promise((resolve, reject) => {
       const db = getFirestore(this.app);
       const q = query(collection(db, "changements"));
@@ -102,19 +102,16 @@ export class SwitchListComponent implements OnInit, OnDestroy {
           });
           if (true) {
             remplacements.push(changement);
-
           }
         });
         resolve(remplacements);
       });
     });
-
   }
 
   toDate(timestp: any): Date | undefined {
     if (timestp && timestp.seconds) {
       return new Date(timestp.seconds * 1000);
-
     } else {
       return undefined;
     }
