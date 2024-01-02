@@ -67,7 +67,7 @@
                   Vigile Switch
                 </span>
               </div>
-              <input [(ngModel)]="rechercheVigileSwitch" (ngModelChange)="getVigiles($event)" type="text"
+              <input [(ngModel)]="rechercheVigileSwitch" (ngModelChange)="getVigilesSwitch($event)" type="text"
                 class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
               <select [(ngModel)]="changement.idvigileSwitch" class="form-control">
                 <ng-container *ngFor="let v of vigilesSwitchs | actifs">

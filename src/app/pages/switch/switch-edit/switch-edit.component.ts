@@ -12,6 +12,7 @@ import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { Responsable } from 'src/app/models/responsable.model';
 import { VigileService } from 'src/app/services/vigile.service';
+import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 
 @Component({
   selector: 'app-switch-edit',
@@ -47,6 +48,7 @@ export class SwitchEditComponent implements OnInit {
     private posteService: JarvisService<Poste>,
     private responsableService: JarvisService<Responsable>,
     private vigileService: VigileService,
+    private affectationCtrlService: AffectationCtrlService,
   ) {
     const firebaseConfig = {
       apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
@@ -131,13 +133,10 @@ export class SwitchEditComponent implements OnInit {
   }
 
   getAffectations() {
-    console.log('getAffectations');
-    this.affectationsResultats = new Array<Affectation>().concat(this.affectations);
-    setTimeout(() => {
-      this.affectationsResultats = this.affectationsResultats.filter((affectation) => {
-        return affectation.idposte && this.poste && affectation.idposte.idposte === this.poste.idposte;
-      });
-    }, 250);
+    console.log('getAffectations of poste');
+    this.affectationCtrlService.getAffectationsOfPoste(this.poste).then((affs) => {
+      this.affectationsResultats = affs;
+    });
   }
 
   save() {
