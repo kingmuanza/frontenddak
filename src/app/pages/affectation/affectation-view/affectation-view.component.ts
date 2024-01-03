@@ -27,6 +27,7 @@ export class AffectationViewComponent implements OnInit {
   jourRepos = "";
 
   arret = undefined;
+  affectationActuelle: Affectation | undefined
 
   constructor(
     private _location: Location,
@@ -98,6 +99,16 @@ export class AffectationViewComponent implements OnInit {
     });
   }
 
+  getAffectionOfVigile(vigile: Vigile): Promise<Affectation | undefined> {
+    return new Promise((resolve, reject) => {
+      this.affectationCtrlService.getAffectationOfVigile(vigile).then((data) => {
+        console.log('data');
+        console.log(data);
+        this.affectationActuelle = data;
+      });
+    });
+  }
+
   async modifierVigile() {
     let ancienneAffectation = this.dupliquer(this.affectation);
     await this.affectationService.ajouter('affectation', ancienneAffectation);
@@ -106,6 +117,11 @@ export class AffectationViewComponent implements OnInit {
     this.affectation.idvigile = this.vigile;
     this.affectation.dateAffectation = new Date();
 
+    if (this.affectationActuelle && this.affectationActuelle.idposte) {
+      this.affectationActuelle.arret = new Date();
+      await this.affectationService.modifier('affectation', this.affectationActuelle.idaffectation, this.affectationActuelle);
+      this.notifierService.notify('success', "Affectation au poste " + this.affectationActuelle.idposte.libelle + " mise à l'arrêt");
+    }
     await this.affectationService.modifier('affectation', this.affectation.idaffectation, this.affectation);
     this.notifierService.notify('success', "Vigile mis à jour avec succès");
     this.retour();

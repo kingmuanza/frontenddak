@@ -57,7 +57,7 @@
                 </div>
                 <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
                   class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
-                <select [(ngModel)]="vigile" class="form-control">
+                <select [(ngModel)]="vigile" (ngModelChange)="getAffectionOfVigile($event)" class="form-control">
                   <ng-container *ngFor="let v of vigiles | actifs">
                     <option [ngValue]="v">
                       {{v.noms}}
@@ -67,6 +67,9 @@
                 <button *ngIf="!affectation.arret" (click)="modifierVigile()" class="btn btn-primary">
                   Mettre à jour le titulaire
                 </button>
+              </div>
+              <div class="mb-3" *ngIf="affectationActuelle">
+                Le vigile est actuellement affecté au poste {{affectationActuelle.idposte.libelle}}
               </div>
             </div>
 
