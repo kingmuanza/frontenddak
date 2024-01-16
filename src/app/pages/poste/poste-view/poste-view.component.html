@@ -62,11 +62,22 @@
                 <tr *ngFor="let affectationLigne of affectationsLignes">
                   <td style="width: 100px;">
                     <b>
-                      {{affectationLigne.matricule}}
+                      <ng-container *ngIf="affectationLigne.isRemplacant">
+                        {{affectationLigne.matriculeRemplacant}}
+                      </ng-container>
+                      <ng-container *ngIf="!affectationLigne.isRemplacant">
+                        {{affectationLigne.matricule}}
+                      </ng-container>
                     </b>
                   </td>
                   <td>
-                    {{affectationLigne.nomsVigile}}
+                    <ng-container *ngIf="affectationLigne.isRemplacant">
+                      {{affectationLigne.nomsRemplacant}}
+                    </ng-container>
+                    <ng-container *ngIf="!affectationLigne.isRemplacant">
+                      {{affectationLigne.nomsVigile}}
+                    </ng-container>
+
                   </td>
                   <td style="text-align: right;">
                     <button (click)="supprimer(affectationLigne)" class="btn btn-sm btn-danger btn-error">

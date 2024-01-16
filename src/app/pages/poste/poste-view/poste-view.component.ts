@@ -183,8 +183,10 @@ export class PosteViewComponent implements OnInit {
       resultats2.forEach((resultat) => {
         let x = {
           id: resultat.id,
-          ...resultat.data()
+          ...resultat.data(),
+          isRemplacant: true,
         }
+
         affectationsLignes.push(x);
       });
       console.log("return affectationsLignes");
@@ -193,7 +195,7 @@ export class PosteViewComponent implements OnInit {
     });
   }
 
-  
+
 
   mettreEnLigne() {
     console.log('mettre en ligne');
