@@ -20,7 +20,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { VigileService } from 'src/app/services/vigile.service';
 import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
-import { getFirestore, setDoc, doc, query, collection, getDocs, where, deleteDoc } from 'firebase/firestore';
+import { getFirestore, setDoc, doc, query, collection, getDocs, where, deleteDoc, DocumentData, QuerySnapshot } from 'firebase/firestore';
 import { Suivi } from 'src/app/models/suivi.model';
 import { AffectationLigne } from 'src/app/models/affectation.ligne.model';
 
@@ -166,24 +166,34 @@ export class PosteViewComponent implements OnInit {
 
   getAffectationsEnLigne(): Promise<Array<any>> {
     console.log("get affectations");
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const affectationsLignes = new Array<any>();
       const db = getFirestore(this.app);
       let q = query(collection(db, "affectation"), where("codeagiv", "==", this.poste.codeagiv));
-      getDocs(q).then((resultats) => {
-        resultats.forEach((resultat) => {
-          let x = {
-            id: resultat.id,
-            ...resultat.data()
-          }
-          affectationsLignes.push(x);
-        });
-        console.log("return affectationsLignes");
-        console.log(affectationsLignes.length);
-        resolve(affectationsLignes);
+      let resultats: QuerySnapshot<DocumentData> = await getDocs(q);
+      resultats.forEach((resultat) => {
+        let x = {
+          id: resultat.id,
+          ...resultat.data()
+        }
+        affectationsLignes.push(x);
       });
+      let q2 = query(collection(db, "affectation-remplacant"), where("postesCodesAgiv", "array-contains", this.poste.codeagiv));
+      let resultats2: QuerySnapshot<DocumentData> = await getDocs(q2);
+      resultats2.forEach((resultat) => {
+        let x = {
+          id: resultat.id,
+          ...resultat.data()
+        }
+        affectationsLignes.push(x);
+      });
+      console.log("return affectationsLignes");
+      console.log(affectationsLignes.length);
+      resolve(affectationsLignes);
     });
   }
+
+  
 
   mettreEnLigne() {
     console.log('mettre en ligne');

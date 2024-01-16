@@ -1,6 +1,10 @@
 <div class="page">
   <div class="entete">
     <h1>
+      <span style="margin-right: 20px;">
+        <i *ngIf="zone.horaire=='jour'" class="bi bi-brightness-high"></i>
+        <i *ngIf="zone.horaire=='nuit'" class="bi bi-moon"></i>
+      </span>
       {{zone.code}}
     </h1>
     <div class="page-entete-titre">
@@ -150,8 +154,8 @@
             </div>
             <div class="row">
               <div *ngFor="let poste of postes" class="col-lg-3">
-                <div class="poste" [ngClass]="{'controlee': isPosteControlee(poste)}">
-                  {{poste.libelle.replace("NUIT", "")}}
+                <div class="poste" (click)="voirPoste(poste)" [ngClass]="{'controlee': isPosteControlee(poste)}">
+                  {{poste.libelle.replace("NUIT", "").replace("JOUR", "")}}
                 </div>
               </div>
             </div>

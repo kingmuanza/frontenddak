@@ -66,7 +66,12 @@ export class RecapVeilleComponent implements OnInit {
     });
 
     this.affectationService.getAll("affectation").then((affectations) => {
-      this.affectations = affectations;
+      this.affectations = affectations.filter((aff) => {
+        let bool1 = !aff.arret
+        let bool2 = aff.arret && new Date(aff.arret).getTime() > this.fin.getTime();
+        let bool = bool1 || bool2;
+        return bool;
+      });
 
       const db = getFirestore(this.app);
       const q2 = query(collection(db, "switch"), where("date", "<=", this.fin), where("date", ">=", this.debut), orderBy("date", 'desc'));
@@ -122,10 +127,10 @@ export class RecapVeilleComponent implements OnInit {
   }
 
   setDates() {
-    this.debut.setDate(this.debut.getDate() - 1);
-    //this.debut.setDate(this.debut.getDate() - 9);
-    this.debut.setHours(6, 0, 0);
-    this.fin.setHours(6, 0, 0);
+    this.debut.setDate(this.debut.getDate() - 2);
+    this.debut.setHours(18, 0, 0);
+    this.fin.setDate(this.fin.getDate() - 1);
+    this.fin.setHours(18, 0, 0);
   }
 
   ngOnInit(): void {

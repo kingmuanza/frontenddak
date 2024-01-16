@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, query, collection, where, orderBy, getDocs } from 'firebase/firestore';
@@ -80,6 +80,7 @@ export class RecapVeilleZoneComponent implements OnInit {
     private affectationService: JarvisService<Affectation>,
     private zoneService: JarvisService<ZoneDak>,
     private route: ActivatedRoute,
+    private router: Router,
     private posteService: PosteCtrlService,
   ) {
     const firebaseConfig = {
@@ -95,11 +96,10 @@ export class RecapVeilleZoneComponent implements OnInit {
   }
 
   setDates() {
-
-    // this.debut.setDate(this.debut.getDate() - 1);
-    this.debut.setDate(this.debut.getDate() - 1);
-    this.debut.setHours(6, 0, 0);
-    this.fin.setHours(6, 0, 0);
+    this.debut.setDate(this.debut.getDate() - 2);
+    this.debut.setHours(18, 0, 0);
+    this.fin.setDate(this.fin.getDate() - 1);
+    this.fin.setHours(18, 0, 0);
   }
 
   ngOnInit(): void {
@@ -117,16 +117,14 @@ export class RecapVeilleZoneComponent implements OnInit {
             this.zone = this.getZoneByCode(code!, zones);
             console.log("code : " + code);
             this.zone.code = code;
-
-
-
             this.posteService.getPostesByZone(this.zone).then((postes) => {
               this.postes = postes;
-
-
               this.affectationService.getAll("affectation").then((affectations) => {
                 this.affectations = affectations.filter((aff) => {
-                  return aff.idposte?.zone?.code === code;
+                  let bool1 = !aff.arret
+                  let bool2 = aff.arret && new Date(aff.arret).getTime() > this.fin.getTime();
+                  let bool = bool1 || bool2;
+                  return aff.idposte?.zone?.code === code && bool;
                 });
                 console.log("Nombre de affectations : " + this.affectations.length);
 
@@ -230,12 +228,12 @@ export class RecapVeilleZoneComponent implements OnInit {
     let affectations = this.affectations.filter((aff) => {
       return aff.idposte?.idposte == idposte;
     })
-    console.log(affectations[0])
+    console.log(affectations[0]);
     return affectations[0];
   }
 
   isPosteControlee(poste: Poste) {
-    return this.postesControles.indexOf(poste.idposte) !== -1;
+    return this.postesControles.indexOf(poste.idposte + "") !== -1;
   }
 
   getZoneByCode(code: string, zones: Array<ZoneDak>): ZoneDak {
@@ -351,4 +349,9 @@ export class RecapVeilleZoneComponent implements OnInit {
     })
   }
 
+  voirPoste(poste: Poste) {
+    if (this.isPosteControlee(poste)) {
+      this.router.navigate(['poste', 'view', poste.idposte])
+    }
+  }
 }

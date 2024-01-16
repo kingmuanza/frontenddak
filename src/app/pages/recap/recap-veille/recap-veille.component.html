@@ -8,6 +8,14 @@
       Au <b>{{fin | date:"dd/MM/yyyy"}}</b> à <b>{{fin | date: "HH:mm:ss"}}</b>
     </div>
   </div>
+  <div *ngIf="!terminee">
+    <div class="d-flex justify-content-center"
+      style="background-color: white; opacity:0.8; height: 50vh; padding-top: 12.5vh; margin-top: 20px;">
+      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
   <div class="page-contenu" *ngIf="terminee">
     <div class="row">
       <div class="col-3">
@@ -120,8 +128,12 @@
             </div>
             <div class="row gx-2">
               <div *ngFor="let zone of zones" class="col-lg-6">
-                <div (click)="goToZone(zone)" class="zone "
+                <div (click)="goToZone(zone)" class="zone"
                   [ngClass]="{'controlee': isZoneControlee(zone),'shadow-1': isZoneControlee(zone)}">
+                  <span style="float: left;">
+                    <i *ngIf="zone.horaire=='jour'" class="bi bi-brightness-high"></i>
+                    <i *ngIf="zone.horaire=='nuit'" class="bi bi-moon"></i>
+                  </span>
                   {{zone.code}}
                 </div>
               </div>
