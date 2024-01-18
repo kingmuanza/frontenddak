@@ -211,21 +211,65 @@ export class PosteViewComponent implements OnInit {
   async mettreEnLigneLesAffectations() {
     for (let index = 0; index < this.affectations.length; index++) {
       const affectation = this.affectations[index];
-      let affectationLigne = new AffectationLigne();
-      affectationLigne.id = affectation.idvigile.matricule
-      affectationLigne.nomsVigile = affectation.idvigile.noms
-      affectationLigne.matricule = affectation.idvigile.matricule
-      affectationLigne.idposte = affectation.idposte.idposte
-      affectationLigne.jourRepos = affectation.jourRepos
-      affectationLigne.libellePoste = affectation.idposte.libelle
-      affectationLigne.codeagiv = affectation.idposte.codeagiv
-      const db = getFirestore(this.app);
-      await setDoc(doc(db, "affectation", affectationLigne.id + ""), JSON.parse(JSON.stringify(affectationLigne)));
-      console.log("Terminé");
-      console.log(affectationLigne);
-      this.notifierService.notify('success', "Mise en ligne de " + affectationLigne.nomsVigile + " effectuée avec succès");
+      if (affectation.idvigile) {
+        let affectationLigne = new AffectationLigne();
+        affectationLigne.id = affectation.idvigile.matricule
+        affectationLigne.nomsVigile = affectation.idvigile.noms
+        affectationLigne.matricule = affectation.idvigile.matricule
+        affectationLigne.idposte = affectation.idposte.idposte
+        affectationLigne.jourRepos = affectation.jourRepos
+        affectationLigne.libellePoste = affectation.idposte.libelle
+        affectationLigne.codeagiv = affectation.idposte.codeagiv
+        const db = getFirestore(this.app);
+        await setDoc(doc(db, "affectation", affectationLigne.id + ""), JSON.parse(JSON.stringify(affectationLigne)));
+        console.log("Terminé");
+        console.log(affectationLigne);
+        this.notifierService.notify('success', "Mise en ligne de " + affectationLigne.nomsVigile + " effectuée avec succès");
+      }
     }
+    // await this.mettreEnLigneLesAffectationsRemplacants();
     window.location.reload();
+  }
+
+  async mettreEnLigneLesAffectationsRemplacants() {
+    for (let index = 0; index < this.affectations.length; index++) {
+      const affectation = this.affectations[index];
+      let remplacant = affectation.remplacant;
+      if (remplacant) {
+        if (remplacant.idvigile) {
+          console.log("remplacant", remplacant)
+          let toutesAffectationsRemplacants = await this.affectationCtrlService.getAffectationsOfVigile(remplacant);
+          let arrayCodesPostes = new Array<string>();
+          console.log("toutesAffectationsRemplacants", toutesAffectationsRemplacants);
+          if (toutesAffectationsRemplacants.length > 0)
+            for (let i = 0; index < toutesAffectationsRemplacants.length; i++) {
+              const element = toutesAffectationsRemplacants[i];
+              if (element) {
+                console.log("affecation du remplacant", element);
+                arrayCodesPostes.push(element.idposte.codeagiv);
+              }
+            }
+          arrayCodesPostes.push(affectation.idposte.codeagiv);
+          console.log("arrayCodesPostes", arrayCodesPostes);
+          let affectationLigne = new AffectationLigne();
+          affectationLigne.id = remplacant.matricule
+          affectationLigne.nomsVigile = remplacant.noms
+          affectationLigne.matricule = remplacant.matricule
+          affectationLigne.idposte = affectation.idposte.idposte
+          affectationLigne.jourRepos = affectation.jourRepos
+          affectationLigne.libellePoste = affectation.idposte.libelle
+          affectationLigne.codeagiv = affectation.idposte.codeagiv
+          affectationLigne.postesCodesAgiv = arrayCodesPostes;
+
+          console.log("affectationLigne", affectationLigne);
+          const db = getFirestore(this.app);
+          await setDoc(doc(db, "affectation-remplacant", affectationLigne.id + ""), JSON.parse(JSON.stringify(affectationLigne)));
+          console.log("Terminé");
+          console.log(affectationLigne);
+          this.notifierService.notify('success', "Mise en ligne du remplacant " + affectationLigne.nomsVigile + " effectuée avec succès");
+        }
+      }
+    }
   }
 
   openGoogleMap() {

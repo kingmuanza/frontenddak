@@ -98,6 +98,7 @@ export class AffectationTemporaireListComponent implements OnInit, OnDestroy {
       codeagiv: affectation.idposte.codeagiv,
       jourRepos: affectation.jourRepos,
       dateAffectation: affectation.dateAffectation,
+      postesCodesAgiv: undefined,
     }
     console.log("affectation temporaire " + aff.id);
     const db = getFirestore(this.app);

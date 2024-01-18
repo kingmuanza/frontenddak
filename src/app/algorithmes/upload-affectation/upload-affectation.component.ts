@@ -4,6 +4,8 @@ import { JarvisService } from 'src/app/services/jarvis.service';
 import { collection, deleteDoc, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
+import { AffectationLigne } from 'src/app/models/affectation.ligne.model';
+import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 
 @Component({
   selector: 'app-upload-affectation',
@@ -22,7 +24,8 @@ export class UploadAffectationComponent implements OnInit {
 
 
   constructor(
-    private affectationService: JarvisService<Affectation>
+    private affectationService: JarvisService<Affectation>,
+    private affectationCtrlService: AffectationCtrlService,
   ) {
 
     const firebaseConfig = {
@@ -40,7 +43,11 @@ export class UploadAffectationComponent implements OnInit {
   ngOnInit(): void {
     this.affectationService.getAll("affectation").then((affectations) => {
 
-      this.affectations = affectations;
+      this.affectations = affectations.filter((aff) => {
+        let bool1 = !aff.arret;
+        let bool2 = aff.arret && new Date(aff.arret).getTime() > new Date().getTime();
+        return bool1 || bool2;
+      });
 
       this.affectations.forEach((affectation) => {
         if (affectation.idposte) {
@@ -57,27 +64,28 @@ export class UploadAffectationComponent implements OnInit {
           this.resultats.push(aff1);
           if (affectation.remplacant) {
             if (affectation.remplacant.matricule) {
-              let aff2 = {
+              let aff2: AffectationLigne = {
                 id: affectation.remplacant.matricule,
-                idvigile: affectation.idvigile.idvigile,
-                matricule: affectation.idvigile.matricule,
-                nomsVigile: affectation.idvigile.noms,
+                idvigile: affectation.remplacant.idvigile,
+                matricule: affectation.remplacant.matricule,
+                nomsVigile: affectation.remplacant.noms,
                 idposte: affectation.idposte.idposte,
                 libellePoste: affectation.idposte.libelle,
                 codeagiv: affectation.idposte.codeagiv,
                 jourRepos: affectation.jourRepos,
-                idremplacant: affectation.remplacant.idvigile,
-                matriculeRemplacant: affectation.remplacant.matricule,
-                nomsRemplacant: affectation.remplacant.noms,
-                remplacant: true
+                dateAffectation: affectation.dateAffectation,
+                postesCodesAgiv: [],
+
               }
+              let agivs = this.getAffectationsDuRemplacant(aff2.matricule);
+              aff2.postesCodesAgiv = agivs;
               this.remplacants.push(aff2);
             }
           }
           this.resultats = this.resultats.sort((a, b) => {
             return a.idvigile < b.idvigile ? -1 : 1;
           });
-          this.creerRemplacantFinaux();
+          // this.creerRemplacantFinaux();
         }
       });
     });
@@ -91,12 +99,22 @@ export class UploadAffectationComponent implements OnInit {
     this.log("affectation " + aff.id + " mis à jour");
   }
 
-  async mettreEnLigneRemplacant(aff: any) {
+  async mettreEnLigneRemplacant(aff: AffectationLigne) {
+
     console.log("affectation Remplacant" + aff.id);
     const db = getFirestore(this.app);
     let ref = doc(db, "affectation-remplacant", aff.id);
     await setDoc(ref, JSON.parse(JSON.stringify(aff)), { merge: true });
     this.log("affectation " + aff.id + " mis à jour");
+  }
+
+  getAffectationsDuRemplacant(matriculeRemplacant: string): string[] {
+    let affs = this.affectations.filter((aff) => {
+      return aff.remplacant && aff.remplacant.matricule == matriculeRemplacant;
+    });
+    return affs.map((aff) => {
+      return aff.idposte.codeagiv;
+    })
   }
 
   async suppressionTitulaires() {

@@ -8,4 +8,5 @@ export class AffectationLigne {
   matricule = "";
   nomsVigile = "";
   dateAffectation = new Date();
+  postesCodesAgiv: Array<string> | undefined = new Array<string>();
 }

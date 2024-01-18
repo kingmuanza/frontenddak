@@ -72,7 +72,8 @@
                   </td>
                   <td>
                     <ng-container *ngIf="affectationLigne.isRemplacant">
-                      {{affectationLigne.nomsRemplacant}}
+                      {{affectationLigne.nomsRemplacant}} | Remplacant, Jour :
+                      {{jourSemaine(affectationLigne.jourRepos) }}
                     </ng-container>
                     <ng-container *ngIf="!affectationLigne.isRemplacant">
                       {{affectationLigne.nomsVigile}}
