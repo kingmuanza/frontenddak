@@ -23,6 +23,7 @@ export class RecapVeilleZoneComponent implements OnInit {
   fin = new Date();
   app: any;
   affectations = new Array<Affectation>();
+  affectationsNonPointees = new Array<Affectation>();
   pointages = new Array<any>();
   pointagesTotaux = new Array<any>();
   absences = new Array<any>();
@@ -173,6 +174,9 @@ export class RecapVeilleZoneComponent implements OnInit {
                   let findDuplicates = (arr: Array<string>) => arr.filter((item, index) => arr.indexOf(item) !== index)
 
                   this.vigilesQuiOntPointes = [...new Set(pointagesString)];
+                  this.affectationsNonPointees = this.affectations.filter((aff) => {
+                    return this.vigilesQuiOntPointes.indexOf(aff.idvigile.matricule) === -1;
+                  });
                   this.vigilesQuiOntPointesDeuxFois = [...new Set(findDuplicates(pointagesString))];
                   this.vigilesQuiOntPointesUneFois = this.vigilesQuiOntPointes.filter((v) => {
                     return this.vigilesQuiOntPointesDeuxFois.indexOf(v) === -1;

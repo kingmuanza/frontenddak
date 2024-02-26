@@ -167,7 +167,7 @@ export class RecapVeilleComponent implements OnInit {
     let affectations = this.affectations.filter((aff) => {
       return aff.idposte?.idposte == idposte;
     })
-    console.log(affectations[0])
+    // console.log(affectations[0])
     return affectations[0];
   }
 

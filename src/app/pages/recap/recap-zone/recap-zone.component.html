@@ -8,19 +8,20 @@
       {{zone.code}}
     </h1>
     <div class="page-entete-titre">
-      Récapitulatif du jour
+      Récapitulatif de la veille
     </div>
     <div>
       Du <b>{{debut | date:"dd/MM/yyyy"}}</b> à <b>{{debut | date: "HH:mm:ss"}}</b>
       Au <b>{{fin | date:"dd/MM/yyyy"}}</b> à <b>{{fin | date: "HH:mm:ss"}}</b>
     </div>
   </div>
+
   <div class="page-contenu">
     <div class="row">
       <div class="col-5">
-        <div class="row">
+        <div class="row gx-2">
           <div class="col-6">
-            <div class="stat" (click)="openModal('pointagesModal')">
+            <div class="stat" (click)="openModal('vigilesEnService')">
               <div class="stat-titre">
                 Vigiles en service
               </div>
@@ -119,6 +120,16 @@
               </div>
             </div>
           </div>
+          <div class="col-6">
+            <div class="stat red" (click)="openModal('vigilesNonPointees')">
+              <div class="stat-titre">
+                Vigiles qui n'ont pas pointé
+              </div>
+              <div class="stat-valeur">
+                {{affectationsNonPointees.length}}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-7">
@@ -205,6 +216,46 @@
       <div class="modal-body">
         <app-display-pointages [pointages]="absences" [affectations]="affectations">
         </app-display-pointages>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #vigilesEnService id="vigilesEnService" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Vigiles en service
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <app-display-affectation-vigiles [affectations]="affectations"></app-display-affectation-vigiles>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #vigilesNonPointees id="vigilesNonPointees" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Vigiles qui n'ont pas pointé
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <app-display-affectation-vigiles [affectations]="affectationsNonPointees"></app-display-affectation-vigiles>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

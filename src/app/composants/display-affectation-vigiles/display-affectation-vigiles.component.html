@@ -1,0 +1,42 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">N.</th>
+      <th scope="col">Matr.</th>
+      <th scope="col">Vigile</th>
+      <th scope="col">Poste</th>
+      <th scope="col">Zone</th>
+      <th scope="col">Heure</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let affect of affectations; let i =index">
+      <tr>
+        <th scope="row">
+          <b>
+            {{i+1}}
+          </b>
+        </th>
+        <th scope="row">
+
+          {{affect.idvigile.matricule}}
+
+        </th>
+        <td>
+          {{affect.idvigile.noms}}
+        </td>
+        <td>
+          <b>
+            {{affect.idposte.libelle}}
+          </b>
+        </td>
+        <td>
+          <b>
+            {{affect?.idposte?.zone?.code}}
+          </b>
+        </td>
+        <td>{{toDate(affect.dateAffectation) | date:"dd-MM-yyyy HH:mm:ss"}}</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>

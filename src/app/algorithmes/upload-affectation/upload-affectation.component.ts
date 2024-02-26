@@ -85,7 +85,7 @@ export class UploadAffectationComponent implements OnInit {
           this.resultats = this.resultats.sort((a, b) => {
             return a.idvigile < b.idvigile ? -1 : 1;
           });
-          // this.creerRemplacantFinaux();
+          this.creerRemplacantFinaux();
         }
       });
     });
