@@ -25,6 +25,7 @@ import { NotifierService } from 'angular-notifier';
 })
 export class SwitchListComponent implements OnInit, OnDestroy {
 
+  date: Date | undefined
   app: any;
   demande: any;
   modale: any;
@@ -74,9 +75,20 @@ export class SwitchListComponent implements OnInit, OnDestroy {
     });
   }
 
+  filtrer(date: Date | undefined) {
+    if (date) {
+      this.resultats = this.remplacements.filter((r) => {
+        return this.toDate(r.date)?.toISOString().split("T")[0] == new Date(date)?.toISOString().split("T")[0];
+      });
+    } else {
+      this.resultats = this.remplacements
+    }
+  }
+
   refresh() {
     this.getSwitchs().then((remplacements) => {
       this.remplacements = remplacements;
+      this.resultats = remplacements;
       this.dtTrigger.next('');
     });
   }
@@ -104,6 +116,7 @@ export class SwitchListComponent implements OnInit, OnDestroy {
             remplacements.push(changement);
           }
         });
+        console.log(remplacements);
         resolve(remplacements);
       });
     });

@@ -35,11 +35,16 @@ export class PosteViewComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
+
+  dtOptionsHistorique: DataTables.Settings = {};
+  dtTriggerHistorique = new Subject<any>();
+
   poste = new Poste();
   processing = false;
   zones = new Array<any>();
   quartiers = new Array<any>();
   affectations = new Array<Affectation>();
+  historiqueAffectations = new Array<Affectation>();
   affectationsLignes = new Array<any>();
   vigiles = new Array<Vigile>();
   remplacants = new Array<Vigile>();
@@ -65,6 +70,7 @@ export class PosteViewComponent implements OnInit {
   myModal?: bootstrap.Modal;
 
   exigences = new Array<ContratSiteVigile>();
+  historiquesAffectations = new Array<Affectation>();
 
   mesDroits = droits;
   rechercheVigile = "";
@@ -124,6 +130,8 @@ export class PosteViewComponent implements OnInit {
           console.log(poste);
           this.poste = poste;
 
+
+
           this.getAffectationsEnLigne().then((affectationsLignes) => {
             this.affectationsLignes = affectationsLignes;
           });
@@ -142,6 +150,11 @@ export class PosteViewComponent implements OnInit {
               });
               this.exigencesVerifiees = this.verifierToutesLesExigences();
             });
+          });
+
+          this.affectationCtrlService.getHistoriqueAffectationsOfPoste(poste).then((affectations) => {
+            this.historiqueAffectations = affectations;
+            this.dtTriggerHistorique.next("");
           });
 
           let idcontratSite = this.poste.idcontratsite?.idcontratSite + "";

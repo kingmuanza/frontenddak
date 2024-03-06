@@ -187,4 +187,16 @@ export class AffectationViewComponent implements OnInit {
     return aff;
   }
 
+  supprimer() {
+    const reponse = confirm("Etes-vous sûr de vouloir supprimer cette affactation ?");
+    if (reponse) {
+      this.affectationService.supprimer('affectation', this.affectation.idaffectation).then((data) => {
+        console.log('data');
+        console.log(data);
+        this.notifierService.notify('success', "Suppression effectuée avec succès");
+        this.router.navigate(['zone']);
+      });
+    }
+  }
+
 }

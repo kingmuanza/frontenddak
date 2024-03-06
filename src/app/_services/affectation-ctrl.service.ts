@@ -151,4 +151,18 @@ export class AffectationCtrlService {
     });
   }
 
+  async getHistoriqueAffectationsOfPoste(poste: Poste): Promise<Array<Affectation>> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "poste" + '/' + poste.idposte + "/historique").subscribe({
+        next: (data) => {
+          const resulat = data as Array<Affectation>;
+          resolve(resulat);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
 }

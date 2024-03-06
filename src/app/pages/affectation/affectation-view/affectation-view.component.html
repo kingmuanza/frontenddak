@@ -129,12 +129,17 @@
             </div>
 
             <div style="margin-top: 20px;">
+              <button (click)="retour()" class="btn btn-danger">
+                Supprimer l'affectation
+              </button>
+              &nbsp;
+              &nbsp;
               <button (click)="retour()" class="btn">
                 Retour
               </button>
               &nbsp;
               &nbsp;
-              <button *ngIf="affectation.arret" [disabled]="!affectation.arret" (click)="relancer()"
+              <button *ngIf="affectation.arret" [disabled]="!affectation.arret" (click)="supprimer()"
                 class="btn btn-primary">
                 Relancer cette affectation
               </button>

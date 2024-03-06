@@ -12,21 +12,19 @@
             </a>
           </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text">Ville</span>
+              <span class="input-group-text">
+                Date
+              </span>
             </div>
-            <select [(ngModel)]="ville" class="form-control">
-              <option [ngValue]="null">Toutes les villes</option>
-              <option [ngValue]="ville" *ngFor="let ville of villes">
-                {{ville.libelle}}
-              </option>
-            </select>
+            <input [ngModel]="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" type="date"
+              class="form-control">
           </div>
         </div>
         <div class="col-lg-2">
-          <button class="btn primaire">Filtrer</button>
+          <button (click)="filtrer(date)" class="btn primaire">Filtrer</button>
         </div>
       </div>
     </div>
@@ -44,16 +42,22 @@
                 <th>Vigile remplacant</th>
                 <th>Responsable</th>
                 <th>Statut</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let switch of remplacements" (click)="voirDemande(switch)">
+              <tr *ngFor="let switch of resultats">
                 <td>{{toDate(switch.date) | date: "yyyy-MM-dd HH:mm"}}</td>
-                <td>{{switch.libellePoste}}</td>
+                <td>
+                  {{switch.libellePoste}}
+                </td>
                 <td>{{switch.nomsVigile}}</td>
                 <td>{{switch.nomsVigileSwitch}}</td>
                 <td>{{switch.idresponsable?.noms}}</td>
                 <td>{{switch.statut}}</td>
+                <td>
+                  <a class="btn btn-sm" (click)="voirDemande(switch)">Voir</a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -120,7 +124,6 @@
             <ng-container *ngIf="validationEnCours">
               Veuillez patienter...
             </ng-container>
-
           </button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
         </div>
