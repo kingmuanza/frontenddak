@@ -1,252 +1,246 @@
 <div class="page">
-    <div class="page-entete">
-        <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
-            Contrat : {{contrat.libelle}}
-        </div>
-        <div *ngIf="isContratsEnCoursDeCreation">
-            EN COURS DE CREATION
-        </div>
-        <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut |
-            date: 'yyyy-MM-dd'}}</div>
-        <div style="margin-top: 0px;">
-            <i>
-                {{contrat.description}}
-            </i>
-        </div>
-        <div class="">
-            <a routerLink="/contrat" class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la liste des contrats
-            </a>
-        </div>
+  <div class="page-entete">
+    <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
+      Contrat : {{contrat.libelle}}
     </div>
-    <div class="boutons">
-        <div class="row">
-            <div class="col-lg-2" *ngIf="mesDroits.contratEdit">
-                <div class="nouveau">
-                    <a [routerLink]="'/contrat/edit/' + contrat.idcontrat " class="btn nouveau">
-                        Modifier
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="nouveau">
-                    <button (click)="imprimer(contrat)" class="btn nouveau">
-                        Imprimer
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div *ngIf="isContratsEnCoursDeCreation">
+      EN COURS DE CREATION
     </div>
-    <div class="page-contenu">
-        <div class="row">
-            <div class="col-3">
-                <div class="stat" [ngClass]="{'red': sites.length!==contrat.nbPostes}">
-                    <div class="stat-titre">
-                        Sites
-                    </div>
-                    <div class="stat-valeur">
-                        {{sites.length}}/{{contrat.nbPostes}}
-                    </div>
-                </div>
-                <app-display-ligne-pourcentage
-                    [fraction]="sites.length/contrat.nbPostes"></app-display-ligne-pourcentage>
-            </div>
-            <div class="col-3">
-                <div class="stat"
-                    [ngClass]="{'red': postes.length === 0 || (postes.length!==(postesJourDansLesExigences + postesNuitDansLesExigences))}">
-                    <div class="stat-titre">
-                        Postes
-                    </div>
-                    <div class="stat-valeur">
-                        {{postes.length}}/{{postesJourDansLesExigences + postesNuitDansLesExigences}}
-                    </div>
-                </div>
-                <app-display-ligne-pourcentage
-                    [fraction]="postes.length/(postesJourDansLesExigences + postesNuitDansLesExigences)"></app-display-ligne-pourcentage>
-            </div>
-            <div class="col-3">
-                <div class="stat" [ngClass]="{'red': vigilesJourDansLesExigences!==contrat.nbVigileJour}">
-                    <div class="stat-titre">
-                        Vigiles Jour
-                    </div>
-                    <div class="stat-valeur">
-                        {{vigilesJourDansLesExigences}}/{{contrat.nbVigileJour}}
-                    </div>
-                </div>
-                <app-display-ligne-pourcentage
-                    [fraction]="vigilesJourDansLesExigences/contrat.nbVigileJour"></app-display-ligne-pourcentage>
-            </div>
-            <div class="col-3">
-                <div class="stat" [ngClass]="{'red': vigilesNuitDansLesExigences!==contrat.nbVigileNuit}">
-                    <div class="stat-titre">
-                        Vigiles Nuit
-                    </div>
-                    <div class="stat-valeur">
-                        {{vigilesNuitDansLesExigences}}/{{contrat.nbVigileNuit}}
-                    </div>
-                </div>
-                <app-display-ligne-pourcentage
-                    [fraction]="vigilesNuitDansLesExigences/contrat.nbVigileNuit"></app-display-ligne-pourcentage>
-            </div>
-        </div>
+    <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut |
+      date: 'yyyy-MM-dd'}}</div>
+    <div style="margin-top: 0px;">
+      <i>
+        {{contrat.description}}
+      </i>
     </div>
-    <div class="page-contenu">
-        <div style="margin-bottom: 16px;">
-            Liste des sites
-            <button *ngIf="sites.length < contrat.nbPostes" (click)="openModal()" style="margin-left: 10px;"
-                class="btn btn-link">
+    <div class="">
+      <a routerLink="/contrat" class="btn btn-link" style="padding: 0; margin: 0;">
+        Revenir à la liste des contrats
+      </a>
+    </div>
+  </div>
+  <div class="boutons">
+    <div class="row">
+      <div class="col-lg-2" *ngIf="mesDroits.contratEdit">
+        <div class="nouveau">
+          <a [routerLink]="'/contrat/edit/' + contrat.idcontrat " class="btn nouveau">
+            Modifier
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <button (click)="imprimer(contrat)" class="btn btn-primary">
+          Imprimer
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="row">
+      <div class="col-3">
+        <div class="stat" [ngClass]="{'red': sites.length!==contrat.nbPostes}">
+          <div class="stat-titre">
+            Sites
+          </div>
+          <div class="stat-valeur">
+            {{sites.length}}/{{contrat.nbPostes}}
+          </div>
+        </div>
+        <app-display-ligne-pourcentage [fraction]="sites.length/contrat.nbPostes"></app-display-ligne-pourcentage>
+      </div>
+      <div class="col-3">
+        <div class="stat"
+          [ngClass]="{'red': postes.length === 0 || (postes.length!==(postesJourDansLesExigences + postesNuitDansLesExigences))}">
+          <div class="stat-titre">
+            Postes
+          </div>
+          <div class="stat-valeur">
+            {{postes.length}}/{{postesJourDansLesExigences + postesNuitDansLesExigences}}
+          </div>
+        </div>
+        <app-display-ligne-pourcentage
+          [fraction]="postes.length/(postesJourDansLesExigences + postesNuitDansLesExigences)"></app-display-ligne-pourcentage>
+      </div>
+      <div class="col-3">
+        <div class="stat" [ngClass]="{'red': vigilesJourDansLesExigences!==contrat.nbVigileJour}">
+          <div class="stat-titre">
+            Vigiles Jour
+          </div>
+          <div class="stat-valeur">
+            {{vigilesJourDansLesExigences}}/{{contrat.nbVigileJour}}
+          </div>
+        </div>
+        <app-display-ligne-pourcentage
+          [fraction]="vigilesJourDansLesExigences/contrat.nbVigileJour"></app-display-ligne-pourcentage>
+      </div>
+      <div class="col-3">
+        <div class="stat" [ngClass]="{'red': vigilesNuitDansLesExigences!==contrat.nbVigileNuit}">
+          <div class="stat-titre">
+            Vigiles Nuit
+          </div>
+          <div class="stat-valeur">
+            {{vigilesNuitDansLesExigences}}/{{contrat.nbVigileNuit}}
+          </div>
+        </div>
+        <app-display-ligne-pourcentage
+          [fraction]="vigilesNuitDansLesExigences/contrat.nbVigileNuit"></app-display-ligne-pourcentage>
+      </div>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div style="margin-bottom: 16px;">
+      Liste des sites
+      <button *ngIf="sites.length < contrat.nbPostes" (click)="openModal()" style="margin-left: 10px;"
+        class="btn btn-link">
+        Créer un site
+      </button>
+    </div>
+    <div class="row gx-3">
+      <div class="col-lg-4" *ngFor="let site of sites">
+        <div class="site">
+          <app-display-site [site]="site" [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences"
+            [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences">
+
+          </app-display-site>
+        </div>
+      </div>
+      <div class="col-lg-4" *ngIf="sites.length < contrat.nbPostes">
+        <div class="nouveau-site" style="padding: 0; height: 355px;">
+          <div class="card-body" style="text-align: center;">
+            <div class="hover" (click)="openModal()">
+              <i class="bi bi-plus-lg" style="font-size: 100px; line-height: 1.05; color: #707070;"></i>
+              <div>
                 Créer un site
-            </button>
-        </div>
-        <div class="row gx-3">
-            <div class="col-lg-4" *ngFor="let site of sites">
-                <div class="site">
-                    <app-display-site [site]="site"
-                        [nbAutorisationJour]="contrat.nbVigileJour - vigilesJourDansLesExigences"
-                        [nbAutorisationNuit]="contrat.nbVigileNuit - vigilesNuitDansLesExigences">
-
-                    </app-display-site>
-                </div>
+              </div>
             </div>
-            <div class="col-lg-4" *ngIf="sites.length < contrat.nbPostes">
-                <div class="nouveau-site" style="padding: 0; height: 355px;">
-                    <div class="card-body" style="text-align: center;">
-                        <div class="hover" (click)="openModal()">
-                            <i class="bi bi-plus-lg" style="font-size: 100px; line-height: 1.05; color: #707070;"></i>
-                            <div>
-                                Créer un site
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="page-contenu">
+  </div>
+  <div class="page-contenu">
 
-        <div style="margin-top: 20px; margin-bottom:16px;">
-            Liste des postes liés à ce contrat
-        </div>
+    <div style="margin-top: 20px; margin-bottom:16px;">
+      Liste des postes liés à ce contrat
+    </div>
 
-        <div class="row">
-            <div class="col-lg-4" *ngFor="let poste of postes">
-                <app-display-poste [affectations]="affectations" [poste]="poste"
-                    [postesVigiles]="postesVigiles"></app-display-poste>
-            </div>
-        </div>
+    <div class="row">
+      <div class="col-lg-4" *ngFor="let poste of postes">
+        <app-display-poste [affectations]="affectations" [poste]="poste"
+          [postesVigiles]="postesVigiles"></app-display-poste>
+      </div>
     </div>
-    <div class="page-contenu">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Historique du contrat
-                        </h5>
-                        <div class="page-contenu-corps ">
-                            <app-display-historique-contrat [contrat]="contrat"></app-display-historique-contrat>
-                        </div>
-                    </div>
-                </div>
+  </div>
+  <div class="page-contenu">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              Historique du contrat
+            </h5>
+            <div class="page-contenu-corps ">
+              <app-display-historique-contrat [contrat]="contrat"></app-display-historique-contrat>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div style="height: 25vh;">
+  </div>
+  <div style="height: 25vh;">
 
-    </div>
+  </div>
 </div>
 
 
 <!-- Modal -->
 <div class="modal fade" #posteModal id="posteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    data-bs-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Ajouter un site à ce contrat : {{contrat.libelle}}
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  data-bs-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Ajouter un site à ce contrat : {{contrat.libelle}}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="categorie" style="margin-top: 0;">
+              Informations sur le site
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="categorie" style="margin-top: 0;">
-                            Informations sur le site
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <datalist id="quartiers">
-                            <option [value]="q.nom" *ngFor="let q of quartiers">{{q.nom}}</option>
-                        </datalist>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Quartier
-                                </span>
-                            </div>
-                            <input list="quartiers" type="text" (ngModelChange)="renommerSite($event)"
-                                [(ngModel)]="quartier" class="form-control"
-                                [ngClass]="{'is-invalid': montrerErreurs && erreurs.quartier}">
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Nom du site
-                                </span>
-                            </div>
-                            <input type="text" [(ngModel)]="site.nom" class="form-control"
-                                [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="input-group">
+          </div>
+          <div class="col-lg-12">
+            <datalist id="quartiers">
+              <option [value]="q.nom" *ngFor="let q of quartiers">{{q.nom}}</option>
+            </datalist>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Quartier
+                </span>
+              </div>
+              <input list="quartiers" type="text" (ngModelChange)="renommerSite($event)" [(ngModel)]="quartier"
+                class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.quartier}">
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Nom du site
+                </span>
+              </div>
+              <input type="text" [(ngModel)]="site.nom" class="form-control"
+                [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="input-group">
 
-                            <span class="input-group-text">
-                                Description
-                                <br>
-                                Localisation
-                            </span>
-                            <textarea [(ngModel)]="site.description" type="text" class="form-control"></textarea>
-                        </div>
-                    </div>
+              <span class="input-group-text">
+                Description
+                <br>
+                Localisation
+              </span>
+              <textarea [(ngModel)]="site.description" type="text" class="form-control"></textarea>
+            </div>
+          </div>
 
-                    <div class="col-lg-12">
-                        <div class="categorie" style="margin-top: 20px;">
-                            Personne à contacter
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Personne à contacter
-                                </span>
-                            </div>
-                            <input type="text" [(ngModel)]="site.personne" class="form-control"
-                                [ngClass]="{'is-invalid': montrerErreurs && erreurs.personne}">
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    Tel
-                                </span>
-                            </div>
-                            <input type="text" [(ngModel)]="site.tel" class="form-control"
-                                [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
-                        </div>
-                    </div>
-                </div>
+          <div class="col-lg-12">
+            <div class="categorie" style="margin-top: 20px;">
+              Personne à contacter
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button (click)="saveSite()" style="width: auto;" type="button"
-                    class="btn primaire">Enregistrer</button>
+          </div>
+          <div class="col-lg-12">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Personne à contacter
+                </span>
+              </div>
+              <input type="text" [(ngModel)]="site.personne" class="form-control"
+                [ngClass]="{'is-invalid': montrerErreurs && erreurs.personne}">
             </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  Tel
+                </span>
+              </div>
+              <input type="text" [(ngModel)]="site.tel" class="form-control"
+                [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button (click)="saveSite()" style="width: auto;" type="button" class="btn primaire">Enregistrer</button>
+      </div>
     </div>
+  </div>
 </div>

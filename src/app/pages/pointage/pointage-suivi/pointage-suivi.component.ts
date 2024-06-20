@@ -49,7 +49,15 @@ export class PointageSuiviComponent implements OnInit {
     private affectationService: JarvisService<Affectation>,
     private jourprisService: JarvisService<JourPris>,
   ) { }
-
+  printDiv(divName: string) {
+    const printContents = document.getElementById(divName)?.innerHTML;
+    if (printContents) {
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+    }
+  }
   ngOnInit(): void {
 
     this.jourprisService.getAll('jourpris').then((data) => {

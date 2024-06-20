@@ -35,6 +35,9 @@
         <div class="col-lg-2">
           <button class="btn primaire" (click)="getAffectationByZone(zone, date)">Générer</button>
         </div>
+        <div class="col-lg-2">
+          <button class="btn primaire" (click)="printDiv('printableDiv')">Imprimer</button>
+        </div>
       </div>
     </div>
   </div>
@@ -52,7 +55,7 @@
         le <b>{{date | date: 'EEEE dd-MM-yyyy'}}</b>
       </ng-container>
     </div>
-    <div style="margin-top: 20px;">
+    <div style="margin-top: 20px;" id="printableDiv">
       <table class="table table-bordered row-border hover">
         <thead>
           <tr>
