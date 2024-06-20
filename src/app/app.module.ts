@@ -118,6 +118,9 @@ import { JourprisViewComponent } from './pages/jourpris/jourpris-view/jourpris-v
 import { AffectationTemporaireListComponent } from './pages/affectation-temporaire/affectation-temporaire-list/affectation-temporaire-list.component';
 import { AffectationTemporaireEditComponent } from './pages/affectation-temporaire/affectation-temporaire-edit/affectation-temporaire-edit.component';
 import { DisplayAffectationVigilesComponent } from './composants/display-affectation-vigiles/display-affectation-vigiles.component';
+import { AffectationControleurViewComponent } from './pages/affectation-controleur/affectation-controleur-view/affectation-controleur-view.component';
+import { AffectationControleurEditComponent } from './pages/affectation-controleur/affectation-controleur-edit/affectation-controleur-edit.component';
+import { AffectationControleurListComponent } from './pages/affectation-controleur/affectation-controleur-list/affectation-controleur-list.component';
 
 @NgModule({
   declarations: [
@@ -231,6 +234,9 @@ import { DisplayAffectationVigilesComponent } from './composants/display-affecta
     AffectationTemporaireListComponent,
     AffectationTemporaireEditComponent,
     DisplayAffectationVigilesComponent,
+    AffectationControleurViewComponent,
+    AffectationControleurEditComponent,
+    AffectationControleurListComponent,
   ],
   imports: [
     BrowserModule,

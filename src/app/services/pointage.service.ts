@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
-import { collection, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
@@ -44,6 +44,37 @@ export class PointageService {
           pointages.push(x);
         });
         resolve(pointages);
+      });
+    });
+  }
+
+  getPointagesByDate(date: Date): Promise<Array<any>> {
+    console.log("getPointagesByDate", date);
+    return new Promise((resolve, reject) => {
+      let debut = new Date(date);
+      let fin = new Date(date);
+      debut.setDate(debut.getDate() - 1);
+      debut.setHours(18, 0, 0);
+      fin.setDate(fin.getDate());
+      fin.setHours(18, 0, 0);
+      console.log("debut", debut)
+      console.log("fin", fin)
+      const pointages = new Array<any>();
+      const db = getFirestore(this.app);
+      const q = query(collection(db, "pointage"), where("date", "<=", fin), where("date", ">=", debut), orderBy("date", 'desc'));
+      getDocs(q).then((resultats) => {
+        resultats.forEach((resultat) => {
+          let x = {
+            id: resultat.id,
+            ...resultat.data()
+          }
+          pointages.push(x);
+        });
+
+        console.log("getPointagesByDate", pointages.length);
+        resolve(pointages);
+      }).catch((reason) => {
+        console.log("reason", reason)
       });
     });
   }

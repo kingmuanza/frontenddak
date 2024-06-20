@@ -133,6 +133,11 @@
             Affectations temporaires
           </a>
         </div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.affectation">
+          <a routerLinkActive="active" routerLink="affectation-controleur">
+            Affectations des contrôleurs
+          </a>
+        </div>
         <div class="menu-gauche-item" *ngIf="mesDroits.switchs">
           <a routerLinkActive="active" routerLink="switch">
             Switchs

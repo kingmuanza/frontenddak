@@ -84,6 +84,9 @@ import { SanctionneesViewComponent } from './pages/sanction/sanctionnees-view/sa
 import { JourprisListComponent } from './pages/jourpris/jourpris-list/jourpris-list.component';
 import { AffectationTemporaireEditComponent } from './pages/affectation-temporaire/affectation-temporaire-edit/affectation-temporaire-edit.component';
 import { AffectationTemporaireListComponent } from './pages/affectation-temporaire/affectation-temporaire-list/affectation-temporaire-list.component';
+import { AffectationControleurEditComponent } from './pages/affectation-controleur/affectation-controleur-edit/affectation-controleur-edit.component';
+import { AffectationControleurListComponent } from './pages/affectation-controleur/affectation-controleur-list/affectation-controleur-list.component';
+import { AffectationControleurViewComponent } from './pages/affectation-controleur/affectation-controleur-view/affectation-controleur-view.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
@@ -117,6 +120,11 @@ const routes: Routes = [
   { path: 'affectation-temporaire', component: AffectationTemporaireListComponent },
   { path: 'affectation-temporaire/edit', component: AffectationTemporaireEditComponent },
   { path: 'affectation-temporaire/edit/:id', component: AffectationTemporaireEditComponent },
+
+  { path: 'affectation-controleur', component: AffectationControleurListComponent },
+  { path: 'affectation-controleur/edit', component: AffectationControleurEditComponent },
+  { path: 'affectation-controleur/edit/:id', component: AffectationControleurEditComponent },
+  { path: 'affectation-controleur/view/:id', component: AffectationControleurViewComponent },
 
   { path: 'conge-dashboard', component: CongeDashboardComponent },
   { path: 'conge', component: CongeListComponent },

@@ -89,7 +89,7 @@ export class TestConnexionComponent implements OnInit, OnChanges {
 
   get(url: string): Promise<Object> {
     return new Promise((resolve, reject) => {
-      this.http.get(url + '/webresources/zone')
+      this.http.get(url + 'webresources/zone')
         .subscribe({
           next:
             (data) => {

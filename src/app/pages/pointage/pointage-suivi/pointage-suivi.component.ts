@@ -57,11 +57,6 @@ export class PointageSuiviComponent implements OnInit {
       console.log(data);
       this.jourpriss = data;
     });
-    this.pointageService.getPointages().then((pointages) => {
-      // console.log('pointages');
-      // console.log(pointages);
-      this.pointages = pointages;
-    });
 
     this.pointageService.getAllRemotePostes().then((remotePostes) => {
       // console.log('remotePostes');
@@ -96,35 +91,40 @@ export class PointageSuiviComponent implements OnInit {
   }
 
   getAffectationByZone(zone: ZoneDak, d: Date) {
-    const date = new Date(d);
-    this.resultatsAffectations = this.affectations.filter((affectation) => {
-      const isBonneZone = affectation.idposte?.zone?.idzone === zone.idzone;
-      const isBonneDateDebut = date.getTime() >= new Date(affectation.dateAffectation).getTime();
-      let isBonneDateFin = false;
-      if (affectation.arret) {
-        isBonneDateFin = new Date(affectation.arret).getTime() >= date.getTime();
-      } else {
-        isBonneDateFin = true
-      }
-      return isBonneZone && isBonneDateDebut && isBonneDateFin;
-    });
 
-    this.getVigilesConcernes(date);
+    this.pointageService.getPointagesByDate(d).then((pointages) => {
+      this.pointages = pointages;
+      console.log("Nombre de poinatge du jour", pointages.length)
+      const date = new Date(d);
+      this.resultatsAffectations = this.affectations.filter((affectation) => {
+        const isBonneZone = affectation.idposte?.zone?.idzone === zone.idzone;
+        const isBonneDateDebut = date.getTime() >= new Date(affectation.dateAffectation).getTime();
+        let isBonneDateFin = false;
+        if (affectation.arret) {
+          isBonneDateFin = new Date(affectation.arret).getTime() >= date.getTime();
+        } else {
+          isBonneDateFin = true
+        }
+        return isBonneZone && isBonneDateDebut && isBonneDateFin;
+      });
 
-    this.resultatsAffectations2 = this.resultatsAffectations.map((affectation) => {
-      let pointage = this.getPointageVigileDate(affectation, date);
+      this.getVigilesConcernes(date);
 
-      const vigileStatus = this.showVigile(affectation, date);
-      let vigile = vigileStatus.vigile;
-      vigile.noms = vigile.noms + (vigileStatus.isRemplacant ? "" : "")
+      this.resultatsAffectations2 = this.resultatsAffectations.map((affectation) => {
+        let pointage = this.getPointageVigileDate(affectation, date);
 
-      return {
-        affectation: affectation,
-        pointage: pointage,
-        vigile: vigile,
-        isRemplacant: vigileStatus.isRemplacant,
-        isSanctionnee: vigileStatus.isSanctionnee,
-      }
+        const vigileStatus = this.showVigile(affectation, date);
+        let vigile = vigileStatus.vigile;
+        vigile.noms = vigile.noms + (vigileStatus.isRemplacant ? "" : "")
+
+        return {
+          affectation: affectation,
+          pointage: pointage,
+          vigile: vigile,
+          isRemplacant: vigileStatus.isRemplacant,
+          isSanctionnee: vigileStatus.isSanctionnee,
+        }
+      });
     });
   }
 
