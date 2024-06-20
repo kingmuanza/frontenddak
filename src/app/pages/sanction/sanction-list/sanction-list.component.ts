@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
+import { NotifierService } from 'angular-notifier';
 import { Subject } from 'rxjs';
+import { VigileCtrlService } from 'src/app/_services/vigile-ctrl-service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { droits } from 'src/app/data/droits';
 import { JourPris } from 'src/app/models/jourpris.model';
@@ -40,9 +42,11 @@ export class SanctionListComponent implements OnInit, OnDestroy {
     private router: Router,
     private suiviService: JarvisService<Suivi>,
     private vigileService: JarvisService<Vigile>,
+    private vigileCtrlService: VigileCtrlService,
     private pointageService: PointageService,
     private authService: AuthService,
     private jourPrisService: JarvisService<JourPris>,
+    private notifierService: NotifierService,
   ) { }
 
   ngOnInit(): void {
@@ -72,22 +76,7 @@ export class SanctionListComponent implements OnInit, OnDestroy {
         this.suiviService.getAll('suiviposte').then((data) => {
           console.log('data');
           console.log(data);
-          this.sanctions = data.filter((s) => {
-            if (this.aujourdhui) {
-              let dateSuivi = new Date(s.dateSuivi);
-              dateSuivi.setDate(dateSuivi.getDate() + 1)
-              const jourSuivi = dateSuivi.toISOString().split("T")[0];
-              const jour = new Date(this.aujourdhui).toISOString().split("T")[0];
-              const mmJour = jourSuivi == jour;
-              console.log("dateSuivi", dateSuivi)
-              console.log("jourSuivi", jourSuivi)
-              console.log("jour", jour)
-              console.log("mmJour", mmJour)
-              return mmJour
-            } else {
-              return true
-            }
-          });
+          this.sanctions = data;
           this.sanctions.forEach((sanction) => {
             if (sanction.numero) {
               this.numeros.push(sanction.numero);
@@ -160,38 +149,39 @@ export class SanctionListComponent implements OnInit, OnDestroy {
     console.log("Starting online importation");
 
     pointages = await this.pointageService.getAbsences();
-    console.log("pointages", pointages);
+    console.log("pointages", pointages.map(p => p.id));
+    console.log("numeros", this.numeros);
     for (let i = 0; i < pointages.length; i++) {
       const pointage = pointages[i];
-      if (pointage.absence && pointage.idvigile && pointage.id) {
-        console.log((i + 1) + " a traversé la première ligne ");
+      if (pointage.absence && pointage.id) {
+        // console.log((i + 1) + " a traversé la première ligne ");
 
-        if (Number(pointage.id.slice(0, 14)) > this.numeroLePlusHaut || true) {
-          console.log((i + 1) + " a traversé la deuxième ligne ");
-          if (!this.isNumeroDansNumeros(pointage.id)) {
-            console.log((i + 1) + " a traversé la troisième ligne ");
-            let identifiant = pointage.id.slice(0, 8) + '' + pointage.idvigile;
-            console.log(identifiant);
-            if (!this.isElementDansListe(identifiant, doubles)) {
-              doubles.push(identifiant);
-              this.absencesRemote.push(pointage);
-              const d = this.toDate(pointage.date);
-              let suivi = new Suivi();
-              suivi.numero = pointage.id;
-              suivi.dateEffet = d;
-              suivi.dateSuivi = d;
-              suivi.motifSanction = "Absence";
-              let vigile = await this.vigileService.get('vigile', Number(pointage.idvigile));
+        if (!this.isNumeroDansNumeros(pointage.id)) {
+          console.log((i + 1) + " a traversé la troisième ligne ");
 
-              if (vigile) {
-                suivi.idvigile = vigile;
-                suivi.nombreAbsence = 2;
-                suivi.commentaire = pointage.commentaire;
-                console.log(suivi);
-                await this.suiviService.ajouterSilent('suiviposte', suivi);
-                n++;
-              }
+          const d = this.toDate(pointage.date);
+          let suivi = new Suivi();
+          suivi.numero = pointage.id;
+          suivi.dateEffet = d;
+          suivi.dateSuivi = d;
+          suivi.motifSanction = "Absence";
+          try {
+            let vigile = await this.vigileCtrlService.getVigileByMatricule(pointage.matricule.trim());
+
+            if (vigile) {
+              suivi.idvigile = vigile;
+              suivi.nombreAbsence = 2;
+              suivi.commentaire = pointage.commentaire;
+              console.log(suivi);
+              await this.suiviService.ajouterSilent('suiviposte', suivi);
+
+              this.notifierService.notify('success', "Sanction du vigile " + vigile.noms + " ajoutée avec succès");
+              n++;
+            } else {
+              console.log("On n'a pas trouvé le vigile avec le matricule", pointage.matricule.trim())
             }
+          } catch (error) {
+
           }
         }
       }
