@@ -1,351 +1,375 @@
 <div *ngIf="!enCoursSuppression" class="page">
-    <div class="page-entete">
-        <div *ngIf="contrat.idcontrat===0" class="page-entete-titre">
-            Ajouter un nouveau contrat
-        </div>
-        <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
-            Contrat : {{contrat.libelle}}
-        </div>
-        <div *ngIf="contrat.idcontrat===0">
-            <a routerLink="/contrat" class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la liste des contrats
-            </a>
-        </div>
-        <div *ngIf="contrat.idcontrat!=0">
-            <a [routerLink]="'/contrat/view/' + contrat.idcontrat " class="btn btn-link" style="padding: 0; margin: 0;">
-                Revenir à la vue du contrat
-            </a>
-        </div>
+  <div class="page-entete">
+    <div *ngIf="contrat.idcontrat===0" class="page-entete-titre">
+      Ajouter un nouveau contrat
     </div>
-    <div class="page-contenu">
-        <div class="">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-                        Informations
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#postes" type="button" role="tab" aria-controls="postes" aria-selected="true">
-                        Historique
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="tab-content" id="myTabContent" style="background-color: #fff; padding: 10px; padding-left: 16px; padding-right: 16px; padding-top: 2px;">
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <div>
-                    <div class="categorie">
-                        Libellé du contrat
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        Libellé <app-required></app-required>
-                                    </span>
-                                </div>
-                                <input [(ngModel)]="contrat.libelle" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.libelle}">
-                            </div>
-                        </div>
-                    </div>
+    <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
+      Contrat : {{contrat.libelle}}
+    </div>
+    <div *ngIf="contrat.idcontrat===0">
+      <a routerLink="/contrat" class="btn btn-link" style="padding: 0; margin: 0;">
+        Revenir à la liste des contrats
+      </a>
+    </div>
+    <div *ngIf="contrat.idcontrat!=0">
+      <a [routerLink]="'/contrat/view/' + contrat.idcontrat " class="btn btn-link" style="padding: 0; margin: 0;">
+        Revenir à la vue du contrat
+      </a>
+    </div>
+  </div>
+  <div class="page-contenu">
+    <div class="">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#home" type="button"
+            role="tab" aria-controls="home" aria-selected="true">
+            Informations
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#postes" type="button" role="tab"
+            aria-controls="postes" aria-selected="true">
+            Historique
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="tab-content" id="myTabContent"
+      style="background-color: #fff; padding: 10px; padding-left: 16px; padding-right: 16px; padding-top: 2px;">
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div>
+          <div class="categorie">
+            Libellé du contrat
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Libellé <app-required></app-required>
+                  </span>
                 </div>
-                <div>
-                    <div class="categorie">
-                        Période de la prestation
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        Date de la signature du contrat
-                                    </span>
-                                </div>
-                                <input [ngModel]="contrat.dateSignature | date:'yyyy-MM-dd'" (ngModelChange)="contrat.dateSignature = $event" type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateSignature}">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        Date début de la prestation <app-required></app-required>
-                                    </span>
-                                </div>
-                                <input [ngModel]="contrat.dateDebut | date:'yyyy-MM-dd'" (ngModelChange)="contrat.dateDebut = $event" type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateDebut}">
-                            </div>
-                        </div>
-                        <div class="col-lg-12" *ngIf="montrerErreurs && erreurs.dateSignature">
-                            <div class="mt-1" style="color: red;">
-                                <small>
-                                    La date de signature du contrat ne peut être supérieure à la date de début du
-                                    contrat
-                                </small>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        Date de fin prévue
-                                    </span>
-                                </div>
-                                <input [ngModel]="contrat.dateFin | date:'yyyy-MM-dd'" (ngModelChange)="contrat.dateFin = $event" type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateFin}">
-                            </div>
-                        </div>
-                        <div class="col-lg-12" *ngIf="montrerErreurs && erreurs.dateFin">
-                            <div class="mt-1" style="color: red;">
-                                <small>
-                                    La date de début du contrat ne peut être supérieure à la date de fin du contrat
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="categorie">
-                        Détails du client
-                    </div>
-                    <div>
-                        <input (change)="choisirClient(0)" type="radio" name="client" [checked]="contrat && contrat.particulier"> Particulier &nbsp;&nbsp;
-                        <input (change)="choisirClient(1)" type="radio" name="client" [checked]="contrat && !contrat.particulier"> Entreprise
-                    </div>
-                    <div *ngIf="contrat && contrat?.particulier" class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Nom <app-required></app-required></span>
-                                </div>
-                                <input [(ngModel)]="contrat.nom" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nom && contrat.particulier)}">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Prénom</span>
-                                </div>
-                                <input [(ngModel)]="contrat.prenom" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Tel <app-required></app-required></span>
-                                </div>
-                                <input [(ngModel)]="contrat.tel" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.tel && contrat.particulier)}">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Email</span>
-                                </div>
-                                <input [(ngModel)]="contrat.email" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">CNI/Passeport</span>
-                                </div>
-                                <input [(ngModel)]="contrat.numero" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Adresse <app-required></app-required></span>
-                                </div>
-                                <input [(ngModel)]="contrat.adresse" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.adresse && contrat.particulier)}">
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="contrat && !contrat?.particulier" class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Nom de l'entreprise
-                                        <app-required></app-required></span>
-                                </div>
-                                <input [(ngModel)]="contrat.nom" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nom && !contrat.particulier)}">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Raison sociale</span>
-                                </div>
-                                <input [(ngModel)]="contrat.raison" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Tel <app-required></app-required></span>
-                                </div>
-                                <input [(ngModel)]="contrat.tel" type="tel" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.tel && !contrat.particulier)}">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Email</span>
-                                </div>
-                                <input [(ngModel)]="contrat.email" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Nom complet du représentant légal
-                                        <app-required></app-required></span>
-                                </div>
-                                <input [(ngModel)]="contrat.representant" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.representant && !contrat.particulier)}">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Adresse <app-required></app-required></span>
-                                </div>
-                                <input [(ngModel)]="contrat.adresse" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.adresse && !contrat.particulier)}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div [ngClass]="{'categorie': true}">
-                        Description de la prestation : Les informations ci-dessous créent un avenant lorsqu'elles sont modifiées
-                        <span *ngIf="!isMemesTermesDuContrat()" style="color: red;">*</span>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Nombre de sites <app-required></app-required></span>
-                                </div>
-                                <input [(ngModel)]="contrat.nbPostes" type="number" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbPostes)}">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Nombre de vigiles jour</span>
-                                </div>
-                                <input [(ngModel)]="contrat.nbVigileJour" type="number" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbJourNegatif || erreurs.nbVigiles)}">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Nombre de vigiles nuit</span>
-                                </div>
-                                <input [(ngModel)]="contrat.nbVigileNuit" type="number" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbNuitNegatif || erreurs.nbVigiles)}">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="input-group">
-
-                                <div class="input-group-text">Description</div>
-
-                                <textarea [(ngModel)]="contrat.description" class="form-control"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group" style="margin-top: 20px; margin-bottom: 20px;">
-                    <button (click)="save()" class="btn nouveau">
-                        Enregistrer
-                    </button>&nbsp;
-                    <button *ngIf="contrat.idcontrat != 0" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
-                </div>
+                <input [(ngModel)]="contrat.libelle" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && erreurs.libelle}">
+              </div>
             </div>
-            <div class="tab-pane" id="postes" role="tabpanel" aria-labelledby="postes-tab">
-                <div>
-                    <div style="margin-top: 20px">
-                        Historique du contrat
-                    </div>
-                    <div class="">
-
-                        <div class="page-contenu-corps ">
-                            <app-display-historique-contrat [contrat]="contrat"></app-display-historique-contrat>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    </div>
-    <div style="height: 25vmin;">
+        <div>
+          <div class="categorie">
+            Période de la prestation
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Date de la signature du contrat
+                  </span>
+                </div>
+                <input [ngModel]="contrat.dateSignature | date:'yyyy-MM-dd'"
+                  (ngModelChange)="contrat.dateSignature = $event" type="date" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateSignature}">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Date début de la prestation <app-required></app-required>
+                  </span>
+                </div>
+                <input [ngModel]="contrat.dateDebut | date:'yyyy-MM-dd'" (ngModelChange)="contrat.dateDebut = $event"
+                  type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateDebut}">
+              </div>
+            </div>
+            <div class="col-lg-12" *ngIf="montrerErreurs && erreurs.dateSignature">
+              <div class="mt-1" style="color: red;">
+                <small>
+                  La date de signature du contrat ne peut être supérieure à la date de début du
+                  contrat
+                </small>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Date de fin prévue
+                  </span>
+                </div>
+                <input [ngModel]="contrat.dateFin | date:'yyyy-MM-dd'" (ngModelChange)="contrat.dateFin = $event"
+                  type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateFin}">
+              </div>
+            </div>
+            <div class="col-lg-12" *ngIf="montrerErreurs && erreurs.dateFin">
+              <div class="mt-1" style="color: red;">
+                <small>
+                  La date de début du contrat ne peut être supérieure à la date de fin du contrat
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="categorie">
+            Détails du client
+          </div>
+          <div>
+            <input (change)="choisirClient(0)" type="radio" name="client" [checked]="contrat && contrat.particulier">
+            Particulier &nbsp;&nbsp;
+            <input (change)="choisirClient(1)" type="radio" name="client" [checked]="contrat && !contrat.particulier">
+            Entreprise
+          </div>
+          <div *ngIf="contrat && contrat?.particulier" class="row">
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Nom <app-required></app-required></span>
+                </div>
+                <input [(ngModel)]="contrat.nom" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nom && contrat.particulier)}">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Prénom</span>
+                </div>
+                <input [(ngModel)]="contrat.prenom" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Tel <app-required></app-required></span>
+                </div>
+                <input [(ngModel)]="contrat.tel" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.tel && contrat.particulier)}">
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Email</span>
+                </div>
+                <input [(ngModel)]="contrat.email" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">CNI/Passeport</span>
+                </div>
+                <input [(ngModel)]="contrat.numero" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Adresse <app-required></app-required></span>
+                </div>
+                <input [(ngModel)]="contrat.adresse" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.adresse && contrat.particulier)}">
+              </div>
+            </div>
+          </div>
+          <div *ngIf="contrat && !contrat?.particulier" class="row">
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Nom de l'entreprise
+                    <app-required></app-required></span>
+                </div>
+                <input [(ngModel)]="contrat.nom" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nom && !contrat.particulier)}">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Raison sociale</span>
+                </div>
+                <input [(ngModel)]="contrat.raison" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Tel <app-required></app-required></span>
+                </div>
+                <input [(ngModel)]="contrat.tel" type="tel" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.tel && !contrat.particulier)}">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Email</span>
+                </div>
+                <input [(ngModel)]="contrat.email" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Nom complet du représentant légal
+                    <app-required></app-required></span>
+                </div>
+                <input [(ngModel)]="contrat.representant" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.representant && !contrat.particulier)}">
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Adresse <app-required></app-required></span>
+                </div>
+                <input [(ngModel)]="contrat.adresse" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.adresse && !contrat.particulier)}">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div [ngClass]="{'categorie': true}">
+            Description de la prestation : Les informations ci-dessous créent un avenant lorsqu'elles sont modifiées
+            <span *ngIf="!isMemesTermesDuContrat()" style="color: red;">*</span>
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Nombre de sites <app-required></app-required></span>
+                </div>
+                <input [(ngModel)]="contrat.nbPostes" type="number" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbPostes)}">
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Nombre de vigiles jour</span>
+                </div>
+                <input [(ngModel)]="contrat.nbVigileJour" type="number" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbJourNegatif || erreurs.nbVigiles)}">
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Nombre de vigiles nuit</span>
+                </div>
+                <input [(ngModel)]="contrat.nbVigileNuit" type="number" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbNuitNegatif || erreurs.nbVigiles)}">
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="input-group">
 
+                <div class="input-group-text">Description</div>
+
+                <textarea [(ngModel)]="contrat.description" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="input-group" style="margin-top: 20px; margin-bottom: 20px;">
+          <button (click)="save()" class="btn nouveau">
+            Enregistrer
+          </button>&nbsp;
+          <!--  <button *ngIf="contrat.idcontrat != 0" (click)="supprimer()" class="btn btn-danger">Supprimer</button> -->
+        </div>
+      </div>
+      <div class="tab-pane" id="postes" role="tabpanel" aria-labelledby="postes-tab">
+        <div>
+          <div style="margin-top: 20px">
+            Historique du contrat
+          </div>
+          <div class="">
+
+            <div class="page-contenu-corps ">
+              <app-display-historique-contrat [contrat]="contrat"></app-display-historique-contrat>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  <div style="height: 25vmin;">
+
+  </div>
 </div>
 
 <div *ngIf="enCoursSuppression" class="page">
-    <div class="page-entete">
-        <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
-            Contrat : {{contrat.libelle}}
-        </div>
-        <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut | date: 'yyyy-MM-dd'}}</div>
-        <div style="margin-top: 0px;">
-            <i>
-                {{contrat.description}}
-            </i>
-        </div>
-        <div class="">
-            <a (click)="enCoursSuppression = !enCoursSuppression" class="btn btn-link" style="padding: 0; margin: 0;">
-                Annuler et revenir
-            </a>
-        </div>
+  <div class="page-entete">
+    <div *ngIf="contrat.idcontrat!=0" class="page-entete-titre">
+      Contrat : {{contrat.libelle}}
     </div>
-    <div *ngIf="postes.length == 0">
-        <div class="page-contenu" *ngIf="contratsites.length > 0">
-            <div>
-                Les sites suivants seront aussi supprimés
-            </div>
-            <ul class="historique">
-                <ng-container *ngFor="let contratsite of contratsites">
-                    <li [ngClass]="{'supprimee': isSiteSupprimee(contratsite.idcontratSite)}">
-                        {{contratsite.nom}}
-                    </li>
-                </ng-container>
-            </ul>
-        </div>
-        <div class="page-contenu" *ngIf="contratsHistoriques.length > 1">
-            <div>
-                Les différents historiques du contrat seront aussi supprimés
-            </div>
-            <ul class="historique">
-                <ng-container *ngFor="let c of contratsHistoriques">
-                    <li *ngIf="c.idcontrat != contrat.idcontrat" [ngClass]="{'supprimee': isContratSupprimee(c.idcontrat)}">
-                        Date :{{c.date | date: "yyyy-MM-dd HH:mm"}}, Sites : {{c.nbPostes}}, Vigiles Jour : {{c.nbVigileJour}}, Vigiles Nuit : {{c.nbVigileNuit}}
-                    </li>
-                </ng-container>
-            </ul>
-        </div>
-        <div class="page-contenu">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                        Code de suppression 
-                        <app-required></app-required>
-                    </span>
-                        </div>
-                        <input [(ngModel)]="code" type="password" class="form-control" [ngClass]="{'is-invalid': code!='1234'}">
-                        <button [disabled]="code!='1234'" class="btn btn-danger" (click)="supprimerDefinitivement()">Supprimer définitivement</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>Date de signature : {{contrat.dateSignature | date: 'yyyy-MM-dd'}}, Date de début : {{contrat.dateDebut | date:
+      'yyyy-MM-dd'}}</div>
+    <div style="margin-top: 0px;">
+      <i>
+        {{contrat.description}}
+      </i>
     </div>
-    <div *ngIf="postes.length != 0">
-        <div class="page-contenu">
-            <div style="width: 50%;">
+    <div class="">
+      <a (click)="enCoursSuppression = !enCoursSuppression" class="btn btn-link" style="padding: 0; margin: 0;">
+        Annuler et revenir
+      </a>
+    </div>
+  </div>
+  <div *ngIf="postes.length == 0">
+    <div class="page-contenu" *ngIf="contratsites.length > 0">
+      <div>
+        Les sites suivants seront aussi supprimés
+      </div>
+      <ul class="historique">
+        <ng-container *ngFor="let contratsite of contratsites">
+          <li [ngClass]="{'supprimee': isSiteSupprimee(contratsite.idcontratSite)}">
+            {{contratsite.nom}}
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <div class="page-contenu" *ngIf="contratsHistoriques.length > 1">
+      <div>
+        Les différents historiques du contrat seront aussi supprimés
+      </div>
+      <ul class="historique">
+        <ng-container *ngFor="let c of contratsHistoriques">
+          <li *ngIf="c.idcontrat != contrat.idcontrat" [ngClass]="{'supprimee': isContratSupprimee(c.idcontrat)}">
+            Date :{{c.date | date: "yyyy-MM-dd HH:mm"}}, Sites : {{c.nbPostes}}, Vigiles Jour : {{c.nbVigileJour}},
+            Vigiles Nuit : {{c.nbVigileNuit}}
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <div class="page-contenu">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Code de suppression
+                <app-required></app-required>
+              </span>
+            </div>
+            <input [(ngModel)]="code" type="password" class="form-control" [ngClass]="{'is-invalid': code!='1234'}">
+            <button [disabled]="code!='1234'" class="btn btn-danger" (click)="supprimerDefinitivement()">Supprimer
+              définitivement</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="postes.length != 0">
+    <div class="page-contenu">
+      <div style="width: 50%;">
 
-                Vous ne pouvez pas supprimer ce contrat car il est lié à des postes. Veuillez supprimer manuellement les postes avant de continuer
-            </div>
-        </div>
+        Vous ne pouvez pas supprimer ce contrat car il est lié à des postes. Veuillez supprimer manuellement les postes
+        avant de continuer
+      </div>
     </div>
+  </div>
 </div>

@@ -296,8 +296,8 @@
               *ngIf="(isPosteContractuel && poste.idcontratsite && (!existeDejaJour || !existeDejaNuit)) || !isPosteContractuel"
               class="input-group" style="margin-top: 20px; margin-bottom: 20px">
               <button [disabled]="processing" (click)="save()" class="btn btn-primary">Enregistrer</button> &nbsp;
-              <button *ngIf="poste.idposte != 0" [disabled]="processing" (click)="supprimer()"
-                class="btn btn-danger">Supprimer</button>
+              <!-- <button *ngIf="poste.idposte != 0" [disabled]="processing" (click)="supprimer()"
+                class="btn btn-danger">Supprimer</button> -->
             </div>
           </div>
         </div>
