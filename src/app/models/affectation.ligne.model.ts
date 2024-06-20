@@ -9,4 +9,5 @@ export class AffectationLigne {
   nomsVigile = "";
   dateAffectation = new Date();
   postesCodesAgiv: Array<string> | undefined = new Array<string>();
+  isRemplacant?: boolean;
 }

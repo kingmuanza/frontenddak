@@ -398,15 +398,27 @@ export class PosteViewComponent implements OnInit {
   supprimer(affectationLigne: AffectationLigne) {
     let oui = confirm("Etes-vous sûr de vouloir mettre l'affectation en ligne ?");
     if (oui) {
-      console.log('supprimer affectationLigne');
-      const db = getFirestore(this.app);
-      deleteDoc(doc(db, "affectation", affectationLigne.id + "")).then((value) => {
-        console.log("Terminé");
-        console.log(value);
-        console.log(affectationLigne);
-        this.notifierService.notify('success', "Suppression effectuée avec succès");
-        window.location.reload();
-      });
+      if (affectationLigne.isRemplacant) {
+        console.log('supprimer affectationLigne du remplacant');
+        const db = getFirestore(this.app);
+        deleteDoc(doc(db, "affectation-remplacant", affectationLigne.id + "")).then((value) => {
+          console.log("Terminé");
+          console.log(value);
+          console.log(affectationLigne);
+          this.notifierService.notify('success', "Suppression du remplacant effectuée avec succès");
+          window.location.reload();
+        });
+      } else {
+        console.log('supprimer affectationLigne');
+        const db = getFirestore(this.app);
+        deleteDoc(doc(db, "affectation", affectationLigne.id + "")).then((value) => {
+          console.log("Terminé");
+          console.log(value);
+          console.log(affectationLigne);
+          this.notifierService.notify('success', "Suppression effectuée avec succès");
+          window.location.reload();
+        });
+      }
     }
   }
 
