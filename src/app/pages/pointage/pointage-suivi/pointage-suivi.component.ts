@@ -158,7 +158,7 @@ export class PointageSuiviComponent implements OnInit {
   }
 
   showVigile(affectation: Affectation, d: Date): { vigile: Vigile, isRemplacant: boolean, isSanctionnee?: boolean } {
-    console.log("showVigile")
+    // console.log("showVigile")
     const date = new Date(d);
     let jour = date.getDay();
     if (jour === 0) {
