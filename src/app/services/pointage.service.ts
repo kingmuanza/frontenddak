@@ -51,6 +51,7 @@ export class PointageService {
 
   getPointagesByDate(date: Date, zone: ZoneDak): Promise<Array<any>> {
     console.log("getPointagesByDate", date);
+    console.log("zone", zone.code, zone.horaire);
     return new Promise((resolve, reject) => {
 
       let debut = new Date(date);
