@@ -10,6 +10,7 @@ import { getFirestore } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { Poste } from 'src/app/models/poste.model';
 import { ContratSite } from '../models/contrat.site.model';
+import { ZoneDak } from '../models/zone.model';
 
 
 @Injectable({
@@ -48,15 +49,21 @@ export class PointageService {
     });
   }
 
-  getPointagesByDate(date: Date): Promise<Array<any>> {
+  getPointagesByDate(date: Date, zone: ZoneDak): Promise<Array<any>> {
     console.log("getPointagesByDate", date);
     return new Promise((resolve, reject) => {
+
       let debut = new Date(date);
       let fin = new Date(date);
-      debut.setDate(debut.getDate() - 1);
-      debut.setHours(18, 0, 0);
-      fin.setDate(fin.getDate());
-      fin.setHours(18, 0, 0);
+      if (zone.horaire.toLowerCase() == "jour") {
+        fin.setHours(18, 0, 0);
+        debut.setHours(6, 0, 0);
+      } else {
+
+        debut.setDate(debut.getDate() - 1);
+        debut.setHours(18, 0, 0);
+        fin.setHours(6, 0, 0);
+      }
       console.log("debut", debut)
       console.log("fin", fin)
       const pointages = new Array<any>();

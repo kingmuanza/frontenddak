@@ -92,7 +92,7 @@ export class PointageSuiviComponent implements OnInit {
 
   getAffectationByZone(zone: ZoneDak, d: Date) {
 
-    this.pointageService.getPointagesByDate(d).then((pointages) => {
+    this.pointageService.getPointagesByDate(d, zone).then((pointages) => {
       this.pointages = pointages;
       console.log("Nombre de poinatge du jour", pointages.length)
       const date = new Date(d);
