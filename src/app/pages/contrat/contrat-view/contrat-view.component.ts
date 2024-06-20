@@ -14,6 +14,7 @@ import { PosteCtrlService } from 'src/app/_services/poste-ctrl.service';
 import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 import { droits } from 'src/app/data/droits';
 import { AuthService } from 'src/app/services/auth.service';
+import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-contrat-view',
@@ -74,6 +75,26 @@ export class ContratViewComponent implements OnInit, OnDestroy {
     private authService: AuthService,
   ) { }
 
+  imprimer(data: Contrat) {
+
+    const doc = new jsPDF();
+
+    doc.text(`Adresse: ${data.adresse}`, 10, 10);
+    doc.text(`Date: ${new Date(data.date).toLocaleString()}`, 10, 20);
+    doc.text(`Date Début: ${new Date(data.dateDebut).toLocaleString()}`, 10, 30);
+    doc.text(`Date Signature: ${new Date(data.dateSignature).toLocaleString()}`, 10, 40);
+    doc.text(`Description: ${data.description}`, 10, 50);
+    doc.text(`Email: ${data.email}`, 10, 60);
+    doc.text(`ID Contrat: ${data.idcontrat}`, 10, 70);
+    doc.text(`Libellé: ${data.libelle}`, 10, 80);
+    doc.text(`Nom: ${data.nom}`, 10, 90);
+    doc.text(`Prénom: ${data.prenom}`, 10, 100);
+    doc.text(`Statut: ${data.statut}`, 10, 110);
+    doc.text(`Téléphone: ${data.tel}`, 10, 120);
+
+    doc.save('output.pdf');
+  }
+
   ngOnInit(): void {
     this.authService.currentUserSubject.subscribe((utilisateur) => {
       console.log('utilisateur');
@@ -100,6 +121,7 @@ export class ContratViewComponent implements OnInit, OnDestroy {
       if (id) {
         this.getContrat(id).then((contrat) => {
           this.contrat = contrat;
+          console.log("contrat", contrat)
 
           this.contratCtrlService.isContratsEnCoursDeCreation(contrat).then((isContratsEnCoursDeCreation) => {
             this.isContratsEnCoursDeCreation = isContratsEnCoursDeCreation;
