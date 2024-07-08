@@ -1,299 +1,289 @@
 <div class="page-contenu-corps">
-    <div class="row">
-        <div class="col-lg-12">
+  <div class="row">
+    <div class="col-lg-12">
 
-            <div class="categorie" style="margin-top: 0;">
-                Informations personnelles
+      <div class="categorie" style="margin-top: 0;">
+        Informations personnelles
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Noms <app-required></app-required>
+              </span>
             </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Noms <app-required></app-required>
-                            </span>
-                        </div>
-                        <input type="text" [(ngModel)]="vigile.nom" class="form-control"
-                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
-                    </div>
-                    <div *ngIf="montrerErreurs && erreurs.nom" class="indication">
-                        {{erreursLibelles.required}}
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Prénoms
-                            </span>
-                        </div>
-                        <input type="text" [(ngModel)]="vigile.prenom" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Date de naissance <app-required></app-required>
-                            </span>
-                        </div>
-                        <input [ngModel]="vigile.dteNce | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dteNce = $event"
-                            type="date" class="form-control"
-                            [ngClass]="{'is-invalid': montrerErreurs && (erreurs.datenaiss || erreurs.majeur)}">
-                    </div>
-                    <div *ngIf="montrerErreurs && erreurs.datenaiss" class="indication">
-                        {{erreursLibelles.datenaiss}}
-                    </div>
-                    <div *ngIf="montrerErreurs && erreurs.majeur" class="indication">
-                        {{erreursLibelles.majeur}}
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Numéro CNI <app-required></app-required>
-                            </span>
-                        </div>
-                        <input type="text" [(ngModel)]="vigile.mumCni" class="form-control"
-                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.cni}">
-                    </div>
-                    <div *ngIf="montrerErreurs && erreurs.cni" class="indication">
-                        {{erreursLibelles.required}}
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Nationalité
-                            </span>
-                        </div>
-                        <select type="text" [(ngModel)]="vigile.nationalite" class="form-control">
-                            <option [ngValue]="nationalite" *ngFor="let nationalite of nationalites">
-                                {{nationalite.libelle}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Téléphone <app-required></app-required>
-                            </span>
-                        </div>
-                        <input type="text" [(ngModel)]="vigile.tel" class="form-control"
-                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
-                    </div>
-                    <div *ngIf="montrerErreurs && erreurs.tel" class="indication">
-                        {{erreursLibelles.required}}
-                    </div>
-                </div>
-            </div>
+            <input type="text" [(ngModel)]="vigile.nom" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.nom" class="indication">
+            {{erreursLibelles.required}}
+          </div>
         </div>
-        <div class="col-lg-12">
-
-            <div class="categorie">
-                Au sein de l'entreprise
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Prénoms
+              </span>
             </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Fonction <app-required></app-required>
-                            </span>
-                        </div>
-                        <select [(ngModel)]="vigile.fonction" class="form-control"
-                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.fonction}">
-                            <option value="AGENT">Agent de sécurité</option>
-                            <option value="ESCORTEUR">Escorteur</option>
-                            <option value="CONTROLEUR">Contrôleur</option>
-                            <option value="CHAUFFEUR">Chauffeur</option>
-                            <option value="MAITRECHIEN">Maitre Chien</option>
-                            <option value="ENTRETIEN">Agent d'entretien</option>
-                            <option value="SUPERVISEUR">Superviseur</option>
-                        </select>
-                    </div>
-                    <div *ngIf="montrerErreurs && erreurs.fonction" class="indication">
-                        {{erreursLibelles.required}}
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Statut
-                            </span>
-                        </div>
-                        <select [(ngModel)]="vigile.statut" class="form-control">
-                            <option [value]="1">Absent[e]</option>
-                            <option [value]="2">Actif[ve]</option>
-                            <option [value]="3">Standby</option>
-                            <option [value]="4">Licencié(e)</option>
-                            <option [value]="5">Suspendu[e]</option>
-                            <option [value]="6">Démissionné[e]</option>
-                            <option [value]="7">Décédé[e]</option>
-                        </select>
-                    </div>
-                </div>
-                <div *ngIf="parrainSelectionnee" class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Parrain
-                            </span>
-                        </div>
-                        <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text"
-                            class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
-                        <select [(ngModel)]="vigile.parrain" type="text" class="form-control">
-                            <ng-container *ngFor="let v of vigiles">
-                                <option *ngIf="v.idvigile !== vigile.idvigile" [value]="v.idvigile">
-                                    {{v.noms}}
-                                </option>
-                            </ng-container>
-                        </select>
-                        <button (click)="voirParrain()" class="btn btn-outline-secondary" type="button">Voir</button>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Matricule <app-required></app-required>
-                            </span>
-                        </div>
-                        <input type="text" [(ngModel)]="vigile.matricule" class="form-control"
-                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.matricule}">
-                    </div>
-                    <div *ngIf="montrerErreurs && erreurs.matricule" class="indication">
-                        {{erreursLibelles.required}}
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-4">
-                    <div style="margin-top:15px; margin-bottom: 15px;">
-                        <input type="checkbox" [(ngModel)]="vigile.estRemplacant"> &nbsp; Est remplacant
-
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div style="margin-top:15px; margin-bottom: 15px;">
-                        <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge"> &nbsp; Est remplacant congés
-
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Horaire
-                            </span>
-                        </div>
-                        <select [(ngModel)]="vigile.horaire" class="form-control">
-                            <option value="jour">Jour</option>
-                            <option value="nuit">Nuit</option>
-                            <option *ngIf="vigile.estRemplacant" value="journuit">Jour et nuit</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Jour de repos
-                            </span>
-                        </div>
-                        <select [(ngModel)]="vigile.jourRepos" class="form-control">
-                            <option [value]="1">Lundi</option>
-                            <option [value]="2">Mardi</option>
-                            <option [value]="3">Mercredi</option>
-                            <option [value]="4">Jeudi</option>
-                            <option [value]="5">Vendredi</option>
-                            <option [value]="6">Samedi</option>
-                            <option [value]="7">Dimanche</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <input type="text" [(ngModel)]="vigile.prenom" class="form-control">
+          </div>
         </div>
-        <div class="col-lg-12">
-
-            <div class="categorie">
-                Localisation
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Date de naissance <app-required></app-required>
+              </span>
             </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Ville
-                            </span>
-                        </div>
-                        <select [(ngModel)]="vigile.ville" class="form-control">
-                            <option [ngValue]="ville" *ngFor="let ville of villes">
-                                {{ville.libelle}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Quartier
-                            </span>
-                        </div>
-                        <select [(ngModel)]="vigile.quartier" class="form-control">
-                            <option [ngValue]="quartier" *ngFor="let quartier of quartiers">
-                                {{quartier.nom}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <input [ngModel]="vigile.dteNce | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dteNce = $event" type="date"
+              class="form-control" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.datenaiss || erreurs.majeur)}">
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.datenaiss" class="indication">
+            {{erreursLibelles.datenaiss}}
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.majeur" class="indication">
+            {{erreursLibelles.majeur}}
+          </div>
         </div>
-        <div class="col-lg-12">
-            <div class="categorie">
-                Période de travail : En cours
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Numéro CNI <app-required></app-required>
+              </span>
             </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Date entrée <app-required></app-required>
-                            </span>
-                        </div>
-                        <input [ngModel]="vigile.dateEntree | date:'yyyy-MM-dd'"
-                            (ngModelChange)="vigile.dateEntree = $event" type="date" class="form-control"
-                            [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateEntree}">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                Date sortie
-                            </span>
-                        </div>
-                        <input [ngModel]="vigile.dateSortie | date:'yyyy-MM-dd'"
-                            (ngModelChange)="vigile.dateSortie = $event" type="date" class="form-control">
-                    </div>
-                </div>
-            </div>
+            <input type="text" [(ngModel)]="vigile.mumCni" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && erreurs.cni}">
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.cni" class="indication">
+            {{erreursLibelles.required}}
+          </div>
         </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Nationalité
+              </span>
+            </div>
+            <select type="text" [(ngModel)]="vigile.nationalite" class="form-control">
+              <option [ngValue]="nationalite" *ngFor="let nationalite of nationalites">
+                {{nationalite.libelle}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Téléphone <app-required></app-required>
+              </span>
+            </div>
+            <input type="text" [(ngModel)]="vigile.tel" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.tel" class="indication">
+            {{erreursLibelles.required}}
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="input-group" style="margin-top: 20px; margin-bottom: 20px;">
-        <button (click)="save()" class="btn nouveau">
-            Enregistrer
-        </button>&nbsp;
-        <button *ngIf="vigile.idvigile != 0" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+    <div class="col-lg-12">
+
+      <div class="categorie">
+        Au sein de l'entreprise
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Fonction <app-required></app-required>
+              </span>
+            </div>
+            <select [(ngModel)]="vigile.fonction" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && erreurs.fonction}">
+              <option value="AGENT">Agent de sécurité</option>
+              <option value="ESCORTEUR">Escorteur</option>
+              <option value="CONTROLEUR">Contrôleur</option>
+              <option value="CHAUFFEUR">Chauffeur</option>
+              <option value="MAITRECHIEN">Maitre Chien</option>
+              <option value="ENTRETIEN">Agent d'entretien</option>
+              <option value="SUPERVISEUR">Superviseur</option>
+            </select>
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.fonction" class="indication">
+            {{erreursLibelles.required}}
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Statut
+              </span>
+            </div>
+            <select [(ngModel)]="vigile.statut" class="form-control">
+              <option [value]="1">Absent[e]</option>
+              <option [value]="2">Actif[ve]</option>
+              <option [value]="3">Standby</option>
+              <option [value]="4">Licencié(e)</option>
+              <option [value]="5">Suspendu[e]</option>
+              <option [value]="6">Démissionné[e]</option>
+              <option [value]="7">Décédé[e]</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Parrain
+              </span>
+            </div>
+            <input [(ngModel)]="vigile.parrain" type="text" class="form-control" placeholder="Nom et numéro de tel">
+
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Matricule <app-required></app-required>
+              </span>
+            </div>
+            <input type="text" [(ngModel)]="vigile.matricule" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && erreurs.matricule}">
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.matricule" class="indication">
+            {{erreursLibelles.required}}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div style="margin-top:15px; margin-bottom: 15px;">
+            <input type="checkbox" [(ngModel)]="vigile.estRemplacant"> &nbsp; Est remplacant
+
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div style="margin-top:15px; margin-bottom: 15px;">
+            <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge"> &nbsp; Est remplacant congés
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Horaire
+              </span>
+            </div>
+            <select [(ngModel)]="vigile.horaire" class="form-control">
+              <option value="jour">Jour</option>
+              <option value="nuit">Nuit</option>
+              <option *ngIf="vigile.estRemplacant" value="journuit">Jour et nuit</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Jour de repos
+              </span>
+            </div>
+            <select [(ngModel)]="vigile.jourRepos" class="form-control">
+              <option [value]="1">Lundi</option>
+              <option [value]="2">Mardi</option>
+              <option [value]="3">Mercredi</option>
+              <option [value]="4">Jeudi</option>
+              <option [value]="5">Vendredi</option>
+              <option [value]="6">Samedi</option>
+              <option [value]="7">Dimanche</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="col-lg-12">
+
+      <div class="categorie">
+        Localisation
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Ville
+              </span>
+            </div>
+            <select [(ngModel)]="vigile.ville" class="form-control">
+              <option [ngValue]="ville" *ngFor="let ville of villes">
+                {{ville.libelle}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Quartier
+              </span>
+            </div>
+            <select [(ngModel)]="vigile.quartier" class="form-control">
+              <option [ngValue]="quartier" *ngFor="let quartier of quartiers">
+                {{quartier.nom}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="categorie">
+        Période de travail : En cours
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Date entrée <app-required></app-required>
+              </span>
+            </div>
+            <input [ngModel]="vigile.dateEntree | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dateEntree = $event"
+              type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateEntree}">
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Date sortie
+              </span>
+            </div>
+            <input [ngModel]="vigile.dateSortie | date:'yyyy-MM-dd'" (ngModelChange)="vigile.dateSortie = $event"
+              type="date" class="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="input-group" style="margin-top: 20px; margin-bottom: 20px;">
+    <button (click)="save()" class="btn nouveau">
+      Enregistrer
+    </button>&nbsp;
+    <button *ngIf="vigile.idvigile != 0" (click)="supprimer()" class="btn btn-danger">Supprimer</button>
+  </div>
 </div>

@@ -87,10 +87,15 @@ import { AffectationTemporaireListComponent } from './pages/affectation-temporai
 import { AffectationControleurEditComponent } from './pages/affectation-controleur/affectation-controleur-edit/affectation-controleur-edit.component';
 import { AffectationControleurListComponent } from './pages/affectation-controleur/affectation-controleur-list/affectation-controleur-list.component';
 import { AffectationControleurViewComponent } from './pages/affectation-controleur/affectation-controleur-view/affectation-controleur-view.component';
+import { DoublonsCniComponent } from './pages/anomalies/doublons-cni/doublons-cni.component';
+import { DoublonsMatriculeComponent } from './pages/anomalies/doublons-matricule/doublons-matricule.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
   { path: 'importation-affectations', component: ImportationAffectationsComponent },
+
+  { path: 'anomalie-cni', component: DoublonsCniComponent },
+  { path: 'anomalie-matricule', component: DoublonsMatriculeComponent },
 
   { path: 'recap-jour', component: RecapJourneeComponent },
   { path: 'recap-jour/:code', component: RecapZoneComponent },

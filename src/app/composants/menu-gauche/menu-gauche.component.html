@@ -27,6 +27,19 @@
 
     <div>
       <div class="menu-gauche-sous-titre">
+        ANOMALIES
+      </div>
+      <div>
+        <div class="menu-gauche-item" *ngIf="mesDroits.enrolement">
+          <a routerLinkActive="active" routerLink="/anomalie-matricule">
+            Vigiles doublons matricule
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="menu-gauche-sous-titre">
         ENROLEMENT
       </div>
       <div>

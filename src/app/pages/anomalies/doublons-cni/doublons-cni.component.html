@@ -1,0 +1,50 @@
+<div class="page">
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      Vigiles avec le même matricule
+    </div>
+
+  </div>
+  <div class="page-contenu">
+    <div class="card shadow-1">
+      <div class="page-contenu-corps">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+          <thead>
+            <tr>
+              <th>Matricule</th>
+              <th>Noms</th>
+              <th>Horaire</th>
+              <th>Fonction</th>
+              <th>Repos</th>
+              <th>Quartier</th>
+              <th>Ville</th>
+              <th style="text-align: center;">Remplacant</th>
+              <th style="text-align: center;">Rempl. Congés</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vigile of vigiles" (click)="view(vigile.idvigile)" style="cursor: pointer;">
+              <td>{{vigile.matricule}}</td>
+              <td>{{vigile.noms}}</td>
+              <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
+              <td>{{vigile.fonction}}</td>
+              <td>{{jourSemaine(vigile.jourRepos)}}</td>
+              <td>{{vigile.quartier?.nom}}</td>
+              <td>{{vigile.ville?.libelle}}</td>
+              <td style="text-align: center;">
+                <input type="checkbox" [(ngModel)]="vigile.estRemplacant" readonly>
+              </td>
+              <td>
+                <input type="checkbox" [(ngModel)]="vigile.estRemplacantConge" readonly>
+                <small style="margin-left: 20px;">
+                  {{vigile.idremplacantConge ? vigile.idremplacantConge.noms : ''}}
+                </small>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>

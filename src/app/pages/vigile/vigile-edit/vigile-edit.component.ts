@@ -328,7 +328,7 @@ export class VigileEditComponent implements OnInit {
           this.notifierService.notify('success', "Ajout effectué avec succès");
           // this.router.navigate(['vigile']);
 
-          this.router.navigate(['vigile']);
+          this.router.navigate(['vigile', 'view', data.idvigile]);
         }).catch((e) => {
           this.processing = false;
         });

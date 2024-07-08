@@ -121,6 +121,8 @@ import { DisplayAffectationVigilesComponent } from './composants/display-affecta
 import { AffectationControleurViewComponent } from './pages/affectation-controleur/affectation-controleur-view/affectation-controleur-view.component';
 import { AffectationControleurEditComponent } from './pages/affectation-controleur/affectation-controleur-edit/affectation-controleur-edit.component';
 import { AffectationControleurListComponent } from './pages/affectation-controleur/affectation-controleur-list/affectation-controleur-list.component';
+import { DoublonsMatriculeComponent } from './pages/anomalies/doublons-matricule/doublons-matricule.component';
+import { DoublonsCniComponent } from './pages/anomalies/doublons-cni/doublons-cni.component';
 
 @NgModule({
   declarations: [
@@ -237,6 +239,8 @@ import { AffectationControleurListComponent } from './pages/affectation-controle
     AffectationControleurViewComponent,
     AffectationControleurEditComponent,
     AffectationControleurListComponent,
+    DoublonsMatriculeComponent,
+    DoublonsCniComponent,
   ],
   imports: [
     BrowserModule,
