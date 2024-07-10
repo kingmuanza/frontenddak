@@ -45,6 +45,16 @@ export class RecapVeilleComponent implements OnInit {
   terminee = false;
   remplacements = new Array<any>();
 
+
+  montrerErreurs = false;
+
+  erreurs = {
+    libelle: false,
+    code: false,
+    horaire: false,
+    ville: false,
+  }
+
   constructor(
     private affectationService: JarvisService<Affectation>,
     private zoneService: JarvisService<ZoneDak>,
@@ -127,6 +137,8 @@ export class RecapVeilleComponent implements OnInit {
   }
 
   setDates() {
+    this.debut = new Date(this.debut)
+    this.fin = new Date(this.fin)
     this.debut.setDate(this.debut.getDate() - 2);
     this.debut.setHours(18, 0, 0);
     this.fin.setDate(this.fin.getDate() - 1);
@@ -134,7 +146,7 @@ export class RecapVeilleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.declencher();
+    // this.declencher();
   }
 
   isZoneControlee(zone: ZoneDak) {

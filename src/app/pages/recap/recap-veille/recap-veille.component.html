@@ -8,6 +8,37 @@
       Au <b>{{fin | date:"dd/MM/yyyy"}}</b> à <b>{{fin | date: "HH:mm:ss"}}</b>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            Début
+          </span>
+        </div>
+        <input type="date" [ngModel]="debut | date:'yyyy-MM-dd'" (ngModelChange)="debut = $event" class="form-control"
+          [ngClass]="{'is-invalid': montrerErreurs && erreurs.code}">
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            Fin
+          </span>
+        </div>
+        <input type="date" [ngModel]="fin | date:'yyyy-MM-dd'" (ngModelChange)="fin = $event" class="form-control"
+          [ngClass]="{'is-invalid': montrerErreurs && erreurs.code}">
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <button class="btn btn-primary" (click)="declencher()">
+        Charger les informations
+      </button>
+    </div>
+  </div>
+
   <div *ngIf="!terminee">
     <div class="d-flex justify-content-center"
       style="background-color: white; opacity:0.8; height: 50vh; padding-top: 12.5vh; margin-top: 20px;">
