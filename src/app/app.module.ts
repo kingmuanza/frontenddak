@@ -123,6 +123,7 @@ import { AffectationControleurEditComponent } from './pages/affectation-controle
 import { AffectationControleurListComponent } from './pages/affectation-controleur/affectation-controleur-list/affectation-controleur-list.component';
 import { DoublonsMatriculeComponent } from './pages/anomalies/doublons-matricule/doublons-matricule.component';
 import { DoublonsCniComponent } from './pages/anomalies/doublons-cni/doublons-cni.component';
+import { DoublonsNomsComponent } from './pages/anomalies/doublons-noms/doublons-noms.component';
 
 @NgModule({
   declarations: [
@@ -241,6 +242,7 @@ import { DoublonsCniComponent } from './pages/anomalies/doublons-cni/doublons-cn
     AffectationControleurListComponent,
     DoublonsMatriculeComponent,
     DoublonsCniComponent,
+    DoublonsNomsComponent,
   ],
   imports: [
     BrowserModule,
