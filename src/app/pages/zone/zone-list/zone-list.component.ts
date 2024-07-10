@@ -45,6 +45,7 @@ export class ZoneListComponent implements OnInit, OnDestroy {
         let end = start + 10
         let search = dataTablesParameters.search;
         let recherche = search.value;
+        console.log("search", search)
         console.log("recherche", recherche)
         if (recherche.length > 1) {
           let resultats = this.zones.filter((z) => {
