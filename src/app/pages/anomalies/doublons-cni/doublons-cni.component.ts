@@ -52,7 +52,7 @@ export class DoublonsCniComponent implements OnInit {
 
     });
     this.authService.notifier();
-    this.vigileCtrlService.getDuplicatesMatricules().then((vigiles) => {
+    this.vigileCtrlService.getDuplicatesCNI().then((vigiles) => {
       this.vigiles = vigiles;
       this.resultats = vigiles;
       this.dtTrigger.next("");
