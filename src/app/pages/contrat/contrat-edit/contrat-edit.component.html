@@ -49,8 +49,8 @@
                     Libellé <app-required></app-required>
                   </span>
                 </div>
-                <input [(ngModel)]="contrat.libelle" class="form-control"
-                  [ngClass]="{'is-invalid': montrerErreurs && erreurs.libelle}">
+                <textarea [(ngModel)]="contrat.libelle" class="form-control"
+                  [ngClass]="{'is-invalid': montrerErreurs && erreurs.libelle}"></textarea>
               </div>
             </div>
           </div>
