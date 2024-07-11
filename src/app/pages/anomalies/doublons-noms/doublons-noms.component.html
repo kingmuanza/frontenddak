@@ -11,7 +11,7 @@
                 <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                     <thead>
                         <tr>
-                            <th>Matricule</th>
+
                             <th>Noms</th>
                             <th>Horaire</th>
                             <th>Fonction</th>
@@ -24,7 +24,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let vigile of vigiles" (click)="view(vigile.idvigile)" style="cursor: pointer;">
-                            <td>{{vigile.matricule}}</td>
+
                             <td>{{vigile.noms}}</td>
                             <td style="text-transform: capitalize;">{{vigile.horaire}}</td>
                             <td>{{vigile.fonction}}</td>
