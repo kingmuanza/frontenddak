@@ -72,7 +72,6 @@ export class VigileCtrlService {
     });
   }
 
-
   async getDuplicatesCNI(): Promise<Vigile[]> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "duplicates-cni").subscribe({
@@ -87,6 +86,19 @@ export class VigileCtrlService {
     });
   }
 
+  async getVigilesByCNI(numCNI: string): Promise<Vigile[]> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "vigiles-by-cni/" + numCNI).subscribe({
+        next: (data) => {
+          const resulats = data as Vigile[];
+          resolve(resulats);
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
 
   async getDuplicatesNoms(): Promise<Vigile[]> {
     return new Promise((resolve, reject) => {

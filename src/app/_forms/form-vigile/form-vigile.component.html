@@ -54,11 +54,15 @@
                 Numéro CNI <app-required></app-required>
               </span>
             </div>
-            <input type="text" [(ngModel)]="vigile.mumCni" class="form-control"
-              [ngClass]="{'is-invalid': montrerErreurs && erreurs.cni}">
+            <input type="text" [(ngModel)]="vigile.mumCni" (ngModelChange)="getVigilesByCNI($event)"
+              class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && (erreurs.cni || erreurs.cniAlreadyExist)}">
           </div>
           <div *ngIf="montrerErreurs && erreurs.cni" class="indication">
             {{erreursLibelles.required}}
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.cniAlreadyExist" class="indication">
+            {{erreursLibelles.cniAlreadyExist}}
           </div>
         </div>
         <div class="col-lg-6">

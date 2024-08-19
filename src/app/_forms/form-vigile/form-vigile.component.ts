@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import * as bootstrap from 'bootstrap';
+import { VigileCtrlService } from 'src/app/_services/vigile-ctrl-service';
 import { Nationalite } from 'src/app/models/nationalite.model';
 import { Quartier } from 'src/app/models/quartier.model';
 import { Vigile } from 'src/app/models/vigile.model';
@@ -38,6 +39,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     datenaiss: 'Veuillez entrer une date de naissance',
     required: 'Ce champ ne peut pas être vide',
     majeur: 'Le vigile doit être majeur',
+    cniAlreadyExist: "Le numéro de CNI est déjà attribué"
   }
 
   erreurs = {
@@ -49,6 +51,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     fonction: false,
     matricule: false,
     dateEntree: false,
+    cniAlreadyExist: false,
   }
 
   montrerErreurs = false;
@@ -60,6 +63,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     private congeService: CongeService,
     private vigileService: JarvisService<Vigile>,
     private vigileCtrlService: VigileService,
+    private myVigileCtrlService: VigileCtrlService,
     private calculService: CalculService,
   ) { }
 
@@ -171,10 +175,12 @@ export class FormVigileComponent implements OnInit, OnChanges {
     } else {
       this.erreurs.matricule = false;
     }
+    const isUniqueCNI = !this.erreurs.cniAlreadyExist;
+
 
     const isDateEntree = !!this.vigile.dateEntree;
     this.erreurs.dateEntree = !this.vigile.dateEntree;
-    return isDateNaiss && isMajeur && isNom && isCNI && isTel && isFonction && isMatricule && isDateEntree;
+    return isDateNaiss && isMajeur && isNom && isCNI && isTel && isFonction && isMatricule && isDateEntree && isUniqueCNI;
   }
 
   isTel(numero: string): boolean {
@@ -254,6 +260,28 @@ export class FormVigileComponent implements OnInit, OnChanges {
     if (modale != null) {
       const myModal = bootstrap.Modal.getInstance(modale);
       myModal?.hide();
+    }
+  }
+
+  getVigilesByCNI(numCNI: string) {
+    console.log("numCNI", numCNI)
+    if (numCNI.length > 2) {
+      this.myVigileCtrlService.getVigilesByCNI(numCNI).then((vigiles) => {
+        console.log("vigiles", vigiles)
+        vigiles = vigiles.filter((v) => {
+          return v.idvigile != this.vigile.idvigile
+        })
+        console.log("autres vigiles", vigiles)
+        if (vigiles.length > 0) {
+          this.montrerErreurs = true;
+          this.erreurs.cniAlreadyExist = true;
+          this.erreursLibelles.cniAlreadyExist = "Le numéro de CNI est déjà attribué à " + vigiles[0].noms;
+        } else {
+          this.montrerErreurs = false;
+          this.erreurs.cniAlreadyExist = false;
+          this.erreursLibelles.cniAlreadyExist = "";
+        }
+      })
     }
   }
 }
