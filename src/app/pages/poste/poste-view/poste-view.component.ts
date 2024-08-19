@@ -23,6 +23,7 @@ import { ContratCtrlService } from 'src/app/_services/contrat-ctrl.service';
 import { getFirestore, setDoc, doc, query, collection, getDocs, where, deleteDoc, DocumentData, QuerySnapshot } from 'firebase/firestore';
 import { Suivi } from 'src/app/models/suivi.model';
 import { AffectationLigne } from 'src/app/models/affectation.ligne.model';
+import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 
 @Component({
   selector: 'app-poste-view',
@@ -36,7 +37,7 @@ export class PosteViewComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
 
-  dtOptionsHistorique: DataTables.Settings = {};
+  dtOptionsHistorique: DataTables.Settings = DatatablesOptions;
   dtTriggerHistorique = new Subject<any>();
 
   poste = new Poste();
