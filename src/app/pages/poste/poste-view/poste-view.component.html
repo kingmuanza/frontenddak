@@ -6,6 +6,9 @@
     <div *ngIf="poste.idposte!=0" class="page-entete-titre">
       <b>Poste : {{poste.libelle}}</b>
     </div>
+    <div *ngIf="poste.statut" style="color: red;">
+      Le poste est inactif
+    </div>
     <div *ngIf="poste.idcontratsite">
       <ng-container *ngIf="mesDroits.contratEdit">
         Contrat : <a [routerLink]="'/contrat/view/' + poste.idcontratsite.idcontrat.idcontrat">
@@ -33,6 +36,18 @@
         <div class="nouveau">
           <a [routerLink]="'/poste/edit/' + poste.idposte " class="btn nouveau">
             Modifier
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-2" *ngIf="mesDroits.posteEdit">
+        <div *ngIf="poste.statut">
+          <a (click)="toggleActivation()" class="btn btn-success" style="width: 100%;">
+            Activer
+          </a>
+        </div>
+        <div *ngIf="!poste.statut">
+          <a (click)="toggleActivation()" class="btn btn-danger btn-error" style="width: 100%;">
+            Desactiver
           </a>
         </div>
       </div>

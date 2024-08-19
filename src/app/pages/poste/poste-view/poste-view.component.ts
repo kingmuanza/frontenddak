@@ -422,5 +422,13 @@ export class PosteViewComponent implements OnInit {
     }
   }
 
+  toggleActivation() {
+    this.poste.statut = this.poste.statut ? undefined : "DESACTIVEE";
+    let message = this.poste.statut ? "Le poste a été désactivé avec succès" : "Le poste est maintenant actif";
+    this.jarvisService.modifier('poste', this.poste.idposte, this.poste).then(() => {
+      this.notifierService.notify('success', message);
+      window.location.reload();
+    });
+  }
 
 }

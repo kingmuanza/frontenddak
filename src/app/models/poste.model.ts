@@ -35,4 +35,5 @@ export class Poste {
   idcontratsite: ContratSite | undefined;
   codeagiv = '';
   jourRepos = '';
+  statut: string | undefined = "";
 }
