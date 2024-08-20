@@ -63,6 +63,35 @@
           </a>
         </div>
       </div>
+
+
+      <div class="col-lg-4" *ngIf="mesDroits.vigileEdit">
+        <div class="input-group" style="margin-top: 0;">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              Statut
+            </span>
+          </div>
+          <select [(ngModel)]="vigile.statut" class="form-control">
+            <option [value]="1">Absent[e]</option>
+            <option [value]="2">Actif[ve]</option>
+            <option [value]="3">Standby</option>
+            <option [value]="4">Licencié(e)</option>
+            <option [value]="5">Suspendu[e]</option>
+            <option [value]="6">Démissionné[e]</option>
+            <option [value]="7">Décédé[e]</option>
+            <option [value]="0">Inactif[ve]</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-lg-2" *ngIf="mesDroits.vigileEdit">
+        <div *ngIf="vigile.statut">
+          <a (click)="voirCommentaire()" class="btn btn-success" style="width: 100%;">
+            Appliquer
+          </a>
+        </div>
+      </div>
     </div>
   </div>
   <div class="page-contenu">
@@ -226,6 +255,32 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
         <button *ngIf="!(vigiles.length > 1)" type="button" class="btn btn-primary">Appliquer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" #commentairenModal id="commentairenModal" tabindex="-1" aria-labelledby="commentairenModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Ajouter un commentaire
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+
+          <textarea [(ngModel)]="vigile.motif" maxlength="44" class="form-control"></textarea>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button (click)="toggleActivation()" class="btn btn-primary">Appliquer</button>
       </div>
     </div>
   </div>

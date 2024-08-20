@@ -276,7 +276,7 @@ export class JarvisService<T> {
     return "";
   }
 
-  libelleStatut(fonction: string | number) {
+  libelleStatut(fonction: string | number): string {
     if (fonction == "1")
       return "Absent[e]";
     if (fonction == "2")
@@ -291,7 +291,9 @@ export class JarvisService<T> {
       return "Démissionné[e]";
     if (fonction == "7")
       return "Décédé[e]";
+    if (fonction == "0")
+      return "Inactif[ve]";
 
-    return "";
+    return "" + fonction;
   }
 }

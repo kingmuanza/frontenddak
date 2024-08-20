@@ -486,4 +486,26 @@ export class VigileViewComponent implements OnInit {
       myModal?.hide();
     }
   }
+
+  voirCommentaire() {
+    console.log('open modal commentaire');
+    const modale = document.getElementById('commentairenModal');
+
+    console.log(modale);
+    if (modale != null) {
+      const myModal = new bootstrap.Modal(modale);
+      myModal.show();
+    }
+  }
+
+  toggleActivation() {
+    this.vigileService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
+      console.log('data');
+      console.log(data);
+      this.processing = false;
+      this.notifierService.notify('success', "Statut modifié avec succès");
+
+      window.location.reload();
+    });
+  }
 }
