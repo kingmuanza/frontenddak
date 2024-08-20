@@ -16,7 +16,7 @@ export class ActifsPipe implements PipeTransform {
           } catch (e) {
 
           }
-          return s < 3;
+          return s < 4;
         } else {
           return true;
         }

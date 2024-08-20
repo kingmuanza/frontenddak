@@ -291,7 +291,7 @@ export class JarvisService<T> {
       return "Démissionné[e]";
     if (fonction == "7")
       return "Décédé[e]";
-    if (fonction == "0")
+    if (fonction == "8")
       return "Inactif[ve]";
 
     return "" + fonction;
