@@ -36,6 +36,10 @@
                   {{z.libelle}}
                 </option>
               </select>
+
+              <button *ngIf="zone.horaire" class="btn btn-outline-secondary">
+                {{zone.horaire | uppercase}}
+              </button>
             </div>
             <div class="input-group">
               <div class="input-group-prepend">
@@ -99,12 +103,16 @@
                   class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
                 <select #vigileElement [(ngModel)]="affectation.idvigile" class="form-control">
                   <ng-container *ngFor="let vigile of vigiles | actifs">
-                    <option [ngValue]="vigile"
-                      *ngIf="!vigile.estRemplacant && !estDejaAffecteAuPoste(vigile) && (affectation.idposte)">
-                      {{vigile.noms}}
-                    </option>
+                    <ng-container *ngIf="shouldDisplayVigile(vigile)">
+                      <option [ngValue]="vigile" [disabled]="isVigileDisabled(vigile)">
+                        {{ vigile.noms }} {{ getVigileHoraire(vigile) }}
+                      </option>
+                    </ng-container>
                   </ng-container>
                 </select>
+                <button *ngIf="affectation.idvigile?.horaire" class="btn btn-outline-secondary">
+                  {{affectation?.idvigile?.horaire | uppercase}}
+                </button>
               </div>
               <small *ngIf="affectation.idvigile">
                 Jour de repos : {{affectation.idvigile ? jourSemaine(affectation.idvigile.jourRepos) :

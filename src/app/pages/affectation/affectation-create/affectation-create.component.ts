@@ -368,4 +368,19 @@ export class AffectationCreateComponent implements OnInit {
     date.setMilliseconds(0);
     return date.getTime();
   }
+
+  shouldDisplayVigile(vigile: Vigile): boolean {
+    return !vigile.estRemplacant && !this.estDejaAffecteAuPoste(vigile) && !!this.affectation.idposte;
+  }
+
+  isVigileDisabled(vigile: Vigile): boolean {
+    return !(!vigile.horaire || vigile.horaire.toLowerCase().trim().indexOf(this.zone.horaire.toLowerCase().trim()) != -1);
+  }
+
+  getVigileHoraire(vigile: Vigile): string {
+    return !(!vigile.horaire || vigile.horaire.toLowerCase().trim().indexOf(this.zone.horaire.toLowerCase().trim()) != -1)
+      ? vigile.horaire.toUpperCase()
+      : '';
+  }
+
 }

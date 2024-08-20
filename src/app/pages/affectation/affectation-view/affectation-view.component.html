@@ -59,8 +59,8 @@
                   class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
                 <select [(ngModel)]="vigile" (ngModelChange)="getAffectionOfVigile($event)" class="form-control">
                   <ng-container *ngFor="let v of vigiles | actifs">
-                    <option [ngValue]="v">
-                      {{v.noms}}
+                    <option [ngValue]="v" [disabled]="isVigileDisabled(v)">
+                      {{v.noms}} {{ getVigileHoraire(v) }}
                     </option>
                   </ng-container>
                 </select>

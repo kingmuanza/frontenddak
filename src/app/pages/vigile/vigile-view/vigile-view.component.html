@@ -40,6 +40,9 @@
         <div>
           Jour de repos : {{jourSemaine(vigile.jourRepos)}}
         </div>
+        <div>
+          Horaire : {{vigile.horaire | uppercase}}
+        </div>
         <div *ngIf="vigile.dateEntree">
           Date d'entrée : {{vigile.dateEntree | date:"yyyy-MM-dd"}}
         </div>

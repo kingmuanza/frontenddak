@@ -199,4 +199,15 @@ export class AffectationViewComponent implements OnInit {
     }
   }
 
+  isVigileDisabled(vigile: Vigile): boolean {
+    return !(!vigile.horaire || vigile.horaire.toLowerCase().trim().indexOf(this.affectation.idposte.horaire.toLowerCase().trim()) != -1);
+  }
+
+  getVigileHoraire(vigile: Vigile): string {
+    return !(!vigile.horaire || vigile.horaire.toLowerCase().trim().indexOf(this.affectation.idposte.horaire.toLowerCase().trim()) != -1)
+      ? vigile.horaire.toUpperCase()
+      : '';
+  }
+
+
 }
