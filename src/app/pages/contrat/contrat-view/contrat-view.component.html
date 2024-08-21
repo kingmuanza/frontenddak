@@ -29,7 +29,12 @@
         </div>
       </div>
       <div class="col-lg-2">
-        <button (click)="imprimer(contrat)" class="btn btn-primary">
+        <button [routerLink]="'/contrat/avenant/' + contrat.idcontrat " class="btn btn-success" style="width: 100%;">
+          Créer un avenant
+        </button>
+      </div>
+      <div class="col-lg-2">
+        <button (click)="imprimer(contrat)" class="btn btn-primary" style="width: 100%;">
           Imprimer
         </button>
       </div>

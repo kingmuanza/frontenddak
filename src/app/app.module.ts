@@ -124,6 +124,7 @@ import { AffectationControleurListComponent } from './pages/affectation-controle
 import { DoublonsMatriculeComponent } from './pages/anomalies/doublons-matricule/doublons-matricule.component';
 import { DoublonsCniComponent } from './pages/anomalies/doublons-cni/doublons-cni.component';
 import { DoublonsNomsComponent } from './pages/anomalies/doublons-noms/doublons-noms.component';
+import { ContratAvenantComponent } from './pages/contrat/contrat-avenant/contrat-avenant.component';
 
 @NgModule({
   declarations: [
@@ -243,6 +244,7 @@ import { DoublonsNomsComponent } from './pages/anomalies/doublons-noms/doublons-
     DoublonsMatriculeComponent,
     DoublonsCniComponent,
     DoublonsNomsComponent,
+    ContratAvenantComponent,
   ],
   imports: [
     BrowserModule,

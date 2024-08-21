@@ -90,6 +90,7 @@ import { AffectationControleurViewComponent } from './pages/affectation-controle
 import { DoublonsCniComponent } from './pages/anomalies/doublons-cni/doublons-cni.component';
 import { DoublonsMatriculeComponent } from './pages/anomalies/doublons-matricule/doublons-matricule.component';
 import { DoublonsNomsComponent } from './pages/anomalies/doublons-noms/doublons-noms.component';
+import { ContratAvenantComponent } from './pages/contrat/contrat-avenant/contrat-avenant.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
@@ -143,6 +144,7 @@ const routes: Routes = [
   { path: 'contrat/edit', component: ContratEditComponent },
   { path: 'contrat/edit/:id', component: ContratEditComponent },
   { path: 'contrat/view/:id', component: ContratViewComponent },
+  { path: 'contrat/avenant/:id', component: ContratAvenantComponent },
 
   { path: 'equipement', component: EquipementListComponent },
   { path: 'equipement/edit', component: EquipementEditComponent },

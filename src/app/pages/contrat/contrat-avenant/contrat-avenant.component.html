@@ -44,7 +44,6 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="input-group">
-
                 <span class="input-group-text">
                   Libellé <app-required></app-required>
                 </span>
@@ -229,32 +228,20 @@
               </div>
             </div>
           </div>
-
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="input-group">
-
-                <div class="input-group-text">Description</div>
-
-                <textarea [(ngModel)]="contrat.description" class="form-control"></textarea>
-              </div>
-            </div>
-          </div>
         </div>
         <div>
-          <div [ngClass]="{'categorie': true}" *ngIf="contrat.idcontrat != 0">
-            Pour modifier les informations suivantes, créez un avenant
+          <div [ngClass]="{'categorie': true}">
+            Description de la prestation : Les informations ci-dessous créent un avenant lorsqu'elles sont modifiées
             <span *ngIf="!isMemesTermesDuContrat()" style="color: red;">*</span>
           </div>
           <div class="row">
-
             <div class="col-lg-4">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">Nombre de sites <app-required></app-required></span>
                 </div>
                 <input [(ngModel)]="contrat.nbPostes" type="number" class="form-control"
-                  [disabled]="contrat.idcontrat != 0" [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbPostes)}">
+                  [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbPostes)}">
               </div>
             </div>
             <div class="col-lg-4">
@@ -263,7 +250,6 @@
                   <span class="input-group-text">Nombre de vigiles jour</span>
                 </div>
                 <input [(ngModel)]="contrat.nbVigileJour" type="number" class="form-control"
-                  [disabled]="contrat.idcontrat != 0"
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbJourNegatif || erreurs.nbVigiles)}">
               </div>
             </div>
@@ -273,8 +259,15 @@
                   <span class="input-group-text">Nombre de vigiles nuit</span>
                 </div>
                 <input [(ngModel)]="contrat.nbVigileNuit" type="number" class="form-control"
-                  [disabled]="contrat.idcontrat != 0"
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nbNuitNegatif || erreurs.nbVigiles)}">
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="input-group">
+
+                <div class="input-group-text">Description</div>
+
+                <textarea [(ngModel)]="contrat.description" class="form-control"></textarea>
               </div>
             </div>
           </div>
