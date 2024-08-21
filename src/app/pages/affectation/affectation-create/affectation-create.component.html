@@ -144,8 +144,11 @@
                   </option>
                   <ng-container *ngFor="let vigile of remplacants | actifs">
                     <option [ngValue]="vigile"
+                      [disabled]="(vigile.jourRepos+'').toLowerCase() == (affectation.jourRepos+'').toLowerCase()"
                       *ngIf="affectation.idvigile && affectation.idvigile.idvigile != vigile.idvigile && vigile.estRemplacant">
                       {{vigile.noms}}
+                      {{(vigile.jourRepos+'').toLowerCase() == (affectation.jourRepos+'').toLowerCase() ?
+                      jourSemaine(vigile.jourRepos):''}}
                     </option>
                   </ng-container>
                 </select>
@@ -270,7 +273,7 @@
                 Vous allez affecter
                 <b>{{affectation.idvigile.noms}}</b> au poste <b>{{affectation.idposte.libelle}}</b>.
                 <ng-container *ngIf="affectation.remplacant">
-                  Il sera remplacé le <b>{{jourSemaine(affectation.idvigile.jourRepos)}}</b> par
+                  Il sera remplacé le <b>{{jourSemaine(affectation.jourRepos)}}</b> par
                   <b>{{affectation.remplacant.noms}}</b>
                 </ng-container>
               </div>

@@ -462,7 +462,7 @@ export class VigileViewComponent implements OnInit {
     return this.vigileService.libelleStatut(fonction);
   }
 
-  jourSemaine(jour: number) {
+  jourSemaine(jour: number | string) {
     return this.vigileService.jourSemaine(jour);
   }
 

@@ -49,7 +49,7 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
     this.router.navigate(['affectation', 'view', id]);
   }
 
-  jourSemaine(jour: number) {
+  jourSemaine(jour: number | string) {
     return this.vigileService.jourSemaine(jour);
   }
 

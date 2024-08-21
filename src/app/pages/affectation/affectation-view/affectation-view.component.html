@@ -52,6 +52,28 @@
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text">
+                    Jour de repos
+                  </span>
+                </div>
+                <select [(ngModel)]="jourRepos" class="form-control">
+                  <option [value]="1">Lundi</option>
+                  <option [value]="2">Mardi</option>
+                  <option [value]="3">Mercredi</option>
+                  <option [value]="4">Jeudi</option>
+                  <option [value]="5">Vendredi</option>
+                  <option [value]="6">Samedi</option>
+                  <option [value]="7">Dimanche</option>
+                </select>
+                <button *ngIf="!affectation.arret" (click)="modifierJourDeRepos()" class="btn btn-primary">
+                  Mettre à jour le jour de repos
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
                     Vigile
                   </span>
                 </div>
@@ -83,36 +105,15 @@
                 class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
               <select [(ngModel)]="remplacant" class="form-control">
                 <ng-container *ngFor="let v of remplacants | actifs">
-                  <option [ngValue]="v">
+                  <option [ngValue]="v" [disabled]="(v.jourRepos+'').toLowerCase() == jourRepos.toLowerCase()">
                     {{v.noms}}
+                    {{(v.jourRepos+'').toLowerCase() == jourRepos.toLowerCase() ? jourSemaine(v.jourRepos):''}}
                   </option>
                 </ng-container>
               </select>
               <button *ngIf="!affectation.arret" (click)="modifierRemplacant()" class="btn btn-primary">
                 Mettre à jour le remplacant
               </button>
-            </div>
-
-            <div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    Jour de repos
-                  </span>
-                </div>
-                <select [(ngModel)]="jourRepos" class="form-control">
-                  <option [value]="1">Lundi</option>
-                  <option [value]="2">Mardi</option>
-                  <option [value]="3">Mercredi</option>
-                  <option [value]="4">Jeudi</option>
-                  <option [value]="5">Vendredi</option>
-                  <option [value]="6">Samedi</option>
-                  <option [value]="7">Dimanche</option>
-                </select>
-                <button *ngIf="!affectation.arret" (click)="modifierJourDeRepos()" class="btn btn-primary">
-                  Mettre à jour le jour de repos
-                </button>
-              </div>
             </div>
 
             <div class="input-group mb-3">
