@@ -36,4 +36,5 @@ export class Poste {
   codeagiv = '';
   jourRepos = '';
   statut: string | undefined = "";
+  historique = "";
 }

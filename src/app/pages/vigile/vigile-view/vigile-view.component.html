@@ -141,8 +141,9 @@
       </div>
     </div>
 
-    <div *ngIf="vigile.estRemplacant" class="remplacant-programme">
-      <div style="margin-top: 20px; margin-bottom: 20px">
+    <div *ngIf="vigile.estRemplacant" class="remplacant-programme card shadow-1"
+      style="margin-top: 20px; margin-bottom: 20px">
+      <div>
         Programme de la semaine
       </div>
       <div class="row">
@@ -175,14 +176,14 @@
       </div>
     </div>
     <div style="margin-top: 20px;" *ngIf="vigile">
-      <div class="card">
+      <div class="card shadow-1">
         <div style="margin-top: 20px; margin-bottom: 20px;">
           Historique des affectations
         </div>
         <app-tableau-affectations [vigile]="vigile"></app-tableau-affectations>
       </div>
     </div>
-    <div style="margin-top: 20px;" *ngIf="vigile">
+    <div style="margin-top: 20px;" *ngIf="vigile" class="card shadow-1">
       <div style="margin-top: 20px; margin-bottom: 20px;">
         Permissions accordées
       </div>
@@ -205,7 +206,7 @@
         </tbody>
       </table>
     </div>
-    <div style="margin-top: 20px;" *ngIf="vigile">
+    <div style="margin-top: 20px;" *ngIf="vigile" class="card shadow-1">
       <div style="margin-top: 20px; margin-bottom: 20px;">
         Sanctions
       </div>
@@ -228,6 +229,29 @@
             <td>{{sanction.nombreAbsence}}</td>
             <td>{{sanction.motifSanction}}</td>
             <td>{{sanction.commentaire}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card shadow-1" style="margin-top: 20px;" *ngIf="vigile">
+      <div style="margin-top: 20px; margin-bottom: 20px;">
+        Histrorique des status
+      </div>
+      <table datatable [dtOptions]="dtOptionsStatut" [dtTrigger]="dtTriggerStatut" class="table row-border hover">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Vigile</th>
+            <th>Statut</th>
+            <th>Commentaire</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let hs of historiqueStatus">
+            <td>{{hs.date | date:"yyyy-MM-dd HH:mm"}}</td>
+            <td>{{vigile.noms}}</td>
+            <td>{{libelleStatut(hs.statut)}}</td>
+            <td>{{hs.commentaire}}</td>
           </tr>
         </tbody>
       </table>
@@ -276,7 +300,7 @@
       </div>
       <div class="modal-body">
         <div class="input-group">
-          <textarea [(ngModel)]="vigile.motif" maxlength="44" class="form-control"></textarea>
+          <textarea [(ngModel)]="commentaire" class="form-control"></textarea>
         </div>
 
       </div>

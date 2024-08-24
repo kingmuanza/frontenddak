@@ -258,6 +258,28 @@
             </table>
           </div>
         </div>
+
+        <div class="card shadow-1" style="margin-top: 20px;" *ngIf="poste">
+          <div style="margin-top: 20px; margin-bottom: 20px;">
+            Histrorique des status
+          </div>
+          <table datatable [dtOptions]="dtOptionsStatut" [dtTrigger]="dtTriggerStatut" class="table row-border hover">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Poste</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let hs of historiqueStatus">
+                <td>{{hs.date | date:"yyyy-MM-dd HH:mm"}}</td>
+                <td>{{poste.code}}</td>
+                <td>{{hs.statut}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="card" style="display: none;">
           <div style="margin-top: 20px; margin-bottom: 16px;">
             Equipements reçus non basiques

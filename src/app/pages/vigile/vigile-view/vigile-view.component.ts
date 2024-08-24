@@ -5,7 +5,7 @@ import { NotifierService } from 'angular-notifier';
 import * as bootstrap from 'bootstrap';
 import { initializeApp } from 'firebase/app';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
-import { Subject } from 'rxjs';
+import { Subject, map } from 'rxjs';
 import { AffectationCtrlService } from 'src/app/_services/affectation-ctrl.service';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 import { FIREBASECONFIG } from 'src/app/data/FIREBASE.CONFIG';
@@ -23,6 +23,12 @@ import { AuthService } from 'src/app/services/auth.service';
 import { JarvisService } from 'src/app/services/jarvis.service';
 import { ParrainService } from 'src/app/services/parrain.service';
 
+
+type HistoriqueStatut = {
+  date: Date,
+  statut: string,
+  commentaire: string
+}
 @Component({
   selector: 'app-vigile-view',
   templateUrl: './vigile-view.component.html',
@@ -42,6 +48,9 @@ export class VigileViewComponent implements OnInit {
 
   dtOptionsSanctions: any = DatatablesOptions;
   dtTriggerSanctions = new Subject<any>();
+
+  dtOptionsStatut: any = DatatablesOptions;
+  dtTriggerStatut = new Subject<any>();
 
   affectations = new Array<Affectation>();
   affectationsActuelles = new Array<Affectation>();
@@ -68,6 +77,9 @@ export class VigileViewComponent implements OnInit {
   statut = 'Titulaire';
 
   mesDroits = droits;
+
+  commentaire = "";
+  historiqueStatus = new Array<HistoriqueStatut>()
 
   constructor(
     private router: Router,
@@ -208,6 +220,22 @@ export class VigileViewComponent implements OnInit {
       if (vigile.image) {
         this.image = this.vigile.image;
       }
+      if (vigile.motif) {
+        try {
+          this.historiqueStatus = JSON.parse(vigile.motif).map((hs: any) => {
+            let newHS: HistoriqueStatut;
+            newHS = {
+              date: new Date(hs.date),
+              statut: hs.statut,
+              commentaire: hs.commentaire
+            }
+            return newHS
+          });
+        } catch (error) {
+          this.historiqueStatus = []
+        }
+      }
+      this.dtTriggerStatut.next("");
       console.log(this.vigile);
       this.getSanctions().then((sanctions) => {
         this.sanctions = sanctions;
@@ -499,13 +527,30 @@ export class VigileViewComponent implements OnInit {
   }
 
   toggleActivation() {
-    this.vigileService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data) => {
+    let historiqueStatus = new Array<any>();
+    if (this.vigile.motif) {
+      try {
+        historiqueStatus = JSON.parse(this.vigile.motif)
+      } catch (error) {
+        historiqueStatus = [];
+      }
+    }
+    historiqueStatus.unshift({
+      date: new Date().toISOString(),
+      statut: this.vigile.statut,
+      commentaire: this.commentaire
+    });
+    this.vigile.motif = JSON.stringify(historiqueStatus);
+    this.vigileService.modifier('vigile', this.vigile.idvigile, this.vigile).then((data: any) => {
       console.log('data');
       console.log(data);
       this.processing = false;
       this.notifierService.notify('success', "Statut modifié avec succès");
-
       window.location.reload();
     });
+  }
+
+  toDate(dateString: string) {
+    return new Date(dateString);
   }
 }

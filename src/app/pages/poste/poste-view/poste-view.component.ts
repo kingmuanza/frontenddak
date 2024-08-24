@@ -25,6 +25,11 @@ import { Suivi } from 'src/app/models/suivi.model';
 import { AffectationLigne } from 'src/app/models/affectation.ligne.model';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
 
+
+type HistoriqueStatut = {
+  date: Date,
+  statut: string,
+}
 @Component({
   selector: 'app-poste-view',
   templateUrl: './poste-view.component.html',
@@ -39,6 +44,9 @@ export class PosteViewComponent implements OnInit {
 
   dtOptionsHistorique: DataTables.Settings = DatatablesOptions;
   dtTriggerHistorique = new Subject<any>();
+
+  dtOptionsStatut: any = DatatablesOptions;
+  dtTriggerStatut = new Subject<any>();
 
   poste = new Poste();
   processing = false;
@@ -81,12 +89,14 @@ export class PosteViewComponent implements OnInit {
 
   jourRepos = "";
 
+  historiqueStatus = new Array<HistoriqueStatut>()
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
     private pointageService: PointageService,
-    private jarvisService: JarvisService<any>,
+    private jarvisService: JarvisService<Poste>,
     private affectationService: JarvisService<Affectation>,
     private vigileService: VigileService,
     private authService: AuthService,
@@ -131,8 +141,21 @@ export class PosteViewComponent implements OnInit {
           console.log(poste);
           this.poste = poste;
 
-
-
+          if (poste.historique) {
+            try {
+              this.historiqueStatus = JSON.parse(poste.historique).map((hs: any) => {
+                let newHS: HistoriqueStatut;
+                newHS = {
+                  date: new Date(hs.date),
+                  statut: hs.statut
+                }
+                return newHS
+              });
+            } catch (error) {
+              this.historiqueStatus = []
+            }
+          }
+          this.dtTriggerStatut.next("");
           this.getAffectationsEnLigne().then((affectationsLignes) => {
             this.affectationsLignes = affectationsLignes;
           });
@@ -145,7 +168,7 @@ export class PosteViewComponent implements OnInit {
 
           this.affectationCtrlService.getAffectationsOfPoste(poste).then((affectations) => {
             this.affectations = affectations;
-            this.contratCtrlService.getExigencesDuSite(poste.idcontratsite).then((exigences) => {
+            this.contratCtrlService.getExigencesDuSite(poste.idcontratsite!).then((exigences) => {
               this.exigences = exigences.filter((exigence) => {
                 return exigence.horaire == this.poste.horaire;
               });
@@ -425,6 +448,20 @@ export class PosteViewComponent implements OnInit {
 
   toggleActivation() {
     this.poste.statut = this.poste.statut ? undefined : "DESACTIVEE";
+
+    let historiqueStatus = new Array<any>();
+    if (this.poste.historique) {
+      try {
+        historiqueStatus = JSON.parse(this.poste.historique)
+      } catch (error) {
+        historiqueStatus = [];
+      }
+    }
+    historiqueStatus.unshift({
+      date: new Date().toISOString(),
+      statut: this.poste.statut ? "INACTIF" : "ACTIF",
+    });
+    this.poste.historique = JSON.stringify(historiqueStatus)
     let message = this.poste.statut ? "Le poste a été désactivé avec succès" : "Le poste est maintenant actif";
     this.jarvisService.modifier('poste', this.poste.idposte, this.poste).then(() => {
       this.notifierService.notify('success', message);
