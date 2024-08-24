@@ -25,7 +25,6 @@ export class VigileCtrlService {
   async init() {
   }
 
-
   async getVigileByMatricule(matricule: string): Promise<Vigile> {
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "matricule/" + matricule).subscribe({
@@ -35,6 +34,24 @@ export class VigileCtrlService {
             resolve(resulats[0]);
           } else {
             resolve(new Vigile());
+          }
+        },
+        error: (e) => {
+          reject(e);
+        }
+      });
+    });
+  }
+
+  async getVigilesByMatricule(matricule: string): Promise<Array<Vigile>> {
+    return new Promise((resolve, reject) => {
+      this.http.get(this.URL + "matricule/" + matricule).subscribe({
+        next: (data) => {
+          const resulats = data as Array<Vigile>;
+          if (resulats.length > 0) {
+            resolve(resulats);
+          } else {
+            resolve([]);
           }
         },
         error: (e) => {

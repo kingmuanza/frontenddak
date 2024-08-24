@@ -160,11 +160,15 @@
                 Matricule <app-required></app-required>
               </span>
             </div>
-            <input type="text" [(ngModel)]="vigile.matricule" class="form-control"
-              [ngClass]="{'is-invalid': montrerErreurs && erreurs.matricule}">
+            <input type="text" [(ngModel)]="vigile.matricule" (ngModelChange)="getVigilesByMatricule($event)"
+              class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && (erreurs.matricule  || erreurs.matriculeAlreadyExist)}">
           </div>
           <div *ngIf="montrerErreurs && erreurs.matricule" class="indication">
             {{erreursLibelles.required}}
+          </div>
+          <div *ngIf="montrerErreurs && erreurs.matriculeAlreadyExist" class="indication">
+            {{erreursLibelles.matriculeAlreadyExist}}
           </div>
         </div>
       </div>

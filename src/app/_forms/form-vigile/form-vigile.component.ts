@@ -39,7 +39,8 @@ export class FormVigileComponent implements OnInit, OnChanges {
     datenaiss: 'Veuillez entrer une date de naissance',
     required: 'Ce champ ne peut pas être vide',
     majeur: 'Le vigile doit être majeur',
-    cniAlreadyExist: "Le numéro de CNI est déjà attribué"
+    cniAlreadyExist: "Le numéro de CNI est déjà attribué",
+    matriculeAlreadyExist: "Le matricule est déjà attribué",
   }
 
   erreurs = {
@@ -52,6 +53,7 @@ export class FormVigileComponent implements OnInit, OnChanges {
     matricule: false,
     dateEntree: false,
     cniAlreadyExist: false,
+    matriculeAlreadyExist: false,
   }
 
   montrerErreurs = false;
@@ -284,4 +286,27 @@ export class FormVigileComponent implements OnInit, OnChanges {
       })
     }
   }
+
+  getVigilesByMatricule(matricule: string) {
+    console.log("numCNI", matricule)
+    if (matricule.length > 2) {
+      this.myVigileCtrlService.getVigilesByMatricule(matricule).then((vigiles) => {
+        console.log("vigiles", vigiles)
+        vigiles = vigiles.filter((v) => {
+          return v.idvigile != this.vigile.idvigile
+        })
+        console.log("autres vigiles", vigiles)
+        if (vigiles.length > 0) {
+          this.montrerErreurs = true;
+          this.erreurs.matriculeAlreadyExist = true;
+          this.erreursLibelles.matriculeAlreadyExist = "Le matricule est déjà attribué à " + vigiles[0].noms;
+        } else {
+          this.montrerErreurs = false;
+          this.erreurs.matriculeAlreadyExist = false;
+          this.erreursLibelles.matriculeAlreadyExist = "";
+        }
+      })
+    }
+  }
+
 }
