@@ -46,6 +46,8 @@ export class AffectationCreateComponent implements OnInit {
 
   vigilesSubject = new Subject<Array<Vigile>>();
 
+  joursSemaine: string[] = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,

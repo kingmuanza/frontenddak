@@ -81,15 +81,14 @@
                   Jour de repos
                 </span>
               </div>
+
               <select [(ngModel)]="affectation.jourRepos" class="form-control">
-                <option [value]="1">Lundi</option>
-                <option [value]="2">Mardi</option>
-                <option [value]="3">Mercredi</option>
-                <option [value]="4">Jeudi</option>
-                <option [value]="5">Vendredi</option>
-                <option [value]="6">Samedi</option>
-                <option [value]="7">Dimanche</option>
+                <option *ngFor="let jour of joursSemaine; let i = index" [value]="i + 1"
+                  [disabled]="affectation.remplacant && affectation.remplacant?.jourRepos==(i+1)">
+                  {{ jour }}
+                </option>
               </select>
+
             </div>
             <div
               *ngIf="!canNotBeAffectation || (canNotBeAffectation && affectationAArreterACauseDuPoste.idaffectation!==0)">

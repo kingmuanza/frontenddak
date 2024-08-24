@@ -27,7 +27,9 @@ export class AffectationViewComponent implements OnInit {
   jourRepos = "";
 
   arret = undefined;
-  affectationActuelle: Affectation | undefined
+  affectationActuelle: Affectation | undefined;
+  joursSemaine: string[] = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+
 
   constructor(
     private _location: Location,
@@ -209,5 +211,8 @@ export class AffectationViewComponent implements OnInit {
       : '';
   }
 
+  libelleStatut(fonction: string) {
+    return this.jarvisService.libelleStatut(fonction);
+  }
 
 }

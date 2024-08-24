@@ -128,7 +128,7 @@
                   Retirer
                 </button>
               </div>
-              <small *ngIf="affectation.idvigile">
+              <small *ngIf="affectation.remplacant">
                 Jour de repos : {{affectation.remplacant ?
                 jourSemaine(affectation.remplacant?.jourRepos) :
                 "Aucun jour défini"}},

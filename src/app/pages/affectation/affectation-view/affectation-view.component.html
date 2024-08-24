@@ -56,14 +56,12 @@
                   </span>
                 </div>
                 <select [(ngModel)]="jourRepos" class="form-control">
-                  <option [value]="1">Lundi</option>
-                  <option [value]="2">Mardi</option>
-                  <option [value]="3">Mercredi</option>
-                  <option [value]="4">Jeudi</option>
-                  <option [value]="5">Vendredi</option>
-                  <option [value]="6">Samedi</option>
-                  <option [value]="7">Dimanche</option>
+                  <option *ngFor="let jour of joursSemaine; let i = index" [value]="i + 1"
+                    [disabled]="affectation.remplacant && affectation.remplacant?.jourRepos==(i+1)">
+                    {{ jour }}
+                  </option>
                 </select>
+
                 <button *ngIf="!affectation.arret" (click)="modifierJourDeRepos()" class="btn btn-primary">
                   Mettre à jour le jour de repos
                 </button>
@@ -114,6 +112,17 @@
               <button *ngIf="!affectation.arret" (click)="modifierRemplacant()" class="btn btn-primary">
                 Mettre à jour le remplacant
               </button>
+            </div>
+            <div style="margin-top: -10px; margin-bottom: 10px;">
+              <small *ngIf="affectation.remplacant">
+                Jour de repos : {{affectation.remplacant ?
+                jourSemaine(affectation.remplacant?.jourRepos) :
+                "Aucun jour défini"}},
+                Statut : {{affectation.remplacant ? affectation.remplacant.statut ?
+                libelleStatut(affectation.remplacant?.statut) :
+                "Aucun statut" :
+                "..."}}
+              </small>
             </div>
 
             <div class="input-group mb-3">
