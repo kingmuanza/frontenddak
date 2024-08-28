@@ -6,24 +6,26 @@
     <tr>
       <th>ID</th>
       <th>Dernière modification</th>
+      <th>Signature</th>
       <th>Debut</th>
-      <th>Fin</th>
       <th>Description</th>
       <th>Sites</th>
       <th>Vig. Jr</th>
       <th>Vig. Nt</th>
+      <th>Fin</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let c of contratsHistoriques" [ngClass]="{'contrat-encours': c.idcontrat == contrat.idcontrat}">
       <td>{{c.idcontrat}}</td>
       <td>{{c.date | date: 'yyyy-MM-dd HH:mm'}}</td>
+      <td>{{c.dateSignature | date: 'yyyy-MM-dd HH:mm'}}</td>
       <td>{{c.dateDebut | date: 'yyyy-MM-dd HH:mm'}}</td>
-      <td>{{c.dateFin | date: 'yyyy-MM-dd HH:mm'}}</td>
       <td>{{c.description}}</td>
       <td>{{c.nbPostes}}</td>
       <td>{{c.nbVigileJour}}</td>
       <td>{{c.nbVigileNuit}}</td>
+      <td>{{c.dateFin | date: 'yyyy-MM-dd HH:mm'}}</td>
     </tr>
   </tbody>
 </table>

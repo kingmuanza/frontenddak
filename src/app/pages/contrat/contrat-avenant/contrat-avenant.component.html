@@ -47,7 +47,7 @@
                 <span class="input-group-text">
                   Libellé <app-required></app-required>
                 </span>
-                <textarea [(ngModel)]="contrat.libelle" class="form-control"
+                <textarea [(ngModel)]="contrat.libelle" class="form-control" disabled
                   [ngClass]="{'is-invalid': montrerErreurs && erreurs.libelle}"></textarea>
               </div>
             </div>
@@ -116,9 +116,11 @@
             Détails du client
           </div>
           <div>
-            <input (change)="choisirClient(0)" type="radio" name="client" [checked]="contrat && contrat.particulier">
+            <input (change)="choisirClient(0)" type="radio" disabled name="client"
+              [checked]="contrat && contrat.particulier">
             Particulier &nbsp;&nbsp;
-            <input (change)="choisirClient(1)" type="radio" name="client" [checked]="contrat && !contrat.particulier">
+            <input (change)="choisirClient(1)" type="radio" disabled name="client"
+              [checked]="contrat && !contrat.particulier">
             Entreprise
           </div>
           <div *ngIf="contrat && contrat?.particulier" class="row">
@@ -127,7 +129,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Nom <app-required></app-required></span>
                 </div>
-                <input [(ngModel)]="contrat.nom" class="form-control"
+                <input [(ngModel)]="contrat.nom" class="form-control" disabled
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nom && contrat.particulier)}">
               </div>
             </div>
@@ -136,7 +138,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Prénom</span>
                 </div>
-                <input [(ngModel)]="contrat.prenom" class="form-control">
+                <input [(ngModel)]="contrat.prenom" class="form-control" disabled>
               </div>
             </div>
             <div class="col-lg-4">
@@ -144,7 +146,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Tel <app-required></app-required></span>
                 </div>
-                <input [(ngModel)]="contrat.tel" class="form-control"
+                <input [(ngModel)]="contrat.tel" class="form-control" disabled
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.tel && contrat.particulier)}">
               </div>
             </div>
@@ -153,7 +155,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Email</span>
                 </div>
-                <input [(ngModel)]="contrat.email" class="form-control">
+                <input [(ngModel)]="contrat.email" class="form-control" disabled>
               </div>
             </div>
             <div class="col-lg-4">
@@ -161,7 +163,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">CNI/Passeport</span>
                 </div>
-                <input [(ngModel)]="contrat.numero" class="form-control">
+                <input [(ngModel)]="contrat.numero" class="form-control" disabled>
               </div>
             </div>
             <div class="col-lg-12">
@@ -169,7 +171,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Adresse <app-required></app-required></span>
                 </div>
-                <input [(ngModel)]="contrat.adresse" class="form-control"
+                <input [(ngModel)]="contrat.adresse" class="form-control" disabled
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.adresse && contrat.particulier)}">
               </div>
             </div>
@@ -181,7 +183,7 @@
                   <span class="input-group-text">Nom de l'entreprise
                     <app-required></app-required></span>
                 </div>
-                <input [(ngModel)]="contrat.nom" class="form-control"
+                <input [(ngModel)]="contrat.nom" class="form-control" disabled
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.nom && !contrat.particulier)}">
               </div>
             </div>
@@ -190,7 +192,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Raison sociale</span>
                 </div>
-                <input [(ngModel)]="contrat.raison" class="form-control">
+                <input [(ngModel)]="contrat.raison" class="form-control" disabled>
               </div>
             </div>
             <div class="col-lg-6">
@@ -198,7 +200,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Tel <app-required></app-required></span>
                 </div>
-                <input [(ngModel)]="contrat.tel" type="tel" class="form-control"
+                <input [(ngModel)]="contrat.tel" type="tel" class="form-control" disabled
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.tel && !contrat.particulier)}">
               </div>
             </div>
@@ -207,7 +209,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Email</span>
                 </div>
-                <input [(ngModel)]="contrat.email" class="form-control">
+                <input [(ngModel)]="contrat.email" class="form-control" disabled>
               </div>
             </div>
             <div class="col-lg-12">
@@ -216,7 +218,7 @@
                   <span class="input-group-text">Nom complet du représentant légal
                     <app-required></app-required></span>
                 </div>
-                <input [(ngModel)]="contrat.representant" class="form-control"
+                <input [(ngModel)]="contrat.representant" class="form-control" disabled
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.representant && !contrat.particulier)}">
               </div>
             </div>
@@ -225,7 +227,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Adresse <app-required></app-required></span>
                 </div>
-                <input [(ngModel)]="contrat.adresse" class="form-control"
+                <input [(ngModel)]="contrat.adresse" class="form-control" disabled
                   [ngClass]="{'is-invalid': montrerErreurs && (erreurs.adresse && !contrat.particulier)}">
               </div>
             </div>

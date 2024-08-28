@@ -37,6 +37,9 @@ export class ContratAvenantComponent implements OnInit {
 
   montrerErreurs = false;
 
+  debut = new Date()
+  fin: Date | undefined = new Date()
+
   erreurs = {
     libelle: false,
     dateDebut: false,
@@ -73,6 +76,8 @@ export class ContratAvenantComponent implements OnInit {
           console.log('contrat');
           console.log(contrat);
           this.contrat = contrat;
+          this.debut = this.contrat.dateDebut;
+          this.fin = this.contrat.dateFin;
           this.contrat.dateDebut = new Date();
 
           this.nbVigileNuit = contrat.nbVigileNuit + 0;
@@ -236,13 +241,15 @@ export class ContratAvenantComponent implements OnInit {
     console.log(this.contrat.nbPostes);
     console.log(date);
     return new Promise((resolve, reject) => {
-      const fils = JSON.parse(JSON.stringify(this.contrat));
+      const fils: Contrat = JSON.parse(JSON.stringify(this.contrat));
       fils.idparent = null;
       fils.nbPostes = this.nbPostes;
       fils.nbVigileJour = this.nbVigileJour;
       fils.description = this.description;
       fils.nbVigileNuit = this.nbVigileNuit;
       fils.date = date;
+      fils.dateDebut = this.debut;
+      fils.dateFin = this.fin;
       this.contratCtrlService.saveContratEtFils(this.contrat.idcontrat, fils).then(() => {
         resolve(fils);
       });

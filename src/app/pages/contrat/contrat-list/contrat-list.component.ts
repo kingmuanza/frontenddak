@@ -166,6 +166,14 @@ export class ContratListComponent implements OnInit, OnDestroy {
     return libelle;
   }
 
+  toDate(date: any) {
+    if (date) {
+      return new Date(date);
+    } else {
+      return new Date()
+    }
+  }
+
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
