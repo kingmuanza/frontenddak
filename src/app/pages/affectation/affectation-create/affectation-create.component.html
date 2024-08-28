@@ -49,8 +49,9 @@
               </div>
               <select (ngModelChange)="setAffectationACauseDuPoste(); setJourRepos($event)"
                 [(ngModel)]="affectation.idposte" class="form-control">
-                <option [ngValue]="poste" *ngFor="let poste of postes">
+                <option [ngValue]="poste" *ngFor="let poste of postes" [disabled]="poste.statut">
                   {{poste.libelle}}
+                  {{poste.statut ? " -- INACTIF": ""}}
                 </option>
               </select>
             </div>

@@ -49,7 +49,7 @@
               </div>
               <select (ngModelChange)="setAffectationACauseDuPoste()" type="text" [(ngModel)]="affectation.idposte"
                 class="form-control">
-                <option [ngValue]="poste" *ngFor="let poste of postes">
+                <option [ngValue]="poste" *ngFor="let poste of postes" [disabled]="poste.statut">
                   {{poste.libelle}}
                 </option>
               </select>
