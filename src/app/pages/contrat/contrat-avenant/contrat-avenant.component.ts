@@ -73,6 +73,7 @@ export class ContratAvenantComponent implements OnInit {
           console.log('contrat');
           console.log(contrat);
           this.contrat = contrat;
+          this.contrat.dateDebut = new Date();
 
           this.nbVigileNuit = contrat.nbVigileNuit + 0;
           this.nbVigileJour = contrat.nbVigileJour + 0;

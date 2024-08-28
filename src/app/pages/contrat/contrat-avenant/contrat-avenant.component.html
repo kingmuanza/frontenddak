@@ -65,28 +65,21 @@
                     Date de la signature du contrat
                   </span>
                 </div>
-                <input [ngModel]="contrat.dateSignature | date:'yyyy-MM-dd'"
+                <input [ngModel]="contrat.dateSignature | date:'yyyy-MM-dd'" disabled
                   (ngModelChange)="contrat.dateSignature = $event" type="date" class="form-control"
                   [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateSignature}">
               </div>
             </div>
+            <div class="col-lg-6"></div>
             <div class="col-lg-6">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">
-                    Date début de la prestation <app-required></app-required>
+                    Date début de l'avenant <app-required></app-required>
                   </span>
                 </div>
                 <input [ngModel]="contrat.dateDebut | date:'yyyy-MM-dd'" (ngModelChange)="contrat.dateDebut = $event"
                   type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateDebut}">
-              </div>
-            </div>
-            <div class="col-lg-12" *ngIf="montrerErreurs && erreurs.dateSignature">
-              <div class="mt-1" style="color: red;">
-                <small>
-                  La date de signature du contrat ne peut être supérieure à la date de début du
-                  contrat
-                </small>
               </div>
             </div>
             <div class="col-lg-6">
@@ -100,6 +93,15 @@
                   type="date" class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.dateFin}">
               </div>
             </div>
+
+            <div class="col-lg-12" *ngIf="montrerErreurs && erreurs.dateSignature">
+              <div class="mt-1" style="color: red;">
+                <small>
+                  La date de signature du contrat ne peut être supérieure à la date de début de l'avenant
+                </small>
+              </div>
+            </div>
+
             <div class="col-lg-12" *ngIf="montrerErreurs && erreurs.dateFin">
               <div class="mt-1" style="color: red;">
                 <small>
