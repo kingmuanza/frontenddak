@@ -189,7 +189,8 @@
         <div class="card">
           <div style="margin-bottom: 10px;">
             Liste des vigiles titulaires en poste
-            <button *ngIf="!exigencesVerifiees" class="btn btn-link" style="float: right;" (click)="openModal()">
+            <button *ngIf="!exigencesVerifiees && !poste.statut" class="btn btn-link" style="float: right;"
+              (click)="openModal()">
               Ajouter un vigile
             </button>
           </div>

@@ -44,6 +44,11 @@ export class ContratListComponent implements OnInit, OnDestroy {
 
   mesDroits = droits;
 
+  du: Date | undefined;
+  au: Date | undefined;
+
+  montrerErreurs = false;
+
   constructor(
     private router: Router,
     private jarvisService: JarvisService<Contrat>,
@@ -171,6 +176,21 @@ export class ContratListComponent implements OnInit, OnDestroy {
       return new Date(date);
     } else {
       return new Date()
+    }
+  }
+
+  rechercher() {
+    if (this.au && this.du) {
+      this.montrerErreurs = false;
+      this.resultats = this.contrats.filter((contrat) => {
+        return new Date(contrat.date).getTime() <= new Date(this.au!).getTime() && new Date(contrat.date).getTime() >= new Date(this.du!).getTime()
+      })
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next("");
+      });
+    } else {
+      this.montrerErreurs = true;
     }
   }
 

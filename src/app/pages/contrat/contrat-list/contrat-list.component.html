@@ -15,6 +15,31 @@
         <div class="col-lg-2">
           <button (click)="init()" class="btn primaire">Actualiser</button>
         </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Du
+              </span>
+            </div>
+            <input [ngModel]="du | date:'yyyy-MM-dd'" (ngModelChange)="du = $event" type="date" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && !du}">
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Au
+              </span>
+            </div>
+            <input [ngModel]="au | date:'yyyy-MM-dd'" (ngModelChange)="au = $event" type="date" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && !au}">
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <button (click)="rechercher()" class="btn primaire">Recherche</button>
+        </div>
       </div>
     </div>
     <div class="boutons">
