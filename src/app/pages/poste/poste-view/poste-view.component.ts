@@ -446,8 +446,18 @@ export class PosteViewComponent implements OnInit {
     }
   }
 
-  toggleActivation() {
+  async toggleActivation() {
     this.poste.statut = this.poste.statut ? undefined : "DESACTIVEE";
+
+    if (this.poste.statut) {
+      const oui = confirm("Etes-vous sûr de voulopir désactiver le poste ? " + "Toutes les affectations seront mises à l'arrêt !".toUpperCase())
+      for (let index = 0; index < this.affectations.length; index++) {
+        const affectation = this.affectations[index];
+        affectation.arret = new Date();
+        await this.affectationService.modifier("affectation", affectation.idaffectation, affectation);
+        this.notifierService.notify('success', "affectation du vigile " + affectation.idvigile.noms + " arrêtée !");
+      }
+    }
 
     let historiqueStatus = new Array<any>();
     if (this.poste.historique) {
@@ -467,6 +477,10 @@ export class PosteViewComponent implements OnInit {
       this.notifierService.notify('success', message);
       window.location.reload();
     });
+  }
+
+  supprimerToutesLesAffectations() {
+
   }
 
 }
