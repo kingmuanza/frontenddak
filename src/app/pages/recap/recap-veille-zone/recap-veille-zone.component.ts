@@ -119,7 +119,7 @@ export class RecapVeilleZoneComponent implements OnInit {
             console.log("code : " + code);
             this.zone.code = code;
             this.posteService.getPostesByZone(this.zone).then((postes) => {
-              this.postes = postes;
+              this.postes = postes.sort((a, b) => a.libelle.localeCompare(b.libelle));;
               this.affectationService.getAll("affectation").then((affectations) => {
                 this.affectations = affectations.filter((aff) => {
                   let bool1 = !aff.arret
