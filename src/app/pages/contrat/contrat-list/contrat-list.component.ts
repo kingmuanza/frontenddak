@@ -180,15 +180,19 @@ export class ContratListComponent implements OnInit, OnDestroy {
   }
 
   rechercher() {
+    const rechercheParDate = (contrat: Contrat): boolean => {
+      return new Date(contrat.date).getTime() <= new Date(this.au!).getTime() && new Date(contrat.date).getTime() >= new Date(this.du!).getTime()
+    }
     if (this.au && this.du) {
       this.montrerErreurs = false;
-      this.resultats = this.contrats.filter((contrat) => {
-        return new Date(contrat.date).getTime() <= new Date(this.au!).getTime() && new Date(contrat.date).getTime() >= new Date(this.du!).getTime()
-      })
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.destroy();
-        this.dtTrigger.next("");
-      });
+      this.contratsEnCours = this.contratsEnCours.filter(rechercheParDate)
+      this.contratsCrees = this.contratsCrees.filter(rechercheParDate)
+      this.contratsParfaits = this.contratsParfaits.filter(rechercheParDate)
+      this.nombres.cree = this.contratsCrees.length;
+      this.nombres.encours = this.contratsEnCours.length;
+      this.nombres.parfait = this.contratsParfaits.length;
+      this.afficherContrat("CREATION")
+
     } else {
       this.montrerErreurs = true;
     }
