@@ -173,8 +173,8 @@
                 L'affectation du remplacant
                 <b>{{affectation.remplacant.noms}}</b> au poste
                 <b>{{getAffectationActuelleRemplacant(affectation.remplacant,
-                  affectation.idvigile.jourRepos)?.idposte?.libelle}}</b> le
-                <b>{{jourSemaine(affectation.idvigile.jourRepos)}}</b> sera mise à l'arrêt
+                  affectation.jourRepos)?.idposte?.libelle}}</b> le
+                <b>{{jourSemaine(affectation.jourRepos)}}</b> sera mise à l'arrêt
               </div>
             </div>
           </div>
@@ -269,6 +269,16 @@
               </div>
             </div>
             <div class="card" *ngIf="affectation.idvigile && affectation.idposte">
+              <div class="card-body">
+                Vous allez affecter
+                <b>{{affectation.idvigile.noms}}</b> au poste <b>{{affectation.idposte.libelle}}</b>.
+                <ng-container *ngIf="affectation.remplacant">
+                  Il sera remplacé le <b>{{jourSemaine(affectation.jourRepos)}}</b> par
+                  <b>{{affectation.remplacant.noms}}</b>
+                </ng-container>
+              </div>
+            </div>
+            <div class="card" *ngIf="affectation.idvigile && affectation.idposte && affectation.remplacant">
               <div class="card-body">
                 Vous allez affecter
                 <b>{{affectation.idvigile.noms}}</b> au poste <b>{{affectation.idposte.libelle}}</b>.

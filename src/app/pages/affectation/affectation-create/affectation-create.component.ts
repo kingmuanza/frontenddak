@@ -317,7 +317,7 @@ export class AffectationCreateComponent implements OnInit {
     let affectation: Affectation | null;
     affectation = null;
     this.affectations.forEach((aff) => {
-      if (!aff.arret && aff.idvigile.idvigile === vigile.idvigile) {
+      if (!aff.arret && aff.idvigile?.idvigile === vigile?.idvigile) {
         affectation = aff;
       }
     });
@@ -329,12 +329,12 @@ export class AffectationCreateComponent implements OnInit {
     return affectation;
   }
 
-  getAffectationActuelleRemplacant(vigile: Vigile, jour: number): Affectation | null {
+  getAffectationActuelleRemplacant(vigile: Vigile, jour: number | string): Affectation | null {
     let affectation: Affectation | null;
     affectation = null;
     this.affectations.forEach((aff) => {
       if (!aff.arret && aff.remplacant && aff.idvigile) {
-        if (aff.remplacant.idvigile === vigile.idvigile && aff.idvigile.jourRepos === jour) {
+        if (aff.remplacant.idvigile === vigile.idvigile && aff.idvigile.jourRepos + '' === jour + '') {
           affectation = aff;
         }
       }

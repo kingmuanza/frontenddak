@@ -223,7 +223,8 @@
                       {{affectation.remplacant.noms}}
                     </b>
                     <div>
-                      {{affectation.remplacant.matricule}}
+                      {{affectation.remplacant.matricule}},
+                      {{jourSemaine(affectation.jourRepos)}}
                     </div>
                     <div style="margin-bottom: 10px; text-align: center;padding: 10px;">
                       <a [routerLink]="'/affectation/view/'+affectation.idaffectation">Voir l'affectation</a>
