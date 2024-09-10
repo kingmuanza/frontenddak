@@ -85,11 +85,16 @@ export class PosteViewComponent implements OnInit {
   rechercheVigile = "";
   rechercheRemplacant = "";
   affectation: Affectation | undefined;
+  affectationsRemplacants = new Array<Affectation>()
   suggestions = new Array<any>();
 
   jourRepos = "";
+  jourReposAffectation = "";
 
   historiqueStatus = new Array<HistoriqueStatut>()
+
+  joursSemaine: string[] = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+  estDejaAffecteeACeJour = false;
 
   constructor(
     private router: Router,
@@ -322,10 +327,13 @@ export class PosteViewComponent implements OnInit {
   }
 
   getRemplacants(texte: string) {
-    if (texte.length > 3)
+    if (texte.length > 3) {
+      console.log("getRemplacants", texte)
       this.vigileService.rechercheCalme(texte).then((vigiles) => {
+        console.log("getRemplacantsterminéé", texte)
         this.remplacants = vigiles;
       });
+    }
   }
 
   isVigileVerifieExigence(vigile: Vigile, exigence: PosteVigile): boolean {
@@ -362,7 +370,8 @@ export class PosteViewComponent implements OnInit {
     affectation.horaire = vigile.horaire;
     affectation.idposte = this.poste;
     affectation.idvigile = vigile;
-    affectation.jourRepos = this.poste.jourRepos;
+    affectation.jourRepos = this.jourReposAffectation;
+
     if (remplacant) {
       affectation.remplacant = remplacant;
     }
@@ -379,6 +388,30 @@ export class PosteViewComponent implements OnInit {
       console.log(affectation);
     });
   }
+
+
+  getAffectationsRemplacants(vigile: Vigile) {
+    this.affectationsRemplacants = [];
+    this.affectationCtrlService.getAffectationsOfVigile(vigile).then((affectations) => {
+      this.affectationsRemplacants = affectations.filter((x) => !x.arret);
+      console.log("affectationsRemplacants");
+      console.log(this.affectationsRemplacants);
+      if (this.affectationsRemplacants.length > 0) {
+        this.estDejaAffecteeACeJour = this.affectationsRemplacants.map((aff) => aff.jourRepos + '').filter((jour) => this.jourReposAffectation + "" == jour + "").length > 0
+      } else {
+        this.estDejaAffecteeACeJour = false;
+      }
+    });
+  }
+
+  setEstDejaAffecteeACeJour() {
+    if (this.affectationsRemplacants.length > 0) {
+      this.estDejaAffecteeACeJour = this.affectationsRemplacants.map((aff) => aff.jourRepos + '').filter((jour) => this.jourReposAffectation + "" == jour + "").length > 0
+    } else {
+      this.estDejaAffecteeACeJour = false;
+    }
+  }
+
 
   jourSemaine(jour: number | string) {
     return this.jarvisService.jourSemaine(jour);
@@ -482,5 +515,7 @@ export class PosteViewComponent implements OnInit {
   supprimerToutesLesAffectations() {
 
   }
+
+
 
 }

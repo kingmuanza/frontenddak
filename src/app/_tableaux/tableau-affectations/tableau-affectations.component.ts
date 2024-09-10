@@ -21,6 +21,7 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
   dtInstance!: Promise<DataTables.Api>;
   @Input()
   vigile!: Vigile;
+  @Input() encours = false;
 
 
   affectations = new Array<Affectation>();
@@ -57,10 +58,17 @@ export class TableauAffectationsComponent implements OnInit, OnChanges, OnDestro
     return new Promise((resolve, reject) => {
       this.affectationService.getAffectationsOfVigile(vigile).then((data) => {
         this.affectations = new Array<Affectation>();
+
         console.log('data');
         console.log(data);
         data.forEach((affectation) => {
-          this.affectations.push(affectation);
+          if (this.encours) {
+            if (!affectation.arret) {
+              this.affectations.push(affectation);
+            }
+          } else {
+            this.affectations.push(affectation);
+          }
         });
         resolve();
       });

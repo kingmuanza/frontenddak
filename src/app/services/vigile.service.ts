@@ -56,7 +56,7 @@ export class VigileService {
       this.http.get(this.URL + "services/vigile/" + texte).subscribe({
         next: (data) => {
           const donnees = data as Array<Vigile>;
-          localStorage.setItem("vigiles", JSON.stringify(data));
+          // localStorage.setItem("vigiles", JSON.stringify(data));
           resolve(donnees);
         },
         error: (e) => {

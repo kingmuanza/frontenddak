@@ -124,6 +124,7 @@ export class AffectationCtrlService {
   }
 
   async getAffectationsOfVigile(vigile: Vigile): Promise<Array<Affectation>> {
+    console.log("vigile", vigile)
     return new Promise((resolve, reject) => {
       this.http.get(this.URL + "vigile" + '/all/' + vigile.idvigile).subscribe({
         next: (datas) => {

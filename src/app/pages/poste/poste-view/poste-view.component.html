@@ -25,7 +25,7 @@
       Code AGIV : {{poste.codeagiv}}
     </div>
     <div>
-      Zone : {{poste.zone.code}}
+      Zone : {{poste.zone?.code}}
     </div>
     <div class="">
       <a routerLink="/poste" class="btn btn-link" style="padding: 0; margin: 0;">
@@ -361,6 +361,22 @@
             Affectation actuelle : {{affectation.idposte.libelle}}
           </div>
         </div>
+
+        <div class="mb-3">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Jour de repos
+              </span>
+            </div>
+            <select [(ngModel)]="jourReposAffectation" (ngModelChange)="setEstDejaAffecteeACeJour()"
+              class="form-control">
+              <option *ngFor="let jour of joursSemaine; let i = index" [value]="i + 1">
+                {{ jour }}
+              </option>
+            </select>
+          </div>
+        </div>
         <div class="mb-3">
           <div class="input-group">
             <div class="input-group-prepend">
@@ -370,18 +386,23 @@
             </div>
             <input [(ngModel)]="rechercheRemplacant" (ngModelChange)="getRemplacants($event)" type="text"
               class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
-            <select #vigileElement [(ngModel)]="remplacant" class="form-control">
+            <select [(ngModel)]="remplacant" (ngModelChange)="getAffectationsRemplacants($event)" class="form-control">
               <ng-container *ngFor="let v of remplacants">
-                <option [ngValue]="v" *ngIf="!v.estRemplacant">
+                <option [ngValue]="v" *ngIf="v.estRemplacant" [disabled]="estDejaAffecteeACeJour">
                   {{v.noms}}
                 </option>
               </ng-container>
             </select>
           </div>
         </div>
+        <div class="mb-3" *ngIf="estDejaAffecteeACeJour" style="color: red;">
+          Le remplacant a déjà une affectation ce jour
+        </div>
+
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn nouveau" (click)="affecter(vigile, remplacant)">
+        <button [disabled]="estDejaAffecteeACeJour" type="button" class="btn nouveau"
+          (click)="affecter(vigile, remplacant)">
           Affecter ici
         </button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

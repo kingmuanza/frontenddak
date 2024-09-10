@@ -244,6 +244,11 @@ export class VigileViewComponent implements OnInit {
       this.getAffectionOfVigile(vigile).then(() => {
         if (vigile.estRemplacant) {
           this.affectationsActuelles = this.getAffectationActuelles();
+          this.affectationsActuelles.sort((a, b) => {
+            let jourReposA = Number(a.jourRepos || "-1")
+            let jourReposB = Number(b.jourRepos || "-1")
+            return jourReposA < jourReposB ? -1 : 1
+          })
         } else {
           this.affectation = this.getAffectationActuelle();
         }

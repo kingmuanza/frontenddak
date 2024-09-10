@@ -14,7 +14,7 @@
       <td>{{affectation.dateAffectation?.split('T')[0]}}</td>
       <td>{{affectation.idposte.libelle}}</td>
       <td>{{affectation.idvigile.noms}}</td>
-      <td>{{jourSemaine(affectation.jourRepos)}}</td>
+      <td><a style="opacity: 0;">{{affectation.jourRepos}}</a>{{jourSemaine(affectation.jourRepos)}}</td>
       <td>{{affectation.remplacant? affectation.remplacant.noms : ""}}</td>
       <td>{{affectation.arret?.split('T')[0]}}</td>
     </tr>

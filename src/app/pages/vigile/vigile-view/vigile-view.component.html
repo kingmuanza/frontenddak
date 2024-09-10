@@ -155,6 +155,9 @@
             <div>
               {{aff.idvigile.noms}}
             </div>
+            <div style="font-weight: bold; line-height: 1.1;">
+              {{aff.idposte.libelle}}
+            </div>
           </div>
         </div>
       </div>
@@ -173,6 +176,14 @@
             <app-display-equipement [equipement]="equipement"></app-display-equipement>
           </ng-container>
         </ng-container>
+      </div>
+    </div>
+    <div style="margin-top: 20px;" *ngIf="vigile">
+      <div class="card shadow-1">
+        <div style="margin-top: 20px; margin-bottom: 20px;">
+          Affectations en cours
+        </div>
+        <app-tableau-affectations [vigile]="vigile" [encours]="true"></app-tableau-affectations>
       </div>
     </div>
     <div style="margin-top: 20px;" *ngIf="vigile">
