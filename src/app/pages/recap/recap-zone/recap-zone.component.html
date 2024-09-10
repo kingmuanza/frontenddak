@@ -164,11 +164,14 @@
               {{postesControles.length}}/{{postes.length}} Postes
             </div>
             <div class="row">
-              <div *ngFor="let poste of postes" class="col-lg-3">
-                <div class="poste" (click)="voirPoste(poste)" [ngClass]="{'controlee': isPosteControlee(poste)}">
-                  {{poste.libelle.replace("NUIT", "").replace("JOUR", "")}}
+              <ng-container *ngFor="let poste of postes">
+                <div *ngIf="!poste.statut" class="col-lg-3">
+                  <div class="poste" (click)="voirPoste(poste)"
+                    [ngClass]="{'controlee': isPosteControlee(poste), 'inactif': poste.statut}">
+                    {{poste.libelle.replace("NUIT", "").replace("JOUR", "")}}
+                  </div>
                 </div>
-              </div>
+              </ng-container>
             </div>
           </div>
         </div>
