@@ -125,6 +125,8 @@ import { DoublonsMatriculeComponent } from './pages/anomalies/doublons-matricule
 import { DoublonsCniComponent } from './pages/anomalies/doublons-cni/doublons-cni.component';
 import { DoublonsNomsComponent } from './pages/anomalies/doublons-noms/doublons-noms.component';
 import { ContratAvenantComponent } from './pages/contrat/contrat-avenant/contrat-avenant.component';
+import { SiteListComponent } from './pages/site/site-list/site-list.component';
+import { SiteViewComponent } from './pages/site/site-view/site-view.component';
 
 @NgModule({
   declarations: [
@@ -245,6 +247,8 @@ import { ContratAvenantComponent } from './pages/contrat/contrat-avenant/contrat
     DoublonsCniComponent,
     DoublonsNomsComponent,
     ContratAvenantComponent,
+    SiteListComponent,
+    SiteViewComponent,
   ],
   imports: [
     BrowserModule,

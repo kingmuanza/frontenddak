@@ -123,18 +123,35 @@
             </div>
           </div>
         </div>
-        <div class="card">
+        <div *ngIf="contratSite" class="card">
           <div>
             <div class="petit-titre">
-              Coordonnées géographiques
+              Coordonnées géographiques : <b>{{poste.idcontratsite?.nom}}</b>
             </div>
             <div>
-              <div>
-                Laltitude : {{poste.latitude}}, Longitude : {{poste.longitude}}
+              <div class="coordonnees">
+                Latitude 1 : {{contratSite?.latitude}}<br> Longitude 1 : {{contratSite?.longitude}}
               </div>
-              <div>
-                <button class="btn btn-link" (click)="openGoogleMap()">Voir la localisation</button>
+              <div class="coordonnees">
+                Latitude 2 : {{contratSite?.latitude1}}<br> Longitude 2 : {{contratSite?.longitude1}}
               </div>
+              <div class="coordonnees">
+                Latitude 3 : {{contratSite?.latitude2}}<br> Longitude 3 : {{contratSite?.longitude2}}
+              </div>
+              <div class="mb-3">
+                <button class="btn btn-primary" (click)="openGoogleMap()">Voir les localisations</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!contratSite">
+          <div class="message-coordonnees">
+            Les Coordonnées Géographiques du site n'ont pas encore été prises, car le site n'est pas en ligne.
+            Voulez-vous le mettre en ligne ?
+            <div class="mt-3">
+              <button class="btn" (click)="mettreLeSiteEnLigne()" style="border: 1px solid #aaa ">
+                Mettre en ligne
+              </button>
             </div>
           </div>
         </div>

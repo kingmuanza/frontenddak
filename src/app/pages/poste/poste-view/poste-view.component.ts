@@ -24,6 +24,7 @@ import { getFirestore, setDoc, doc, query, collection, getDocs, where, deleteDoc
 import { Suivi } from 'src/app/models/suivi.model';
 import { AffectationLigne } from 'src/app/models/affectation.ligne.model';
 import { DatatablesOptions } from 'src/app/data/DATATABLES.OPTIONS';
+import { ContratSite } from 'src/app/models/contrat.site.model';
 
 
 type HistoriqueStatut = {
@@ -90,6 +91,7 @@ export class PosteViewComponent implements OnInit {
 
   jourRepos = "";
   jourReposAffectation = "";
+  contratSite: any
 
   historiqueStatus = new Array<HistoriqueStatut>()
 
@@ -108,8 +110,6 @@ export class PosteViewComponent implements OnInit {
     private affectationCtrlService: AffectationCtrlService,
     private contratCtrlService: ContratCtrlService,
   ) {
-
-
     const firebaseConfig = {
       apiKey: "AIzaSyCBdaLWw5PsGl13X_jtsHIhHepIZ2bUMrE",
       authDomain: "dak-security.firebaseapp.com",
@@ -145,6 +145,13 @@ export class PosteViewComponent implements OnInit {
           console.log('le poste recupéré');
           console.log(poste);
           this.poste = poste;
+
+          if (poste.idcontratsite) {
+            this.getContratSite().then((contratSites) => {
+              if (contratSites.length > 0)
+                this.contratSite = contratSites[0]
+            });
+          }
 
           if (poste.historique) {
             try {
@@ -237,7 +244,25 @@ export class PosteViewComponent implements OnInit {
     });
   }
 
-
+  getContratSite(): Promise<Array<any>> {
+    console.log("getContratSite");
+    return new Promise(async (resolve, reject) => {
+      const affectationsLignes = new Array<any>();
+      const db = getFirestore(this.app);
+      let q = query(collection(db, "contratSite"), where("nom", "==", this.poste.idcontratsite?.nom));
+      let resultats: QuerySnapshot<DocumentData> = await getDocs(q);
+      resultats.forEach((resultat) => {
+        let x = {
+          id: resultat.id,
+          ...resultat.data()
+        }
+        affectationsLignes.push(x);
+      });
+      console.log("return affectationsLignes");
+      console.log(affectationsLignes.length);
+      resolve(affectationsLignes);
+    });
+  }
 
   mettreEnLigne() {
     console.log('mettre en ligne');
@@ -315,7 +340,19 @@ export class PosteViewComponent implements OnInit {
   }
 
   openGoogleMap() {
-    let url = "https://maps.google.com/?q=" + this.poste.latitude + "," + this.poste.longitude;
+    let url =
+      "https://www.google.com/maps/dir/?api=1&origin="
+      + this.contratSite.latitude
+      + ","
+      + this.contratSite.longitude
+      + "&destination="
+      + this.contratSite.latitude2
+      + ","
+      + this.contratSite.longitude2
+      + "&waypoints="
+      + this.contratSite.latitude1
+      + ","
+      + this.contratSite.longitude1;
     window.open(url);
   }
 
@@ -516,6 +553,15 @@ export class PosteViewComponent implements OnInit {
 
   }
 
-
+  async mettreLeSiteEnLigne() {
+    if (this.poste.idcontratsite) {
+      console.log("site", this.poste.idcontratsite);
+      const db = getFirestore(this.app);
+      await setDoc(doc(db, "contratSite", this.poste.idcontratsite + ""), JSON.parse(JSON.stringify(this.poste.idcontratsite)));
+      console.log("Terminé");
+      this.notifierService.notify('success', "Mise en ligne du site " + this.poste.idcontratsite?.nom + " effectuée avec succès");
+      window.location.reload();
+    }
+  }
 
 }

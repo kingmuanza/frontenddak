@@ -91,6 +91,8 @@ import { DoublonsCniComponent } from './pages/anomalies/doublons-cni/doublons-cn
 import { DoublonsMatriculeComponent } from './pages/anomalies/doublons-matricule/doublons-matricule.component';
 import { DoublonsNomsComponent } from './pages/anomalies/doublons-noms/doublons-noms.component';
 import { ContratAvenantComponent } from './pages/contrat/contrat-avenant/contrat-avenant.component';
+import { SiteListComponent } from './pages/site/site-list/site-list.component';
+import { SiteViewComponent } from './pages/site/site-view/site-view.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
@@ -119,6 +121,9 @@ const routes: Routes = [
   { path: 'vacant/remplacant', component: VacantRemplacantListComponent },
   { path: 'vacant/remplacant-conges', component: VacantRemplacantCongeListComponent },
   { path: 'vacant/remplacant-conges/edit/:id', component: VacantRemplacantCongeEditComponent },
+
+  { path: 'site', component: SiteListComponent },
+  { path: 'site/view/:id', component: SiteViewComponent },
 
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationCreateComponent },
