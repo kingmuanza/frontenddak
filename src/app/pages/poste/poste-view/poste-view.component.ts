@@ -294,7 +294,7 @@ export class PosteViewComponent implements OnInit {
         this.notifierService.notify('success', "Mise en ligne de " + affectationLigne.nomsVigile + " effectuée avec succès");
       }
     }
-    // await this.mettreEnLigneLesAffectationsRemplacants();
+    await this.mettreEnLigneLesAffectationsRemplacants();
     window.location.reload();
   }
 
