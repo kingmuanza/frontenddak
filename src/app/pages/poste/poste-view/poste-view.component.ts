@@ -490,7 +490,7 @@ export class PosteViewComponent implements OnInit {
   }
 
   supprimer(affectationLigne: AffectationLigne) {
-    let oui = confirm("Etes-vous sûr de vouloir mettre l'affectation en ligne ?");
+    let oui = confirm("Etes-vous sûr de vouloir supprimer l'affectation en ligne ?");
     if (oui) {
       if (affectationLigne.isRemplacant) {
         console.log('supprimer affectationLigne du remplacant');
