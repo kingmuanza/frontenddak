@@ -57,7 +57,8 @@
       </a>
     </div>
   </div>
-  <div class="boutons" *ngIf="mesDroits.vigileEdit">
+
+  <div class="boutons" *ngIf="mesDroits.vigileEdit && vigile && vigile.idvigile !== 0">
     <div class="row">
       <div class="col-lg-2">
         <div class="nouveau">
@@ -75,7 +76,7 @@
               Statut
             </span>
           </div>
-          <select [(ngModel)]="vigile.statut" class="form-control">
+          <select [disabled]="!!affectation" [(ngModel)]="vigile.statut" class="form-control">
             <option [value]="1">Absent[e]</option>
             <option [value]="2">Actif[ve]</option>
             <option [value]="3">Standby</option>
@@ -88,7 +89,7 @@
         </div>
       </div>
 
-      <div class="col-lg-2" *ngIf="mesDroits.vigileEdit">
+      <div class="col-lg-2" *ngIf="mesDroits.vigileEdit && !affectation ">
         <div *ngIf="vigile.statut">
           <a (click)="voirCommentaire()" class="btn btn-success" style="width: 100%;">
             Appliquer
