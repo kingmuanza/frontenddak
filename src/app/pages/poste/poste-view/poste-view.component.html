@@ -367,7 +367,7 @@
             <input [(ngModel)]="rechercheVigile" (ngModelChange)="getVigiles($event)" type="text" class="form-control"
               placeholder="Rechercher ici..." style="max-width: 150px;">
             <select #vigileElement [(ngModel)]="vigile" (ngModelChange)="getAffectation($event)" class="form-control">
-              <ng-container *ngFor="let v of vigiles">
+              <ng-container *ngFor="let v of vigiles | actifs">
                 <option [ngValue]="v" *ngIf="!v.estRemplacant && !v.estRemplacantConge">
                   {{v.noms}}
                 </option>
@@ -404,7 +404,7 @@
             <input [(ngModel)]="rechercheRemplacant" (ngModelChange)="getRemplacants($event)" type="text"
               class="form-control" placeholder="Rechercher ici..." style="max-width: 150px;">
             <select [(ngModel)]="remplacant" (ngModelChange)="getAffectationsRemplacants($event)" class="form-control">
-              <ng-container *ngFor="let v of remplacants">
+              <ng-container *ngFor="let v of remplacants | actifs">
                 <option [ngValue]="v" *ngIf="v.estRemplacant" [disabled]="estDejaAffecteeACeJour">
                   {{v.noms}}
                 </option>
