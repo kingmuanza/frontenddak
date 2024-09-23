@@ -44,7 +44,7 @@ export class RecapVeilleComponent implements OnInit {
 
   terminee = false;
   remplacements = new Array<any>();
-
+  isDeclencher = false;
 
   montrerErreurs = false;
 
@@ -65,7 +65,8 @@ export class RecapVeilleComponent implements OnInit {
   }
 
   declencher() {
-
+    this.terminee = false;
+    this.isDeclencher = true;
     this.setDates();
 
     this.zoneService.getAll("zone").then((zones) => {
@@ -132,6 +133,8 @@ export class RecapVeilleComponent implements OnInit {
         });
 
         this.terminee = true;
+        this.isDeclencher = false;
+
       });
     });
   }
@@ -139,14 +142,17 @@ export class RecapVeilleComponent implements OnInit {
   setDates() {
     this.debut = new Date(this.debut)
     this.fin = new Date(this.fin)
-    this.debut.setDate(this.debut.getDate() - 2);
+    // this.debut.setDate(this.debut.getDate() - 2);
     this.debut.setHours(18, 0, 0);
-    this.fin.setDate(this.fin.getDate() - 1);
+    // this.fin.setDate(this.fin.getDate() - 1);
     this.fin.setHours(18, 0, 0);
   }
 
   ngOnInit(): void {
     // this.declencher();
+    this.debut.setDate(this.debut.getDate() - 1);
+    this.setDates();
+
   }
 
   isZoneControlee(zone: ZoneDak) {
@@ -185,7 +191,7 @@ export class RecapVeilleComponent implements OnInit {
 
   goToZone(zone: ZoneDak) {
     if (this.isZoneControlee(zone))
-      this.router.navigate(["recap-veille", zone.code]);
+      this.router.navigate(["recap", zone.code, new Date(this.debut).getTime(), new Date(this.fin).getTime()]);
   }
 
   openModal(idElement: string) {

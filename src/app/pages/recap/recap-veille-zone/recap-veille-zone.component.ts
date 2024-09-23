@@ -96,11 +96,15 @@ export class RecapVeilleZoneComponent implements OnInit {
     this.app = initializeApp(firebaseConfig);
   }
 
-  setDates() {
+  setDates(debut?: string | undefined, fin?: string | undefined) {
     this.debut.setDate(this.debut.getDate() - 2);
     this.debut.setHours(18, 0, 0);
     this.fin.setDate(this.fin.getDate() - 1);
     this.fin.setHours(18, 0, 0);
+    if (debut && fin) {
+      this.debut = new Date(Number(debut));
+      this.fin = new Date(Number(fin));
+    }
   }
 
   ngOnInit(): void {
@@ -112,7 +116,10 @@ export class RecapVeilleZoneComponent implements OnInit {
 
     this.route.paramMap.subscribe((paramMap) => {
       const code = paramMap.get("code");
-      if (code) {
+      const debut = paramMap.get("debut");
+      const fin = paramMap.get("fin");
+      if (code && debut && fin) {
+        this.setDates(debut, fin);
         this.zoneService.getAll("zone").then((zones) => {
           if (code) {
             this.zone = this.getZoneByCode(code!, zones);

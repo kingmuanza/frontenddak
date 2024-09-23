@@ -104,8 +104,10 @@ const routes: Routes = [
 
   { path: 'recap-jour', component: RecapJourneeComponent },
   { path: 'recap-jour/:code', component: RecapZoneComponent },
-  { path: 'recap-veille', component: RecapVeilleComponent },
-  { path: 'recap-veille/:code', component: RecapVeilleZoneComponent },
+  { path: 'recap-jour/:code/:debut/:fin', component: RecapZoneComponent },
+  { path: 'recap', component: RecapVeilleComponent },
+  { path: 'recap/:code', component: RecapVeilleZoneComponent },
+  { path: 'recap/:code/:debut/:fin', component: RecapVeilleZoneComponent },
   { path: 'upload-affectation', component: UploadAffectationComponent },
 
   { path: 'connexion', component: ConnexionComponent },
