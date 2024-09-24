@@ -54,54 +54,76 @@
       &nbsp;
       <button *ngIf="verificationEffectuee" class="btn btn-success" (click)="mettreLesSitesEnLigne()"
         [disabled]="isLoadingVerifier">
-        Mettre les sites en ligne
+        Mettre les {{sitesPasEncoreEnLigne.length}} sites en ligne
+      </button>
+      &nbsp;
+      &nbsp;
+      <button *ngIf="verificationEffectuee" class="btn btn-primaire" (click)="importerLesCoordonnes()"
+        [disabled]="isLoadingVerifier">
+        Importer les coordonnées prises des {{sitesAImporter.length}} sites
       </button>
     </div>
     <div class="mb-1">
-      On dispose de {{contratSitesEnLigne.length}} sites en ligne, {{sitesPasEncoreEnLigne.length}} sites n'ont pas
+      On dispose de {{contratSitesEnLigne.length}} sites en ligne dont {{contratSitesEnLigneWithCoordonnees.length}}
+      avec des
+      coordonnées, {{sitesPasEncoreEnLigne.length}} sites n'ont pas
       encore été mis en ligne,
-      <ng-container *ngIf="verificationEffectuee">
+      <ng-container *ngIf="verificationEffectuee && isCliquedMettreLesSitesEnLigne">
         {{sitesMisEnLigne.length}} sur {{sitesPasEncoreEnLigne.length}}
+      </ng-container>
+      <ng-container *ngIf="verificationEffectuee && isCliquedImporter">
+        {{sitesImportees.length}} sur {{sitesAImporter.length}}
       </ng-container>
 
     </div>
-    <div style="background-color: #aaa; text-align: center; padding: 0px;" *ngIf="verificationEffectuee">
-      <div style="background-color: orange;  padding: 2px; height: 10px;"
-        [ngStyle]="{'width': (sitesMisEnLigne.length / sitesPasEncoreEnLigne.length)*100+'%'}">
+    <div class="mb-1" *ngIf="isCliquedMettreLesSitesEnLigne">
+      <div style="background-color: #aaa; text-align: center; padding: 0px;" *ngIf="verificationEffectuee">
+        <div style="background-color: orange;  padding: 2px; height: 10px;"
+          [ngStyle]="{'width': (sitesMisEnLigne.length / sitesPasEncoreEnLigne.length)*100+'%'}">
 
+        </div>
+      </div>
+      <div style="text-align: center;">
       </div>
     </div>
-    <div style="text-align: center;">
+    <div class="mb-1" *ngIf="isCliquedImporter">
+      <div style="background-color: #aaa; text-align: center; padding: 0px;" *ngIf="verificationEffectuee">
+        <div style="background-color: orange;  padding: 2px; height: 10px;"
+          [ngStyle]="{'width': (sitesImportees.length / sitesAImporter.length)*100+'%'}">
+
+        </div>
+      </div>
+      <div style="text-align: center;">
+      </div>
     </div>
-  </div>
-  <div class="page-contenu">
-    <div class="page-contenu-titre">
-      <div class="page-contenu-corps">
-        <div class="card shadow-1">
-          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>En Ligne</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let site of resultats" (click)="edit(site.idcontratSite)">
-                <td>{{site.idcontratSite}}</td>
-                <td>{{site.nom}}</td>
-                <td>{{site.latitude}}</td>
-                <td>{{site.longitude}}</td>
-                <td>
-                  <div style="opacity: 0; width: 50px; display: inline-block;">{{site.enLigne}} </div>
-                  <input type="checkbox" [checked]="site.enLigne" readonly>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+    <div class="page-contenu">
+      <div class="page-contenu-titre">
+        <div class="page-contenu-corps">
+          <div class="card shadow-1">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nom</th>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                  <th>En Ligne</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let site of resultats" (click)="edit(site.idcontratSite)">
+                  <td>{{site.idcontratSite}}</td>
+                  <td>{{site.nom}}</td>
+                  <td>{{site.latitude}}</td>
+                  <td>{{site.longitude}}</td>
+                  <td>
+                    <div style="opacity: 0; width: 50px; display: inline-block;">{{site.enLigne}} </div>
+                    <input type="checkbox" [checked]="site.enLigne" readonly>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>

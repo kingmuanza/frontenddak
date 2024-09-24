@@ -31,10 +31,15 @@ export class SiteListComponent implements OnInit {
 
   app: any;
   contratSitesEnLigne = new Array<any>()
+  contratSitesEnLigneWithCoordonnees = new Array<any>()
+  sitesAImporter = new Array<ContratSite>();
+  sitesImportees = new Array<ContratSite>();
   isLoadingVerifier = false;
   sitesPasEncoreEnLigne = new Array<ContratSite>()
   sitesMisEnLigne = new Array<ContratSite>()
   verificationEffectuee = false;
+  isCliquedMettreLesSitesEnLigne = false;
+  isCliquedImporter = false;
 
   constructor(
     private jarvisService: JarvisService<ContratSite>,
@@ -126,28 +131,50 @@ export class SiteListComponent implements OnInit {
       contratSitesEnLigne.push(x);
     });
     this.contratSitesEnLigne = contratSitesEnLigne;
+    this.contratSitesEnLigneWithCoordonnees = contratSitesEnLigne.filter((c) => c.latitude && c.longitude);
     console.log("verifier terminée", this.contratSitesEnLigne.length)
 
     setTimeout(() => {
+      let i = 0;
+      this.sitesAImporter = new Array<ContratSite>();
       this.sites = this.sites.map((resultat) => {
-        return {
+        const siteEnLignes = this.contratSitesEnLigne.filter((el) => el.nom == resultat.nom);
+        const isEnLigne = siteEnLignes.length > 0;
+        let siteEnLigne = siteEnLignes[0];
+        const site = {
           ...resultat,
-          enLigne: this.contratSitesEnLigne.filter((el) => el.nom == resultat.nom).length > 0
+          latitude: isEnLigne ? siteEnLigne.latitude : 0,
+          longitude: isEnLigne ? siteEnLigne.longitude : 0,
+          latitude1: isEnLigne ? siteEnLigne.latitude1 : 0,
+          longitude1: isEnLigne ? siteEnLigne.longitude1 : 0,
+          latitude2: isEnLigne ? siteEnLigne.latitude2 : 0,
+          longitude2: isEnLigne ? siteEnLigne.longitude2 : 0,
+          enLigne: isEnLigne
+        };
+        if (isEnLigne && siteEnLigne.latitude && siteEnLigne.longitude) {
+          console.log("site")
+          console.log(site)
+          i++;
+          console.log(i)
+          this.sitesAImporter.push(siteEnLigne);
         }
+        return site
       });
       this.resultats = this.sites;
+      this.sitesAvec = this.sites.filter((d) => d.latitude && d.longitude);
+      this.sitesSans = this.sites.filter((d) => !(d.latitude && d.longitude));
       this.sitesPasEncoreEnLigne = this.sites.filter((site) => !site.enLigne)
       this.verificationEffectuee = true;
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.destroy();
         this.dtTrigger.next('');
-
         this.isLoadingVerifier = false
       });
     }, 500);
   }
 
   async mettreLesSitesEnLigne() {
+    this.isCliquedMettreLesSitesEnLigne = true;
     this.sitesPasEncoreEnLigne = this.sites.filter((site) => !site.enLigne)
     for (let index = 0; index < Math.min(this.sitesPasEncoreEnLigne.length, 10); index++) {
       const site = this.sitesPasEncoreEnLigne[index];
@@ -155,6 +182,7 @@ export class SiteListComponent implements OnInit {
       await this.mettreLeSiteEnLigne(site)
       this.sitesMisEnLigne.push(site)
     }
+    this.isCliquedMettreLesSitesEnLigne = false;
   }
 
   async mettreLeSiteEnLigne(site: ContratSite) {
@@ -168,6 +196,26 @@ export class SiteListComponent implements OnInit {
 
   isEnLigne(site: ContratSite) {
     return this.contratSitesEnLigne.filter((el) => el.nom == site.nom).length > 0
+  }
+
+  async importerLesCoordonnes() {
+    this.isCliquedImporter = true;
+
+    for (let index = 0; index < Math.min(this.sitesAImporter.length, 100); index++) {
+      const site = this.sitesAImporter[index];
+      await this.importerLeSite(site)
+      this.sitesImportees.push(site)
+    }
+    this.isCliquedImporter = false;
+  }
+
+  async importerLeSite(site: ContratSite) {
+    await this.jarvisService.modifierSilent('contratsite', site.idcontratSite, site);
+    console.log("Site Terminé " + site.idcontratSite);
+  }
+
+  updateSite() {
+
   }
 
   ngOnDestroy(): void {
