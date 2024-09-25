@@ -93,6 +93,7 @@ import { DoublonsNomsComponent } from './pages/anomalies/doublons-noms/doublons-
 import { ContratAvenantComponent } from './pages/contrat/contrat-avenant/contrat-avenant.component';
 import { SiteListComponent } from './pages/site/site-list/site-list.component';
 import { SiteViewComponent } from './pages/site/site-view/site-view.component';
+import { SiteEditComponent } from './pages/site/site-edit/site-edit.component';
 
 const routes: Routes = [
   { path: 'importation-localisation-postes', component: ImportationLocalisationPostesComponent },
@@ -126,6 +127,7 @@ const routes: Routes = [
 
   { path: 'site', component: SiteListComponent },
   { path: 'site/view/:id', component: SiteViewComponent },
+  { path: 'site/edit/:id', component: SiteEditComponent },
 
   { path: 'affectation', component: AffectationListComponent },
   { path: 'affectation/edit', component: AffectationCreateComponent },

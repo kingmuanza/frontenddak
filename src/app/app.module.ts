@@ -127,6 +127,7 @@ import { DoublonsNomsComponent } from './pages/anomalies/doublons-noms/doublons-
 import { ContratAvenantComponent } from './pages/contrat/contrat-avenant/contrat-avenant.component';
 import { SiteListComponent } from './pages/site/site-list/site-list.component';
 import { SiteViewComponent } from './pages/site/site-view/site-view.component';
+import { SiteEditComponent } from './pages/site/site-edit/site-edit.component';
 
 @NgModule({
   declarations: [
@@ -249,6 +250,7 @@ import { SiteViewComponent } from './pages/site/site-view/site-view.component';
     ContratAvenantComponent,
     SiteListComponent,
     SiteViewComponent,
+    SiteEditComponent,
   ],
   imports: [
     BrowserModule,

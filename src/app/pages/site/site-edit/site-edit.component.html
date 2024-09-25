@@ -1,0 +1,107 @@
+<div class="page">
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      {{site.nom}}
+    </div>
+    <div>
+      {{site.idcontrat.libelle}}
+    </div>
+    <div>
+      Quartier : {{site.idquartier? site.idquartier.nom: 'Indéfini'}}
+    </div>
+    <div>
+      Personne à contacter : {{site.personne? site.personne: 'Indéfini'}},
+      Tel : {{site.tel? site.tel: 'Indéfini'}}
+    </div>
+    <div>
+      Longitude : {{site.longitude? site.longitude: 'Indéfini'}},
+      Latitude : {{site.latitude? site.latitude:
+      'Indéfini'}}
+    </div>
+  </div>
+  <div style="display: none;">
+    {{sitesEnLigne | json}}
+  </div>
+  <div class="page-contenu">
+    <div class="formulaire">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="categorie" style="margin-top: 0;">
+            Informations sur le site
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <datalist id="quartiers">
+            <option [value]="q.nom" *ngFor="let q of quartiers">{{q.nom}}</option>
+          </datalist>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Quartier
+              </span>
+            </div>
+            <input list="quartiers" type="text" (ngModelChange)="renommerSite($event)" [(ngModel)]="quartier"
+              class="form-control" [ngClass]="{'is-invalid': montrerErreurs && erreurs.quartier}">
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Nom du site
+              </span>
+            </div>
+            <input type="text" [(ngModel)]="site.nom" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && erreurs.nom}">
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="input-group">
+
+            <span class="input-group-text">
+              Description
+              <br>
+              Localisation
+            </span>
+            <textarea [(ngModel)]="site.description" type="text" class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="categorie" style="margin-top: 20px;">
+            Personne à contacter
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Personne à contacter
+              </span>
+            </div>
+            <input type="text" [(ngModel)]="site.personne" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && erreurs.personne}">
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                Tel
+              </span>
+            </div>
+            <input type="text" [(ngModel)]="site.tel" class="form-control"
+              [ngClass]="{'is-invalid': montrerErreurs && erreurs.tel}">
+          </div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <button [disabled]="loading" (click)="saveSite()" class="btn nouveau" style="width: 200px;">
+          Modifier le site
+          <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

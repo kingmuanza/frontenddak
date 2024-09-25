@@ -1,1 +1,42 @@
-<p>site-view works!</p>
+<div class="page">
+  <div class="page-entete">
+    <div class="page-entete-titre">
+      {{site.nom}}
+    </div>
+    <div>
+      {{site.idcontrat.libelle}}
+    </div>
+    <div>
+      Quartier : {{site.idquartier? site.idquartier.nom: 'Indéfini'}}
+    </div>
+    <div>
+      Personne à contacter : {{site.personne? site.personne: 'Indéfini'}},
+      Tel : {{site.tel? site.tel: 'Indéfini'}}
+    </div>
+    <div>
+      Longitude : {{site.longitude? site.longitude: 'Indéfini'}},
+      Latitude : {{site.latitude? site.latitude:
+      'Indéfini'}}
+    </div>
+
+    <div class="boutons">
+      <div class="row">
+        <div class="col-lg-2">
+          <div class="nouveau">
+            <a [routerLink]="'/site/edit/' + site.idcontratSite " class="btn nouveau">
+              Modifier
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-contenu">
+
+    <div class="row">
+      <div class="col-lg-4" *ngFor="let poste of postes">
+        <app-display-poste [affectations]="[]" [poste]="poste"></app-display-poste>
+      </div>
+    </div>
+  </div>
+</div>
