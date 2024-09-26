@@ -176,7 +176,7 @@ export class SiteListComponent implements OnInit {
   async mettreLesSitesEnLigne() {
     this.isCliquedMettreLesSitesEnLigne = true;
     this.sitesPasEncoreEnLigne = this.sites.filter((site) => !site.enLigne)
-    for (let index = 0; index < Math.min(this.sitesPasEncoreEnLigne.length, 10); index++) {
+    for (let index = 0; index < Math.min(this.sitesPasEncoreEnLigne.length); index++) {
       const site = this.sitesPasEncoreEnLigne[index];
       site.enLigne = true;
       await this.mettreLeSiteEnLigne(site)
@@ -201,7 +201,7 @@ export class SiteListComponent implements OnInit {
   async importerLesCoordonnes() {
     this.isCliquedImporter = true;
 
-    for (let index = 0; index < Math.min(this.sitesAImporter.length, 100); index++) {
+    for (let index = 0; index < Math.min(this.sitesAImporter.length); index++) {
       const site = this.sitesAImporter[index];
       await this.importerLeSite(site)
       this.sitesImportees.push(site)
