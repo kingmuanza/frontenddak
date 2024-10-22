@@ -96,6 +96,7 @@ export class PosteListComponent implements OnInit, OnDestroy {
   }
 
   rechercher(horaire: string, zone?: ZoneDak, nom?: string) {
+    console.log('recherche...')
     this.libelle = "Résultats de la recherche";
     this.resultatsPrimaires = new Array<Poste>();
     if (zone && zone.idzone !== 0) {

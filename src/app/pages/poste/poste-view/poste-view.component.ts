@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { initializeApp } from 'firebase/app';
@@ -36,7 +36,7 @@ type HistoriqueStatut = {
   templateUrl: './poste-view.component.html',
   styleUrls: ['./poste-view.component.scss']
 })
-export class PosteViewComponent implements OnInit {
+export class PosteViewComponent implements OnInit, OnDestroy {
 
   app: any;
 
@@ -562,6 +562,13 @@ export class PosteViewComponent implements OnInit {
       this.notifierService.notify('success', "Mise en ligne du site " + this.poste.idcontratsite?.nom + " effectuée avec succès");
       window.location.reload();
     }
+  }
+
+
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+    this.dtTriggerHistorique.unsubscribe();
+    this.dtTriggerStatut.unsubscribe();
   }
 
 }
